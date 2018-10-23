@@ -38,11 +38,18 @@
             </v-list-tile>
         </v-list> -->
     </v-navigation-drawer>
-    <v-content>
-      <v-slide-y-transition mode="out-in">
-        <router-view @authenticated="setAuthenticated"/>
-      </v-slide-y-transition>
-    </v-content>
+    <!-- <v-container fluid fill height id="appcontainer0"> -->
+      <v-layout align-center justify-center>
+        <!-- <v-flex xs12> -->
+          <!-- <v-content> -->
+            <v-slide-y-transition mode="out-in">
+              <router-view @authenticated="setAuthenticated"/>
+            </v-slide-y-transition>
+          <!-- </v-content> -->
+        <!-- </v-flex> -->
+      </v-layout>
+    <!-- </v-container> -->
+
     <v-footer v-if="authenticated.state" :fixed="fixed" app>
         <span>Version: 0.1.0</span>
     </v-footer>
