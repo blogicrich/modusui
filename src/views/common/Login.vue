@@ -1,5 +1,5 @@
 <template>
-  <v-container id="login-waiting" fluid>
+  <v-container id="login" fluid>
     <v-flex>
       <v-layout column align-center>
         <v-fade-transition>
@@ -116,28 +116,22 @@ export default {
 
 @import "./public/scss/main.scss";
 
-#login-waiting {
-  // width: 75vw;
-}
-.mp_login {
-  // width:50vw;
-  // position:relative;
-  // left: 25vw;
-  // top: 25vh;
-}
-.mp_loading {
-  // height: 100vh;
-  // top: 30vh;
+#login {
+  background-color: inherit;
 }
 img {
   width: 35vh;
+}
+h2 {
+  color: $text-body;
 }
 input[type=text], input[type=password] {
   width:30vh;
   padding: 0.5vh;
   margin:1vh;
   border-radius: 0.5vh;
-  border-color: rgb(0, 181, 229);
+  color:$text-body;
+  border-color: $main-blue;
   border-style: solid;
 }
 .creds-input {
@@ -145,24 +139,18 @@ input[type=text], input[type=password] {
   padding: 0.5vh;
   margin:1vh;
   border-radius: 0.5vh;
-  border-color: rgb(0, 181, 229);
+  border-color: $main-blue;
   border-style: solid;
   background-color: rgb(250, 245, 240);
 }
-.msgFalse {
-  color: red;
-}
-.msgTrue {
-  color: black;
-}
 button {
   float: right;
-  color: black;
-  background-color:inherit;
-  border-color:  rgb(0, 181, 229);
+  color: $text-body;
+  background-color: inherit;
+  border-color: $main-blue;
   border-style: solid;
   border-radius: 1vh;
-  box-shadow: 0 0 0.5vh 0.5vh rgba(0, 181, 229,0.0);
+  box-shadow: 0 0 0.5vh 0.5vh $bg-grey;
   padding: 1vh;
   cursor: pointer;
 }
@@ -170,11 +158,11 @@ button:hover {
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
   float: right;
-  color: black;
+  color: $text-body;
   background-color:inherit;
   border-style: solid;
   border-radius: 1vh;
-  border-color:  rgb(0, 181, 229);
+  border-color:  $main-blue;;
   box-shadow:0.1vh 0.1vh rgba(0, 181, 229,0.25), 0.5vh 0.5vh rgba(0, 181, 229,0.08);
   padding: 1vh;
   cursor: pointer;

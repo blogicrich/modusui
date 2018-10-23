@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app-shell">
     <v-toolbar
       v-if="authenticated.state"
       flat
@@ -98,3 +98,12 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+
+@import "./public/scss/main.scss";
+
+.app-shell {
+  background-color: $bg-grey;
+}
+
+</style>
