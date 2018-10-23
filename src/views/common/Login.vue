@@ -27,7 +27,7 @@
                 </v-layout>
               </div>
               <v-fade-transition>
-                <div v-if="isFalse">
+                <div v-if="isFalse" class="test" >
                   <v-flex>
                     <v-layout align-center justify-center>
                       <v-icon class="ma-2" color="error">highlight_off</v-icon>
@@ -84,10 +84,7 @@ export default {
     }
   },
   methods: {
-    onResize () {
-      this.windowSize = { x: window.innerWidth, y: window.innerHeight }
-    },
-    async submitCredentials () {
+    submitCredentials () {
       if (this.input.password !== null && this.input.userId !== null) {
         // this.isAuthenticating = true
         // this.isFalse = false
@@ -117,6 +114,8 @@ export default {
 
 <style scoped lang="scss">
 
+@import "./public/scss/main.scss";
+
 #login-waiting {
   // width: 75vw;
 }
@@ -134,7 +133,7 @@ img {
   width: 35vh;
 }
 input[type=text], input[type=password] {
-  width:inherit;
+  width:30vh;
   padding: 0.5vh;
   margin:1vh;
   border-radius: 0.5vh;
@@ -142,7 +141,7 @@ input[type=text], input[type=password] {
   border-style: solid;
 }
 .creds-input {
-  width:inherit;
+  width:30vh;
   padding: 0.5vh;
   margin:1vh;
   border-radius: 0.5vh;
