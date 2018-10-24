@@ -2,6 +2,8 @@
   <v-app class="app-shell">
     <v-toolbar
       v-if="authenticated.state"
+      class="pa-1"
+      color="white"
       app
       :clipped-left="clipped"
     >
@@ -51,8 +53,14 @@
       </v-layout>
     <!-- </v-container> -->
 
-    <v-footer v-if="authenticated.state" :fixed="fixed" app class="elevation-2">
-        <span>Version: 0.1.0</span>
+    <v-footer
+      class="elevation-2 pa-1"
+      v-if="authenticated.state"
+      :fixed="fixed"
+      color="white"
+      app
+    >
+      <span>Version: 0.1.0</span>
     </v-footer>
   </v-app>
 </template>
@@ -108,7 +116,6 @@ export default {
 }
 img {
   height: inherit;
-  margin-left: 1vw;
-  margin-right: 1vw;
+  margin: 1vw;
 }
 </style>

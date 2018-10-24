@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="page-container">
 
   </div>
 </template>
@@ -10,3 +10,6 @@ export default {
   name: 'Landing'
 }
 </script>
+<style>
+
+</style>
