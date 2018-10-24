@@ -1,3 +1,5 @@
+// Colour vars
+
 $main-blue: #00a1cd;
 $bg-grey: #f2f4f4;
 $text-body: #4d504f;
@@ -12,7 +14,7 @@ $text-body: #4d504f;
 }
 .pg-header{
   margin: 1vw;
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: bold;
   color: $main-blue;
 }
@@ -31,8 +33,9 @@ $text-body: #4d504f;
 
 //Subheaders
 
-.common-subhead {
-  font-size: 1em;
+.pg-subhead {
+  margin: 1vw;
+  font-size: 1.5em;
   font-weight: bold;
   color: $main-blue;
 }

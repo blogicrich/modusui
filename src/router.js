@@ -37,11 +37,11 @@ export default new Router({
       name: 'CarerSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
-    {
-      path: '/carersettings',
-      name: 'CarerSettings',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerSettings.vue')
-    },
+    // {
+    //   path: '/carersettings',
+    //   name: 'CarerSettings',
+    //   component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerSettings.vue')
+    // },
     {
       path: '/conditions',
       name: 'Conditions',

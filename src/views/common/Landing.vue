@@ -2,117 +2,63 @@
   <div class="page-container">
     <div class="landing-sys-admin">
       <h1 class="pg-header">eDroplet Administration</h1>
-      <v-container v-if="$vuetify.breakpoint.smAndUp" grid-list-xs12>
+      <v-container v-if="$vuetify.breakpoint.smAndUp" xs12>
       <!-- <v-container v-else="$vuetify.breakpoint.smAndDown" grid-list-xs6> -->
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">Administrator Management</h2>
+          <h2 class="pg-subhead">Administrator Management</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/systemadmins"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Admin Users
-          </v-btn>
+          <SubNavButton
+            title="System Administrators"
+            route="/systemadmins"
+          />
         </v-container>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">Defaults Administration</h2>
+          <h2 class="pg-subhead">Defaults Administration</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/defaultintervals"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Default Intervals
-          </v-btn>
+          <SubNavButton
+            title="default Intervals"
+            route="/defaultintervals"
+          />
         </v-container>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">Data Tables</h2>
+          <h2 class="pg-subhead">Data Tables</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/titles"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Titles
-          </v-btn>
-          <v-btn
-            type="button"
-            to="/containertypes"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Container Types
-          </v-btn>
-          <v-btn
-            type="button"
-            to="/genderoptions"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Gender Options
-          </v-btn>
-          <v-btn
-            type="button"
-            to="/conditions"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Conditions
-          </v-btn>
+          <SubNavButton
+            title="Titles"
+            route="/titles"
+          />
+          <SubNavButton
+            title="Container Types"
+            route="/containertypes"
+          />
+          <SubNavButton
+            title="Gender Options"
+            route="/genderoptions"
+          />
+          <SubNavButton
+            title="Conditions"
+            route="/conditions"
+          />
         </v-container>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">Message options</h2>
+          <h2 class="pg-subhead">Message options</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/textmessages"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Text/Email Messages
-          </v-btn>
-          <v-btn
-            type="button"
-            to="/voicemessages"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Voice Message Defaults
-          </v-btn>
+          <SubNavButton
+            title="Text/Email Messages"
+            route="/textmessages"
+          />
+          <SubNavButton
+            title="Voice Message Defaults"
+            route="/voicemessages"
+          />
         </v-container>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">Hydration Parameters</h2>
+          <h2 class="pg-subhead">Hydration Parameters</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/hydrationparameters"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Hydration Parameters
-          </v-btn>
+          <SubNavButton
+            title="Hydration Parameters"
+            route="/hydrationparameters"
+          />
         </v-container>
       </v-container>
     </div>
@@ -120,80 +66,44 @@
       <h1 class="pg-header">Main Menu</h1>
       <v-container grid-list-xs,sm,md,lg,xl>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">Authorised Persons</h2>
+          <h2 class="pg-subhead">Authorised Persons</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/personaldetails"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Personal Details
-          </v-btn>
+          <SubNavButton
+            title="Personal Details"
+            route="/personaldetails"
+          />
         </v-container>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">eDroplet Settings</h2>
+          <h2 class="pg-subhead">eDroplet Settings</h2>
           <v-divider color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/voicemessages"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Voice Message Management
-          </v-btn>
-          <v-btn
-            type="button"
-            to="/intervalsettings"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Interval Settings Management
-          </v-btn>
-          <v-btn
-            type="button"
-            to="/conditions"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Conditions
-          </v-btn>
+          <SubNavButton
+            title="Voice Message Management"
+            route="/voicemessages"
+          />
+          <SubNavButton
+            title=" Interval Settings Management"
+            route="/intervalsettings"
+          />
+          <SubNavButton
+            title="Conditions"
+            route="/conditions"
+          />
         </v-container>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">eDroplet Management</h2>
+          <h2 class="pg-subhead">eDroplet Management</h2>
           <v-divider color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/edropletmanagement"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            eDroplet Management
-          </v-btn>
+          <SubNavButton
+            title="eDroplet Management"
+            route="/edropletmanagement"
+          />
         </v-container>
         <v-container grid-list-xs,sm,md,lg,xl>
-          <h2 class="common-subhead">Carer Settings</h2>
+          <h2 class="pg-subhead">Carer Settings</h2>
           <v-divider color="#00a1cd"></v-divider>
-          <v-btn
-            type="button"
-            to="/personnelsettings"
-            outline
-            color="primary"
-            class="root-nav-btn"
-            block
-          >
-            Personnel Settings
-          </v-btn>
+          <SubNavButton
+            title="Personnel Settings"
+            route="/personnelsettings"
+          />
         </v-container>
       </v-container>
     </div>
@@ -201,14 +111,23 @@
 </template>
 
 <script>
-import BaseButtonComponent from '@/components/sub/SubMenuBtn.vue'
+import SubNavButton from '@/components/sub/SubNavButton.vue'
 export default {
   name: 'Landing',
-  data () {
-    return {
-
-    }
-  }
+  components: {
+    SubNavButton
+  },
+  // data () {
+  //   return {
+  //     type: String,
+  //     outline: Boolean,
+  //     btnColor: String,
+  //     btnClass: String,
+  //     block: Boolean,
+  //     title: String,
+  //     route: String
+  //   }
+  // }
 }
 </script>
 <style scoped lang="scss">
