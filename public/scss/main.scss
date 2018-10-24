@@ -2,12 +2,49 @@ $main-blue: #00a1cd;
 $bg-grey: #f2f4f4;
 $text-body: #4d504f;
 
+// Headers
+
+.app-header {
+  margin: 1vw;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: $text-body;
+}
+.pg-header{
+  margin: 1vw;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: $main-blue;
+}
+.table-header {
+  margin: 1vw;
+  font-size: 1em;
+  font-weight: bold;
+  color: $main-blue;
+}
+.table-dialog-header .pg-dialog-header {
+  margin: 1vw;
+  font-size: 1em;
+  font-weight: bold;
+  color: $text-body;
+}
+
+//Subheaders
+
+.common-subhead {
+  font-size: 1em;
+  font-weight: bold;
+  color: $main-blue;
+}
+.voice-subhead .msg-subhead {
+  font-size: 1em;
+  color: $text-body;
+}
+
 // Buttons
 
 .root-nav-btn {
-  color: $main-blue;
-  border: 2px;
-  border-color: $main-blue;
+  margin-top: 1vw;
   border-radius: 4px;
   font-size: 1em;
 }

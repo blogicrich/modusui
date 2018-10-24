@@ -1,5 +1,5 @@
 <template>
-  <v-container id="login" fluid>
+  <v-container id="login" fluid fill-height>
     <v-flex>
       <v-layout column align-center>
         <v-fade-transition>
@@ -113,7 +113,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 @import "./public/scss/main.scss";
 
 #login {

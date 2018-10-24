@@ -33,8 +33,8 @@ export default new Router({
     },
     // Cliadmin routes
     {
-      path: '/careralertsettings',
-      name: 'CarerAlertSettings',
+      path: '/carersettings',
+      name: 'CarerSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
     {
@@ -53,8 +53,8 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/eDropletManagement.vue')
     },
     {
-      path: '/users',
-      name: 'Users',
+      path: '/personneldetails',
+      name: 'PersonnelDetails',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/Users.vue')
     },
     // Sysadmin routes
@@ -87,6 +87,11 @@ export default new Router({
       path: '/textmessages',
       name: 'TextMessages',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/TextMessages.vue')
+    },
+    {
+      path: '/defaultintervals',
+      name: 'DefaultIntervals',
+      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
     },
     {
       path: '/titles',

@@ -42,13 +42,13 @@
         </v-list> -->
     </v-navigation-drawer>
     <!-- <v-container fluid fill height id="appcontainer0"> -->
-      <v-layout align-center justify-center>
+      <v-layout>
         <!-- <v-flex xs12> -->
-          <!-- <v-content> -->
+          <v-content>
             <v-slide-y-transition mode="out-in">
               <router-view @authenticated="setAuthenticated"/>
             </v-slide-y-transition>
-          <!-- </v-content> -->
+          </v-content>
         <!-- </v-flex> -->
       </v-layout>
     <!-- </v-container> -->
