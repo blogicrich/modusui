@@ -2,13 +2,14 @@
   <v-app class="app-shell">
     <v-toolbar
       v-if="authenticated.state"
-      flat
       app
       :clipped-left="clipped"
     >
-    <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-    <v-toolbar-title v-text="title"></v-toolbar-title>
-    <v-spacer></v-spacer>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <img alt="" src="./assets/ed_logo.svg"><img>
+      <v-spacer></v-spacer>
+      <span>Logged in as: {{ user }}</span>
       <v-btn id="logout" icon @click.stop="logout">
         <v-icon >exit_to_app</v-icon>
       </v-btn>
@@ -50,7 +51,7 @@
       </v-layout>
     <!-- </v-container> -->
 
-    <v-footer v-if="authenticated.state" :fixed="fixed" app>
+    <v-footer v-if="authenticated.state" :fixed="fixed" app class="elevation-2">
         <span>Version: 0.1.0</span>
     </v-footer>
   </v-app>
@@ -69,7 +70,8 @@ export default {
       clipped: true,
       drawer: false,
       fixed: false,
-      title: 'eDroplet'
+      title: 'PLACEHOLDER HEADER',
+      user: 'User'
     }
   },
   methods: {
@@ -99,11 +101,14 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-
 @import "./public/scss/main.scss";
 
 .app-shell {
   background-color: $bg-grey;
 }
-
+img {
+  height: inherit;
+  margin-left: 1vw;
+  margin-right: 1vw;
+}
 </style>
