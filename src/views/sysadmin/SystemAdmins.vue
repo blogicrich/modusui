@@ -4,9 +4,11 @@
     <BaseDataTable
       :headers="headers"
       :items="items"
+      :editedItem="editedItem"
       tableTitle="System Administrators"
       btnTitle="New Administrator"
       dialogTitle="Add New Administrator"
+      @newItem="logItem"
     />
   </v-container>
 </template>
@@ -46,8 +48,8 @@ export default {
         { text: 'Calories', value: 'calories' },
         { text: 'Fat (g)', value: 'fat' },
         { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' }
-        // { text: 'Actions', value: 'name', sortable: false }
+        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Actions', value: null, sortable: false }
       ],
       editedItem: {
         name: '',
@@ -56,6 +58,11 @@ export default {
         carbs: 0,
         protein: 0
       }
+    }
+  },
+  methods: {
+    logItem: function(newItem) {
+      console.log(newItem);
     }
   }
 }
