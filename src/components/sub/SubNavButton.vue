@@ -16,7 +16,7 @@
 import BaseButton from '@/components/base/BaseBtnComponent.vue'
 
 export default {
-  name: 'SubMenuBtn',
+  name: 'SubNavButton',
   components: {
     BaseButton
   },
@@ -25,7 +25,7 @@ export default {
       type: 'button',
       outline: true,
       btnColor: 'primary',
-      btnClass: "root-nav-btn",
+      btnClass: 'root-nav-btn',
       block: true
     }
   },

@@ -78,7 +78,7 @@ export default {
       clipped: true,
       drawer: false,
       fixed: false,
-      title: 'PLACEHOLDER HEADER',
+      title: '',
       user: 'User'
     }
   },
