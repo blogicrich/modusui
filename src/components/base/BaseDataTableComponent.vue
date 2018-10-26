@@ -1,7 +1,8 @@
 <template>
   <div>
     <v-toolbar class="my-1" flat color="white">
-      <h2 class="table-dialog-header">{{ tableTitle }}</h2>
+      <span class="table-header">{{ tableTitle }}</span>
+      <!-- <h2 class="table-dialog-header">{{ tableTitle }}</h2> -->
       <v-divider
         class="mx-2"
         inset
@@ -12,12 +13,12 @@
       <v-btn slot="activator" color="primary" dark class="mb-2">{{ btnTitle }}</v-btn>
       <v-card>
         <v-card-title>
-          <span class="table-dialog-header">{{ dialogTitle }}</span>
+          <span class="table-header">{{ dialogTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-layout row wrap>
-              <v-flex v-for="(item, key) in editedItem" :key="key" xs12 md4>
+              <v-flex v-for="(item, key) in editedItem" xs12 md4>
                 <v-text-field class="ma-1" :label="key" v-model="editedItem[key]"></v-text-field>
               </v-flex>
             </v-layout>
@@ -31,35 +32,67 @@
       </v-card>
     </v-dialog>
   </v-toolbar>
-
+  <v-card>
+    <v-card-title>
+      Search {{ tableTitle }}
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
     <v-data-table
       :headers="headers"
       :items="items"
-      hide-actions
+      :search="search"
+      v-model="selected"
+      :item-key="itemKey"
+      select-all
+      hide-details
       class="elevation-1"
     >
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-left" v-for="header in headers" :key="header.text">{{ props.item[header.value] }}</td>
-        <td class="justify-center layout px-0">
-            <v-icon
-              small
-              class="mr-2"
-              @click="editItem(props.item)"
-            >
-              edit
-            </v-icon>
-            <v-icon
-              small
-              @click="deleteItem(props.item)"
-            >
-              delete
-            </v-icon>
-          </td>
-        </template>
+    <template slot="headerCell" slot-scope="props">
+      <v-tooltip bottom>
+        <span slot="activator">
+          {{ props.header.text }}
+        </span>
+        <span>
+          {{ props.header.text }}
+        </span>
+      </v-tooltip>
+    </template>
+    <template slot="items" slot-scope="props">
+      <td>
+        <v-checkbox
+          v-model="props.selected"
+          primary
+        ></v-checkbox>
+      </td>
+      <td class="text-xs-left" v-for="header in headers">{{ props.item[header.value] }}</td>
+      <!-- <td class="justify-center layout px-0">
+          <v-icon
+            small
+            class="mr-2"
+            @click="editItem(props.item)"
+          >
+            edit
+          </v-icon>
+          <v-icon
+            small
+            @click="deleteItem(props.item)"
+          >
+            delete
+          </v-icon>
+        </td> -->
+      </template>
         <template slot="no-data">
           <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
         </template>
     </v-data-table>
+  </v-card>
   </div>
 </template>
 
@@ -69,7 +102,9 @@ export default {
   name: 'BaseDataTable',
   data () {
     return {
-      dialog: false
+      dialog: false,
+      search: '',
+      selected: []
     }
   },
   props: {
@@ -78,7 +113,8 @@ export default {
     btnTitle: String,
     dialogTitle: String,
     tableTitle: String,
-    editedItem: Object
+    editedItem: Object,
+    itemKey: String
   },
   // created () {
   //   this.initialize()

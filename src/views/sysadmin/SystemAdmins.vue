@@ -8,6 +8,7 @@
       tableTitle="System Administrators"
       btnTitle="New Administrator"
       dialogTitle="Add New Administrator"
+      itemKey="name"
       @newItem="logItem"
     />
   </v-container>
@@ -48,8 +49,7 @@ export default {
         { text: 'Calories', value: 'calories' },
         { text: 'Fat (g)', value: 'fat' },
         { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Actions', sortable: false }
+        { text: 'Protein (g)', value: 'protein' }
       ],
       editedItem: {
         name: '',
