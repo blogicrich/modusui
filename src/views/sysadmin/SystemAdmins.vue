@@ -49,7 +49,7 @@ export default {
         { text: 'Fat (g)', value: 'fat' },
         { text: 'Carbs (g)', value: 'carbs' },
         { text: 'Protein (g)', value: 'protein' },
-        { text: 'Actions', value: null, sortable: false }
+        { text: 'Actions', sortable: false }
       ],
       editedItem: {
         name: '',
@@ -61,8 +61,8 @@ export default {
     }
   },
   methods: {
-    logItem: function(newItem) {
-      console.log(newItem);
+    logItem: function (newItem) {
+      console.log(newItem)
     }
   }
 }

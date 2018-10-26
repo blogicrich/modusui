@@ -14,8 +14,8 @@
           <h2 class="pg-subhead">Defaults Administration</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
           <SubNavButton
-            title="default Intervals"
-            route="/defaultintervals"
+            title="Interval Options"
+            route="/intervaloptions"
           />
         </v-flex>
         <v-flex xs12 md6>

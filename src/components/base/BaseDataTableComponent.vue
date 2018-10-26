@@ -17,7 +17,7 @@
         <v-card-text>
           <v-container>
             <v-layout row wrap>
-              <v-flex v-for="(item, key) in editedItem" xs12 md4>
+              <v-flex v-for="(item, key) in editedItem" :key="key" xs12 md4>
                 <v-text-field class="ma-1" :label="key" v-model="editedItem[key]"></v-text-field>
               </v-flex>
             </v-layout>
@@ -110,12 +110,12 @@ export default {
     close () {
       this.dialog = false
       // setTimeout(() => {
-        console.log("hgjhgghh");
-        this.$emit('newItem', 'true')
-        // this.editedItem = Object.assign({}, this.defaultItem)
-        // this.editedIndex = -1
+      console.log('hgjhgghh')
+      this.$emit('newItem', 'true')
+      // this.editedItem = Object.assign({}, this.defaultItem)
+      // this.editedIndex = -1
       // }, 300)
-    },
+    }
     //
     // save () {
     //   if (this.editedIndex > -1) {
