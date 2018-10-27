@@ -2,7 +2,7 @@
   <v-app class="app-shell">
     <v-toolbar
       v-if="authenticated.state"
-      class="pa-1"
+
       color="white"
       app
       :clipped-left="clipped"
@@ -116,6 +116,6 @@ export default {
 }
 img {
   height: inherit;
-  margin: 1vw;
+  padding: 5px;
 }
 </style>

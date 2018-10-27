@@ -1,7 +1,7 @@
 <template>
   <div>
   <!-- Table Header: Title and '+' button -->
-    <v-toolbar class="pa-1 elevation-1" flat color="white">
+    <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
       <h2 class="table-header">{{ tableTitle }}</h2>
       <v-divider
         class="mx-2"
@@ -20,9 +20,10 @@
           </v-card-title>
           <v-card-text>
             <v-container>
-              <v-layout row wrap>
-                <v-flex v-for="(item, key) in editedItem" xs12 md4>
-                  <v-text-field class="ma-1" :label="key" v-model="editedItem[key]"></v-text-field>
+              <v-layout row wrap justify-space-around>
+                <v-flex v-for="(item, key) in editedItem" :key="item.name" xs12 md4>
+                  <v-text-field v-if="item.cellType === 'tb'" class="mx-1" :label="item.cellLabel" v-model="editedItem[key].sync"></v-text-field>
+                  <v-overflow-btn v-else-if="item.cellType === 'dd'" class="mx-1" :label="item.cellLabel" :items="headers" v-model="editedItem[key].sync"></v-overflow-btn>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -35,18 +36,21 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-  <!-- Edit or New item: Search bar -->
+  <!-- New item: Search bar -->
     <v-card>
-      <v-card-title v-if="!searchBarHidden">
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          :label="searchLabel"
-          single-line
-          hide-details
-        ></v-text-field>
-      </v-card-title>
+      <v-fade-transition>
+        <v-card-title v-if="!searchBarHidden">
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            :label="searchLabel"
+            single-line
+            hide-details
+          ></v-text-field>
+          <v-spacer></v-spacer>
+        </v-card-title>
+      </v-fade-transition>
     </v-card>
     <!-- Data table -->
     <v-data-table
@@ -79,33 +83,33 @@
           primary
         ></v-checkbox>
       </td>
-      <td class="text-xs-left" v-for="header in headers">{{ props.item[header.value] }}</td>
+      <td class="text-xs-left" v-for="header in headers" :key="header.text">{{ props.item[header.value] }}</td>
       </template>
     </v-data-table>
     <!-- Table: Footer Pagination CRUD function buttons-->
-  <v-card>
-    <v-container>
-      <v-layout row>
-        <v-flex>
-          <v-layout align-end justify-end>
-            <v-btn fab dark small color="green">
-              <v-icon dark>edit</v-icon>
-            </v-btn>
-            <v-btn fab dark small color="primary">
-              <v-icon dark>search</v-icon>
-            </v-btn>
-            <v-btn fab dark small color="error">
-              <v-icon dark>delete</v-icon>
-            </v-btn>
+    <v-card>
+      <v-container class="my-1">
+        <v-layout row>
+          <v-flex>
+            <v-layout align-end justify-end>
+              <v-btn fab dark small color="green">
+                <v-icon dark>edit</v-icon>
+              </v-btn>
+              <v-btn fab dark small color="primary" @click="searchDisplay">
+                <v-icon dark>search</v-icon>
+              </v-btn>
+              <v-btn fab dark small color="error">
+                <v-icon dark>delete</v-icon>
+              </v-btn>
+            </v-layout>
+          </v-flex>
+          <v-layout row align-start justify-start>
+            <v-pagination class="ma-2" v-model="pagination.page" :length="pages"></v-pagination>
           </v-layout>
-        </v-flex>
-        <v-layout row align-start justify-start>
-          <v-pagination class="ma-2" v-model="pagination.page" :length="pages"></v-pagination>
         </v-layout>
-      </v-layout>
-    </v-container>
-    <!-- </v-layout> -->
-  </v-card>
+      </v-container>
+      <!-- </v-layout> -->
+    </v-card>
   </div>
 </template>
 
@@ -128,7 +132,7 @@ export default {
     btnTitle: String,
     dialogTitle: String,
     tableTitle: String,
-    editedItem: Object,
+    editedItem: Array,
     itemKey: String,
     searchLabel: String
   },
@@ -140,13 +144,12 @@ export default {
   },
   computed: {
     pages () {
-        if (this.pagination.rowsPerPage == null ||
-          this.pagination.totalItems == null
-        ) return 0
-
-        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
-      }
-    },
+      if (this.pagination.rowsPerPage == null ||
+        this.pagination.totalItems == null
+      ) return 0
+      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+    }
+  },
   // formTitle () {
   //   return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
   //   }
@@ -171,10 +174,14 @@ export default {
       this.dialog = false
       // setTimeout(() => {
       console.log('hgjhgghh')
-      this.$emit('newItem', 'true')
+      this.$emit('newItem', this.editedItem)
       // this.editedItem = Object.assign({}, this.defaultItem)
       // this.editedIndex = -1
       // }, 300)
+    },
+    searchDisplay () {
+      this.searchBarHidden = !this.searchBarHidden
+      return this.searchBarHidden
     }
     //
     // save () {
