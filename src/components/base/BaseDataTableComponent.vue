@@ -1,49 +1,54 @@
 <template>
   <div>
-    <v-toolbar class="my-1" flat color="white">
-      <span class="table-header">{{ tableTitle }}</span>
-      <!-- <h2 class="table-dialog-header">{{ tableTitle }}</h2> -->
+  <!-- Table Header: Title and '+' button -->
+    <v-toolbar class="pa-1 elevation-1" flat color="white">
+      <h2 class="table-header">{{ tableTitle }}</h2>
       <v-divider
         class="mx-2"
         inset
         vertical
       ></v-divider>
       <v-spacer></v-spacer>
+  <!-- Edit or New item: Title and '+' button -->
       <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">{{ btnTitle }}</v-btn>
-      <v-card>
-        <v-card-title>
-          <span class="table-header">{{ dialogTitle }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-layout row wrap>
-              <v-flex v-for="(item, key) in editedItem" xs12 md4>
-                <v-text-field class="ma-1" :label="key" v-model="editedItem[key]"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-toolbar>
-  <v-card>
-    <v-card-title>
-      Search {{ tableTitle }}
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
+        <v-btn slot="activator" color="green" fab small dark class="ma-1">
+          <v-icon dark>add</v-icon>
+        </v-btn>
+        <v-card>
+          <v-card-title>
+            <span class="table-header">{{ dialogTitle }}</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-layout row wrap>
+                <v-flex v-for="(item, key) in editedItem" xs12 md4>
+                  <v-text-field class="ma-1" :label="key" v-model="editedItem[key]"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
+            <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-toolbar>
+  <!-- Edit or New item: Search bar -->
+    <v-card>
+      <v-card-title v-if="!searchBarHidden">
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          :label="searchLabel"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
+    </v-card>
+    <!-- Data table -->
     <v-data-table
       :headers="headers"
       :items="items"
@@ -51,9 +56,11 @@
       v-model="selected"
       :item-key="itemKey"
       select-all
-      hide-details
+      hide-actions
+      :pagination.sync="pagination"
       class="elevation-1"
     >
+    <!-- Table: Headers -->
     <template slot="headerCell" slot-scope="props">
       <v-tooltip bottom>
         <span slot="activator">
@@ -64,6 +71,7 @@
         </span>
       </v-tooltip>
     </template>
+    <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <td>
         <v-checkbox
@@ -72,26 +80,31 @@
         ></v-checkbox>
       </td>
       <td class="text-xs-left" v-for="header in headers">{{ props.item[header.value] }}</td>
-      <!-- <td class="justify-center layout px-0">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(props.item)"
-          >
-            delete
-          </v-icon>
-        </td> -->
       </template>
-        <template slot="no-data">
-          <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
-        </template>
     </v-data-table>
+    <!-- Table: Footer Pagination CRUD function buttons-->
+  <v-card>
+    <v-container>
+      <v-layout row>
+        <v-flex>
+          <v-layout align-end justify-end>
+            <v-btn fab dark small color="green">
+              <v-icon dark>edit</v-icon>
+            </v-btn>
+            <v-btn fab dark small color="primary">
+              <v-icon dark>search</v-icon>
+            </v-btn>
+            <v-btn fab dark small color="error">
+              <v-icon dark>delete</v-icon>
+            </v-btn>
+          </v-layout>
+        </v-flex>
+        <v-layout row align-start justify-start>
+          <v-pagination class="ma-2" v-model="pagination.page" :length="pages"></v-pagination>
+        </v-layout>
+      </v-layout>
+    </v-container>
+    <!-- </v-layout> -->
   </v-card>
   </div>
 </template>
@@ -104,7 +117,9 @@ export default {
     return {
       dialog: false,
       search: '',
-      selected: []
+      selected: [],
+      searchBarHidden: true,
+      pagination: {}
     }
   },
   props: {
@@ -114,7 +129,8 @@ export default {
     dialogTitle: String,
     tableTitle: String,
     editedItem: Object,
-    itemKey: String
+    itemKey: String,
+    searchLabel: String
   },
   // created () {
   //   this.initialize()
@@ -122,7 +138,15 @@ export default {
   mounted () {
     console.log(this.items)
   },
-  // computed: {
+  computed: {
+    pages () {
+        if (this.pagination.rowsPerPage == null ||
+          this.pagination.totalItems == null
+        ) return 0
+
+        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+      }
+    },
   // formTitle () {
   //   return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
   //   }
@@ -167,4 +191,7 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+  .tfoot {
+    width: 100vw;
+  }
 </style>
