@@ -5,13 +5,14 @@
       :headers="headers"
       :items="items"
       :newItem="newItem"
+      :menuItems="menuItems"
       searchLabel="Search System Administrators"
       tableTitle="System Administrators"
       btnTitle="+"
       dialogTitle="Add New Administrator"
       itemKey="name"
       @newItem="addItem"
-      @deleteItem="deleteItem"
+      @deleteSelected="deleteItem"
     />
   </v-container>
 </template>
@@ -130,41 +131,69 @@ export default {
         { text: 'Protein (g)', value: 'protein' }
       ],
       newItem: [
-        { name: '', cellType: 'dd', cellLabel: 'name' },
-        { calories: 0, cellType: 'tb', cellLabel: 'calories' },
-        { fat: 0, cellType: 'dd', cellLabel: 'fat' },
-        { carbs: 0, cellType: 'dd', cellLabel: 'carbs' },
-        { protein: 0, cellType: 'dd', cellLabel: 'protein' }
+        { name: '', cellType: 'tb', cellLabel: 'name' },
+        { calories: 0, cellType: 'md', cellLabel: 'calories' },
+        { fat: 0, cellType: 'md', cellLabel: 'fat' },
+        { carbs: 0, cellType: 'md', cellLabel: 'carbs' },
+        { protein: 0, cellType: 'md', cellLabel: 'protein' }
       ],
+      defaultItem: [
+        { name: '', calories: 0, fat: 0, carbs: 0, protein: 0 }
+      ],
+      menuItems: [
+        { text: 'Calories', value: 'calories' },
+        { text: 'Fat (g)', value: 'fat' },
+        { text: 'Carbs (g)', value: 'carbs' },
+        { text: 'Protein (g)', value: 'protein' }
+      ]
     }
   },
   methods: {
-    addItem: function (item) {
-      var itemToAdd = {name: item[0].sync, calories: item[1].sync, fat: item[2].sync, carbs: item[3].sync, protein: item[4].sync}
+    addItem (item) {
       for (var i = 0; i < item.length; i++) {
-        if(this.items[i].hasOwnProperty('sync')) {
-          console.log(item);
-          console.log(this.newItem);
-        }
+        // for (var j = 0; j < item.length; j++) {
+          if(item[i].hasOwnProperty('sync')) {
+            // const index = item[i].indexOf['sync']
+            // this.items[i].indexOf['sync'] &&
+            this.defaultItem[item[i].cellLabel] = item[i].sync
+            console.log(item[i].cellLabel, item[i].sync);
+            // console.log(this.newItem);
+
+          }
+        // }
       }
-      this.items.push(itemToAdd)
+      // var itemToAdd = {name: item[0].sync, calories: item[1].sync, fat: item[2].sync, carbs: item[3].sync, protein: item[4].sync}
+      // for (var i = 0; i < item.length; i++) {
+      //   if(this.items[i].hasOwnProperty('sync')) {
+      //     console.log(item);
+      //     console.log(this.newItem);
+      //   }
+      // }
+      this.items.push(this.defaultItem)
+      console.log("item: ", item);
+      // console.log(this.newItem)
       this.resetItem()
     },
     deleteItem (items) {
       console.log(items)
-      var index
+      var index = 0
       for (var i = 0; i < items.length; i++) {
         index = this.items.indexOf(items[i])
+        console.log(items[i].name)
         confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
       }
+      console.log(this.items)
     },
     resetItem () {
       this.newItem = [
-        { name: '', cellType: 'dd', cellLabel: 'name' },
-        { calories: 0, cellType: 'tb', cellLabel: 'calories' },
-        { fat: 0, cellType: 'dd', cellLabel: 'fat' },
-        { carbs: 0, cellType: 'dd', cellLabel: 'carbs' },
-        { protein: 0, cellType: 'dd', cellLabel: 'protein' }
+        { name: '', cellType: 'tb', cellLabel: 'name' },
+        { calories: 0, cellType: 'md', cellLabel: 'calories' },
+        { fat: 0, cellType: 'md', cellLabel: 'fat' },
+        { carbs: 0, cellType: 'md', cellLabel: 'carbs' },
+        { protein: 0, cellType: 'md', cellLabel: 'protein' }
+      ]
+      this.defaultItem = [
+        { name: '', calories: 0, fat: 0, carbs: 0, protein: 0 }
       ]
     }
   }

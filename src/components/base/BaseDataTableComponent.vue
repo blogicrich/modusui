@@ -22,8 +22,24 @@
             <v-container>
               <v-layout row wrap justify-space-around>
                 <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md4>
-                  <v-text-field v-if="item.cellType === 'tb'" class="mx-1" :label="item.cellLabel" v-model="newItem[key].sync"></v-text-field>
-                  <v-overflow-btn v-else-if="item.cellType === 'dd'" class="mx-1" :label="item.cellLabel" :items="headers" v-model="newItem[key].sync"></v-overflow-btn>
+                  <v-text-field
+                    v-if="item.cellType === 'tb'"
+                    class="ma-1"
+                    :label="item.cellLabel"
+                    v-model="newItem[key].sync"
+                    color="primary"
+                    outline
+                  ></v-text-field>
+                  <v-select
+                    v-else-if="item.cellType === 'md'"
+                    class="ma-1"
+                    v-model="newItem[key].sync"
+                    :items="menuItems"
+                    :label="newItem[key].cellLabel"
+                    color="primary"
+                    outline
+                  ></v-select>
+                  </v-flex>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -52,7 +68,7 @@
         </v-card-title>
       </v-fade-transition>
     </v-card>
-    <!-- Data table -->
+  <!-- Data table -->
     <v-data-table
       :headers="headers"
       :items="items"
@@ -65,7 +81,7 @@
       :total.items="pagination.totalItems"
       class="elevation-1"
     >
-    <!-- Table: Headers -->
+  <!-- Table: Headers -->
     <template slot="headerCell" slot-scope="props">
       <v-tooltip bottom>
         <span slot="activator">
@@ -76,7 +92,7 @@
         </span>
       </v-tooltip>
     </template>
-    <!-- Table: Row data-->
+  <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <td>
         <v-checkbox
@@ -87,15 +103,12 @@
       <td class="text-xs-left" v-for="header in headers" :key="header.text">{{ props.item[header.value] }}</td>
       </template>
     </v-data-table>
-    <!-- Table: Footer Pagination CRUD function buttons-->
+  <!-- Table: Footer Pagination CRUD function buttons-->
     <v-card>
       <v-container class="my-1">
         <v-layout row>
           <v-flex>
             <v-layout align-end justify-end>
-              <!-- <v-btn fab dark small color="green">
-                <v-icon dark>edit</v-icon>
-              </v-btn> -->
               <v-btn fab dark small color="primary" @click="searchDisplay">
                 <v-icon dark>search</v-icon>
               </v-btn>
@@ -129,6 +142,7 @@ export default {
   props: {
     items: Array,
     headers: Array,
+    menuItems: Array,
     btnTitle: String,
     dialogTitle: String,
     tableTitle: String,
@@ -138,17 +152,19 @@ export default {
   },
   computed: {
     pages () {
-      if (this.pagination.rowsPerPage == null ||
-        this.pagination.totalItems == null
-      ) return 0
-      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+      this.pagination.totalItems = this.items.length
+      if ( this.pagination.rowsPerPage == null || this.pagination.totalItems == null ) {
+        return 0
+      } else {
+        return Math.ceil( this.pagination.totalItems / this.pagination.rowsPerPage )
+      }
     }
   },
   methods: {
     deleteItem () {
-      this.$emit('deleteItem', this.selected)
+      this.$emit('deleteSelected', this.selected)
+      this.selected = []
     },
-
     close () {
       this.dialog = false
       console.log('Dialog Closing')
@@ -171,7 +187,4 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
-  .tfoot {
-    width: 100vw;
-  }
 </style>
