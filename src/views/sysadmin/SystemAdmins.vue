@@ -4,13 +4,14 @@
     <BaseDataTable
       :headers="headers"
       :items="items"
-      :editedItem="editedItem"
+      :newItem="newItem"
       searchLabel="Search System Administrators"
       tableTitle="System Administrators"
       btnTitle="+"
       dialogTitle="Add New Administrator"
       itemKey="name"
-      @newItem="logItem"
+      @newItem="addItem"
+      @deleteItem="deleteItem"
     />
   </v-container>
 </template>
@@ -62,7 +63,7 @@ export default {
           iron: '8%'
         },
         {
-          value: false,
+          // value: false,
           name: 'Gingerbread',
           calories: 356,
           fat: 16.0,
@@ -71,7 +72,7 @@ export default {
           iron: '16%'
         },
         {
-          value: false,
+          // value: false,
           name: 'Jelly bean',
           calories: 375,
           fat: 0.0,
@@ -80,7 +81,7 @@ export default {
           iron: '0%'
         },
         {
-          value: false,
+          // value: false,
           name: 'Lollipop',
           calories: 392,
           fat: 0.2,
@@ -89,7 +90,7 @@ export default {
           iron: '2%'
         },
         {
-          value: false,
+          // value: false,
           name: 'Honeycomb',
           calories: 408,
           fat: 3.2,
@@ -98,7 +99,7 @@ export default {
           iron: '45%'
         },
         {
-          value: false,
+          // value: false,
           name: 'Donut',
           calories: 452,
           fat: 25.0,
@@ -107,7 +108,7 @@ export default {
           iron: '22%'
         },
         {
-          value: false,
+          // value: false,
           name: 'KitKat',
           calories: 518,
           fat: 26.0,
@@ -128,18 +129,43 @@ export default {
         { text: 'Carbs (g)', value: 'carbs' },
         { text: 'Protein (g)', value: 'protein' }
       ],
-      editedItem: [
+      newItem: [
+        { name: '', cellType: 'dd', cellLabel: 'name' },
+        { calories: 0, cellType: 'tb', cellLabel: 'calories' },
+        { fat: 0, cellType: 'dd', cellLabel: 'fat' },
+        { carbs: 0, cellType: 'dd', cellLabel: 'carbs' },
+        { protein: 0, cellType: 'dd', cellLabel: 'protein' }
+      ],
+    }
+  },
+  methods: {
+    addItem: function (item) {
+      var itemToAdd = {name: item[0].sync, calories: item[1].sync, fat: item[2].sync, carbs: item[3].sync, protein: item[4].sync}
+      for (var i = 0; i < item.length; i++) {
+        if(this.items[i].hasOwnProperty('sync')) {
+          console.log(item);
+          console.log(this.newItem);
+        }
+      }
+      this.items.push(itemToAdd)
+      this.resetItem()
+    },
+    deleteItem (items) {
+      console.log(items)
+      var index
+      for (var i = 0; i < items.length; i++) {
+        index = this.items.indexOf(items[i])
+        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+      }
+    },
+    resetItem () {
+      this.newItem = [
         { name: '', cellType: 'dd', cellLabel: 'name' },
         { calories: 0, cellType: 'tb', cellLabel: 'calories' },
         { fat: 0, cellType: 'dd', cellLabel: 'fat' },
         { carbs: 0, cellType: 'dd', cellLabel: 'carbs' },
         { protein: 0, cellType: 'dd', cellLabel: 'protein' }
       ]
-    }
-  },
-  methods: {
-    logItem: function (newItem) {
-      console.log(newItem)
     }
   }
 }

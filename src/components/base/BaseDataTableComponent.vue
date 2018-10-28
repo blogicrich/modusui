@@ -21,9 +21,9 @@
           <v-card-text>
             <v-container>
               <v-layout row wrap justify-space-around>
-                <v-flex v-for="(item, key) in editedItem" :key="item.name" xs12 md4>
-                  <v-text-field v-if="item.cellType === 'tb'" class="mx-1" :label="item.cellLabel" v-model="editedItem[key].sync"></v-text-field>
-                  <v-overflow-btn v-else-if="item.cellType === 'dd'" class="mx-1" :label="item.cellLabel" :items="headers" v-model="editedItem[key].sync"></v-overflow-btn>
+                <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md4>
+                  <v-text-field v-if="item.cellType === 'tb'" class="mx-1" :label="item.cellLabel" v-model="newItem[key].sync"></v-text-field>
+                  <v-overflow-btn v-else-if="item.cellType === 'dd'" class="mx-1" :label="item.cellLabel" :items="headers" v-model="newItem[key].sync"></v-overflow-btn>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -62,6 +62,7 @@
       select-all
       hide-actions
       :pagination.sync="pagination"
+      :total.items="pagination.totalItems"
       class="elevation-1"
     >
     <!-- Table: Headers -->
@@ -92,13 +93,13 @@
         <v-layout row>
           <v-flex>
             <v-layout align-end justify-end>
-              <v-btn fab dark small color="green">
+              <!-- <v-btn fab dark small color="green">
                 <v-icon dark>edit</v-icon>
-              </v-btn>
+              </v-btn> -->
               <v-btn fab dark small color="primary" @click="searchDisplay">
                 <v-icon dark>search</v-icon>
               </v-btn>
-              <v-btn fab dark small color="error">
+              <v-btn fab dark small color="error" @click="deleteItem">
                 <v-icon dark>delete</v-icon>
               </v-btn>
             </v-layout>
@@ -108,7 +109,6 @@
           </v-layout>
         </v-layout>
       </v-container>
-      <!-- </v-layout> -->
     </v-card>
   </div>
 </template>
@@ -132,15 +132,9 @@ export default {
     btnTitle: String,
     dialogTitle: String,
     tableTitle: String,
-    editedItem: Array,
+    newItem: Array,
     itemKey: String,
     searchLabel: String
-  },
-  // created () {
-  //   this.initialize()
-  // },
-  mounted () {
-    console.log(this.items)
   },
   computed: {
     pages () {
@@ -150,48 +144,27 @@ export default {
       return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
     }
   },
-  // formTitle () {
-  //   return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-  //   }
-  // },
-  // watch: {
-  //   dialog (val) {
-  //     val || this.close()
-  //   }
-  // },
   methods: {
-    // editItem (item) {
-    //   this.editedIndex = this.desserts.indexOf(item)
-    //   this.editedItem = Object.assign({}, item)
-    //   this.dialog = true
-    // },
-    // deleteItem (item) {
-    //   const index = this.desserts.indexOf(item)
-    //   confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
-    // },
-    //
+    deleteItem () {
+      this.$emit('deleteItem', this.selected)
+    },
+
     close () {
       this.dialog = false
-      // setTimeout(() => {
-      console.log('hgjhgghh')
-      this.$emit('newItem', this.editedItem)
-      // this.editedItem = Object.assign({}, this.defaultItem)
-      // this.editedIndex = -1
-      // }, 300)
+      console.log('Dialog Closing')
     },
     searchDisplay () {
       this.searchBarHidden = !this.searchBarHidden
       return this.searchBarHidden
+    },
+    save () {
+      console.log("Fired")
+      this.$emit('newItem', this.newItem)
+      this.close()
     }
-    //
-    // save () {
-    //   if (this.editedIndex > -1) {
-    //     Object.assign(this.desserts[this.editedIndex], this.editedItem)
-    //   } else {
-    //     this.desserts.push(this.editedItem)
-    //   }
-    //   this.close()
-    // }
+  },
+  mounted () {
+    console.log(this.items)
   }
 }
 </script>
