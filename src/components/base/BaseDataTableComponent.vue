@@ -21,7 +21,7 @@
           <v-card-text>
             <v-container>
               <v-layout row wrap justify-space-around>
-                <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md4>
+                <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
                   <v-text-field
                     v-if="item.cellType === 'tb'"
                     class="ma-1"
@@ -39,7 +39,6 @@
                     color="primary"
                     outline
                   ></v-select>
-                  </v-flex>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -64,6 +63,9 @@
             single-line
             hide-details
           ></v-text-field>
+          <v-btn class="mx-3" fab dark small color="error" @click="search = null">
+            <v-icon dark>close</v-icon>
+          </v-btn>
           <v-spacer></v-spacer>
         </v-card-title>
       </v-fade-transition>
@@ -78,7 +80,7 @@
       select-all
       hide-actions
       :pagination.sync="pagination"
-      :total.items="pagination.totalItems"
+      :total.items="this.items.length"
       class="elevation-1"
     >
   <!-- Table: Headers -->
@@ -100,13 +102,61 @@
           primary
         ></v-checkbox>
       </td>
-      <td class="text-xs-left" v-for="header in headers" :key="header.text">{{ props.item[header.value] }}</td>
+       <td
+         class="text-xs-left"
+         v-for="header in headers"
+         :key="header.text"
+       >
+         <v-edit-dialog
+            :return-value.sync="props.item[header.value]"
+            lazy
+            large
+            permanent
+            persistent
+            @save="msgSave"
+            @cancel="msgCancel"
+            @close="msgClose"
+          >
+          <div>{{ props.item[header.value] }}</div>
+          <div slot="input" class="my-3 title">{{ header.text }}</div>
+            <v-text-field
+              v-if="header.cellType == 'tb'"
+              slot="input"
+              v-model="props.item[header.value]"
+              label="Edit"
+              single-line
+              counter
+            ></v-text-field>
+            <v-select
+              v-else-if="header.cellType === 'md'"
+              slot="input"
+              class="ma-1"
+              v-model="props.item[header.value]"
+              :items="menuItems"
+              :label="header.text"
+              color="primary"
+              large
+              outline
+            ></v-select>
+        </v-edit-dialog>
+      </td>
       </template>
     </v-data-table>
   <!-- Table: Footer Pagination CRUD function buttons-->
     <v-card>
       <v-container class="my-1">
-        <v-layout row>
+        <v-layout row wrap>
+          <!-- <v-layout xs2 md2> -->
+            <v-flex xs1 md1>
+              <v-select
+                class="ma-1"
+                v-model="pagination.rowsPerPage"
+                :items="rows"
+                label="rows"
+                color="primary"
+              ></v-select>
+            </v-flex>
+          <!-- </v-layout> -->
           <v-flex>
             <v-layout align-end justify-end>
               <v-btn fab dark small color="primary" @click="searchDisplay">
@@ -118,11 +168,21 @@
             </v-layout>
           </v-flex>
           <v-layout row align-start justify-start>
-            <v-pagination class="ma-2" v-model="pagination.page" :length="pages"></v-pagination>
+            <v-pagination
+              class="ma-1"
+              v-model="pagination.page"
+              :length="pages"
+              >
+            </v-pagination>
           </v-layout>
         </v-layout>
       </v-container>
     </v-card>
+    <!-- Table: Footer Pagination CRUD function buttons-->
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+      {{ snackText }}
+      <v-btn flat @click="snack = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -132,11 +192,16 @@ export default {
   name: 'BaseDataTable',
   data () {
     return {
+      rows: [ 5, 10, 15, 20, 25, 50, 100 ],
       dialog: false,
       search: '',
       selected: [],
       searchBarHidden: true,
-      pagination: {}
+      pagination: {},
+      snackColor: 'primary',
+      snackText: '',
+      rowDisplayNo: 5,
+      snack: false
     }
   },
   props: {
@@ -148,15 +213,14 @@ export default {
     tableTitle: String,
     newItem: Array,
     itemKey: String,
-    searchLabel: String
+    searchLabel: String,
   },
   computed: {
     pages () {
-      this.pagination.totalItems = this.items.length
-      if ( this.pagination.rowsPerPage == null || this.pagination.totalItems == null ) {
+      if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) {
         return 0
       } else {
-        return Math.ceil( this.pagination.totalItems / this.pagination.rowsPerPage )
+        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
       }
     }
   },
@@ -171,13 +235,33 @@ export default {
     },
     searchDisplay () {
       this.searchBarHidden = !this.searchBarHidden
+      this.search = null
       return this.searchBarHidden
     },
     save () {
-      console.log("Fired")
+      console.log('Fired')
       this.$emit('newItem', this.newItem)
       this.close()
+    },
+    msgSave () {
+      this.snack = true
+      this.snackColor = 'success'
+      this.snackText = 'Data saved'
+    },
+    msgCancel () {
+      this.snack = true
+      this.snackColor = 'error'
+      this.snackText = 'Canceled'
+    },
+    msgOpen () {
+      this.snack = true
+      this.snackColor = 'info'
+      this.snackText = 'Dialog opened'
+    },
+    msgClose () {
+      console.log('Snackbar closed')
     }
+
   },
   mounted () {
     console.log(this.items)

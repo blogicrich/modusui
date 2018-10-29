@@ -123,12 +123,13 @@ export default {
           text: 'Dessert',
           align: 'left',
           sortable: false,
-          value: 'name'
+          value: 'name',
+          cellType: 'tb'
         },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' }
+        { text: 'Calories', value: 'calories', cellType: 'md' },
+        { text: 'Fat (g)', value: 'fat', cellType: 'md' },
+        { text: 'Carbs (g)', value: 'carbs', cellType: 'md' },
+        { text: 'Protein (g)', value: 'protein', cellType: 'md' }
       ],
       newItem: [
         { name: '', cellType: 'tb', cellLabel: 'name' },
@@ -151,27 +152,13 @@ export default {
   methods: {
     addItem (item) {
       for (var i = 0; i < item.length; i++) {
-        // for (var j = 0; j < item.length; j++) {
-          if(item[i].hasOwnProperty('sync')) {
-            // const index = item[i].indexOf['sync']
-            // this.items[i].indexOf['sync'] &&
-            this.defaultItem[item[i].cellLabel] = item[i].sync
-            console.log(item[i].cellLabel, item[i].sync);
-            // console.log(this.newItem);
-
-          }
-        // }
+        if (item[i].hasOwnProperty('sync')) {
+          this.defaultItem[item[i].cellLabel] = item[i].sync
+          console.log(item[i].cellLabel, item[i].sync)
+        }
       }
-      // var itemToAdd = {name: item[0].sync, calories: item[1].sync, fat: item[2].sync, carbs: item[3].sync, protein: item[4].sync}
-      // for (var i = 0; i < item.length; i++) {
-      //   if(this.items[i].hasOwnProperty('sync')) {
-      //     console.log(item);
-      //     console.log(this.newItem);
-      //   }
-      // }
       this.items.push(this.defaultItem)
-      console.log("item: ", item);
-      // console.log(this.newItem)
+      console.log('item: ', item)
       this.resetItem()
     },
     deleteItem (items) {
