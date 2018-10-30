@@ -4,19 +4,19 @@
       <v-dialog v-model="dialog" persistent scrollable max-width="500px">
         <v-btn slot="activator" class="btnCol2">{{ btnTitle }}</v-btn>
         <v-card>
-          <v-card-title><h2>{{ btnTitle }}</h2></v-card-title>
+          <v-layout justify-center>
+            <v-card-title><h2>{{ btnTitle }}</h2></v-card-title>
+          </v-layout>
           <v-divider></v-divider>
           <v-card-title>
             <input type="checkbox" v-model="allSelected" @click="selectAll"/>
-            <label> {{ SelectAll }}</label>
+            <label class="selectAllStyle"> {{ SelectAll }}</label>
             <v-spacer></v-spacer>
             <v-icon>search</v-icon>
             <input type="text" class="styleSearch" v-model="search" placeholder="Search user.."/>
           </v-card-title>
           <v-divider></v-divider>
-          <v-card-text style="height: 300px;">
-            <p>{{userIds}}</p>
-            <p>{{selectedUsers}}</p>
+          <v-card-text class="cardHeight">
               <div v-for="item in filteredName">
                 <span class="test">
                 <input  type="checkbox"
@@ -56,23 +56,23 @@ export default {
         {name: 'Elsa'},
         {name: 'Tamara'},
         {name: 'Daniek'},
-        {name: 'Elsa1'},
-        {name: 'Tamara2'},
-        {name: 'Dani3ek'},
-        {name: 'Elsa4'},
-        {name: 'Tamaara'},
-        {name: 'Dandiek'},
-        {name: 'Elasa'},
-        {name: 'Taemara'},
-        {name: 'Danziek'},
-        {name: 'Tameara'},
-        {name: 'Danidek'},
-        {name: 'Eelsa'},
-        {name: 'Tamaewra'},
-        {name: 'Tamzhwara'},
-        {name: 'Danhtiek'},
-        {name: 'Selectsa'},
-        {name: 'Tatmara'}
+        {name: 'Mitchell'},
+        {name: 'Jasper'},
+        {name: 'Bram'},
+        {name: 'Kevin'},
+        {name: 'Julian'},
+        {name: 'Patricia'},
+        {name: 'Marcel'},
+        {name: 'Fred'},
+        {name: 'Joke'},
+        {name: 'Kaily'},
+        {name: 'Bryan'},
+        {name: 'Michelle'},
+        {name: 'Lisa'},
+        {name: 'Cheyenne'},
+        {name: 'Shalina'},
+        {name: 'Naomi'},
+        {name: 'Leeroy'}
       ],
       selectedUsers: [],
       userIds: [],
@@ -117,20 +117,31 @@ export default {
   computed:{
     filteredName(){
       return this.users.filter((name) =>{
-        return name.name.match(this.search);
+        var Uppercase = name.name.toUpperCase();
+        var searchUppercase = this.search.toUpperCase();
+        return Uppercase.match(searchUppercase);
+        // return name.name.match(this.search);
       })
     }
   }
 }
 </script>
+
 <style>
+  .selectAllStyle{
+    font-weight: bold;
+  }
+  .cardHeight{
+    height: 300px;
+  }
   input[type=checkbox]:checked + label{
     color: #27aae2 !important;
+    font-weight: bold;
   }
   .styleSearch{
     outline: none;
     border-bottom: solid 1px;
-    border-color: #27aae2;
+    border-color: #00a1cd;
     border-radius: 3px;
   }
   .hr{
@@ -139,17 +150,17 @@ export default {
     border-color: #27aae2;
   }
   .btnCol2{
-  background-color: #00a1cd !important;
+  background-color: #27aae2 !important;
   color: white !important;
   border: solid;
-  border-color: #00a1cd;
+  border-color: #27aae2;
   font-weight: bold;
   }
   .btnCol2:hover{
   background-color: white !important;
-  color: #00a1cd !important;
+  color:  #27aae2 !important;
   border: solid;
-  border-color: #00a1cd;
+  border-color: #27aae2;
   font-weight: bold;
   }
 </style>
