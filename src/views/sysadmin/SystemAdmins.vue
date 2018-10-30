@@ -10,7 +10,9 @@
       tableTitle="System Administrators"
       btnTitle="+"
       dialogTitle="Add New Administrator"
+      titleDel="Confirm delete items?"
       itemKey="name"
+      msgDel="Are you sure you want to delete the selected items?"
       @newItem="addItem"
       @deleteSelected="deleteItem"
     />
@@ -167,7 +169,7 @@ export default {
       for (var i = 0; i < items.length; i++) {
         index = this.items.indexOf(items[i])
         console.log(items[i].name)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        this.items.splice(index, 1)
       }
       console.log(this.items)
     },

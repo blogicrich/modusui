@@ -10,7 +10,7 @@
       ></v-divider>
       <v-spacer></v-spacer>
   <!-- Edit or New item: Title and '+' button -->
-      <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog v-model="editDialog" max-width="500px">
         <v-btn slot="activator" color="green" fab small dark class="ma-1">
           <v-icon dark>add</v-icon>
         </v-btn>
@@ -29,6 +29,7 @@
                     v-model="newItem[key].sync"
                     color="primary"
                     outline
+                    required
                   ></v-text-field>
                   <v-select
                     v-else-if="item.cellType === 'md'"
@@ -38,6 +39,7 @@
                     :label="newItem[key].cellLabel"
                     color="primary"
                     outline
+                    required
                   ></v-select>
                 </v-flex>
               </v-layout>
@@ -126,6 +128,7 @@
               label="Edit"
               single-line
               counter
+              required
             ></v-text-field>
             <v-select
               v-else-if="header.cellType === 'md'"
@@ -137,6 +140,7 @@
               color="primary"
               large
               outline
+              required
             ></v-select>
         </v-edit-dialog>
       </td>
@@ -146,7 +150,6 @@
     <v-card>
       <v-container class="my-1">
         <v-layout row wrap>
-          <!-- <v-layout xs2 md2> -->
             <v-flex xs1 md1>
               <v-select
                 class="ma-1"
@@ -156,15 +159,35 @@
                 color="primary"
               ></v-select>
             </v-flex>
-          <!-- </v-layout> -->
           <v-flex>
             <v-layout align-end justify-end>
               <v-btn fab dark small color="primary" @click="searchDisplay">
                 <v-icon dark>search</v-icon>
               </v-btn>
-              <v-btn fab dark small color="error" @click="deleteItem">
-                <v-icon dark>delete</v-icon>
-              </v-btn>
+  <!-- Delete confirmation dialog -->
+              <v-dialog v-model="delDialog" persistent max-width="500">
+                <v-btn slot="activator" fab dark small color="error" @click="delDialog = true">
+                  <v-icon dark>delete</v-icon>
+                </v-btn>
+                <v-card v-if="selected.length > 0">
+                  <v-card-title class="table-header">{{ titleDel }}</v-card-title>
+                  <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click.native="delDialog = false">Cancel</v-btn>
+                    <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn>
+                  </v-card-actions>
+                </v-card>
+                <v-card v-else-if="selected.length === 0">
+                  <v-card-title class="table-header">No items have been selected for delete</v-card-title>
+                  <!-- <v-card-text class="ma-2">{{ msgDel }}</v-card-text> -->
+                  <v-card-actions v-if="selected.length < 1">
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click.native="delDialog = false">Okay</v-btn>
+                    <!-- <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn> -->
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </v-layout>
           </v-flex>
           <v-layout row align-start justify-start>
@@ -178,7 +201,7 @@
         </v-layout>
       </v-container>
     </v-card>
-    <!-- Table: Footer Pagination CRUD function buttons-->
+  <!-- Table: Footer Pagination CRUD function buttons-->
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
       <v-btn flat @click="snack = false">Close</v-btn>
@@ -193,7 +216,7 @@ export default {
   data () {
     return {
       rows: [ 5, 10, 15, 20, 25, 50, 100 ],
-      dialog: false,
+      editDialog: false,
       search: '',
       selected: [],
       searchBarHidden: true,
@@ -201,7 +224,8 @@ export default {
       snackColor: 'primary',
       snackText: '',
       rowDisplayNo: 5,
-      snack: false
+      snack: false,
+      delDialog: false
     }
   },
   props: {
@@ -214,6 +238,8 @@ export default {
     newItem: Array,
     itemKey: String,
     searchLabel: String,
+    msgDel: String,
+    titleDel: String
   },
   computed: {
     pages () {
@@ -228,9 +254,10 @@ export default {
     deleteItem () {
       this.$emit('deleteSelected', this.selected)
       this.selected = []
+      this.delDialog = false
     },
     close () {
-      this.dialog = false
+      this.editDialog = false
       console.log('Dialog Closing')
     },
     searchDisplay () {
@@ -261,7 +288,6 @@ export default {
     msgClose () {
       console.log('Snackbar closed')
     }
-
   },
   mounted () {
     console.log(this.items)
