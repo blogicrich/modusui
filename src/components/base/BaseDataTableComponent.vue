@@ -88,7 +88,7 @@
   <!-- Table: Headers -->
     <template slot="headerCell" slot-scope="props">
       <v-tooltip bottom>
-        <span slot="activator">
+        <span class="cell-header" slot="activator">
           {{ props.header.text }}
         </span>
         <span>
