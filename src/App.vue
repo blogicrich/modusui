@@ -1,8 +1,7 @@
 <template>
-  <v-app class="app-shell">
+  <v-app>
     <v-toolbar
       v-if="authenticated.state"
-
       color="white"
       app
       :clipped-left="clipped"
@@ -41,18 +40,15 @@
             </v-list-tile>
         </v-list> -->
     </v-navigation-drawer>
-    <!-- <v-container fluid fill height id="appcontainer0"> -->
-      <v-layout>
-        <!-- <v-flex xs12> -->
-          <v-content>
-            <v-slide-y-transition mode="out-in">
-              <router-view @authenticated="setAuthenticated"/>
-            </v-slide-y-transition>
-          </v-content>
-        <!-- </v-flex> -->
-      </v-layout>
-    <!-- </v-container> -->
-
+      <v-content>
+        <!-- <v-container fluid> -->
+        <v-slide-y-transition mode="out-in">
+          <!-- <v-container xs12> -->
+          <router-view @authenticated="setAuthenticated"/>
+        <!-- </v-container> -->
+        </v-slide-y-transition>
+        <!-- </v-container> -->
+      </v-content>
     <v-footer
       class="elevation-2 pa-1"
       v-if="authenticated.state"

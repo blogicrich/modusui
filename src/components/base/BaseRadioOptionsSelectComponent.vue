@@ -1,32 +1,34 @@
 <template>
-  <v-container fluid column>
-    <v-card class="pa-2">
-      <span class="subheader"> {{ groupHeader }} </span>
-      <v-divider class="mb-2" color="#00a1cd"></v-divider>
-      <v-layout row wrap>
-      </v-layout>
-        <v-layout row fill-height align-start justify-center>
-          <span class="my-2"> {{ groupDescription }} </span>
-          <v-layout class="ma-2" column>
-            <span> {{ radioHeader }}</span>
-            <v-radio-group
-              v-model="value"
-              :mandatory="false"
-              color="primary"
-              row
-            >
-              <v-radio
-                v-for="radio in radioConfig"
-                :key="radio.label"
-                :label="radio.label"
-                :value="radio.value"
-                >
-              </v-radio>
-            </v-radio-group>
-          </v-layout>
-        </v-layout>
-      <!-- </v-layout> -->
-    </v-card>
+  <v-container>
+    <!-- <v-layout row wrap> -->
+      <!-- <v-flex xs12 md6> -->
+        <v-card class="ma-0">
+          <!-- <v-flex xs12 md6> -->
+          <v-card-title class="subheader"> {{ groupHeader }} </v-card-title>
+          <v-divider color="#00a1cd"></v-divider>
+          <!-- <v-layout align-start justify-space-around column fill-height> -->
+            <v-card-title> {{ groupDescription }} </v-card-title>
+            <!-- <v-layout class="ma-2"> -->
+              <v-card-title> {{ radioHeader }}</v-card-title>
+              <v-radio-group
+                v-model="value"
+                :mandatory="false"
+                color="primary"
+                row
+              >
+                <v-radio
+                  v-for="radio in radioConfig"
+                  :key="radio.label"
+                  :label="radio.label"
+                  :value="radio.value"
+                  >
+                </v-radio>
+              </v-radio-group>
+            <!-- </v-layout> -->
+          <!-- </v-flex> -->
+        </v-card>
+      <!-- </v-flex> -->
+    <!-- </v-layout> -->
   </v-container>
 </template>
 
@@ -43,12 +45,12 @@ export default {
     radioConfig: Array,
     groupHeader: String,
     groupDescription: String,
-    radioHeader: String,
-  },
-  computed: {
-  },
-  methods: {
+    radioHeader: String
   }
+  // computed: {
+  // },
+  // methods: {
+  // }
 }
 </script>
 
