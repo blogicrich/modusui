@@ -5,12 +5,17 @@
         <v-card class="ma-0">
           <!-- <v-flex xs12 md6> -->
           <v-card-title class="subheader"> {{ groupHeader }} </v-card-title>
-          <v-divider color="#00a1cd"></v-divider>
+          <v-divider
+            class="mx-2"
+            color="#00a1cd">
+          </v-divider>
           <!-- <v-layout align-start justify-space-around column fill-height> -->
             <v-card-title> {{ groupDescription }} </v-card-title>
-            <!-- <v-layout class="ma-2"> -->
-              <v-card-title> {{ radioHeader }}</v-card-title>
+          <!-- </v-layout> -->
+            <v-layout>
+              <v-card-title class="subheader"> {{ radioHeader }}</v-card-title>
               <v-radio-group
+                class="mx-2"
                 v-model="value"
                 :mandatory="false"
                 color="primary"
@@ -24,7 +29,7 @@
                   >
                 </v-radio>
               </v-radio-group>
-            <!-- </v-layout> -->
+            </v-layout>
           <!-- </v-flex> -->
         </v-card>
       <!-- </v-flex> -->

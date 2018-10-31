@@ -1,5 +1,6 @@
 <template>
   <v-container grid-list-md text-xs-center>
+    <h1 class="pg-header">eDroplet Administration</h1>
     <v-layout row wrap>
       <v-flex xs12 md6>
         <BaseRadioOptions
