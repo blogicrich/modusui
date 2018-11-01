@@ -10,7 +10,95 @@
       ></v-divider>
       <v-spacer></v-spacer>
   <!-- Edit or New item: Title and '+' button -->
+      <v-dialog v-model="editDialog" max-width="500px">
+        <v-btn slot="activator" color="green" fab small dark class="ma-1">
+          <v-icon dark>add</v-icon>
+        </v-btn>
+        <v-card>
+          <v-card-title>
+            <span class="table-header">{{ dialogTitle }}</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-layout row wrap justify-space-around>
+                <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                  <v-text-field
+                    v-if="item.cellType === 'tb'"
+                    class="ma-1"
+                    :label="item.cellLabel"
+                    v-model="newItem[key].sync"
+                    color="primary"
+                    outline
+                    required
+                  ></v-text-field>
+                  <v-select
+                    v-else-if="item.cellType === 'md'"
+                    class="ma-1"
+                    v-model="newItem[key].sync"
+                    :items="menuItems"
+                    :label="newItem[key].cellLabel"
+                    color="primary"
+                    outline
+                    required
+                  ></v-select>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
+            <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-toolbar>
+
+    <v-speed-dial
+      v-model="fab"
+      :top="top"
+      :bottom="bottom"
+      :right="right"
+      :left="left"
+      :direction="direction"
+      :open-on-hover="hover"
+      :transition="transition"
+      >
+      <v-btn
+        slot="activator"
+        v-model="fab"
+        color="blue darken-2"
+        dark
+        fab
+      >
+        <v-icon>account_circle</v-icon>
+        <v-icon>close</v-icon>
+      </v-btn>
+      <!-- <v-btn
+        fab
+        dark
+        small
+        color="green"
+      >
+        <v-icon>edit</v-icon>
+      </v-btn>
+      <v-btn
+        fab
+        dark
+        small
+        color="indigo"
+      >
+        <v-icon>add</v-icon>
+      </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="red"
+        >
+          <v-icon>delete</v-icon>
+        </v-btn> -->
+      </v-speed-dial>
   <!-- New item: Search bar -->
     <v-card>
       <v-fade-transition>
@@ -44,58 +132,30 @@
       class="elevation-1"
     >
   <!-- Table: Headers -->
-  <template slot="headers" slot-scope="props">
-    <!-- <tr> -->
-      <th>
-        <v-checkbox
-          :input-value="props.all"
-          :indeterminate="props.indeterminate"
-          primary
-          hide-details
-          @click.native="toggleAll"
-        ></v-checkbox>
-      </th>
-      <th
-        v-for="header in props.headers"
-        :key="header.text"
-        class="table-cell-header text-xs-left"
-        :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-        @click="changeSort(header.value)"
-      >
-        <!-- <template slot="headerCell" slot-scope="props"> -->
-          <v-tooltip bottom>
-            <span class="table-cell-header" slot="activator">
-              {{ header.text }}
-            </span>
-            <span>
-              {{ header.text }}
-            </span>
-          </v-tooltip>
-          <v-icon small>arrow_upward</v-icon>
-        <!-- </template> -->
-        <!-- {{ header.text }} -->
-      </th>
-    <!-- </tr> -->
-  </template>
+    <template slot="headerCell" slot-scope="props">
+      <v-tooltip bottom>
+        <span class="cell-header" slot="activator">
+          {{ props.header.text }}
+        </span>
+        <span>
+          {{ props.header.text }}
+        </span>
+      </v-tooltip>
+    </template>
   <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
-    <tr>
       <td>
         <v-checkbox
-          class="pa-0"
-          :input-value="props.selected"
-          :indeterminate="props.indeterminate"
+          v-model="props.selected"
           primary
-          hide-details
-          @click.native="toggleAll"
         ></v-checkbox>
       </td>
        <td
          class="text-xs-left"
          v-for="header in headers"
          :key="header.text"
-       > {{ props.item[header.value] }}
-         <!-- <v-edit-dialog
+       >
+         <v-edit-dialog
             :return-value.sync="props.item[header.value]"
             lazy
             large
@@ -104,10 +164,10 @@
             @save="msgSave"
             @cancel="msgCancel"
             @close="msgClose"
-          > -->
-
-          <!-- <div slot="input" class="my-3 title">{{ header.text }}</div> -->
-            <!-- <v-text-field
+          >
+          <div>{{ props.item[header.value] }}</div>
+          <div slot="input" class="my-3 title">{{ header.text }}</div>
+            <v-text-field
               v-if="header.cellType == 'tb'"
               slot="input"
               v-model="props.item[header.value]"
@@ -115,8 +175,8 @@
               single-line
               counter
               required
-            ></v-text-field> -->
-            <!-- <v-select
+            ></v-text-field>
+            <v-select
               v-else-if="header.cellType === 'md'"
               slot="input"
               class="ma-1"
@@ -127,16 +187,15 @@
               large
               outline
               required
-            ></v-select> -->
-        <!-- </v-edit-dialog> -->
+            ></v-select>
+        </v-edit-dialog>
       </td>
-    </tr>
       </template>
     </v-data-table>
-  <!-- Table: Footer Pagination CRUD function buttons-->
+  <!-- Table: Footer Pagination function buttons-->
     <v-card>
       <v-container class="my-1">
-        <!-- <v-layout row wrap>
+        <v-layout row wrap>
             <v-flex xs1 md1>
               <v-select
                 class="ma-1"
@@ -145,17 +204,17 @@
                 label="rows"
                 color="primary"
               ></v-select>
-            </v-flex> -->
+            </v-flex>
           <v-flex>
             <v-layout align-end justify-end>
-              <!-- <v-btn fab dark small color="primary" @click="searchDisplay">
+              <v-btn fab dark small color="primary" @click="searchDisplay">
                 <v-icon dark>search</v-icon>
-              </v-btn> -->
+              </v-btn>
   <!-- Delete confirmation dialog -->
               <v-dialog v-model="delDialog" persistent max-width="500">
-                <!-- <v-btn slot="activator" fab dark small color="error" @click="delDialog = true">
+                <v-btn slot="activator" fab dark small color="error" @click="delDialog = true">
                   <v-icon dark>delete</v-icon>
-                </v-btn> -->
+                </v-btn>
                 <v-card v-if="selected.length > 0">
                   <v-card-title class="table-header">{{ titleDel }}</v-card-title>
                   <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
@@ -177,107 +236,18 @@
               </v-dialog>
             </v-layout>
           </v-flex>
-          <!-- <v-layout> -->
-            <v-layout row fill-height align-start justify-space-around>
-              <v-pagination
-                class="ma-1"
-                v-model="pagination.page"
-                :length="pages"
-                >
-              </v-pagination>
-            </v-layout>
-          <!-- </v-layout> -->
+          <v-layout row align-start justify-start>
+            <v-pagination
+              class="ma-1"
+              v-model="pagination.page"
+              :length="pages"
+              >
+            </v-pagination>
+          </v-layout>
         </v-layout>
-        <v-dialog v-model="editDialog" max-width="500px">
-          <v-speed-dial
-            v-model="fab"
-            :top="top"
-            :bottom="bottom"
-            :right="right"
-            :left="left"
-            :direction="direction"
-            :open-on-hover="hover"
-            :transition="transition"
-          >
-          <!-- <v-btn slot="activator" fab small dark absolute color="green" style="position:absolute;right:0.5%;bottom:80%;">
-            <v-icon dark>add</v-icon>
-          </v-btn> -->
-            <v-btn
-              slot="activator"
-              v-model="fab"
-              color="blue darken-2"
-              dark
-              fab
-            >
-              <v-icon>account_circle</v-icon>
-              <v-icon>close</v-icon>
-            </v-btn>
-            <v-btn
-              fab
-              dark
-              small
-              color="green"
-            >
-              <v-icon>edit</v-icon>
-            </v-btn>
-            <v-btn
-              fab
-              dark
-              small
-              color="indigo"
-            >
-              <v-icon>add</v-icon>
-            </v-btn>
-            <v-btn
-              fab
-              dark
-              small
-              color="red"
-            >
-              <v-icon>delete</v-icon>
-            </v-btn>
-          </v-speed-dial>
-          <v-card>
-            <v-card-title>
-              <span class="table-header">{{ dialogTitle }}</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-layout row wrap justify-space-around>
-                  <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
-                    <v-text-field
-                      v-if="item.cellType === 'tb'"
-                      class="ma-1"
-                      :label="item.cellLabel"
-                      v-model="newItem[key].sync"
-                      color="primary"
-                      outline
-                      required
-                    ></v-text-field>
-                    <v-select
-                      v-else-if="item.cellType === 'md'"
-                      class="ma-1"
-                      v-model="newItem[key].sync"
-                      :items="menuItems"
-                      :label="newItem[key].cellLabel"
-                      color="primary"
-                      outline
-                      required
-                    ></v-select>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
-              <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-container>
     </v-card>
-  <!-- Table: Footer Pagination CRUD function buttons-->
+  <!-- Snakcbar -->
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
       <v-btn flat @click="snack = false">Close</v-btn>
@@ -303,9 +273,9 @@ export default {
       snack: false,
       delDialog: false,
       direction: 'top',
-      fab: false,
-      fling: false,
-      hover: false,
+      fab: true,
+      fling: true,
+      hover: true,
       tabs: null,
       top: false,
       right: true,
@@ -328,6 +298,7 @@ export default {
     titleDel: String
   },
   computed: {
+
     pages () {
       if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) {
         return 0
@@ -350,18 +321,6 @@ export default {
       this.searchBarHidden = !this.searchBarHidden
       this.search = null
       return this.searchBarHidden
-    },
-    toggleAll () {
-      if (this.selected.length) this.selected = []
-      else this.selected = this.desserts.slice()
-    },
-    changeSort (column) {
-      if (this.pagination.sortBy === column) {
-        this.pagination.descending = !this.pagination.descending
-      } else {
-        this.pagination.sortBy = column
-        this.pagination.descending = false
-      }
     },
     save () {
       console.log('Fired')

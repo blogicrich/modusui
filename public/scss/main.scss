@@ -1,6 +1,7 @@
 // Colour vars
 
 $main-blue: #00a1cd;
+$main-blue-highlight: rgba(0, 161, 205, 0.1);
 $bg-grey: #f2f4f4;
 $text-body: #4d504f;
 
@@ -36,7 +37,12 @@ $text-body: #4d504f;
   font-weight: bold;
   color: $main-blue;
 }
-
+.table-cell-header {
+  margin-right: 1vw;
+  font-size: 1em;
+  font-weight: bold;
+  color: $main-blue;
+}
 // Text common
 
 .text-center {
@@ -81,4 +87,10 @@ $text-body: #4d504f;
   background-color: $main-blue;
   border-radius: 4px;
   font-size: 1em;
+}
+
+// Table
+
+tr:hover td {
+  background-color: $main-blue-highlight;
 }
