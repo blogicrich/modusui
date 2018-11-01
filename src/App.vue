@@ -44,7 +44,9 @@
         <!-- <v-container fluid> -->
         <v-slide-y-transition mode="out-in">
           <!-- <v-container xs12> -->
-          <router-view @authenticated="setAuthenticated"/>
+          <keep-alive>
+            <router-view @authenticated="setAuthenticated"/>
+          </keep-alive>
         <!-- </v-container> -->
         </v-slide-y-transition>
         <!-- </v-container> -->

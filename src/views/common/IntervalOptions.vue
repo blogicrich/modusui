@@ -1,7 +1,13 @@
 <template>
   <v-container grid-list-md text-xs-center>
     <h1 class="pg-header">eDroplet Administration</h1>
-    <v-layout row wrap>
+    <h2 class="pg-subheader">eDroplet Reminder Interval Options</h2>
+    <v-divider
+      class="mx-2"
+      color="#00a1cd"
+      >
+    </v-divider>
+    <v-layout row wrap fill-height align-space-between>
       <v-flex xs12 md6>
         <BaseRadioOptions
           :radioConfig="drinkIntervalSettings"
@@ -18,6 +24,14 @@
           :radioHeader="voiceRadioHeader"
         />
       </v-flex>
+    </v-layout>
+      <h2 class="pg-subheader">eDroplet Comms Interval Options</h2>
+      <v-divider
+        class="mx-2"
+        color="#00a1cd"
+        >
+      </v-divider>
+    <v-layout row wrap fill-height align-space-between justify-space-between>
       <v-flex xs12 md6>
         <BaseRadioOptions
           :radioConfig="wakeUpIntervalSettings"
@@ -35,15 +49,21 @@
         />
       </v-flex>
     </v-layout>
+    <v-layout row justify-center align-center>
+      <SubPageNavButton title="Home" route="/landing" large/>
+      <SubPageNavButton title="Save" large/>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
+import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 export default {
   name: 'IntervalOptions',
   components: {
-    BaseRadioOptions
+    BaseRadioOptions,
+    SubPageNavButton
   },
   data () {
     return {

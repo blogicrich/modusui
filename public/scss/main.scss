@@ -37,10 +37,19 @@ $text-body: #4d504f;
   color: $main-blue;
 }
 
+// Text common
+
+.text-center {
+  text-align:center;
+}
+.text-left {
+  text-align:left;
+}
 //Subheaders
 
-.pg-subhead {
+.pg-subheader {
   margin: 1vw;
+  text-align: left;
   font-size: 1.5em;
   font-weight: bold;
   color: $main-blue;

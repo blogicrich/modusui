@@ -2,12 +2,11 @@
   <div>
     <BaseButton
     :type="type"
-    :outline="outline"
     :btnColor="btnColor"
     :btnClass="btnClass"
-    :block="block"
     :title="title"
     :route="route"
+    :large="large"
     />
   </div>
 </template>
@@ -16,22 +15,21 @@
 import BaseButton from '@/components/base/BaseBtnComponent.vue'
 
 export default {
-  name: 'SubNavButton',
+  name: 'SubPageNavButton',
   components: {
     BaseButton
   },
   data () {
     return {
       type: 'button',
-      outline: true,
       btnColor: 'primary',
-      btnClass: 'root-nav-btn',
-      block: true
+      btnClass: 'root-nav-btn'
     }
   },
   props: {
     title: String,
-    route: String
+    route: String,
+    large: Boolean
   }
 }
 </script>

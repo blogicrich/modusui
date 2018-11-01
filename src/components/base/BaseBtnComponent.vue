@@ -7,6 +7,7 @@
       :color="btnColor"
       :class="btnClass"
       :block="block"
+      :large="large"
     >
       {{ title }}
     </v-btn>
@@ -24,7 +25,8 @@ export default {
     outline: Boolean,
     btnColor: String,
     btnClass: String,
-    block: Boolean
+    block: Boolean,
+    large: Boolean
   }
 }
 </script>

@@ -3,57 +3,57 @@
     <h1 class="pg-header">eDroplet Administration</h1>
       <v-layout row wrap>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">Administrator Management</h2>
+          <h2 class="pg-subheader">Administrator Management</h2>
           <v-divider class="mb-2" color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="System Administrators"
             route="/systemadmins"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">Defaults Administration</h2>
+          <h2 class="pg-subheader">Defaults Administration</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="Interval Options"
             route="/intervaloptions"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">Data Tables</h2>
+          <h2 class="pg-subheader">Data Tables</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="Titles"
             route="/titles"
           />
-          <SubNavButton
+          <SubLandingNavButton
             title="Container Types"
             route="/containertypes"
           />
-          <SubNavButton
+          <SubLandingNavButton
             title="Gender Options"
             route="/genderoptions"
           />
-          <SubNavButton
+          <SubLandingNavButton
             title="Conditions"
             route="/conditions"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">Message options</h2>
+          <h2 class="pg-subheader">Message options</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="Text/Email Messages"
             route="/textmessages"
           />
-          <SubNavButton
+          <SubLandingNavButton
             title="Voice Message Defaults"
             route="/voicemessages"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">Hydration Parameters</h2>
+          <h2 class="pg-subheader">Hydration Parameters</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="Hydration Parameters"
             route="/hydrationparameters"
           />
@@ -63,41 +63,41 @@
       <h1 class="pg-header">Main Menu</h1>
         <v-layout row wrap>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">Authorised Persons</h2>
+          <h2 class="pg-subheader">Authorised Persons</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="Personal Details"
             route="/personaldetails"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">eDroplet Settings</h2>
+          <h2 class="pg-subheader">eDroplet Settings</h2>
           <v-divider color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="Voice Message Management"
             route="/voicemessages"
           />
-          <SubNavButton
+          <SubLandingNavButton
             title=" Interval Settings Management"
             route="/intervalsettings"
           />
-          <SubNavButton
+          <SubLandingNavButton
             title="Conditions"
             route="/conditions"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">eDroplet Management</h2>
+          <h2 class="pg-subheader">eDroplet Management</h2>
           <v-divider color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="eDroplet Management"
             route="/edropletmanagement"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subhead">Carer Settings</h2>
+          <h2 class="pg-subheader text-center">Carer Settings</h2>
           <v-divider color="#00a1cd"></v-divider>
-          <SubNavButton
+          <SubLandingNavButton
             title="Personnel Settings"
             route="/personnelsettings"
           />
@@ -108,11 +108,11 @@
 </template>
 
 <script>
-import SubNavButton from '@/components/sub/SubNavButton.vue'
+import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
 export default {
   name: 'Landing',
   components: {
-    SubNavButton
+    SubLandingNavButton
   }
 }
 </script>
