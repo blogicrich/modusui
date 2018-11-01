@@ -52,7 +52,7 @@
         <!-- </v-container> -->
       </v-content>
     <v-footer
-      class="elevation-2 pa-1"
+      class="elevation-5 pa-1"
       v-if="authenticated.state"
       :fixed="fixed"
       color="white"
