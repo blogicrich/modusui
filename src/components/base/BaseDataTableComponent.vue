@@ -3,23 +3,35 @@
     <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
         <h2 class="table-header">{{ tableTitle }}</h2>
+        <v-icon medium color="primary">person</v-icon>
         <v-divider
           class="mx-2"
           inset
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
-        <v-fade-transition>
-          <v-card-title v-if="!searchBarHidden">
-            <v-text-field
-              v-model="search"
-              append-icon="search"
-              :label="searchLabel"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-card-title>
-        </v-fade-transition>
+        <v-flex lg-3 xl-2>
+          <v-text-field
+            class="mb-2"
+            @click:append-outer="search = ''"
+            v-model="search"
+            append-icon="search"
+            :label="searchLabel"
+            single-line
+            hide-details
+            append-outer-icon="close"
+          ></v-text-field>
+        </v-flex>
+        </v-card-title>
+        <v-spacer></v-spacer>
+        <v-divider
+          class="mx-2"
+          inset
+          vertical
+        ></v-divider>
+        <v-btn @click="newDialog = true" color="primary">new administrator
+          <v-icon class="ml-2">person_add</v-icon>
+        </v-btn>
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -192,9 +204,9 @@
               >
                 <v-icon>delete</v-icon>
               </v-btn>
-              <v-btn fab dark small color="primary" @click="searchDisplay">
+              <!-- <v-btn fab dark small color="primary" @click="searchDisplay">
                 <v-icon dark>search</v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-speed-dial>
           </v-layout>
     <!-- Delete confirmation dialog -->
@@ -298,8 +310,27 @@
           </v-dialog>
         </v-container>
       </v-card>
-      <v-layout row justify-center align-center>
-        <SubPageNavButton title="Home" route="/landing" large/>
+      <v-layout row justify-center align-center ma-3>
+        <v-fade-transition>
+          <v-btn class="pg-foot-btn" @click="this.router.push('/landing')" color="primary" large>home
+            <v-icon class="ml-2">home</v-icon>
+          </v-btn>
+        </v-fade-transition>
+        <v-fade-transition>
+          <v-btn class="pg-foot-btn" @click="" color="primary" large>save
+            <v-icon class="ml-2">save</v-icon>
+          </v-btn>
+        </v-fade-transition>
+        <v-fade-transition>
+          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="editDialog = true" color="primary" large>edit record
+            <v-icon class="ml-2">edit</v-icon>
+          </v-btn>
+        </v-fade-transition>
+        <v-fade-transition>
+          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="delDialog = true" color="primary" large>delete
+            <v-icon class="ml-2">delete</v-icon>
+          </v-btn>
+        </v-fade-transition>
       </v-layout>
       <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
         {{ snackText }}
@@ -335,7 +366,6 @@
           @click="editDialog = true"
           fab
           dark
-          small
           color="green"
         >
           <v-icon>edit</v-icon>
@@ -344,7 +374,6 @@
           @click="save"
           fab
           dark
-          small
           color="error"
         >
         <v-icon>save</v-icon>
@@ -353,7 +382,6 @@
           @click="newDialog = true"
           fab
           dark
-          small
           color="green"
         >
           <v-icon>add</v-icon>
@@ -362,7 +390,6 @@
           @click="delDialog = true"
           fab
           dark
-          small
           color="error"
         >
           <v-icon>delete</v-icon>
@@ -371,7 +398,7 @@
           <v-icon dark>search</v-icon>
         </v-btn>
       </v-speed-dial>
-      <v-toolbar v-if="!searchBarHidden" class="pa-1 my-1 elevation-1" flat color="white">
+      <!-- <v-toolbar v-if="!searchBarHidden" class="pa-1 my-1 elevation-1" flat color="white"> -->
         <!-- <h2 class="table-header">{{ tableTitle }}</h2> -->
         <!-- <v-divider
           class="mx-2"
@@ -379,17 +406,27 @@
           vertical
         ></v-divider> -->
       <v-fade-transition>
-        <v-card-title v-if="!searchBarHidden">
+        <!-- <v-card-title v-if="!searchBarHidden"> -->
+        <v-layout
+          row align-center justify-space-around
+          v-if="!searchBarHidden"
+        >
           <v-text-field
+            class="mb-2"
+            @click:append-outer="search = ''"
             v-model="search"
             append-icon="search"
             :label="searchLabel"
             single-line
             hide-details
+            append-outer-icon="close"
           ></v-text-field>
-        </v-card-title>
+        </v-layout>
+
+
+        <!-- </v-card-title> -->
       </v-fade-transition>
-      </v-toolbar>
+      <!-- </v-toolbar> -->
       <v-data-table
         :headers="headers"
         :items="items"
@@ -404,11 +441,12 @@
       >
     <!-- Table: Headers -->
     <template slot="headers" slot-scope="props">
-      <th v-if="$vuetify.breakpoint.smAndUp">
+      <th>
         <v-checkbox
           :input-value="props.all"
           :indeterminate="props.indeterminate"
           primary
+          small
           hide-details
           @click.native="toggleAll"
         ></v-checkbox>
@@ -434,7 +472,7 @@
     <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <tr>
-        <td v-if="$vuetify.breakpoint.smAndUp">
+        <td>
           <v-checkbox
             v-model="props.selected"
           ></v-checkbox>
@@ -635,7 +673,7 @@ export default {
       delDialog: false,
       editDialog: false,
       newDialog: false,
-      direction: 'top',
+      direction: 'left',
       fab: false,
       fling: false,
       hover: false,

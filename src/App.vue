@@ -11,17 +11,17 @@
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
-      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="mx-3" id="logout" icon @click.stop="home">
-        <v-icon large>home</v-icon>
+      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="home">
+        <v-icon medium>home</v-icon>
       </v-btn>
-      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="mx-1" id="logout" icon @click.stop="home">
-        <v-icon>home</v-icon>
+      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="home">
+        <v-icon small>home</v-icon>
       </v-btn>
-      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="mx-3" id="logout" icon @click.stop="logout">
-        <v-icon large>exit_to_app</v-icon>
+      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="logout">
+        <v-icon medium>exit_to_app</v-icon>
       </v-btn>
-      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="mx-1" id="logout" icon @click.stop="logout">
-        <v-icon>exit_to_app</v-icon>
+      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="logout">
+        <v-icon small>exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
     <v-navigation-drawer id ='nav-drawer' v-if="authenticated.state"
