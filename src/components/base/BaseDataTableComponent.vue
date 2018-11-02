@@ -9,13 +9,8 @@
         vertical
       ></v-divider>
       <v-spacer></v-spacer>
-  <!-- Edit or New item: Title and '+' button -->
-    </v-toolbar>
-  <!-- New item: Search bar -->
-    <v-card>
       <v-fade-transition>
         <v-card-title v-if="!searchBarHidden">
-          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="search"
@@ -23,14 +18,9 @@
             single-line
             hide-details
           ></v-text-field>
-          <v-btn class="mx-3" fab dark small color="error" @click="search = null">
-            <v-icon dark>close</v-icon>
-          </v-btn>
-          <v-spacer></v-spacer>
         </v-card-title>
       </v-fade-transition>
-    </v-card>
-  <!-- Data table -->
+    </v-toolbar>
     <v-data-table
       :headers="headers"
       :items="items"
@@ -45,152 +35,107 @@
     >
   <!-- Table: Headers -->
   <template slot="headers" slot-scope="props">
-    <!-- <tr> -->
-      <th>
-        <v-checkbox
-          :input-value="props.all"
-          :indeterminate="props.indeterminate"
-          primary
-          hide-details
-          @click.native="toggleAll"
-        ></v-checkbox>
-      </th>
-      <th
-        v-for="header in props.headers"
-        :key="header.text"
-        class="table-cell-header text-xs-left"
-        :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-        @click="changeSort(header.value)"
-      >
-        <!-- <template slot="headerCell" slot-scope="props"> -->
-          <v-tooltip bottom>
-            <span class="table-cell-header" slot="activator">
-              {{ header.text }}
-            </span>
-            <span>
-              {{ header.text }}
-            </span>
-          </v-tooltip>
-          <v-icon small>arrow_upward</v-icon>
-        <!-- </template> -->
-        <!-- {{ header.text }} -->
-      </th>
-    <!-- </tr> -->
+    <th>
+      <v-checkbox
+        :input-value="props.all"
+        :indeterminate="props.indeterminate"
+        primary
+        hide-details
+        @click.native="toggleAll"
+      ></v-checkbox>
+    </th>
+    <th
+      v-for="header in props.headers"
+      :key="header.text"
+      class="table-cell-header text-xs-left"
+      :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+      @click="changeSort(header.value)"
+    >
+      <v-tooltip bottom>
+        <span class="table-cell-header" slot="activator">
+          {{ header.text }}
+        </span>
+        <span>
+          {{ header.text }}
+        </span>
+      </v-tooltip>
+      <v-icon small>arrow_upward</v-icon>
+    </th>
   </template>
   <!-- Table: Row data-->
-    <template slot="items" slot-scope="props">
+  <template slot="items" slot-scope="props">
     <tr>
       <td>
         <v-checkbox
-          class="pa-0"
-          :input-value="props.selected"
-          :indeterminate="props.indeterminate"
-          primary
-          hide-details
-          @click.native="toggleAll"
+          v-model="props.selected"
         ></v-checkbox>
       </td>
-       <td
-         class="text-xs-left"
-         v-for="header in headers"
-         :key="header.text"
-       > {{ props.item[header.value] }}
-         <!-- <v-edit-dialog
-            :return-value.sync="props.item[header.value]"
-            lazy
-            large
-            permanent
-            persistent
-            @save="msgSave"
-            @cancel="msgCancel"
-            @close="msgClose"
-          > -->
-
-          <!-- <div slot="input" class="my-3 title">{{ header.text }}</div> -->
-            <!-- <v-text-field
-              v-if="header.cellType == 'tb'"
-              slot="input"
-              v-model="props.item[header.value]"
-              label="Edit"
-              single-line
-              counter
-              required
-            ></v-text-field> -->
-            <!-- <v-select
-              v-else-if="header.cellType === 'md'"
-              slot="input"
-              class="ma-1"
-              v-model="props.item[header.value]"
-              :items="menuItems"
-              :label="header.text"
-              color="primary"
-              large
-              outline
-              required
-            ></v-select> -->
-        <!-- </v-edit-dialog> -->
+      <td
+        class="text-xs-left"
+        v-for="header in headers"
+        :key="header.text"
+      >
+        <v-edit-dialog
+           :return-value.sync="props.item[header.value]"
+           lazy
+           large
+           permanent
+           persistent
+           @save="msgSave"
+           @cancel="msgCancel"
+           @close="msgClose"
+         >
+         <div>{{ props.item[header.value] }}</div>
+         <div slot="input" class="my-3 title">{{ header.text }}</div>
+           <v-text-field
+             v-if="header.cellType == 'tb'"
+             slot="input"
+             v-model="props.item[header.value]"
+             label="Edit"
+             single-line
+             counter
+           ></v-text-field>
+           <v-select
+             v-else-if="header.cellType === 'md'"
+             slot="input"
+             class="ma-1"
+             v-model="props.item[header.value]"
+             :items="menuItems"
+             :label="header.text"
+             color="primary"
+             large
+             outline
+           ></v-select>
+       </v-edit-dialog>
       </td>
     </tr>
-      </template>
-    </v-data-table>
-  <!-- Table: Footer Pagination CRUD function buttons-->
+  </template>
+  </v-data-table>
+  <!-- Table: Footer Pagination CRUD function buttons -->
     <v-card>
       <v-container class="my-1">
-        <!-- <v-layout row wrap>
-            <v-flex xs1 md1>
-              <v-select
-                class="ma-1"
-                v-model="pagination.rowsPerPage"
-                :items="rows"
-                label="rows"
-                color="primary"
-              ></v-select>
-            </v-flex> -->
-          <v-flex>
-            <v-layout align-end justify-end>
-              <!-- <v-btn fab dark small color="primary" @click="searchDisplay">
-                <v-icon dark>search</v-icon>
-              </v-btn> -->
-  <!-- Delete confirmation dialog -->
-              <v-dialog v-model="delDialog" persistent max-width="500">
-                <!-- <v-btn slot="activator" fab dark small color="error" @click="delDialog = true">
-                  <v-icon dark>delete</v-icon>
-                </v-btn> -->
-                <v-card v-if="selected.length > 0">
-                  <v-card-title class="table-header">{{ titleDel }}</v-card-title>
-                  <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" flat @click.native="delDialog = false">Cancel</v-btn>
-                    <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn>
-                  </v-card-actions>
-                </v-card>
-                <v-card v-else-if="selected.length === 0">
-                  <v-card-title class="table-header">No items have been selected for delete</v-card-title>
-                  <!-- <v-card-text class="ma-2">{{ msgDel }}</v-card-text> -->
-                  <v-card-actions v-if="selected.length < 1">
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" flat @click.native="delDialog = false">Okay</v-btn>
-                    <!-- <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn> -->
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-layout>
+        <v-layout row fill-height align-center justify-center>
+          <v-flex xs2 md2>
+            <v-select
+              class="ma-1"
+              v-model="pagination.rowsPerPage"
+              :items="rows"
+              label="rows"
+              color="primary"
+            ></v-select>
           </v-flex>
-          <!-- <v-layout> -->
-            <v-layout row fill-height align-start justify-space-around>
-              <v-pagination
-                class="ma-1"
-                v-model="pagination.page"
-                :length="pages"
-                >
-              </v-pagination>
-            </v-layout>
-          <!-- </v-layout> -->
-        </v-layout>
-        <v-dialog v-model="editDialog" max-width="500px">
+          <v-pagination
+            class="ml-1 mr-4"
+            v-model="pagination.page"
+            total-visible="3"
+            :length="pages"
+            >
+          </v-pagination>
+  <!-- Table: Footer Speed dial -->
           <v-speed-dial
             v-model="fab"
+            class="table-fab ma-0"
+            absolute
             :top="top"
             :bottom="bottom"
             :right="right"
@@ -199,20 +144,19 @@
             :open-on-hover="hover"
             :transition="transition"
           >
-          <!-- <v-btn slot="activator" fab small dark absolute color="green" style="position:absolute;right:0.5%;bottom:80%;">
-            <v-icon dark>add</v-icon>
-          </v-btn> -->
             <v-btn
               slot="activator"
               v-model="fab"
-              color="blue darken-2"
+              color="primary"
               dark
               fab
             >
-              <v-icon>account_circle</v-icon>
+              <v-icon>menu</v-icon>
               <v-icon>close</v-icon>
             </v-btn>
             <v-btn
+              v-if="selected.length < 2"
+              @click="editDialog = true"
               fab
               dark
               small
@@ -221,22 +165,89 @@
               <v-icon>edit</v-icon>
             </v-btn>
             <v-btn
+              @click="newDialog = true"
               fab
               dark
               small
-              color="indigo"
+              color="green"
             >
               <v-icon>add</v-icon>
             </v-btn>
             <v-btn
+              @click="delDialog = true"
               fab
               dark
               small
-              color="red"
+              color="error"
             >
               <v-icon>delete</v-icon>
             </v-btn>
+            <v-btn fab dark small color="primary" @click="searchDisplay">
+              <v-icon dark>search</v-icon>
+            </v-btn>
           </v-speed-dial>
+        </v-layout>
+  <!-- Delete confirmation dialog -->
+        <v-dialog v-model="delDialog" persistent max-width="500">
+          <v-card v-if="selected.length > 0">
+            <v-card-title class="table-header">{{ titleDel }}</v-card-title>
+            <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" flat @click.native="delDialog = false">Cancel</v-btn>
+              <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+          <v-card v-else-if="selected.length === 0">
+            <v-card-title class="table-header">No items have been selected for delete</v-card-title>
+            <v-card-actions v-if="selected.length < 1">
+              <v-spacer></v-spacer>
+              <v-btn color="primary" flat @click.native="delDialog = false">Okay</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+  <!-- New Item newDialog -->
+        <v-dialog v-model="newDialog" max-width="500px">
+          <v-card>
+            <v-card-title>
+              <span class="table-header">{{ dialogTitle }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-layout row wrap justify-space-around>
+                  <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                    <v-text-field
+                      v-if="item.cellType === 'tb'"
+                      class="ma-1"
+                      :label="item.cellLabel"
+                      v-model="newItem[key].sync"
+                      color="primary"
+                      outline
+                      required
+                    ></v-text-field>
+                    <v-select
+                      v-else-if="item.cellType === 'md'"
+                      class="ma-1"
+                      v-model="newItem[key].sync"
+                      :items="menuItems"
+                      :label="newItem[key].cellLabel"
+                      color="primary"
+                      outline
+                      required
+                    ></v-select>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
+              <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+  <!-- Edit confirmation dialog -->
+        <v-dialog v-model="editDialog" max-width="500px">
           <v-card>
             <v-card-title>
               <span class="table-header">{{ dialogTitle }}</span>
@@ -277,7 +288,6 @@
         </v-dialog>
       </v-container>
     </v-card>
-  <!-- Table: Footer Pagination CRUD function buttons-->
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
       <v-btn flat @click="snack = false">Close</v-btn>
@@ -302,6 +312,8 @@ export default {
       rowDisplayNo: 5,
       snack: false,
       delDialog: false,
+      editDialog: false,
+      newDialog: false,
       direction: 'top',
       fab: false,
       fling: false,
@@ -329,6 +341,7 @@ export default {
   },
   computed: {
     pages () {
+      this.pagination.totalItems = this.items.length
       if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) {
         return 0
       } else {
@@ -344,6 +357,7 @@ export default {
     },
     close () {
       this.editDialog = false
+      this.newDialog = false
       console.log('Dialog Closing')
     },
     searchDisplay () {
@@ -353,7 +367,7 @@ export default {
     },
     toggleAll () {
       if (this.selected.length) this.selected = []
-      else this.selected = this.desserts.slice()
+      else this.selected = this.items.slice()
     },
     changeSort (column) {
       if (this.pagination.sortBy === column) {
