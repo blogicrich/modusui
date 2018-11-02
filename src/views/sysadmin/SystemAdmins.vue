@@ -1,13 +1,14 @@
 <template>
   <v-container>
-    <h1 class="pg-header">System Administrators</h1>
+    <!-- <h1 v-if="this.$vuetify.breakpoint.smAndDown" class="pg-header">System Administrators</h1> -->
+    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-center" text-xs-center>System Administrators</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
       :newItem="newItem"
       :menuItems="menuItems"
       searchLabel="Search System Administrators"
-      tableTitle="System Administrators"
+      tableTitle="System Administrator Records"
       btnTitle="+"
       dialogTitle="Add New Administrator"
       titleDel="Confirm delete items?"

@@ -10,19 +10,28 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
-      <span>Logged in as: {{ user }}</span>
-      <v-btn id="logout" icon @click.stop="logout">
-        <v-icon >exit_to_app</v-icon>
+      <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
+      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="mx-3" id="logout" icon @click.stop="home">
+        <v-icon large>home</v-icon>
+      </v-btn>
+      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="mx-1" id="logout" icon @click.stop="home">
+        <v-icon>home</v-icon>
+      </v-btn>
+      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="mx-3" id="logout" icon @click.stop="logout">
+        <v-icon large>exit_to_app</v-icon>
+      </v-btn>
+      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="mx-1" id="logout" icon @click.stop="logout">
+        <v-icon>exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
     <v-navigation-drawer id ='nav-drawer' v-if="authenticated.state"
-        width=160
-        :clipped="clipped"
-        v-model="drawer"
-        enable-resize-watcher
-        fixed
-        app
-        value="false"
+      width=160
+      :clipped="clipped"
+      v-model="drawer"
+      enable-resize-watcher
+      fixed
+      app
+      value="false"
     >
         <!-- <v-list>
             <img alt="" src="./assets/ed_logo.svg"><img>
@@ -53,7 +62,7 @@
       </v-content>
     <v-footer
       class="elevation-5 pa-1"
-      v-if="authenticated.state"
+      v-if="authenticated.state && $vuetify.breakpoint.mdAndUp"
       :fixed="fixed"
       color="white"
       app
@@ -92,6 +101,9 @@ export default {
     logout () {
       this.authenticated = { state: false, userId: null }
       this.$router.push('/login')
+    },
+    home () {
+      this.$router.push('/landing')
     }
   },
   watch: {

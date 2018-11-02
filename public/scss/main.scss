@@ -37,12 +37,7 @@ $text-body: #4d504f;
   font-weight: bold;
   color: $main-blue;
 }
-.table-cell-header {
-  margin-right: 1vw;
-  font-size: 1em;
-  font-weight: bold;
-  color: $main-blue;
-}
+
 // Text common
 
 .text-center {
@@ -55,6 +50,7 @@ $text-body: #4d504f;
 
 .pg-subheader {
   margin: 1vw;
+  margin-left: 3vw;
   text-align: left;
   font-size: 1.5em;
   font-weight: bold;
@@ -89,14 +85,19 @@ $text-body: #4d504f;
   font-size: 1em;
 }
 .table-fab {
-  float: right;
-  z-index: 2;
-  // top: 2px;
-  // right: -5px;
+  // position: absolute;
+  // z-index: 2;
+  // top: 1.5vw;
+  // right: 1.5vw;
 }
 
 // Table
-
+.table-cell-header {
+  margin-right: 1vw;
+  font-size: 1em;
+  font-weight: bold;
+  color: $main-blue;
+}
 tr:hover td {
   background-color: $main-blue-highlight;
 }
