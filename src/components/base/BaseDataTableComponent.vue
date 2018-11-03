@@ -45,7 +45,7 @@
         :total.items="this.items.length"
         class="elevation-1"
       >
-    <!-- Table: Headers -->
+  <!-- Table: Headers -->
     <template slot="headers" slot-scope="props">
       <th>
         <v-checkbox
@@ -74,7 +74,7 @@
         <v-icon small>arrow_upward</v-icon>
       </th>
     </template>
-    <!-- Table: Row data-->
+  <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <tr>
         <td>
@@ -123,7 +123,7 @@
       </tr>
     </template>
     </v-data-table>
-    <!-- Table: Footer Pagination CRUD function buttons -->
+  <!-- Table: Footer Pagination CRUD function buttons -->
       <v-card>
         <v-container class="my-1">
           <v-layout row fill-height align-center justify-center>
@@ -143,7 +143,7 @@
               :length="pages"
               >
             </v-pagination>
-    <!-- Table: Footer Speed dial -->
+  <!-- Table: Footer Speed dial -->
             <v-speed-dial
               v-model="fab"
               class="table-fab ma-0"
@@ -205,7 +205,7 @@
               </v-btn>
             </v-speed-dial>
           </v-layout>
-    <!-- Delete confirmation dialog -->
+  <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
             <v-card>
               <v-card-title class="table-header">{{ delDialogTitle }}</v-card-title>
@@ -217,16 +217,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <!-- <v-dialog v-else-if="!selected.length" v-model="delDialog" persistent max-width="500">
-            <v-card>
-              <v-card-title class="table-header">No items have been selected for delete</v-card-title>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="delDialog = false">Okay</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog> -->
-    <!-- New Item newDialog -->
+  <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="96%">
             <v-card>
               <v-card-title>
@@ -400,15 +391,7 @@
           <v-icon dark>search</v-icon>
         </v-btn>
       </v-speed-dial>
-      <!-- <v-toolbar v-if="!searchBarHidden" class="pa-1 my-1 elevation-1" flat color="white"> -->
-        <!-- <h2 class="table-header">{{ tableTitle }}</h2> -->
-        <!-- <v-divider
-          class="mx-2"
-          inset
-          vertical
-        ></v-divider> -->
       <v-fade-transition>
-        <!-- <v-card-title v-if="!searchBarHidden"> -->
         <v-layout
           row align-center justify-space-around
           v-if="searchBarHidden"
@@ -551,13 +534,6 @@
                 <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn>
               </v-card-actions>
             </v-card>
-            <!-- <v-card v-else-if="selected.length === 0">
-              <v-card-title class="table-header">No items have been selected for delete</v-card-title>
-              <v-card-actions v-if="selected.length < 1">
-                <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="delDialog = false">Okay</v-btn>
-              </v-card-actions>
-            </v-card> -->
           </v-dialog>
   <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="500px">
