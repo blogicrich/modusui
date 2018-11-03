@@ -10,7 +10,7 @@
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
-        <v-flex lg-3 xl-2>
+        <v-flex v-if="searchBarHidden" lg-3 xl-2>
           <v-text-field
             class="mb-2"
             @click:append-outer="search = ''"
@@ -25,7 +25,7 @@
         </v-card-title>
         <v-spacer></v-spacer>
         <v-divider
-          class="mx-2"
+          class="mx-2 mr-3"
           inset
           vertical
         ></v-divider>
@@ -171,42 +171,39 @@
                 @click="editDialog = true"
                 fab
                 dark
-                small
+                medium
                 color="green"
               >
                 <v-icon>edit</v-icon>
               </v-btn>
               </v-btn>
-                <v-btn
-                  @click="save"
-                  fab
-                  dark
-                  small
-                  color="error"
-                >
-              <v-icon>save</v-icon>
-              </v-btn>
               <v-btn
-                @click="newDialog = true"
+                @click="save"
                 fab
                 dark
-                small
-                color="green"
+                medium
+                color="error"
               >
-                <v-icon>add</v-icon>
+              <v-icon>save</v-icon>
               </v-btn>
               <v-btn
                 @click="delDialog = true"
                 fab
                 dark
-                small
+                medium
                 color="error"
               >
                 <v-icon>delete</v-icon>
               </v-btn>
-              <!-- <v-btn fab dark small color="primary" @click="searchDisplay">
+              <v-btn
+                fab
+                dark
+                medium
+                color="primary"
+                @click="searchDisplay"
+              >
                 <v-icon dark>search</v-icon>
-              </v-btn> -->
+              </v-btn>
             </v-speed-dial>
           </v-layout>
     <!-- Delete confirmation dialog -->
@@ -229,7 +226,7 @@
             </v-card>
           </v-dialog>
     <!-- New Item newDialog -->
-          <v-dialog v-model="newDialog" max-width="500px">
+          <v-dialog v-model="newDialog" max-width="96%">
             <v-card>
               <v-card-title>
                 <span class="table-header">{{ dialogTitle }}</span>
@@ -237,7 +234,7 @@
               <v-card-text>
                 <v-container>
                   <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6 lg2>
                       <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
@@ -269,25 +266,24 @@
             </v-card>
           </v-dialog>
     <!-- Edit confirmation dialog -->
-          <v-dialog v-model="editDialog" max-width="500px">
+          <v-dialog v-model="editDialog" max-width="98%">
             <v-card>
               <v-card-title>
                 <span class="table-header">{{ dialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
-                  <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                  <v-layout v-for="(item) in selected" :key="item.name" row wrap justify-space-around>
+                    <v-flex v-for="(property, key) in item" :key="item.name" xs12 md6 lg2>
                       <v-text-field
-                        v-if="item.cellType === 'tb'"
                         class="ma-1"
-                        :label="item.cellLabel"
-                        v-model="newItem[key].sync"
+                        :label="key"
+                        v-model="property.sync"
                         color="primary"
                         outline
                         required
-                      ></v-text-field>
-                      <v-select
+                      >{{ selected[key] }}</v-text-field>
+                      <!-- <v-select
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
                         v-model="newItem[key].sync"
@@ -296,7 +292,7 @@
                         color="primary"
                         outline
                         required
-                      ></v-select>
+                      ></v-select> -->
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -312,7 +308,7 @@
       </v-card>
       <v-layout row justify-center align-center ma-3>
         <v-fade-transition>
-          <v-btn class="pg-foot-btn" @click="this.router.push('/landing')" color="primary" large>home
+          <v-btn class="pg-foot-btn" @click="$router.push('/landing')" color="primary" large>home
             <v-icon class="ml-2">home</v-icon>
           </v-btn>
         </v-fade-transition>
@@ -356,6 +352,7 @@
           v-model="fab"
           color="primary"
           dark
+          small
           fab
         >
           <v-icon>menu</v-icon>
@@ -366,6 +363,7 @@
           @click="editDialog = true"
           fab
           dark
+          small
           color="green"
         >
           <v-icon>edit</v-icon>
@@ -374,6 +372,7 @@
           @click="save"
           fab
           dark
+          small
           color="error"
         >
         <v-icon>save</v-icon>
@@ -382,6 +381,7 @@
           @click="newDialog = true"
           fab
           dark
+          small
           color="green"
         >
           <v-icon>add</v-icon>
@@ -390,6 +390,7 @@
           @click="delDialog = true"
           fab
           dark
+          small
           color="error"
         >
           <v-icon>delete</v-icon>
@@ -522,7 +523,7 @@
       <v-card>
         <v-container class="my-1">
           <v-layout row wrap fill-height align-center justify-space-around>
-            <v-flex xs3 md1>
+            <v-flex xs3 md1 lg1>
               <v-select
                 class="ma-1"
                 v-model="pagination.rowsPerPage"
@@ -664,7 +665,7 @@ export default {
       editDialog: false,
       search: '',
       selected: [],
-      searchBarHidden: true,
+      searchBarHidden: false,
       pagination: {},
       snackColor: 'primary',
       snackText: '',

@@ -15,13 +15,13 @@
         <v-icon medium>home</v-icon>
       </v-btn>
       <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="home">
-        <v-icon small>home</v-icon>
+        <v-icon medium>home</v-icon>
       </v-btn>
       <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="logout">
         <v-icon medium>exit_to_app</v-icon>
       </v-btn>
       <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="logout">
-        <v-icon small>exit_to_app</v-icon>
+        <v-icon medium>exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
     <v-navigation-drawer id ='nav-drawer' v-if="authenticated.state"
