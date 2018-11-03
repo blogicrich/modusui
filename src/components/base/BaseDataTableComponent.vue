@@ -152,7 +152,7 @@
               :bottom="bottom"
               :right="right"
               :left="left"
-              :direction="direction"
+              :direction="dtDirection"
               :open-on-hover="hover"
               :transition="transition"
             >
@@ -167,7 +167,6 @@
                 <v-icon>close</v-icon>
               </v-btn>
               <v-btn
-                v-if="selected.length < 2"
                 @click="editDialog = true"
                 fab
                 dark
@@ -208,28 +207,30 @@
           </v-layout>
     <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
-            <v-card v-if="selected.length > 0">
-              <v-card-title class="table-header">{{ titleDel }}</v-card-title>
+            <v-card>
+              <v-card-title class="table-header">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="delDialog = false">Cancel</v-btn>
-                <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn>
+                <v-btn color="primary" flat @click.native.prevent="close">Cancel</v-btn>
+                <v-btn color="primary" flat @click.native.prevent="deleteItem">Delete</v-btn>
               </v-card-actions>
             </v-card>
-            <v-card v-else-if="selected.length === 0">
+          </v-dialog>
+          <!-- <v-dialog v-else-if="!selected.length" v-model="delDialog" persistent max-width="500">
+            <v-card>
               <v-card-title class="table-header">No items have been selected for delete</v-card-title>
-              <v-card-actions v-if="selected.length < 1">
+              <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click.native="delDialog = false">Okay</v-btn>
               </v-card-actions>
             </v-card>
-          </v-dialog>
+          </v-dialog> -->
     <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="96%">
             <v-card>
               <v-card-title>
-                <span class="table-header">{{ dialogTitle }}</span>
+                <span class="table-header">{{ newDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -269,20 +270,20 @@
           <v-dialog v-model="editDialog" max-width="98%">
             <v-card>
               <v-card-title>
-                <span class="table-header">{{ dialogTitle }}</span>
+                <span class="table-header">{{ editDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
-                  <v-layout v-for="(item) in selected" :key="item.name" row wrap justify-space-around>
-                    <v-flex v-for="(property, key) in item" :key="item.name" xs12 md6 lg2>
+                  <v-layout v-for="(item, index) in selected" :key="index" row wrap justify-space-around>
+                    <v-flex v-for="(property, key) in item" :key="key" xs12 md6 lg2>
                       <v-text-field
                         class="ma-1"
                         :label="key"
-                        v-model="property.sync"
+                        v-model.sync="item[key]"
                         color="primary"
                         outline
                         required
-                      >{{ selected[key] }}</v-text-field>
+                      >{{ item[key].value }}</v-text-field>
                       <!-- <v-select
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
@@ -300,7 +301,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
-                <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
+                <v-btn color="primary darken-1" flat @click.native="saveChanges">save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -343,7 +344,7 @@
         :bottom="bottom"
         :right="right"
         :left="left"
-        :direction="direction"
+        :direction="mbDirection"
         :open-on-hover="hover"
         :transition="transition"
       >
@@ -358,7 +359,7 @@
           <v-icon>menu</v-icon>
           <v-icon>close</v-icon>
         </v-btn>
-        <v-btn
+        <!-- <v-btn
           v-if="selected.length < 2"
           @click="editDialog = true"
           fab
@@ -367,7 +368,7 @@
           color="green"
         >
           <v-icon>edit</v-icon>
-        </v-btn>
+        </v-btn> -->
         <v-btn
           @click="save"
           fab
@@ -410,7 +411,7 @@
         <!-- <v-card-title v-if="!searchBarHidden"> -->
         <v-layout
           row align-center justify-space-around
-          v-if="!searchBarHidden"
+          v-if="searchBarHidden"
         >
           <v-text-field
             class="mb-2"
@@ -423,11 +424,9 @@
             append-outer-icon="close"
           ></v-text-field>
         </v-layout>
-
-
-        <!-- </v-card-title> -->
+  <!-- </v-card-title> -->
       </v-fade-transition>
-      <!-- </v-toolbar> -->
+  <!-- </v-toolbar> -->
       <v-data-table
         :headers="headers"
         :items="items"
@@ -440,7 +439,7 @@
         :total.items="this.items.length"
         class="elevation-1"
       >
-    <!-- Table: Headers -->
+  <!-- Table: Headers -->
     <template slot="headers" slot-scope="props">
       <th>
         <v-checkbox
@@ -470,7 +469,7 @@
         <v-icon small>arrow_upward</v-icon>
       </th>
     </template>
-    <!-- Table: Row data-->
+  <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <tr>
         <td>
@@ -519,7 +518,7 @@
       </tr>
     </template>
     </v-data-table>
-    <!-- Table: Footer Pagination CRUD function buttons -->
+  <!-- Table: Footer Pagination CRUD function buttons -->
       <v-card>
         <v-container class="my-1">
           <v-layout row wrap fill-height align-center justify-space-around>
@@ -539,32 +538,32 @@
               :length="pages"
               >
             </v-pagination>
-    <!-- Table: Footer Speed dial -->
+  <!-- Table: Footer Speed dial -->
           </v-layout>
-    <!-- Delete confirmation dialog -->
+  <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
-            <v-card v-if="selected.length > 0">
-              <v-card-title class="table-header">{{ titleDel }}</v-card-title>
+            <v-card>
+              <v-card-title class="table-header">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="delDialog = false">Cancel</v-btn>
+                <v-btn color="primary" flat @click.native="close">Cancel</v-btn>
                 <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn>
               </v-card-actions>
             </v-card>
-            <v-card v-else-if="selected.length === 0">
+            <!-- <v-card v-else-if="selected.length === 0">
               <v-card-title class="table-header">No items have been selected for delete</v-card-title>
               <v-card-actions v-if="selected.length < 1">
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat @click.native="delDialog = false">Okay</v-btn>
               </v-card-actions>
-            </v-card>
+            </v-card> -->
           </v-dialog>
-    <!-- New Item newDialog -->
+  <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="500px">
             <v-card>
               <v-card-title>
-                <span class="table-header">{{ dialogTitle }}</span>
+                <span class="table-header">{{ newDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -595,16 +594,16 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
-                <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
+                <v-btn color="primary darken-1" flat @click.native.stop="close">Cancel</v-btn>
+                <v-btn color="primary darken-1" flat @click.native.stop="save">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
-    <!-- Edit confirmation dialog -->
+  <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="500px">
             <v-card>
               <v-card-title>
-                <span class="table-header">{{ dialogTitle }}</span>
+                <span class="table-header">{{ editDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -647,7 +646,6 @@
         <v-btn flat @click="snack = false">Close</v-btn>
       </v-snackbar>
     </v-container>
-  <!-- Table Header: Title and '+' button -->
   </div>
 </template>
 
@@ -669,12 +667,12 @@ export default {
       pagination: {},
       snackColor: 'primary',
       snackText: '',
-      rowDisplayNo: 5,
       snack: false,
       delDialog: false,
       editDialog: false,
       newDialog: false,
-      direction: 'left',
+      mbDirection: 'top',
+      dtDirection: 'left',
       fab: false,
       fling: false,
       hover: false,
@@ -691,7 +689,9 @@ export default {
     headers: Array,
     menuItems: Array,
     btnTitle: String,
-    dialogTitle: String,
+    newDialogTitle: String,
+    editDialogTitle: String,
+    delDialogTitle: String,
     tableTitle: String,
     newItem: Array,
     itemKey: String,
@@ -716,8 +716,10 @@ export default {
       this.delDialog = false
     },
     close () {
+      if(this.selected.length) this.selected = []
       this.editDialog = false
       this.newDialog = false
+      this.delDialog = false
       console.log('Dialog Closing')
     },
     searchDisplay () {
@@ -741,6 +743,12 @@ export default {
       console.log('Fired')
       this.$emit('newItem', this.newItem)
       this.close()
+    },
+    saveChanges () {
+      console.log(this.selected)
+      console.log(this.items)
+      this.close()
+      this.selected = []
     },
     msgSave () {
       this.snack = true
