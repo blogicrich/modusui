@@ -4,6 +4,7 @@ $main-blue: #00a1cd;
 $main-blue-highlight: rgba(0, 161, 205, 0.1);
 $bg-grey: #f2f4f4;
 $text-body: #4d504f;
+$bg-white: #ffff;
 
 // Headers
 
@@ -62,6 +63,15 @@ $text-body: #4d504f;
   font-size: 1em;
   color: $text-body;
 }
+.input-subhead-search{
+  outline: none;
+  border-bottom: solid 1px;
+  border-color: $main-blue;
+  border-radius: 3px;
+}
+.check-subhead-selectall{
+  font-weight: bold;
+}
 
 // Buttons
 
@@ -82,8 +92,11 @@ $text-body: #4d504f;
   font-size: 1em;
 }
 .dialog-btn {
-  background-color: $main-blue;
+  background-color: $main-blue !important;
+  border: solid;
+  border-color: $main-blue;
   border-radius: 4px;
+  color: $bg-white !important;
   font-size: 1em;
 }
 .table-fab {
@@ -102,4 +115,27 @@ $text-body: #4d504f;
 }
 tr:hover td {
   background-color: $main-blue-highlight;
+}
+.dialog-btn:hover {
+  background-color: $bg-white !important;
+  border: solid;
+  border-color: $main-blue;
+  border-radius: 4px;
+  color: $main-blue !important;
+  font-size: 1em;
+}
+
+// Hr
+
+.dialog-hr{
+  border: dotted;
+  border-width: 0.5px;
+  color: $main-blue;
+}
+
+// Inputs
+
+input[type=checkbox]:checked + label{
+  color: $main-blue !important;
+  font-weight: bold;
 }
