@@ -44,13 +44,15 @@ $text-body: #4d504f;
   text-align:center;
 }
 .text-left {
+  // font-size: 1em;
+  // margin: 10px;
   text-align:left;
 }
 //Subheaders
 
 .pg-subheader {
   margin: 1vw;
-  margin-left: 3vw;
+  margin-left: 1vw;
   text-align: left;
   font-size: 1.5em;
   font-weight: bold;

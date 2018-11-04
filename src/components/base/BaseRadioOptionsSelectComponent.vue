@@ -1,22 +1,26 @@
 <template>
   <v-container>
+    <v-layout justify-space-around fill-height>
+      <v-flex xs12 md12 lg12>
         <v-card class="ma-0">
-          <v-card-title class="subheader text-left"> {{ groupHeader }} </v-card-title>
+          <h3 class="subheader text-left"> {{ groupHeader }} </h3>
           <v-divider
             class="mx-2"
             color="#00a1cd">
           </v-divider>
-          <v-layout row fill-height>
-            <v-card-title class="text-wrap"> {{ groupDescription }} </v-card-title>
-          <v-layout column fill-height>
-              <v-card-title class="subheader text-left"> {{ radioHeader }}</v-card-title>
+          <!-- <v-layout row fill-height> -->
+
+            <!-- <v-layout justify-space-between row fill-height> -->
+
+            <v-flex xs12 md12 lg12>
+              <p class="text-left"> {{ groupDescription }} </p>
+              <h3 class="subheader text-left"> {{ radioHeader }}</h3>
               <v-radio-group
-                class="mx-2"
                 v-model="value"
                 :mandatory="false"
                 color="primary"
-                row
               >
+                <!-- <v-layout justify-space-around fill-height> -->
                 <v-radio
                   v-for="radio in radioConfig"
                   :key="radio.label"
@@ -24,10 +28,14 @@
                   :value="radio.value"
                   >
                 </v-radio>
+              <!-- </v-layout> -->
               </v-radio-group>
-            </v-layout>
-          </v-layout>
+            </v-flex>
+            <!-- </v-layout> -->
+          <!-- </v-layout> -->
         </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 

@@ -6,7 +6,7 @@
       app
       :clipped-left="clipped"
     >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon v-if="$vuetify.breakpoint.mdAndUp" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
@@ -62,12 +62,12 @@
       </v-content>
     <v-footer
       class="elevation-5 pa-1"
-      v-if="authenticated.state && $vuetify.breakpoint.mdAndUp"
+      v-if="authenticated.state"
       :fixed="fixed"
       color="white"
       app
     >
-      <span>Version: 0.1.0</span>
+      <span v-if="$vuetify.breakpoint.smAndUp">Version: 0.1.0</span>
     </v-footer>
   </v-app>
 </template>

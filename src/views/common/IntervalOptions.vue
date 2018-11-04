@@ -7,7 +7,7 @@
       color="#00a1cd"
       >
     </v-divider>
-    <v-layout row wrap fill-height align-space-between>
+    <v-layout row wrap fill-height justify-space-between>
       <v-flex xs12 md6>
         <BaseRadioOptions
           :radioConfig="drinkIntervalSettings"
@@ -31,7 +31,7 @@
         color="#00a1cd"
         >
       </v-divider>
-    <v-layout row wrap fill-height align-space-between justify-space-between>
+    <v-layout row wrap fill-height justify-space-between>
       <v-flex xs12 md6>
         <BaseRadioOptions
           :radioConfig="wakeUpIntervalSettings"
