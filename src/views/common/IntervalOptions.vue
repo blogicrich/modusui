@@ -8,20 +8,23 @@
       >
     </v-divider>
     <v-layout row wrap fill-height justify-space-between>
-      <v-flex xs12 md6>
+      <v-flex xs12 lg6>
         <BaseRadioOptions
           :radioConfig="drinkIntervalSettings"
           :groupHeader="drinkGroupHeader"
           :groupDescription="drinkRadioDescription"
           :radioHeader="drinkRadioHeader"
+          :height="height"
         />
       </v-flex>
-      <v-flex xs12 md6>
+      <v-flex xs12 lg6>
         <BaseRadioOptions
           :radioConfig="voiceIntervalSettings"
           :groupHeader="voiceGroupHeader"
           :groupDescription="voiceRadioDescription"
           :radioHeader="voiceRadioHeader"
+          :height="height"
+
         />
       </v-flex>
     </v-layout>
@@ -32,20 +35,24 @@
         >
       </v-divider>
     <v-layout row wrap fill-height justify-space-between>
-      <v-flex xs12 md6>
+      <v-flex xs12 lg6>
         <BaseRadioOptions
           :radioConfig="wakeUpIntervalSettings"
           :groupHeader="wakeUpGroupHeader"
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
+          :height="height"
+
         />
       </v-flex>
-      <v-flex xs12 md6>
+      <v-flex xs12 lg6>
         <BaseRadioOptions
           :radioConfig="commsIntervalSettings"
           :groupHeader="commsGroupHeader"
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
+          :height="height"
+
         />
       </v-flex>
     </v-layout>
@@ -98,11 +105,20 @@ export default {
         { label: 'Comms-1', value: '1' },
         { label: 'Comms-2', value: '2' },
         { label: 'Comms-3', value: '3' },
-        { label: 'Comms-4', value: '4' }
+        { label: 'Comms-4', value: '4' },
+        { label: 'Comms-5', value: '5' }
       ],
       commsGroupHeader: 'Communication interval options',
       commsRadioDescription: 'Time betweeen edroplet communications - (Voice message)',
       commsRadioHeader: 'Time interval in minutes'
+    }
+  },
+  computed: {
+    height () {
+      var cardHeight = 0
+      if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
+      if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
+      return cardHeight
     }
   }
 }
