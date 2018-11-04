@@ -33,7 +33,6 @@ $bg-white: #ffff;
   color: $main-blue;
 }
 .subheader {
-  // margin: 1vw;
   font-size: 1em;
   font-weight: bold;
   color: $main-blue;
@@ -99,14 +98,9 @@ $bg-white: #ffff;
   color: $bg-white !important;
   font-size: 1em;
 }
-.table-fab {
-  // position: absolute;
-  // z-index: 2;
-  // top: 1.5vw;
-  // right: 1.5vw;
-}
 
 // Table
+
 .table-cell-header {
   margin-right: 1vw;
   font-size: 1em;
