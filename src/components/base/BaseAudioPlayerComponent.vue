@@ -1,68 +1,28 @@
 <template lang="html">
-  <!-- <selectComponent></selectComponent> -->
-    <v-container>
-      <v-layout>
-        <v-flex xs12>
-        <h1 class="pg-header">Voice Messages</h1>
-        <v-card class="pa-2">
-        <h2 class="pg-subheader">Message Type: Reminder</h2>
-        <v-divider
-          class="ma-2"
-          color="#00a1cd"
-          >
-        </v-divider>
-        <v-layout row wrap align-center justify-center>
-          <v-flex class="mx-3">
-            <v-layout row>
-              <h3>{{ fileType }}</h3>
-              <v-icon class="mx-3">{{ uploadIcon }}</v-icon>
-              <h3>{{ fileName }}</h3>
-            </v-layout>
-          </v-flex>
-          <v-flex class="mx-3">
-            <v-layout row align-center justify-center>
-            <v-btn
-              class="mx-3"
-              fab
-              dark
-              small
-              color="primary"
-            >
-              <v-icon>play_arrow</v-icon>
-            </v-btn>
-            <h2>0.00</h2>
-          </v-layout>
-        </v-flex>
-          <v-flex class="mx-3">
-            <v-layout row align-center justify-center>
-              <h3 class="mr-3 my-1">Message Interval in Minutes:</h3>
-              <!-- <v-layout row fill height align-end justfy-space-around> -->
-                <v-radio-group
-                  v-model="value"
-                  :mandatory="false"
-                  row
-                >
-                  <v-radio
-                    color="primary"
-                    v-for="radio in radioConfig"
-                    :key="radio.label"
-                    :label="radio.label"
-                    :value="radio.value"
-                    >
-                  </v-radio>
-                </v-radio-group>
-              <!-- </v-layout> -->
-            </v-layout>
-          </v-flex>
-        </v-layout>
-        <v-divider
-          class="ma-2"
-          color="#f2f4f4"
-          >
-        </v-divider>
-      </v-card>
-      </v-flex>
-    </v-layout>
+  <v-container>
+    <v-flex class="mx-3">
+      <v-layout row align-center justify-center>
+        <audio
+          controls
+          hidden
+          ref="audio"
+          :src="sourceMP3"
+          type="audio/mpeg"
+         >
+        </audio>
+        <v-btn
+          class="mx-3"
+          fab
+          dark
+          small
+          color="primary"
+          @click = "play"
+        >
+          <v-icon>play_arrow</v-icon>
+        </v-btn>
+        <h2>0.00</h2>
+      </v-layout>
+    </v-flex>
   </v-container>
 </template>
 
@@ -71,18 +31,35 @@ export default {
   name: 'BaseAudioPlayerComponent',
   data () {
     return {
-      value: ''
+      value: '',
+      audio: undefined,
+      sourceMP3: require('../../../public/audio/mp3/mpfile.mp3'),
+      sourceOgg: require('../../../public/audio/ogg/ogfile.ogg'),
+      demoFile: 'https://soundbible.com/mp3/Tyrannosaurus%20Rex%20Roar-SoundBible.com-807702404.mp3'
     }
   },
   props: {
-    radioConfig: Array,
-    groupHeader: String,
-    groupDescription: String,
-    radioHeader: String,
-    height: String,
-    uploadIcon: String,
-    fileName: String,
-    fileType: String
+
+  },
+  methods: {
+    play() {
+      // this.audio.play()
+      // if(filePath)
+      // var audio = new Audio()
+      this.$refs.audio.play('https://soundbible.com/mp3/Tyrannosaurus%20Rex%20Roar-SoundBible.com-807702404.mp3')
+      // console.log(audio)
+      // console.log(this.$refs)
+    }
+  },
+  beforeMount () {
+    this.audio = new Audio()
+    // const el = this.$el.querySelectorAll('audio')[0]
+    this.audio.addEventListener('play', this.play)
+    // console.log(this.source);
+    // var context = new AudioContext()
+    // var source = context.createBufferSource()
+    // source.buffer = aBuffer
+    // source.connect(context.destination)
   }
 }
 </script>

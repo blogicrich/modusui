@@ -1,7 +1,7 @@
 <template lang="html">
   <v-container>
     <!-- <selectComponent></selectComponent> -->
-    <BaseAudioPlayer
+    <SubVoiceMsgAudioPlayer
       :radioConfig="drinkIntervalSettings"
       :groupHeader="drinkGroupHeader"
       :groupDescription="drinkRadioDescription"
@@ -15,12 +15,12 @@
 
 <script>
 // import selectComponent from '../../components/base/BaseUserSelectComponent.vue'
-import BaseAudioPlayer from '@/components/base/BaseAudioPlayerComponent.vue'
+import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
 export default {
 name: 'VoiceMessageViewComponent',
   components: {
-    // selectComponent
-    BaseAudioPlayer
+    // selectComponent,
+    SubVoiceMsgAudioPlayer
   },
   data () {
     return {
