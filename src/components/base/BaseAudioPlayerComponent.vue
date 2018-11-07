@@ -3,11 +3,9 @@
     <v-flex class="mx-3">
       <v-layout row align-center justify-center>
         <audio
-          controls
-          hidden
           ref="audio"
-          :src="sourceMP3"
-          type="audio/mpeg"
+          :src="audioFile"
+          :type="audioType"
          >
         </audio>
         <v-btn
@@ -16,7 +14,7 @@
           dark
           small
           color="primary"
-          @click = "play"
+          @click="play"
         >
           <v-icon>play_arrow</v-icon>
         </v-btn>
@@ -31,23 +29,19 @@ export default {
   name: 'BaseAudioPlayerComponent',
   data () {
     return {
-      value: '',
-      audio: undefined,
-      sourceMP3: require('../../../public/audio/mp3/mpfile.mp3'),
-      sourceOgg: require('../../../public/audio/ogg/ogfile.ogg'),
-      demoFile: 'https://soundbible.com/mp3/Tyrannosaurus%20Rex%20Roar-SoundBible.com-807702404.mp3'
+      audioData: this.audio
     }
   },
   props: {
-
+    audio: Object,
+    audioFile: String,
+    audioType: String,
   },
   methods: {
-    play() {
+    play () {
       // this.audio.play()
-      // if(filePath)
-      // var audio = new Audio()
-      this.$refs.audio.play('https://soundbible.com/mp3/Tyrannosaurus%20Rex%20Roar-SoundBible.com-807702404.mp3')
-      // console.log(audio)
+      this.$refs.audio.play(this.audioData)
+      // else console.log("audio error")
       // console.log(this.$refs)
     }
   },
@@ -66,7 +60,4 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
-  .audio-player {
-    margin: 1%;
-  }
 </style>
