@@ -4,12 +4,12 @@
       <v-layout row align-center justify-center>
         <audio
           ref="audio"
-          :src="audioFile"
+          :src="audioData"
           :type="audioType"
          >
         </audio>
         <v-btn
-          class="mx-3"
+          class="ml-3"
           fab
           dark
           small
@@ -18,7 +18,17 @@
         >
           <v-icon>play_arrow</v-icon>
         </v-btn>
-        <h2>0.00</h2>
+        <v-btn
+          class="mr-3"
+          fab
+          dark
+          small
+          color="error"
+          @click="play"
+        >
+          <v-icon>stop</v-icon>
+        </v-btn>
+        <h2 class="pg-subheader">0.00</h2>
       </v-layout>
     </v-flex>
   </v-container>
@@ -29,31 +39,30 @@ export default {
   name: 'BaseAudioPlayerComponent',
   data () {
     return {
-      audioData: this.audio
+      // audioData: require(this.audioFile)
+      // audioData: require('"' + String(this.audioFile) + '"'),
+      audioData: require('../../../public/audio/mp3/mpfile.mp3'),
+      audio: undefined
     }
   },
   props: {
-    audio: Object,
     audioFile: String,
-    audioType: String,
+    audioType: String
   },
   methods: {
     play () {
-      // this.audio.play()
       this.$refs.audio.play(this.audioData)
-      // else console.log("audio error")
-      // console.log(this.$refs)
     }
   },
   beforeMount () {
     this.audio = new Audio()
-    // const el = this.$el.querySelectorAll('audio')[0]
     this.audio.addEventListener('play', this.play)
-    // console.log(this.source);
-    // var context = new AudioContext()
-    // var source = context.createBufferSource()
-    // source.buffer = aBuffer
-    // source.connect(context.destination)
+  },
+  mounted () {
+    console.log(this.audioFile);
+  },
+  beforeDestroy () {
+    this.audio.removeEventListener('play')
   }
 }
 </script>

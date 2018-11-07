@@ -7,7 +7,12 @@ $text-body: #4d504f;
 $bg-white: #ffff;
 
 // Headers
-
+.blue-header {
+  color: $main-blue;
+}
+.grey-header {
+  color: $bg-grey;
+}
 .app-header {
   margin: 1vw;
   font-size: 1.5em;
@@ -26,7 +31,7 @@ $bg-white: #ffff;
   font-weight: bold;
   color: $main-blue;
 }
-.table-dialog-header .pg-dialog-header {
+.table-dialog-header {
   margin: 1vw;
   font-size: 1.5em;
   font-weight: bold;
@@ -47,6 +52,12 @@ $bg-white: #ffff;
   // font-size: 1em;
   // margin: 10px;
   text-align:left;
+}
+.text-intervals {
+  margin: 1vw;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: $text-body;
 }
 //Subheaders
 
