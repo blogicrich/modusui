@@ -59,10 +59,10 @@ export default {
     this.audio.addEventListener('play', this.play)
   },
   mounted () {
-    console.log(this.audioFile);
+    console.log(this.audioFile)
   },
   beforeDestroy () {
-    this.audio.removeEventListener('play')
+    this.audio.removeEventListener('play', this.play)
   }
 }
 </script>

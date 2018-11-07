@@ -21,128 +21,39 @@
 </template>
 
 <script>
+import { getMeta } from '@/mixins/apiRequests'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 export default {
   name: 'SystemAdmins',
+  mixins: [getMeta],
   components: {
     BaseDataTable
   },
   data () {
     return {
-      items: [
-        {
-          // value: false,
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%'
-        },
-        {
-          // value: false,
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%'
-        },
-        {
-          // value: false,
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%'
-        },
-        {
-          // value: false,
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%'
-        },
-        {
-          // value: false,
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%'
-        },
-        {
-          // value: false,
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%'
-        },
-        {
-          // value: false,
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%'
-        },
-        {
-          // value: false,
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: '45%'
-        },
-        {
-          // value: false,
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: '22%'
-        },
-        {
-          // value: false,
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%'
-        }
-      ],
+      items: undefined,
       headers: [
         {
-          text: 'Dessert',
+          text: 'Title',
           align: 'left',
           sortable: false,
-          value: 'name',
-          cellType: 'tb'
+          value: 'titleId',
+          cellType: 'md'
         },
-        { text: 'Calories', value: 'calories', cellType: 'md' },
-        { text: 'Fat (g)', value: 'fat', cellType: 'md' },
-        { text: 'Carbs (g)', value: 'carbs', cellType: 'md' },
-        { text: 'Protein (g)', value: 'protein', cellType: 'md' }
+        { text: 'Given Name', value: 'givenName', cellType: 'tb' },
+        { text: 'Family Name', value: 'familyName', cellType: 'tb' },
+        { text: 'Corporate Id', value: 'corporateIdentification', cellType: 'tb' },
+        { text: 'User Name', value: 'username', cellType: 'tb' }
       ],
       newItem: [
-        { name: '', cellType: 'tb', cellLabel: 'name' },
-        { calories: 0, cellType: 'md', cellLabel: 'calories' },
-        { fat: 0, cellType: 'md', cellLabel: 'fat' },
-        { carbs: 0, cellType: 'md', cellLabel: 'carbs' },
-        { protein: 0, cellType: 'md', cellLabel: 'protein' }
+        { titleId: '', cellType: 'tb', cellLabel: 'name' },
+        { givenName: 0, cellType: 'tb', cellLabel: 'calories' },
+        { familyName: 0, cellType: 'tb', cellLabel: 'fat' },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'carbs' },
+        { username: 0, cellType: 'tb', cellLabel: 'protein' }
       ],
       defaultItem: [
-        { name: '', calories: 0, fat: 0, carbs: 0, protein: 0 }
+        { titleId: '', givenName: '', familyName: '', corporateIdentification: '', username: '' }
       ],
       menuItems: [
         { text: 'Calories', value: 'calories' },
@@ -186,6 +97,11 @@ export default {
         { name: '', calories: 0, fat: 0, carbs: 0, protein: 0 }
       ]
     }
+  },
+  async mounted () {
+    var values = await this.getMeta('sysadget')
+    console.log(values)
+    this.items = values
   }
 }
 </script>

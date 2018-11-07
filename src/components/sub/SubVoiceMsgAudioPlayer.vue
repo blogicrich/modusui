@@ -58,7 +58,7 @@ export default {
     value: String,
     audio: Object,
     audioFile: String,
-    audioType: String,
+    audioType: String
     // audioConfig: Array,
     // sourceMP3:
     // sourceOgg: require('../../../public/audio/ogg/ogfile.ogg'),

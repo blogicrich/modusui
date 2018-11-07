@@ -12,7 +12,7 @@
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgReminderConfig" :key="index"
+            v-for="(config, key, index) in msgReminderConfig" :key="msgRem + index"
             :radioConfig="msgReminderIntervalSettings"
             :groupHeader="msgReminderGroupHeader"
             :groupDescription="msgReminderRadioDescription"
@@ -36,7 +36,7 @@
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgInstructConfig" :key="index"
+            v-for="(config, key, index) in msgInstructConfig" :key="msgIns + index"
             :radioConfig="msgInstructIntervalSettings"
             :groupHeader="msgInstructGroupHeader"
             :groupDescription="msgInstructRadioDescription"
@@ -60,11 +60,11 @@
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgInstructConfig" :key="index"
-            :radioConfig="msgInstructIntervalSettings"
-            :groupHeader="msgInstructGroupHeader"
-            :groupDescription="msgInstructRadioDescription"
-            :radioHeader="msgInstructRadioHeader"
+            v-for="(config, key, index) in msgInstructConfig" :key="msgPr + index"
+            :radioConfig="msgPraiseIntervalSettings"
+            :groupHeader="msgPraiseGroupHeader"
+            :groupDescription="msgPraiseRadioDescription"
+            :radioHeader="msgPraiseRadioHeader"
             :uploadIcon="uploadIcon"
             :audioFile="config.source"
             :audioType="config.audioType"
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { getMeta } from '@/mixins/apiRequests'
 import selectComponent from '../../components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
 export default {
@@ -90,6 +91,7 @@ export default {
     selectComponent,
     SubVoiceMsgAudioPlayer
   },
+  mixins: [getMeta],
   data () {
     return {
       msgReminderIntervalSettings: [
@@ -98,10 +100,9 @@ export default {
         { label: '60', value: 60 },
         { label: 'Never', value: 'Never' }
       ],
-      msgReminderGroupHeader: 'Blue light flashing interval options',
+      // msgReminderGroupHeader: 'Blue light flashing interval options',
       msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
-      msgReminderRadioHeader: 'Please select an option from the following:',
-      messages: ['msg1', 'msg2', 'msg3'],
+      msgReminderRadioHeader: 'Time interval in minutes:',
       uploadIcon: 'cloud_upload',
       msgReminderConfig: [
         {
@@ -120,7 +121,7 @@ export default {
         { label: '60', value: 60 },
         { label: 'Never', value: 'Never' }
       ],
-      msgInstructGroupHeader: 'Blue light flashing interval options',
+      // msgInstructGroupHeader: 'Blue light flashing interval options',
       msgInstructRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgInstructRadioHeader: 'Please select an option from the following:',
       messages: ['msg1', 'msg2', 'msg3'],
@@ -155,7 +156,7 @@ export default {
         {
           source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003'
         }
-      ],
+      ]
     }
   }
 }

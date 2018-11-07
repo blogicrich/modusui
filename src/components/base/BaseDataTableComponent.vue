@@ -692,7 +692,7 @@ export default {
       this.delDialog = false
     },
     close () {
-      if(this.selected.length) this.selected = []
+      if (this.selected.length) this.selected = []
       this.editDialog = false
       this.newDialog = false
       this.delDialog = false
