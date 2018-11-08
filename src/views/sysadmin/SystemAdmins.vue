@@ -31,7 +31,8 @@ export default {
   },
   data () {
     return {
-      items: undefined,
+      items: [],
+      loading: true,
       headers: [
         {
           text: 'Title',
@@ -98,10 +99,13 @@ export default {
       ]
     }
   },
-  async mounted () {
+  async beforeMount () {
+    this.loading = true
     var values = await this.getMeta('sysadget')
     console.log(values)
     this.items = values
+    this.loading = false
+    // this.items.splice(values, 1)
   }
 }
 </script>

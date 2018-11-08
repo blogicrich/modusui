@@ -746,7 +746,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.items)
+    // console.log(this.items)
   }
 }
 </script>
