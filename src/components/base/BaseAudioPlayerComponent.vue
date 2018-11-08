@@ -1,34 +1,31 @@
 <template lang="html">
   <v-container>
-    <v-flex class="mx-3">
-      <v-layout row align-center justify-center>
+    <v-flex class="mx-3" mx4>
+      <v-layout row fill-height align-center justify-space-around style="background-color: rgba(0, 161, 205, 0.1); border-radius:10%/50%; width:250px;">
         <audio
+          hidden
+          controls
           ref="audio"
           :src="audioData"
           :type="audioType"
          >
         </audio>
-        <v-btn
-          class="ml-3"
-          fab
-          dark
-          small
-          color="primary"
-          @click="play"
-        >
-          <v-icon>play_arrow</v-icon>
-        </v-btn>
-        <v-btn
-          class="mr-3"
-          fab
-          dark
-          small
-          color="error"
-          @click="play"
-        >
-          <v-icon>stop</v-icon>
-        </v-btn>
-        <h2 class="pg-subheader">0.00</h2>
+        <v-spacer></v-spacer>
+        <v-flex>
+          <v-layout align-center justify-space-around>
+          <v-icon
+            @click="play"
+            >play_arrow
+          </v-icon>
+          <v-icon
+            @click="play"
+            >stop
+          </v-icon>
+        </v-layout>
+        </v-flex>
+        <v-flex class="mx-3" md3>
+          <h2 class="text-white pg-subheader">0.00</h2>
+        </v-flex>
       </v-layout>
     </v-flex>
   </v-container>

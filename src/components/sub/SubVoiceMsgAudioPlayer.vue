@@ -1,14 +1,14 @@
 <template lang="html">
   <v-container class="pa-0">
-    <v-layout row wrap align-center justify-center>
-      <v-flex class="mx-3">
+    <v-layout row wrap align-center justify-space-between>
+      <v-flex class="mx-3" md2>
         <v-layout row>
           <h3 class="text-intervals">{{ fileName }}</h3>
-          <v-icon class="mx-3" medium color="black">{{ uploadIcon }}</v-icon>
+          <v-icon class="mx-3" medium color="primary">{{ uploadIcon }}</v-icon>
           <h3 class="text-intervals">{{ audioType }}</h3>
         </v-layout>
       </v-flex>
-      <v-flex class="mx-3">
+      <v-flex class="mx-3" md2>
         <v-layout row align-center justify-center>
           <BaseAudioPlayer
             :audioFile="audioFile"
@@ -16,6 +16,7 @@
           />
         </v-layout>
       </v-flex>
+      <v-spacer></v-spacer>
       <v-flex class="mx-3">
         <v-layout row align-center justify-center>
           <h3 class="text-intervals mr-3 my-1">Message Interval in Minutes:</h3>

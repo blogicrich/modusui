@@ -1,18 +1,21 @@
 <template lang="html">
   <v-container>
-    <selectComponent class="mx-2"></selectComponent>
     <v-layout>
       <v-flex xs12>
-        <h1 class="pg-header ma-2">Voice Messages</h1>
+        <v-layout row align-start justify-space-between>
+          <h1 class="pg-header ma-2">Voice Messages</h1>
+          <v-spacer></v-spacer>
+          <selectComponent class="mx-2"></selectComponent>
+        </v-layout>
         <v-card class="pa-2 my-3">
-          <h2 class="pg-subheader ma-2">Message Type: Reminder</h2>
+          <h2 class="pg-subheader ma-2">{{ msgReminderGroupHeader}}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgReminderConfig" :key="msgRem + index"
+            v-for="(config, key) in msgReminderConfig" :key="'msgRem' + config.fileName"
             :radioConfig="msgReminderIntervalSettings"
             :groupHeader="msgReminderGroupHeader"
             :groupDescription="msgReminderRadioDescription"
@@ -29,14 +32,14 @@
           </v-divider>
         </v-card>
         <v-card class="pa-2 my-3">
-          <h2 class="pg-subheader ma-2">Message Type: Instruction</h2>
+          <h2 class="pg-subheader ma-2">{{ msgInstructGroupHeader }}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgInstructConfig" :key="msgIns + index"
+            v-for="(config, key, index) in msgInstructConfig" :key="'msgIns' + '-' + config.fileName"
             :radioConfig="msgInstructIntervalSettings"
             :groupHeader="msgInstructGroupHeader"
             :groupDescription="msgInstructRadioDescription"
@@ -53,14 +56,14 @@
           </v-divider>
         </v-card>
         <v-card class="pa-2 my-2">
-          <h2 class="pg-subheader ma-2">Message Type: Praise</h2>
+          <h2 class="pg-subheader ma-2">{{ msgPraiseGroupHeader }}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgInstructConfig" :key="msgPr + index"
+            v-for="(config, key, index) in msgPraiseConfig" :key="'msgPr' + '-' + config.fileName"
             :radioConfig="msgPraiseIntervalSettings"
             :groupHeader="msgPraiseGroupHeader"
             :groupDescription="msgPraiseRadioDescription"
@@ -94,68 +97,51 @@ export default {
   mixins: [getMeta],
   data () {
     return {
+      uploadIcon: 'cloud_upload',
+      // Messages reminders
       msgReminderIntervalSettings: [
         { label: '20', value: 20 },
         { label: '40', value: 40 },
         { label: '60', value: 60 },
         { label: 'Never', value: 'Never' }
       ],
-      // msgReminderGroupHeader: 'Blue light flashing interval options',
+      msgReminderGroupHeader: 'Message Type: Reminders',
       msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgReminderRadioHeader: 'Time interval in minutes:',
-      uploadIcon: 'cloud_upload',
       msgReminderConfig: [
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001'
-        },
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002'
-        },
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003'
-        }
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ],
+      // Messages instructions
       msgInstructIntervalSettings: [
         { label: '20', value: 20 },
         { label: '40', value: 40 },
         { label: '60', value: 60 },
         { label: 'Never', value: 'Never' }
       ],
-      // msgInstructGroupHeader: 'Blue light flashing interval options',
+      msgInstructGroupHeader: 'Message Type: Instructions',
       msgInstructRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgInstructRadioHeader: 'Please select an option from the following:',
-      messages: ['msg1', 'msg2', 'msg3'],
       msgInstructConfig: [
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001'
-        },
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002'
-        },
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003'
-        }
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ],
-      msgInstructIntervalSettings: [
+      // Messages praise
+      msgPraiseIntervalSettings: [
         { label: '20', value: 20 },
         { label: '40', value: 40 },
         { label: '60', value: 60 },
         { label: 'Never', value: 'Never' }
       ],
-      msgInstructGroupHeader: 'Blue light flashing interval options',
-      msgInstructRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
-      msgInstructRadioHeader: 'Please select an option from the following:',
-      messages: ['msg1', 'msg2', 'msg3'],
-      msgInstructConfig: [
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001'
-        },
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002'
-        },
-        {
-          source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003'
-        }
+      msgPraiseGroupHeader: 'Message Type: Praise',
+      msgPraiseRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
+      msgPraiseRadioHeader: 'Please select an option from the following:',
+      msgPraiseConfig: [
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
+        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ]
     }
   }

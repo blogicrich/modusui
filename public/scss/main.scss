@@ -7,6 +7,7 @@ $text-body: #4d504f;
 $bg-white: #ffff;
 
 // Headers
+//
 .blue-header {
   color: $main-blue;
 }
@@ -52,6 +53,9 @@ $bg-white: #ffff;
   // font-size: 1em;
   // margin: 10px;
   text-align:left;
+}
+.text-white {
+  color: white;
 }
 .text-intervals {
   margin: 1vw;
