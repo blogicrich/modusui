@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { getMeta } from '@/mixins/apiRequests'
+import { getData } from '@/mixins/apiRequests'
 import selectComponent from '../../components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
 export default {
@@ -94,7 +94,7 @@ export default {
     selectComponent,
     SubVoiceMsgAudioPlayer
   },
-  mixins: [getMeta],
+  mixins: [getData],
   data () {
     return {
       uploadIcon: 'cloud_upload',

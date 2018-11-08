@@ -6,33 +6,42 @@
       :items="items"
       :newItem="newItem"
       :menuItems="menuItems"
+      item-key="username"
       searchLabel="Search Records..."
       tableTitle="System Administrator Records"
       btnTitle="+"
       newDialogTitle="Add a New Administrator Record"
       editDialogTitle="Edit Administrator Records"
       delDialogTitle="Confirm deletetion of selected items?"
-      itemKey="name"
+      :newItemKey="itemKey"
+      :editItemKey="itemKey"
+      :headerItemKey="itemKey"
       msgDel="Are you sure you want to delete the selected items?"
       @newItem="addItem"
+      @itemsEdited="edit"
       @deleteSelected="deleteItem"
     />
   </v-container>
 </template>
 
 <script>
-import { getMeta } from '@/mixins/apiRequests'
+import { getData } from '@/mixins/apiRequests'
+import { postData } from '@/mixins/apiRequests'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 export default {
   name: 'SystemAdmins',
-  mixins: [getMeta],
+  mixins: [getData, postData],
   components: {
     BaseDataTable
   },
   data () {
     return {
       items: [],
+      name: 'name',
       loading: true,
+      getEndpoint: 'sysadget',
+      postEndpoint: 'sysadcreate',
+      itemKey: 'username',
       headers: [
         {
           text: 'Title',
@@ -43,18 +52,29 @@ export default {
         },
         { text: 'Given Name', value: 'givenName', cellType: 'tb' },
         { text: 'Family Name', value: 'familyName', cellType: 'tb' },
-        { text: 'Corporate Id', value: 'corporateIdentification', cellType: 'tb' },
+        { text: 'CorporateId', value: 'corporateIdentification', cellType: 'tb' },
         { text: 'User Name', value: 'username', cellType: 'tb' }
       ],
       newItem: [
-        { titleId: '', cellType: 'tb', cellLabel: 'name' },
-        { givenName: 0, cellType: 'tb', cellLabel: 'calories' },
-        { familyName: 0, cellType: 'tb', cellLabel: 'fat' },
-        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'carbs' },
-        { username: 0, cellType: 'tb', cellLabel: 'protein' }
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId' },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName' },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
+        { username: '', cellType: 'tb', cellLabel: 'username' },
+        { password: '', cellType: 'tb', cellLabel: 'password' },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
+        { email: '', cellType: 'tb', cellLabel: 'email' }
+
+      ],
+      editItem: [
+          { titleId: 0, cellType: 'tb', cellLabel: 'titleId' },
+          { givenName: '', cellType: 'tb', cellLabel: 'givenName' },
+          { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
+          { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
+          { username: '', cellType: 'tb', cellLabel: 'username' }
       ],
       defaultItem: [
-        { titleId: '', givenName: '', familyName: '', corporateIdentification: '', username: '' }
+        { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
       ],
       menuItems: [
         { text: 'Calories', value: 'calories' },
@@ -73,7 +93,24 @@ export default {
         }
       }
       this.items.push(this.defaultItem)
-      console.log('item: ', item)
+      var obj = { titleId:Number(this.defaultItem.titleId), givenName:this.defaultItem.givenName, familyName:this.defaultItem.familyName, corporateIdentification: this.defaultItem.corporateIdentification, username: this.defaultItem.username, password: this.defaultItem.password, mobileNo: this.defaultItem.mobileNo, email: this.defaultItem.email }
+      // console.log('item: ', item)
+      this.postData(this.postEndpoint, obj )
+      console.log("obj: ", obj)
+      this.resetItem()
+    },
+    editItems (items) {
+      for (var i = 0; i < item.length; i++) {
+        if (item[i].hasOwnProperty('sync')) {
+          this.defaultItem[item[i].cellLabel] = item[i].sync
+          console.log(item[i].cellLabel, item[i].sync)
+        }
+      }
+      this.items.push(this.defaultItem)
+      var obj = { titleId:Number(this.defaultItem.titleId), givenName:this.defaultItem.givenName, familyName:this.defaultItem.familyName, corporateIdentification: this.defaultItem.corporateIdentification, username: this.defaultItem.username, password: this.defaultItem.password, mobileNo: this.defaultItem.mobileNo, email: this.defaultItem.email }
+      // console.log('item: ', item)
+      this.postData(this.postEndpoint, obj )
+      console.log("obj: ", obj)
       this.resetItem()
     },
     deleteItem (items) {
@@ -88,20 +125,24 @@ export default {
     },
     resetItem () {
       this.newItem = [
-        { name: '', cellType: 'tb', cellLabel: 'name' },
-        { calories: 0, cellType: 'md', cellLabel: 'calories' },
-        { fat: 0, cellType: 'md', cellLabel: 'fat' },
-        { carbs: 0, cellType: 'md', cellLabel: 'carbs' },
-        { protein: 0, cellType: 'md', cellLabel: 'protein' }
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId' },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName' },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
+        { username: '', cellType: 'tb', cellLabel: 'username' },
+        { password: '', cellType: 'tb', cellLabel: 'password' },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
+        { email: '', cellType: 'tb', cellLabel: 'email' }
+
       ]
       this.defaultItem = [
-        { name: '', calories: 0, fat: 0, carbs: 0, protein: 0 }
+        { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
       ]
     }
   },
   async beforeMount () {
     this.loading = true
-    var values = await this.getMeta('sysadget')
+    var values = await this.getData('sysadget')
     console.log(values)
     this.items = values
     this.loading = false

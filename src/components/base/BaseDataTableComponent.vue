@@ -34,6 +34,7 @@
         </v-btn>
       </v-toolbar>
       <v-data-table
+      id="table"
         :headers="headers"
         :items="items"
         :search="search"
@@ -226,7 +227,7 @@
               <v-card-text>
                 <v-container>
                   <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6 lg2>
+                    <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6 lg2>
                       <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
@@ -414,8 +415,8 @@
         :headers="headers"
         :items="items"
         :search="search"
-        v-model="selected"
         :item-key="itemKey"
+        v-model="selected"
         select-all
         hide-actions
         :pagination.sync="pagination"
@@ -544,7 +545,7 @@
               <v-card-text>
                 <v-container>
                   <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                    <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
                       <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
@@ -584,7 +585,7 @@
               <v-card-text>
                 <v-container>
                   <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                    <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
                       <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
@@ -670,10 +671,16 @@ export default {
     delDialogTitle: String,
     tableTitle: String,
     newItem: Array,
+    headerItemPrefix: String,
+    newItemPrefix: String,
+    editItemPrefix: String,
+    headerItemKey: String,
+    editItemKey: String,
+    newItemKey: String,
     itemKey: String,
     searchLabel: String,
     msgDel: String,
-    titleDel: String
+    titleDel: String,
   },
   computed: {
     pages () {
@@ -716,11 +723,11 @@ export default {
       }
     },
     save () {
-      console.log('Fired')
       this.$emit('newItem', this.newItem)
       this.close()
     },
     saveChanges () {
+      this.$emit('itemsChanged', this.selected)
       console.log(this.selected)
       console.log(this.items)
       this.close()
@@ -744,9 +751,6 @@ export default {
     msgClose () {
       console.log('Snackbar closed')
     }
-  },
-  mounted () {
-    // console.log(this.items)
   }
 }
 </script>
