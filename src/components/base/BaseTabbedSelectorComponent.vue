@@ -118,6 +118,7 @@
 </template>
 
 <script>
+
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
 
@@ -132,9 +133,18 @@ export default {
       dialog: false,
       btns: false,
       activeHash: '',
-      currentItem: ''
+      currentItem: 'tab-Dehydrated'
     }
   },
+  watch: {
+   '$route' (from) {
+     for (var x = 0; x < this.changedData.length; x++) {
+       if (this.changedData[x].subject !== this.startData[x].subject || this.changedData[x].text !== this.startData[x].text) {
+         this.dialog = true
+       }
+     }
+   }
+ },
   props:{
     changedData: Array,
     startData: Array,
@@ -153,6 +163,13 @@ export default {
         }
       }
     },
+    leaving(){
+      for (var x = 0; x < this.changedData.length; x++) {
+        if (this.changedData[x].subject !== this.startData[x].subject || this.changedData[x].text !== this.startData[x].text) {
+          console.log('eee');
+        }
+      }
+    },
     eraseChange () {
       for (var i = 0; i < this.startData.length; i++) {
         this.changedData[i].subject = this.startData[i].subject
@@ -165,8 +182,8 @@ export default {
         if (this.changedData[x].subject !== this.startData[x].subject || this.changedData[x].text !== this.startData[x].text) {
           this.dialog = true
           this.activeHash = event.target.hash
-          this.activeHash = this.activeHash.replace(/%20|#/gi, '')
-          console.log(this.activeHash);
+          this.activeHash = this.activeHash.replace('#', '')
+          this.activeHash = this.activeHash.replace(/%20/gi, ' ')
           event.stopImmediatePropagation()
         }
       }
@@ -186,7 +203,7 @@ export default {
     },
     discard () {
       this.currentItem = this.activeHash
-      console.log(this.currentItem);
+
       for (var i = 0; i < this.startData.length; i++) {
         this.changedData[i].subject = this.startData[i].subject
         this.changedData[i].text = this.startData[i].text
