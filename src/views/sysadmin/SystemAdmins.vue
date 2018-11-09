@@ -43,17 +43,14 @@ export default {
       postEndpoint: 'sysadcreate',
       itemKey: 'username',
       headers: [
-        {
-          text: 'Title',
-          align: 'left',
-          sortable: false,
-          value: 'titleId',
-          cellType: 'md'
-        },
-        { text: 'Given Name', value: 'givenName', cellType: 'tb' },
-        { text: 'Family Name', value: 'familyName', cellType: 'tb' },
-        { text: 'CorporateId', value: 'corporateIdentification', cellType: 'tb' },
-        { text: 'User Name', value: 'username', cellType: 'tb' }
+        { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', class: 'hidden' },
+        { text: 'Given Name', value: 'givenName', cellType: 'tb', class: 'hidden'},
+        { text: 'Family Name', value: 'familyName', cellType: 'tb', class: 'hidden' },
+        { text: 'CorporateId', value: 'corporateIdentification', cellType: 'tb', class: 'hidden' },
+        { text: 'User Name', value: 'username', cellType: 'tb', class: 'hidden'},
+        // { text: 'titleId', value: 'titleId', cellType: 'tb', class: 'hidden'},
+        // { text: 'mobileNo', value: 'mobileNo', cellType: 'tb', class: 'hidden' },
+        // { text: 'email', value: 'email', cellType: 'tb', class: 'hidden' }
       ],
       newItem: [
         { titleId: 0, cellType: 'tb', cellLabel: 'titleId' },
@@ -61,17 +58,8 @@ export default {
         { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
         { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
         { username: '', cellType: 'tb', cellLabel: 'username' },
-        { password: '', cellType: 'tb', cellLabel: 'password' },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
-        { email: '', cellType: 'tb', cellLabel: 'email' }
-
-      ],
-      editItem: [
-          { titleId: 0, cellType: 'tb', cellLabel: 'titleId' },
-          { givenName: '', cellType: 'tb', cellLabel: 'givenName' },
-          { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
-          { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
-          { username: '', cellType: 'tb', cellLabel: 'username' }
+        // { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
+        // { email: '', cellType: 'tb', cellLabel: 'email' }
       ],
       defaultItem: [
         { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
@@ -109,7 +97,7 @@ export default {
       this.items.push(this.defaultItem)
       var obj = { titleId:Number(this.defaultItem.titleId), givenName:this.defaultItem.givenName, familyName:this.defaultItem.familyName, corporateIdentification: this.defaultItem.corporateIdentification, username: this.defaultItem.username, password: this.defaultItem.password, mobileNo: this.defaultItem.mobileNo, email: this.defaultItem.email }
       // console.log('item: ', item)
-      this.postData(this.postEndpoint, obj )
+      this.postData(this.postEndpoint, obj)
       console.log("obj: ", obj)
       this.resetItem()
     },
@@ -130,9 +118,9 @@ export default {
         { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
         { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
         { username: '', cellType: 'tb', cellLabel: 'username' },
-        { password: '', cellType: 'tb', cellLabel: 'password' },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
-        { email: '', cellType: 'tb', cellLabel: 'email' }
+        // { password: '', cellType: 'tb', cellLabel: 'password' },
+        // { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
+        // { email: '', cellType: 'tb', cellLabel: 'email' }
 
       ]
       this.defaultItem = [

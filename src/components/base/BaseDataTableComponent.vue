@@ -260,7 +260,7 @@
           </v-dialog>
     <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="98%">
-            <v-card>
+            <v-card class="pa-0">
               <v-card-title>
                 <span class="table-header">{{ editDialogTitle }}</span>
               </v-card-title>
@@ -269,6 +269,7 @@
                   <v-layout v-for="(item, index) in selected" :key="index" row wrap justify-space-around>
                     <v-flex v-for="(property, key) in item" :key="key" xs12 md6 lg2>
                       <v-text-field
+                        v-if="newItem.find(attr => attr.cellLabel === key)"
                         class="ma-1"
                         :label="key"
                         v-model.sync="item[key]"
@@ -671,6 +672,7 @@ export default {
     delDialogTitle: String,
     tableTitle: String,
     newItem: Array,
+    editItem: Object,
     headerItemPrefix: String,
     newItemPrefix: String,
     editItemPrefix: String,
@@ -699,6 +701,8 @@ export default {
       this.delDialog = false
     },
     close () {
+      console.log('yutiuyittyukjhg gf g: ', this.items);
+      console.log('hgffjhfjhfjhgf: ', this.selected);
       if (this.selected.length) this.selected = []
       this.editDialog = false
       this.newDialog = false
