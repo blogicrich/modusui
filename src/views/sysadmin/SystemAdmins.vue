@@ -18,7 +18,7 @@
       :headerItemKey="itemKey"
       msgDel="Are you sure you want to delete the selected items?"
       @newItem="addItem"
-      @itemsEdited="edit"
+      @itemsEdited="editItems"
       @deleteSelected="deleteItem"
     />
   </v-container>
@@ -41,6 +41,8 @@ export default {
       loading: true,
       getEndpoint: 'sysadget',
       postEndpoint: 'sysadcreate',
+      delUrl: 'sysaddelete',
+      updateUrl: 'sysadupdate',
       itemKey: 'username',
       headers: [
         { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', class: 'hidden' },
@@ -48,28 +50,23 @@ export default {
         { text: 'Family Name', value: 'familyName', cellType: 'tb', class: 'hidden' },
         { text: 'CorporateId', value: 'corporateIdentification', cellType: 'tb', class: 'hidden' },
         { text: 'User Name', value: 'username', cellType: 'tb', class: 'hidden'},
-        // { text: 'titleId', value: 'titleId', cellType: 'tb', class: 'hidden'},
-        // { text: 'mobileNo', value: 'mobileNo', cellType: 'tb', class: 'hidden' },
-        // { text: 'email', value: 'email', cellType: 'tb', class: 'hidden' }
       ],
       newItem: [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId' },
-        { givenName: '', cellType: 'tb', cellLabel: 'givenName' },
+        { titleId: 0, cellType: 'md', cellLabel: 'titleId', },
+        { givenName: '', cellType: 'md', cellLabel: 'givenName' },
         { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
         { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
         { username: '', cellType: 'tb', cellLabel: 'username' },
-        // { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
-        // { email: '', cellType: 'tb', cellLabel: 'email' }
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' }
       ],
       defaultItem: [
         { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
       ],
-      menuItems: [
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' }
-      ]
+      menuItems: [],
+      urls: [
+        { url:'titleget', key:'shortDescription'},
+        { url:'sysadget', key:'username'},
+      ],
     }
   },
   methods: {
@@ -81,8 +78,16 @@ export default {
         }
       }
       this.items.push(this.defaultItem)
-      var obj = { titleId:Number(this.defaultItem.titleId), givenName:this.defaultItem.givenName, familyName:this.defaultItem.familyName, corporateIdentification: this.defaultItem.corporateIdentification, username: this.defaultItem.username, password: this.defaultItem.password, mobileNo: this.defaultItem.mobileNo, email: this.defaultItem.email }
-      // console.log('item: ', item)
+      var obj = {
+        titleId:Number(this.defaultItem.titleId),
+        givenName:this.defaultItem.givenName,
+        familyName:this.defaultItem.familyName,
+        corporateIdentification: this.defaultItem.corporateIdentification,
+        username: this.defaultItem.username,
+        password: this.defaultItem.password,
+        mobileNo: this.defaultItem.mobileNo,
+        email: this.defaultItem.email
+      }
       this.postData(this.postEndpoint, obj )
       console.log("obj: ", obj)
       this.resetItem()
@@ -95,9 +100,17 @@ export default {
         }
       }
       this.items.push(this.defaultItem)
-      var obj = { titleId:Number(this.defaultItem.titleId), givenName:this.defaultItem.givenName, familyName:this.defaultItem.familyName, corporateIdentification: this.defaultItem.corporateIdentification, username: this.defaultItem.username, password: this.defaultItem.password, mobileNo: this.defaultItem.mobileNo, email: this.defaultItem.email }
-      // console.log('item: ', item)
-      this.postData(this.postEndpoint, obj)
+      var obj = {
+        titleId:Number(this.defaultItem.titleId),
+        givenName:this.defaultItem.givenName,
+        familyName:this.defaultItem.familyName,
+        corporateIdentification: this.defaultItem.corporateIdentification,
+        username: this.defaultItem.username,
+        password: this.defaultItem.password,
+        mobileNo: this.defaultItem.mobileNo,
+        email: this.defaultItem.email
+      }
+      this.postData('sysadupdate', items)
       console.log("obj: ", obj)
       this.resetItem()
     },
@@ -118,23 +131,32 @@ export default {
         { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
         { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
         { username: '', cellType: 'tb', cellLabel: 'username' },
-        // { password: '', cellType: 'tb', cellLabel: 'password' },
-        // { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
-        // { email: '', cellType: 'tb', cellLabel: 'email' }
-
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
       ]
       this.defaultItem = [
         { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
       ]
+    },
+    async setMenuItems (urls) {
+      for (var i = 0; i < urls.length; i++) {
+        var items = await this.getData(urls[i].url)
+        var options = []
+        for (var j= 0; j < items.length; j++) {
+          if (items[j].hasOwnProperty(urls[i].key))
+          options.push(items[j][urls[i].key])
+        }
+        this.menuItems.push({[urls[i].key]:[options]})
+        console.log(options)
+        console.log(this.menuItems);
+      }
     }
   },
   async beforeMount () {
     this.loading = true
-    var values = await this.getData('sysadget')
-    console.log(values)
-    this.items = values
+    var sysadmins = await this.getData('sysadget')
+    this.items = sysadmins
+    this.setMenuItems(this.urls)
     this.loading = false
-    // this.items.splice(values, 1)
   }
 }
 </script>

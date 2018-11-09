@@ -267,26 +267,29 @@
               <v-card-text>
                 <v-container>
                   <v-layout v-for="(item, index) in selected" :key="index" row wrap justify-space-around>
-                    <v-flex v-for="(property, key) in item" :key="key" xs12 md6 lg2>
+                    <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)" xs12 md6 lg2>
                       <v-text-field
-                        v-if="newItem.find(attr => attr.cellLabel === key)"
-                        class="ma-1"
-                        :label="key"
-                        v-model.sync="item[key]"
-                        color="primary"
-                        outline
-                        required
-                      >{{ item[key].value }}</v-text-field>
-                      <!-- <v-select
-                        v-else-if="item.cellType === 'md'"
-                        class="ma-1"
-                        v-model="newItem[key].sync"
-                        :items="menuItems"
-                        :label="newItem[key].cellLabel"
-                        color="primary"
-                        outline
-                        required
-                      ></v-select> -->
+                          v-if="determineInputType(key, 'tb')"
+                          class="ma-1"
+                          :label="key"
+                          v-model.sync="item[key]"
+                          color="primary"
+                          outline
+                          required
+                        >{{ item[key].value }}
+                      </v-text-field>
+                      <v-select
+                          v-if="determineInputType(key, 'md')"
+                          class="ma-1"
+                          v-model="item[key].sync"
+                          :items="menuItems[0]"
+                          :label="key"
+                          :placeholder="String(item[key])"
+                          color="primary"
+                          outline
+                          required
+                        >{{ item[key].value }}
+                      </v-select>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -492,7 +495,7 @@
                slot="input"
                class="ma-1"
                v-model="props.item[header.value]"
-               :items="menuItems"
+               :items="headers"
                :label="header.text"
                color="primary"
                large
@@ -699,6 +702,17 @@ export default {
       this.$emit('deleteSelected', this.selected)
       this.selected = []
       this.delDialog = false
+    },
+    determineInputType (key, type) {
+      for (var i = 0; i < this.newItem.length; i++) {
+        if (this.newItem[i].hasOwnProperty(key)) {
+          if (this.newItem[i].cellType == type) {
+            return true
+          } else {
+            return false
+          }
+        }
+      }
     },
     close () {
       console.log('yutiuyittyukjhg gf g: ', this.items);
