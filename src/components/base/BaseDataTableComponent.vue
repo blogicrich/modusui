@@ -241,7 +241,7 @@
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
                         v-model="newItem[key].sync"
-                        :items="menuItems"
+                        :items="newItem[key].menuItems"
                         :label="newItem[key].cellLabel"
                         color="primary"
                         outline
@@ -269,7 +269,7 @@
                   <v-layout v-for="(item, index) in selected" :key="index" row wrap justify-space-around>
                     <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)" xs12 md6 lg2>
                       <v-text-field
-                          v-if="determineInputType(key, 'tb')"
+                          v-if="inputType(key, 'tb')"
                           class="ma-1"
                           :label="key"
                           v-model.sync="item[key]"
@@ -279,10 +279,10 @@
                         >{{ item[key].value }}
                       </v-text-field>
                       <v-select
-                          v-if="determineInputType(key, 'md')"
+                          v-if="inputType(key, 'md')"
                           class="ma-1"
                           v-model="item[key].sync"
-                          :items="menuItems[0]"
+                          :items="menuItems(key)"
                           :label="key"
                           :placeholder="String(item[key])"
                           color="primary"
@@ -355,7 +355,7 @@
           <v-icon>menu</v-icon>
           <v-icon>close</v-icon>
         </v-btn>
-        <!-- <v-btn
+        <v-btn
           v-if="selected.length < 2"
           @click="editDialog = true"
           fab
@@ -364,7 +364,7 @@
           color="green"
         >
           <v-icon>edit</v-icon>
-        </v-btn> -->
+        </v-btn>
         <v-btn
           @click="save"
           fab
@@ -668,7 +668,7 @@ export default {
   props: {
     items: Array,
     headers: Array,
-    menuItems: Array,
+    // menuItems: Array,
     btnTitle: String,
     newDialogTitle: String,
     editDialogTitle: String,
@@ -703,7 +703,7 @@ export default {
       this.selected = []
       this.delDialog = false
     },
-    determineInputType (key, type) {
+    inputType (key, type) {
       for (var i = 0; i < this.newItem.length; i++) {
         if (this.newItem[i].hasOwnProperty(key)) {
           if (this.newItem[i].cellType == type) {
@@ -714,9 +714,16 @@ export default {
         }
       }
     },
+    menuItems (key) {
+      for (var i = 0; i < this.newItem.length; i++) {
+        console.log(this.newItem[i], key)
+        if (this.newItem[i].hasOwnProperty(key)) return this.newItem[i].menuItems
+        else return ['err menu items']
+      }
+    },
     close () {
-      console.log('yutiuyittyukjhg gf g: ', this.items);
-      console.log('hgffjhfjhfjhgf: ', this.selected);
+      // console.log('yutiuyittyukjhg gf g: ', this.items);
+      // console.log('hgffjhfjhfjhgf: ', this.selected);
       if (this.selected.length) this.selected = []
       this.editDialog = false
       this.newDialog = false

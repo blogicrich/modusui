@@ -52,20 +52,20 @@ export default {
         { text: 'User Name', value: 'username', cellType: 'tb', class: 'hidden'},
       ],
       newItem: [
-        { titleId: 0, cellType: 'md', cellLabel: 'titleId', },
-        { givenName: '', cellType: 'md', cellLabel: 'givenName' },
-        { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
-        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
-        { username: '', cellType: 'tb', cellLabel: 'username' },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' }
+        { titleId: 0, cellType: 'md', cellLabel: 'titleId', menuItems: [] },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [] },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [] },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [] },
+        { username: '', cellType: 'md', cellLabel: 'username', menuItems: [] },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [] }
       ],
       defaultItem: [
         { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
       ],
       menuItems: [],
       urls: [
-        { url:'titleget', key:'shortDescription'},
-        { url:'sysadget', key:'username'},
+        { url:'titleget', attr: 'titleId', key: 'shortDescription'},
+        { url:'sysadget', attr: 'username', key: 'username'},
       ],
     }
   },
@@ -138,16 +138,21 @@ export default {
       ]
     },
     async setMenuItems (urls) {
+      console.log('Fired!!!!');
       for (var i = 0; i < urls.length; i++) {
-        var items = await this.getData(urls[i].url)
-        var options = []
-        for (var j= 0; j < items.length; j++) {
-          if (items[j].hasOwnProperty(urls[i].key))
-          options.push(items[j][urls[i].key])
+        var menuItems = await this.getData(urls[i].url)
+        var values = []
+        console.log(menuItems)
+        for (var j= 0; j < menuItems.length; j++) {
+          console.log('fhdjahjkgfhgkfkd: ', menuItems[j][urls[i].key])
+          values.push(menuItems[j][urls[i].key])
         }
-        this.menuItems.push({[urls[i].key]:[options]})
-        console.log(options)
-        console.log(this.menuItems);
+        console.log('menu vals:', values)
+        for (var k = 0; k < this.newItem.length; k++) {
+          console.log(this.newItem[k].cellLabel, urls[i].attr);
+          if (this.newItem[k].cellLabel === urls[i].attr)
+            this.newItem[k].menuItems = values
+        }
       }
     }
   },
