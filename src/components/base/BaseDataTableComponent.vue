@@ -669,19 +669,19 @@ export default {
     items: Array,
     headers: Array,
     // menuItems: Array,
-    btnTitle: String,
+    // btnTitle: String,
     newDialogTitle: String,
     editDialogTitle: String,
     delDialogTitle: String,
     tableTitle: String,
     newItem: Array,
     editItem: Object,
-    headerItemPrefix: String,
-    newItemPrefix: String,
-    editItemPrefix: String,
-    headerItemKey: String,
-    editItemKey: String,
-    newItemKey: String,
+    // headerItemPrefix: String,
+    // newItemPrefix: String,
+    // editItemPrefix: String,
+    // headerItemKey: String,
+    // editItemKey: String,
+    // newItemKey: String,
     itemKey: String,
     searchLabel: String,
     msgDel: String,
@@ -715,11 +715,30 @@ export default {
       }
     },
     menuItems (key) {
-      for (var i = 0; i < this.newItem.length; i++) {
-        console.log(this.newItem[i], key)
-        if (this.newItem[i].hasOwnProperty(key)) return this.newItem[i].menuItems
-        else return ['err menu items']
-      }
+      return [1,2,3,4,5,6,7,8,9]
+      // var menuItems = []
+      // // console.log("key: ", key)
+      // for (var i = 0; i < this.newItem.length; i++) {
+      //   // console.log(this.newItem[i])
+      //   // console.log(this.newItem[i].cellLabel, key);
+      //   // console.log("retrun menItem: ", this.newItem[i].menuItems, i)
+      //   if (this.newItem[i].cellLabel === String(key)) {
+      //     console.log(menuItems)
+      //     menuItems = this.newItem[i].menuItems
+      //     console.log(menuItems)
+      //     // console.log("true: ", this.newItem[i].cellLabel);
+      //     // for (var attr in this.newItem[i]) {
+      //       // console.log(attr[key])
+      //       // if (attr) {
+      //         // return this.newItem[i].menuItems
+      //       } else {
+      //         return ['err menu items']
+      //       }
+      //     }
+      //
+      //     return menuItems
+      //   },
+    //   }
     },
     close () {
       // console.log('yutiuyittyukjhg gf g: ', this.items);

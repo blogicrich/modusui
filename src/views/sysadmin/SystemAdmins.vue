@@ -39,8 +39,8 @@ export default {
       items: [],
       name: 'name',
       loading: true,
-      getEndpoint: 'sysadget',
-      postEndpoint: 'sysadcreate',
+      // getEndpoint: 'sysadget',
+      // postEndpoint: 'sysadcreate',
       delUrl: 'sysaddelete',
       updateUrl: 'sysadupdate',
       itemKey: 'username',
@@ -126,34 +126,39 @@ export default {
     },
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId' },
-        { givenName: '', cellType: 'tb', cellLabel: 'givenName' },
-        { familyName: '', cellType: 'tb', cellLabel: 'familyName' },
-        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification' },
-        { username: '', cellType: 'tb', cellLabel: 'username' },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo' },
+        { titleId: 0, cellType: 'md', cellLabel: 'titleId', menuItems: [] },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [] },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [] },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [] },
+        { username: '', cellType: 'md', cellLabel: 'username', menuItems: [] },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [] }
       ]
       this.defaultItem = [
         { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
       ]
     },
     async setMenuItems (urls) {
-      console.log('Fired!!!!');
+      // console.log('Fired!!!!');
       for (var i = 0; i < urls.length; i++) {
         var menuItems = await this.getData(urls[i].url)
         var values = []
-        console.log(menuItems)
+        // console.log(menuItems)
         for (var j= 0; j < menuItems.length; j++) {
-          console.log('fhdjahjkgfhgkfkd: ', menuItems[j][urls[i].key])
+          console.log('menuItem: ', menuItems[j][urls[i].key])
           values.push(menuItems[j][urls[i].key])
         }
-        console.log('menu vals:', values)
+        // console.log('menu vals:', values)
         for (var k = 0; k < this.newItem.length; k++) {
-          console.log(this.newItem[k].cellLabel, urls[i].attr);
+          // console.log('vals: ', values)
+          // values = []
+          // console.log(this.newItem[k].cellLabel, urls[i].attr);
           if (this.newItem[k].cellLabel === urls[i].attr)
             this.newItem[k].menuItems = values
+            // console.log('appeded vals: ', this.newItem[k].menuItems)
+            // console.log('appeded vals: ', this.newItem)
         }
       }
+      console.log(this.newItem);
     }
   },
   async beforeMount () {
