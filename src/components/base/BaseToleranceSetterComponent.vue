@@ -4,7 +4,7 @@
       <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
           <v-flex xs6>
-            <v-card class="redBox"></v-card>
+            <v-card class="redBox" v-model="severeOverHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
@@ -20,7 +20,7 @@
             >{{ severeOverHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="yellowBox"></v-card>
+            <v-card class="yellowBox" v-model="overHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
@@ -41,12 +41,13 @@
           <v-flex xs6>
             <v-text-field
               class="textField"
+              label="This should be removed."
               placeholder="Great Hydration"
               box
             ></v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="yellowBox"></v-card>
+            <v-card class="yellowBox" v-model="underHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
@@ -62,7 +63,7 @@
             >{{ underHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="redBox"></v-card>
+            <v-card class="redBox" v-model="severeUnderHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
