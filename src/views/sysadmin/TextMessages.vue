@@ -15,8 +15,8 @@ export default {
   components: {
     baseTab
   },
-  data(){
-    return{
+  data () {
+    return {
       changedData: [
         { name: 'Dehydrated', subject: 'Dehydrated', text: 'User is Dehydrated!' },
         { name: 'Still Dehydrated', subject: 'Still Dehydrated', text: 'User is still Dehydrated!' },

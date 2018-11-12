@@ -133,19 +133,10 @@ export default {
       dialog: false,
       btns: false,
       activeHash: '',
-      currentItem: 'tab-Dehydrated'
+      currentItem: ''
     }
   },
-  watch: {
-   '$route' (from) {
-     for (var x = 0; x < this.changedData.length; x++) {
-       if (this.changedData[x].subject !== this.startData[x].subject || this.changedData[x].text !== this.startData[x].text) {
-         this.dialog = true
-       }
-     }
-   }
- },
-  props:{
+  props: {
     changedData: Array,
     startData: Array,
     dialogTitle: String,
@@ -160,13 +151,6 @@ export default {
           this.startData[i].subject = this.changedData[i].subject
           this.startData[i].text = this.changedData[i].text
           this.btns = false
-        }
-      }
-    },
-    leaving(){
-      for (var x = 0; x < this.changedData.length; x++) {
-        if (this.changedData[x].subject !== this.startData[x].subject || this.changedData[x].text !== this.startData[x].text) {
-          console.log('eee');
         }
       }
     },
@@ -203,12 +187,7 @@ export default {
     },
     discard () {
       this.currentItem = this.activeHash
-
-      for (var i = 0; i < this.startData.length; i++) {
-        this.changedData[i].subject = this.startData[i].subject
-        this.changedData[i].text = this.startData[i].text
-        this.btns = false
-      }
+      this.eraseChange()
       this.dialog = false
     }
   }
