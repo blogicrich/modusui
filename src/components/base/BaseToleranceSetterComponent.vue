@@ -8,6 +8,7 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              class="textField"
               label="Severe Over Hydration"
               placeholder="....."
               append-icon="%"
@@ -23,6 +24,7 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              class="textField"
               label="Over Hydration"
               placeholder="....."
               append-icon="%"
@@ -37,13 +39,18 @@
             <v-card class="greenBox"></v-card>
           </v-flex>
           <v-flex xs6>
-            <v-card class="greenBox"></v-card>
+            <v-text-field
+              class="textField"
+              placeholder="Great Hydration"
+              box
+            ></v-text-field>
           </v-flex>
           <v-flex xs6>
             <v-card class="yellowBox"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              class="textField"
               label="Under Hydration"
               placeholder="....."
               append-icon="%"
@@ -59,6 +66,7 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              class="textField"
               label="Severe Under Hydration"
               placeholder="....."
               append-icon="%"
@@ -103,21 +111,18 @@ export default {
 <style scoped>
   .redBox {
     height: 75px;
-    width: 20%;
     background-color: #FF0000;
     border: 1px solid black;
   }
 
   .yellowBox {
     height: 75px;
-    width: 20%;
     background-color: #FFFF00;
     border: 1px solid black;
   }
 
   .greenBox {
     height: 75px;
-    width: 20%;
     background-color: #00FF00;
     border: 1px solid black;
   }

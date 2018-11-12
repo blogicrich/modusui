@@ -3,6 +3,7 @@
     <h2 class="pg-subheader text-center" text-xs-center>Hydration Parameters</h2>
     <br><br><br>
     <BaseToleranceSetter
+      class="baseToleranceSetter"
       :severeOverHydration="severeOverHydration"
       :overHydration="overHydration"
       :underHydration="underHydration"
@@ -35,7 +36,8 @@ export default {
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
 
-  BaseToleranceSetter {
-    float: right;
+  .baseToleranceSetter {
+    width: 50%;
+    margin: 0 auto 0 auto;
   }
 </style>
