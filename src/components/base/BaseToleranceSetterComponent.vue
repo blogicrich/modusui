@@ -1,18 +1,12 @@
 <template>
   <div>
-    <v-layout>
-      <v-flex>
-        <v-card class="redBox"></v-card>
-        <v-card class="yellowBox"></v-card>
-        <v-card class="greenBox"></v-card>
-        <v-card class="yellowBox"></v-card>
-        <v-card class="redBox"></v-card>
-      </v-flex>
-    </v-layout>
     <v-form>
-      <v-container>
+      <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
-          <v-flex xs12 sm6 md3>
+          <v-flex xs6>
+            <v-card class="redBox"></v-card>
+          </v-flex>
+          <v-flex xs6>
             <v-text-field
               label="Severe Over Hydration"
               placeholder="....."
@@ -24,7 +18,10 @@
               box
             >{{ severeOverHydration }}</v-text-field>
           </v-flex>
-          <v-flex xs12 sm6 md3>
+          <v-flex xs6>
+            <v-card class="yellowBox"></v-card>
+          </v-flex>
+          <v-flex xs6>
             <v-text-field
               label="Over Hydration"
               placeholder="....."
@@ -36,7 +33,16 @@
               box
             >{{ overHydration }}</v-text-field>
           </v-flex>
-          <v-flex xs12 sm6 md3>
+          <v-flex xs6>
+            <v-card class="greenBox"></v-card>
+          </v-flex>
+          <v-flex xs6>
+            <v-card class="greenBox"></v-card>
+          </v-flex>
+          <v-flex xs6>
+            <v-card class="yellowBox"></v-card>
+          </v-flex>
+          <v-flex xs6>
             <v-text-field
               label="Under Hydration"
               placeholder="....."
@@ -48,7 +54,10 @@
               box
             >{{ underHydration }}</v-text-field>
           </v-flex>
-          <v-flex xs12 sm6 md3>
+          <v-flex xs6>
+            <v-card class="redBox"></v-card>
+          </v-flex>
+          <v-flex xs6>
             <v-text-field
               label="Severe Under Hydration"
               placeholder="....."
@@ -94,21 +103,21 @@ export default {
 <style scoped>
   .redBox {
     height: 75px;
-    width: 10%;
+    width: 20%;
     background-color: #FF0000;
     border: 1px solid black;
   }
 
   .yellowBox {
     height: 75px;
-    width: 10%;
+    width: 20%;
     background-color: #FFFF00;
     border: 1px solid black;
   }
 
   .greenBox {
     height: 75px;
-    width: 10%;
+    width: 20%;
     background-color: #00FF00;
     border: 1px solid black;
   }
