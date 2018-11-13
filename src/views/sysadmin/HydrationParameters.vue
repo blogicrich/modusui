@@ -37,7 +37,6 @@ export default {
   @import "./public/scss/main.scss";
 
   .baseToleranceSetter {
-    width: 50%;
     margin: 0 auto 0 auto;
   }
 </style>

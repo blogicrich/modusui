@@ -1,14 +1,15 @@
 <template>
   <div>
     <v-form>
-      <v-container grid-list-md text-xs-center>
+      <!-- v-if="$vuetify.breakpoint.lgAndUp" BELONGS INSIDE V-CONTAINER -->
+      <v-container>
         <v-layout row wrap>
           <v-flex xs6>
-            <v-card class="redBox" v-model="severeOverHydration"></v-card>
+            <v-card class="redBox" onclick="this.style.height = '150px'" v-model="severeOverHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              class="textField"
+              class="textField pa-3"
               label="Severe Over Hydration"
               placeholder="....."
               append-icon="%"
@@ -20,11 +21,11 @@
             >{{ severeOverHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="yellowBox" v-model="overHydration"></v-card>
+            <v-card class="yellowBox" onclick="this.style.height = '150px'" v-model="overHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              class="textField"
+              class="textField pa-3"
               label="Over Hydration"
               placeholder="....."
               append-icon="%"
@@ -40,18 +41,18 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              class="textField"
+              class="textField pa-3"
               label="This should be removed."
               placeholder="Great Hydration"
               box
             ></v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="yellowBox" v-model="underHydration"></v-card>
+            <v-card class="yellowBox" onclick="this.style.height = '150px'" v-model="underHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              class="textField"
+              class="textField pa-3"
               label="Under Hydration"
               placeholder="....."
               append-icon="%"
@@ -63,11 +64,11 @@
             >{{ underHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="redBox" v-model="severeUnderHydration"></v-card>
+            <v-card class="redBox" onclick="this.style.height = '150px'" v-model="severeUnderHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              class="textField"
+              class="textField pa-3"
               label="Severe Under Hydration"
               placeholder="....."
               append-icon="%"
@@ -94,10 +95,6 @@ export default {
   name: 'BaseToleranceSetter',
   data () {
     return {
-      // SevereOverHydration: '200',
-      // OverHydration: '120',
-      // UnderHydration: '50',
-      // SevereUnderHydration: '20'
     }
   },
   props: {
