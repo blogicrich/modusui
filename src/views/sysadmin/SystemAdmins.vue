@@ -8,6 +8,10 @@
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
+      :addRecordIcon="iconAdd"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
       item-key="username"
       searchLabel="Search Records..."
       tableTitle="System Administrator Records"
@@ -23,12 +27,13 @@
 </template>
 
 <script>
-import { getData } from '@/mixins/apiRequests'
-import { postData } from '@/mixins/apiRequests'
+import { getData, postData } from '@/mixins/apiRequests'
+import { crudOperations } from '@/mixins/CRUD'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+
 export default {
   name: 'SystemAdmins',
-  mixins: [getData, postData],
+  mixins: [getData, postData, crudOperations],
   components: {
     BaseDataTable
   },
@@ -37,6 +42,8 @@ export default {
       items: [],
       name: 'name',
       loading: true,
+      loaded: false,
+      error: false,
       delUrl: 'sysaddelete',
       updateUrl: 'sysadupdate',
       getUrl: 'sysadget',
@@ -45,9 +52,11 @@ export default {
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'person',
+      iconAdd: 'person_add',
       headers: [
-        { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: false },
-        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: false },
+        { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
+        { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
+        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'Mobile Number', align: 'left', sortable: false, value: 'mobileNo', cellType: 'tb', hidden: true, editable: true },
         { text: 'password', align: 'left', sortable: false, value: 'password', cellType: 'tb', hidden: true, editable: true },
         { text: 'Email', align: 'left', sortable: false, value: 'email', cellType: 'tb', hidden: true, editable: true },
@@ -68,7 +77,7 @@ export default {
         { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators:[] }
       ],
       defaultItem: [
-        { titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
+        { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ],
       urls: [
         { url:'titleget', attr: 'titleId', key: 'shortDescription'},
@@ -113,39 +122,29 @@ export default {
       console.log(this.items)
     },
     editItems (items) {
+      var a = []
       for (var i = 0; i < items.length; i++) {
-        for (const property in items[i]) {
-          if (items[i].hasOwnProperty(property)) {
-          // console.log("asaddede: ", items[i], property);
-            this.defaultItem[property] = items[i][property]
-            console.log("Editing Items: ", this.defaultItem[property], items[i][property])
-          }
+        a = this.defaultItem
+        console.log("Looping Outer", items[i]);
+        for (var j = 0; j < a.length; j++) {
+          Object.keys(a[j]).forEach(function (key) {
+            console.log("Looping Inner: ", key);
+          })
+        // for (const property in items[i]) {
+          // console.log(items[i][property], this.defaultItem[0])
+
+            // Object.keys(items[i]).forEach(function (key) {
+            //   console.log(a[j][key]);
+            // })
+            // if (this.defaultItem[j].hasOwnProperty(property)) {
+            //   // this.defaultItem[j].property = items[i][property]
+            //   // console.log(this.defaultItem[j]['email'])
+            // } else {
+            //   console.log(false);
+            }
+          // }
         }
-      }
-      // this.items.push(this.defaultItem)
-      var obj = {
-        deptPersonsId: this.defaultItem.deptPersonsId,
-        personsId: this.defaultItem.personsId,
-        titleId: this.defaultItem.titleId,
-        givenName: this.defaultItem.givenName,
-        familyName: this.defaultItem.familyName,
-        corporateIdentification: this.defaultItem.corporateIdentification,
-        username: this.defaultItem.username,
-        password: this.defaultItem.password,
-        mobileNo: this.defaultItem.mobileNo,
-        email: this.defaultItem.email
-      }
-      this.postData(this.updateUrl, obj)
-      console.log("obj: ", obj)
-      this.resetItem()
-    },
-    async getItems (url) {
-      this.loading = true
-      var sysadmins = await this.getData('sysadget')
-      // console.log("fdgfdsgfsg: ", sysadmins);
-      this.items = sysadmins
-      this.setMenuItems(this.urls)
-      this.loading = false
+      // this.resetItem()
     },
     resetItem () {
       this.newItem = [
@@ -161,20 +160,6 @@ export default {
       this.defaultItem = [
         { titleId: 0, givenName: ' ', familyName: ' ', corporateIdentification: ' ', username: ' ', mobileNo: ' ', password: ' ', email: ' ' }
       ]
-    },
-    async setMenuItems (urls) {
-      for (var i = 0; i < urls.length; i++) {
-        var menuItems = await this.getData(urls[i].url)
-        var values = []
-        for (var j= 0; j < menuItems.length; j++) {
-          // console.log('menuItem: ', menuItems[j][urls[i].key])
-          values.push(menuItems[j][urls[i].key])
-        }
-        for (var k = 0; k < this.newItem.length; k++) {
-          if (this.newItem[k].cellLabel === urls[i].attr)
-            this.newItem[k].menuItems = values
-        }
-      }
     }
   },
   created () {
@@ -183,5 +168,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-@import "./public/scss/main.scss";
+  @import "./public/scss/main.scss";
 </style>

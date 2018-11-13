@@ -30,7 +30,7 @@
           vertical
         ></v-divider>
         <v-btn @click="newDialog = true" :color="primaryColor">new administrator
-          <v-icon class="ml-2">person_add</v-icon>
+          <v-icon class="ml-2">{{ addRecordIcon }}</v-icon>
         </v-btn>
       </v-toolbar>
       <v-data-table
@@ -89,6 +89,7 @@
           :hidden="header.hidden"
           v-for="header in headers"
           :key="header.text"
+          :color="primaryColor"
         >
           <v-edit-dialog
              :return-value.sync="props.item[header.value]"
@@ -125,11 +126,20 @@
         </td>
       </tr>
     </template>
-    </v-data-table>
   <!-- Table: No Data Slot - spinner Loading, display Error -->
     <template slot="no-data">
-
+      <BaseDataTableInfoCard
+      errorMsg="Unable to retrieve data from the server - Please contact your system administrator"
+      infoMsg="Loading data from the server - Please wait"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
+      :color="primaryColor"
+      :spinner="loading"
+      :hide="loading"
+      />
     </template>
+    </v-data-table>
   <!-- Table: Footer Pagination CRUD function buttons -->
       <v-card>
         <v-container class="my-1">
@@ -642,11 +652,11 @@
 </template>
 
 <script>
-// import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
+import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
   components: {
-    // SubPageNavButton
+    BaseDataTableInfoCard
   },
   name: 'BaseDataTable',
   data () {
@@ -677,6 +687,9 @@ export default {
     }
   },
   props: {
+    loading: Boolean,
+    loaded: Boolean,
+    error: Boolean,
     items: Array,
     headers: Array,
     primaryColor: String,
@@ -691,7 +704,8 @@ export default {
     searchLabel: String,
     msgDel: String,
     titleDel: String,
-    recordIcon: String
+    recordIcon: String,
+    addRecordIcon: String,
   },
   computed: {
     pages () {
@@ -727,7 +741,7 @@ export default {
       }
     },
     close () {
-      console.log(this.selected);
+      // console.log(this.selected);
       if (this.selected.length) this.selected = []
       this.editDialog = false
       this.newDialog = false
@@ -757,10 +771,10 @@ export default {
     },
     saveChanges () {
       this.$emit('itemsEdited', this.selected)
-      console.log(this.selected)
+      // console.log(this.selected)
       // console.log(this.items)
       this.close()
-      this.selected = []
+      // this.selected = []
     },
     msgSave () {
       this.snack = true

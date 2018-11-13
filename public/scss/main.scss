@@ -2,6 +2,7 @@
 
 $main-blue: #00a1cd;
 $main-blue-highlight: rgba(0, 161, 205, 0.1);
+$main-error: #ff5252;
 $bg-grey: #f2f4f4;
 $text-body: #4d504f;
 $bg-white: #ffff;
@@ -56,6 +57,9 @@ $bg-white: #ffff;
 }
 .text-white {
   color: white;
+}
+.text-error {
+  color: #ff5252;
 }
 .text-intervals {
   margin: 1vw;
