@@ -113,33 +113,36 @@ export default {
       console.log(this.items)
     },
     editItems (items) {
-      for (var i = 0; i < item.length; i++) {
-        if (item[i].hasOwnProperty('sync')) {
-          this.defaultItem[item[i].cellLabel] = item[i].sync
-          console.log(item[i].cellLabel, item[i].sync)
+      for (var i = 0; i < items.length; i++) {
+        for (const property in items[i]) {
+          if (items[i].hasOwnProperty(property)) {
+          // console.log("asaddede: ", items[i], property);
+            this.defaultItem[property] = items[i][property]
+            console.log("Editing Items: ", this.defaultItem[property], items[i][property])
+          }
         }
       }
-      this.items.push(this.defaultItem)
+      // this.items.push(this.defaultItem)
       var obj = {
         deptPersonsId: this.defaultItem.deptPersonsId,
         personsId: this.defaultItem.personsId,
-        titleId:Number(this.defaultItem.titleId),
-        givenName:this.defaultItem.givenName,
-        familyName:this.defaultItem.familyName,
+        titleId: this.defaultItem.titleId,
+        givenName: this.defaultItem.givenName,
+        familyName: this.defaultItem.familyName,
         corporateIdentification: this.defaultItem.corporateIdentification,
         username: this.defaultItem.username,
         password: this.defaultItem.password,
         mobileNo: this.defaultItem.mobileNo,
         email: this.defaultItem.email
       }
-      this.postData('sysadupdate', obj)
+      this.postData(this.updateUrl, obj)
       console.log("obj: ", obj)
       this.resetItem()
     },
     async getItems (url) {
       this.loading = true
       var sysadmins = await this.getData('sysadget')
-      console.log("fdgfdsgfsg: ", sysadmins);
+      // console.log("fdgfdsgfsg: ", sysadmins);
       this.items = sysadmins
       this.setMenuItems(this.urls)
       this.loading = false
@@ -164,7 +167,7 @@ export default {
         var menuItems = await this.getData(urls[i].url)
         var values = []
         for (var j= 0; j < menuItems.length; j++) {
-          console.log('menuItem: ', menuItems[j][urls[i].key])
+          // console.log('menuItem: ', menuItems[j][urls[i].key])
           values.push(menuItems[j][urls[i].key])
         }
         for (var k = 0; k < this.newItem.length; k++) {

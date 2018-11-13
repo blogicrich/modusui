@@ -128,7 +128,7 @@
     </v-data-table>
   <!-- Table: No Data Slot - spinner Loading, display Error -->
     <template slot="no-data">
-      
+
     </template>
   <!-- Table: Footer Pagination CRUD function buttons -->
       <v-card>
@@ -756,9 +756,9 @@ export default {
       this.close()
     },
     saveChanges () {
-      this.$emit('itemsChanged', this.selected)
+      this.$emit('itemsEdited', this.selected)
       console.log(this.selected)
-      console.log(this.items)
+      // console.log(this.items)
       this.close()
       this.selected = []
     },

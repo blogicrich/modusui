@@ -15,7 +15,7 @@ export const getData = {
             headers: { 'Content-Type': 'application/json' }
           })
           // this.isLoading = false
-          console.log("apiRequests: ", axGet.data)
+          // console.log("apiRequests: ", axGet.data)
           return axGet.data
         } catch (err) {
           // console.log(err)
