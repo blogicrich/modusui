@@ -9,7 +9,8 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              onclick="expandBox1.style.height = '150px'"
+              onfocus="expandBox1.style.height = '150px'"
+              onfocusout="expandBox1.style.height = '75px'"
               class="textField pa-3"
               label="Severe Over Hydration"
               placeholder="....."
@@ -26,7 +27,8 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              onclick="expandBox2.style.height = '150px'"
+              onfocus="expandBox2.style.height = '150px'"
+              onfocusout="expandBox2.style.height = '75px'"
               class="textField pa-3"
               label="Over Hydration"
               placeholder="....."
@@ -54,7 +56,8 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              onclick="expandBox3.style.height = '150px'"
+              onfocus="expandBox3.style.height = '150px'"
+              onfocusout="expandBox3.style.height = '75px'"
               class="textField pa-3"
               label="Under Hydration"
               placeholder="....."
@@ -71,7 +74,8 @@
           </v-flex>
           <v-flex xs6>
             <v-text-field
-              onclick="expandBox4.style.height = '150px'"
+              onfocus="expandBox4.style.height = '150px'"
+              onfocusout="expandBox4.style.height = '75px'"
               class="textField pa-3"
               label="Severe Under Hydration"
               placeholder="....."
@@ -106,9 +110,6 @@ export default {
     overHydration: Number,
     underHydration: Number,
     severeUnderHydration: Number
-  },
-  methods: {
-    // revert box when not focussed method
   }
 }
 </script>
