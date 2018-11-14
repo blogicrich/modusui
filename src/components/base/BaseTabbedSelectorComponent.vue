@@ -27,7 +27,7 @@
             <v-card-text>
               <v-layout justify-space-around wrap>
                 <v-flex lg4 md4 xs12>
-                  <h2>{{ cardEmailHeader }}</h2>
+                  <h2 class="table-header">{{ cardEmailHeader }}</h2>
                   <v-text-field
                     label="Subject"
                     v-model="item.subject"
@@ -42,7 +42,7 @@
                   ></v-textarea>
                 </v-flex>
                 <v-flex lg4 md4 xs12>
-                  <h2>{{ cardSmsHeader }}</h2>
+                  <h2 class="table-header">{{ cardSmsHeader }}</h2>
                     <v-textarea
                       label="SMS Body"
                       counter
