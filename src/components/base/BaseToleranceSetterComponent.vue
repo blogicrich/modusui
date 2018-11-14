@@ -5,10 +5,11 @@
       <v-container>
         <v-layout row wrap>
           <v-flex xs6>
-            <v-card class="redBox" onclick="this.style.height = '150px'" v-model="severeOverHydration"></v-card>
+            <v-card id="expandBox1" class="redBox" v-model="severeOverHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              onclick="expandBox1.style.height = '150px'"
               class="textField pa-3"
               label="Severe Over Hydration"
               placeholder="....."
@@ -21,10 +22,11 @@
             >{{ severeOverHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="yellowBox" onclick="this.style.height = '150px'" v-model="overHydration"></v-card>
+            <v-card id="expandBox2" class="yellowBox" onclick="this.style.height = '150px'" v-model="overHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              onclick="expandBox2.style.height = '150px'"
               class="textField pa-3"
               label="Over Hydration"
               placeholder="....."
@@ -48,10 +50,11 @@
             ></v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="yellowBox" onclick="this.style.height = '150px'" v-model="underHydration"></v-card>
+            <v-card id="expandBox3" class="yellowBox" onclick="this.style.height = '150px'" v-model="underHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              onclick="expandBox3.style.height = '150px'"
               class="textField pa-3"
               label="Under Hydration"
               placeholder="....."
@@ -64,10 +67,11 @@
             >{{ underHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card class="redBox" onclick="this.style.height = '150px'" v-model="severeUnderHydration"></v-card>
+            <v-card id="expandBox4" class="redBox" onclick="this.style.height = '150px'" v-model="severeUnderHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
+              onclick="expandBox4.style.height = '150px'"
               class="textField pa-3"
               label="Severe Under Hydration"
               placeholder="....."
