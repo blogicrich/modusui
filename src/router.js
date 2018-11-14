@@ -8,7 +8,10 @@ export default new Router({
   routes: [
     { path: '',
       redirect: { name: 'Login' },
-      component: Login
+      component: Login,
+      params: {
+        usertype: "undefined"
+      }
     },
     // Common routes
     {

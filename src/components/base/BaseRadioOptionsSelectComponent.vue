@@ -2,7 +2,7 @@
   <v-container>
     <v-layout justify-space-around fill-height>
       <v-flex xs12 md12 lg12>
-        <v-card v-if="$vuetify.breakpoint.smAndUp" class="ma-0 pa-3" color="white" :height="height">
+        <v-card v-if="$vuetify.breakpoint.smAndUp" class="ma-0 pa-3" color="Blue" :height="height">
           <h3 class="subheader text-left"> {{ groupHeader }} </h3>
           <v-divider
             class="ma-2"

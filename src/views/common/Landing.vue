@@ -113,6 +113,9 @@ export default {
   name: 'Landing',
   components: {
     SubLandingNavButton
+  },
+  mounted () {
+      console.log(this.$route.params)
   }
 }
 </script>

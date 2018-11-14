@@ -92,7 +92,7 @@ export default {
   methods: {
     setAuthenticated (newStatus) {
       this.authenticated.state = newStatus.state
-      this.authenticated.userId = newStatus.userId
+      this.authenticated.username = newStatus.username
       localStorage.auth = JSON.stringify(this.authenticated)
       if (newStatus.state) {
         this.$router.push('/landing')
