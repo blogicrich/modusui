@@ -16,8 +16,11 @@
           <v-card-title>
             <v-layout justify-space-between>
               <div>
-                <input type="checkbox" v-model="allSelected" @click="selectAll"/>
-                <label class="check-subhead-selectall"> {{ SelectAll }}</label>
+                <v-checkbox
+                  v-bind:label="SelectAll"
+                  v-model="allUsers"
+                  @click.native="selectAll">
+                </v-checkbox>
               </div>
               <div>
                 <v-icon>search</v-icon>
@@ -29,14 +32,13 @@
           <v-card-text>
             <v-layout justify-start column>
               <div v-for="item in filteredName" :value="item.name" :key="item.name">
-                <input  type="checkbox"
-                        :value="item.name"
-                        v-model="userIds"
-                        @click="select"
-                />
-                <label> {{ item.name }}</label>
+                <v-checkbox
+                  v-model="selectedUsers"
+                  :value="item.name"
+                  v-bind:label="item.name"
+                  @click.native="select">
+                </v-checkbox>
                 <p><hr class="dialog-hr"><p/>
-                <br/>
               </div>
             </v-layout>
           </v-card-text>
@@ -47,7 +49,7 @@
                 @click.native="close"
                 title="Cancel"
               ></SubPageNavButton>
-              <div v-if="this.userIds.length > 0">
+              <div v-if="this.selectedUsers.length > 0">
                 <SubPageNavButton
                   @click.native="save"
                   title="Save"
@@ -73,8 +75,9 @@ export default {
     return {
       dialog: true,
       allSelected: false,
+      allUsers: [],
+      savedUsers: [],
       selectedUsers: [],
-      userIds: [],
       search: ''
     }
   },
@@ -86,29 +89,43 @@ export default {
   },
   methods: {
     close () {
-      if (this.selectedUsers.length >= 1) {
+      if (this.savedUsers.length >= 1) {
         this.dialog = false
-        this.userIds = this.selectedUsers
+        this.selectedUsers = this.savedUsers
       }
     },
     save () {
-      if (this.userIds.length >= 1) {
+      if (this.selectedUsers.length >= 1) {
         this.dialog = false
-        this.selectedUsers = this.userIds
+        this.savedUsers = this.selectedUsers
       }
     },
     selectAll () {
       this.allSelected = !this.allSelected
-      this.userIds = []
       if (this.allSelected) {
         let name
         for (name in this.users) {
-          this.userIds.push(this.users[name].name.toString())
+          this.allUsers.push(this.users[name].name.toString())
         }
+        this.selectedUsers = this.allUsers
+        this.selectedUsers = this.selectedUsers.slice(1, this.selectedUsers.length)
+      }
+      else {
+        this.allUsers = []
+        this.selectedUsers = []
       }
     },
     select () {
-      this.allSelected = false
+      if (this.selectedUsers.length === this.users.length) {
+        this.allSelected = true
+        for (var i = 0; i < this.users.length; i++) {
+          this.allUsers.push(this.users[i].name.toString())
+        }
+      }
+      else{
+        this.allSelected = false
+        this.allUsers = []
+      }
     }
   },
   computed: {
