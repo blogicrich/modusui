@@ -14,11 +14,51 @@ export const crudOperations = {
         }
       }
     },
+    async addItem (item) {
+      var row = {}
+      for (var i = 0; i < item.length; i++) {
+        var that = this
+          Object.keys(item[i]).forEach(function (key) {
+            if (key === 'sync') row[item[i].cellLabel] = item[i].sync
+          })
+        // console.log(row);
+      }
+      await this.postData(this.createUrl, row)
+      this.getItems(this.readUrl)
+      this.resetItem()
+    },
+    deleteItem (items) {
+      var index = 0
+      for (var i = 0; i < items.length; i++) {
+        index = this.items.indexOf(items[i])
+        // console.log(items[i][this.idKey], items[i], this.idKey)
+        this.postData(this.delUrl, { personsId:items[i][this.idKey] })
+        this.items.splice(index, 1)
+      }
+    },
+    editItems (items) {
+      for (var i = 0; i < items.length; i++) {
+        var defaultItem = this.defaultItem
+        var row = {}
+        var editedItems = []
+        for (var j = 0; j < defaultItem.length; j++) {
+          Object.keys(defaultItem[j]).forEach(function (key) {
+            if(items[i][key]) defaultItem[j][key] = items[i][key]
+            // console.log("Looping Inner: ", key, defaultItem[j][key], items[i][key])
+          })
+          this.postData(this.updateUrl, defaultItem[j])
+          // console.log(this.defaultItem)
+        }
+      }
+      this.resetItem()
+      // this.getItems(this.readUrl)
+      // console.log(this.defaultItem)
+    },
     async getItems (url) {
       this.loading = true
       this.loaded = false
       this.hide = false
-      var sysadmins = await this.getData(this.getUrl)
+      var sysadmins = await this.getData(this.readUrl)
       // console.log("fdgfdsgfsg: ", sysadmins);
       this.items = sysadmins
       this.setMenuItems(this.urls)

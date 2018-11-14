@@ -46,9 +46,10 @@ export default {
       error: false,
       delUrl: 'sysaddelete',
       updateUrl: 'sysadupdate',
-      getUrl: 'sysadget',
-      postUrl: 'sysadcreate',
+      readUrl: 'sysadget',
+      createUrl: 'sysadcreate',
       itemKey: 'username',
+      idKey: 'personsId',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'person',
@@ -86,66 +87,6 @@ export default {
     }
   },
   methods: {
-    addItem (item) {
-      for (var i = 0; i < item.length; i++) {
-        if (item[i].hasOwnProperty('sync')) {
-          this.defaultItem[item[i].cellLabel] = item[i].sync
-          console.log(item[i].cellLabel, item[i].sync)
-          console.log("defaultItem: ", this.defaultItem)
-        }
-      }
-      this.items.push(this.defaultItem)
-      var obj = {
-        titleId:Number(this.defaultItem.titleId),
-        givenName:this.defaultItem.givenName,
-        familyName:this.defaultItem.familyName,
-        corporateIdentification: this.defaultItem.corporateIdentification,
-        username: this.defaultItem.username,
-        password: this.defaultItem.password,
-        mobileNo: this.defaultItem.mobileNo,
-        email: this.defaultItem.email
-      }
-      this.postData(this.postUrl, obj)
-      console.log("obj: ", obj)
-      this.resetItem()
-    },
-    deleteItem (items) {
-      // console.log(items)
-      var index = 0
-      for (var i = 0; i < items.length; i++) {
-        index = this.items.indexOf(items[i])
-        console.log(items[i].personsId)
-        this.postData(this.delUrl, { personsId:items[i].personsId })
-        this.items.splice(index, 1)
-      }
-      // this.postData(this.delUrl, obj)
-      console.log(this.items)
-    },
-    editItems (items) {
-      var a = []
-      for (var i = 0; i < items.length; i++) {
-        a = this.defaultItem
-        console.log("Looping Outer", items[i]);
-        for (var j = 0; j < a.length; j++) {
-          Object.keys(a[j]).forEach(function (key) {
-            console.log("Looping Inner: ", key);
-          })
-        // for (const property in items[i]) {
-          // console.log(items[i][property], this.defaultItem[0])
-
-            // Object.keys(items[i]).forEach(function (key) {
-            //   console.log(a[j][key]);
-            // })
-            // if (this.defaultItem[j].hasOwnProperty(property)) {
-            //   // this.defaultItem[j].property = items[i][property]
-            //   // console.log(this.defaultItem[j]['email'])
-            // } else {
-            //   console.log(false);
-            }
-          // }
-        }
-      // this.resetItem()
-    },
     resetItem () {
       this.newItem = [
         { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
@@ -163,7 +104,7 @@ export default {
     }
   },
   created () {
-    this.getItems(this.getUrl)
+    this.getItems(this.readUrl)
   }
 }
 </script>

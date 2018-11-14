@@ -771,10 +771,8 @@ export default {
     },
     saveChanges () {
       this.$emit('itemsEdited', this.selected)
-      // console.log(this.selected)
-      // console.log(this.items)
       this.close()
-      // this.selected = []
+      this.selected = []
     },
     msgSave () {
       this.snack = true
