@@ -1,130 +1,93 @@
 <template>
-  <v-card id="create">
-    <!-- <v-container fluid grid-list-md>
-      <v-layout child-flex wrap>
-        <v-flex xs12 sm6 md4>
-          <v-subheader>Options</v-subheader>
-          <v-checkbox v-model="hover" label="Open on hover" hide-details></v-checkbox>
-        </v-flex>
-        <v-flex xs12 sm6 md4>
-          <v-subheader>FAB location</v-subheader>
-          <v-checkbox v-model="top" label="Top" hide-details></v-checkbox>
-          <v-checkbox v-model="right" label="Right" hide-details></v-checkbox>
-          <v-checkbox v-model="bottom" label="Bottom" hide-details></v-checkbox>
-          <v-checkbox v-model="left" label="Left" hide-details></v-checkbox>
-        </v-flex>
-        <v-flex xs12 sm6 md4>
-          <v-subheader>Speed dial direction</v-subheader>
-          <v-radio-group v-model="direction" hide-details>
-            <v-radio value="top" label="Top"></v-radio>
-            <v-radio value="right" label="Right"></v-radio>
-            <v-radio value="bottom" label="Bottom"></v-radio>
-            <v-radio value="left" label="Left"></v-radio>
-          </v-radio-group>
-        </v-flex>
-        <v-flex xs12 sm6 md4>
-          <v-subheader>Transition</v-subheader>
-          <v-radio-group v-model="transition" hide-details>
-            <v-radio value="slide-y-transition" label="Slide y"></v-radio>
-            <v-radio value="slide-y-reverse-transition" label="Slide y reverse"></v-radio>
-            <v-radio value="slide-x-transition" label="Slide x"></v-radio>
-            <v-radio value="slide-x-reverse-transition" label="Slide x reverse"></v-radio>
-            <v-radio value="scale-transition" label="Scale"></v-radio>
-          </v-radio-group>
-        </v-flex>
-      </v-layout>
-    </v-container> -->
-    <v-speed-dial
-      v-model="fab"
-      :top="top"
-      :bottom="bottom"
-      :right="right"
-      :left="left"
-      :direction="direction"
-      :open-on-hover="hover"
-      :transition="transition"
-    >
-      <v-btn
-        slot="activator"
-        v-model="fab"
-        color="blue darken-2"
-        dark
-        fab
-      >
-        <v-icon>account_circle</v-icon>
-        <v-icon>close</v-icon>
-      </v-btn>
-      <v-btn
-        fab
-        dark
-        small
-        color="green"
-      >
-        <v-icon>edit</v-icon>
-      </v-btn>
-      <v-btn
-        fab
-        dark
-        small
-        color="indigo"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
-      <v-btn
-        fab
-        dark
-        small
-        color="red"
-      >
-        <v-icon>delete</v-icon>
-      </v-btn>
-    </v-speed-dial>
-  </v-card>
+  <v-container>
+    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-center mx-3" text-xs-center>Titles</h2>
+    <BaseDataTable
+      :headers="headers"
+      :items="items"
+      :newItem="newItem"
+      :primaryColor="primaryColor"
+      :secondaryColor="secondaryColor"
+      :recordIcon="icon"
+      :addRecordIcon="iconAdd"
+      addBtnTitle="New Title"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
+      item-key="titleId"
+      searchLabel="Search Records..."
+      tableTitle="Titles"
+      newDialogTitle="Add a New Title"
+      editDialogTitle="Edit Titles"
+      delDialogTitle="Confirm deletetion of selected items?"
+      msgDel="Are you sure you want to delete the selected items?"
+      @newItem="addItem"
+      @itemsEdited="editItems"
+      @deleteSelected="deleteItem"
+    />
+  </v-container>
 </template>
 
 <script>
-export default {
-  data: () => ({
-    direction: 'top',
-    fab: false,
-    fling: false,
-    hover: false,
-    tabs: null,
-    top: false,
-    right: true,
-    bottom: true,
-    left: false,
-    transition: 'slide-y-reverse-transition'
-  }),
+import { getData, postData } from '@/mixins/apiRequests'
+import { crudOperations } from '@/mixins/CRUD'
+import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 
-  computed: {
-    activeFab () {
-      switch (this.tabs) {
-        case 'one': return { 'class': 'purple', icon: 'account_circle' }
-        case 'two': return { 'class': 'red', icon: 'edit' }
-        case 'three': return { 'class': 'green', icon: 'keyboard_arrow_up' }
-        default: return {}
-      }
+export default {
+  name: 'SystemAdmins',
+  mixins: [getData, postData, crudOperations],
+  components: {
+    BaseDataTable
+  },
+  data () {
+    return {
+      items: [],
+      name: 'name',
+      loading: true,
+      loaded: false,
+      error: false,
+      delUrl: 'titlesdelete',
+      updateUrl: 'titlesupdate',
+      readUrl: 'titleget',
+      createUrl: 'titlecreate',
+      itemKey: 'titleId',
+      idKey: 'titleId',
+      primaryColor: 'primary',
+      secondaryColor: 'primary darken-2',
+      icon: 'perm_identity',
+      iconAdd: 'add',
+      headers: [
+        { text: 'titleId', align: 'left', sortable: false, value: 'titleId', cellType: 'tb', hidden: true },
+        { text: 'shortDescription', align: 'left', sortable: false, value: 'shortDescription', cellType: 'tb', hidden: false },
+        { text: 'LongDescription', align: 'left', sortable: false, value: 'longDescription', cellType: 'tb', hidden: false },
+      ],
+      newItem: [
+        // { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
+        { shortDescription: '', cellType: 'tb', cellLabel: 'shortDescription', menuItems: [], validators:[]  },
+        { LongDescription: '', cellType: 'tb', cellLabel: 'longDescription', menuItems: [], validators:[]  },
+      ],
+      defaultItem: [
+        { titleId: 0, shortDescription: ' ', longDesription: ' ' }
+      ],
+      urls: []
     }
   },
-
-  watch: {
-    top (val) {
-      this.bottom = !val
-    },
-    right (val) {
-      this.left = !val
-    },
-    bottom (val) {
-      this.top = !val
-    },
-    left (val) {
-      this.right = !val
+  methods: {
+    resetItem () {
+      this.newItem = [
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
+        { shortDescription: '', cellType: 'tb', cellLabel: 'Abbreviation', menuItems: [], validators:[]  },
+        { LongDescription: '', cellType: 'tb', cellLabel: 'Long Desription', menuItems: [], validators:[]  },
+      ]
+      this.defaultItem = [
+        { titleId: 0, shortDescription: ' ', longDesription: ' ' }
+      ]
     }
+  },
+  created () {
+    this.getItems(this.readUrl)
   }
 }
 </script>
-
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
 </style>

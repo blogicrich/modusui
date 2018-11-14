@@ -1,16 +1,18 @@
 export const crudOperations = {
   methods: {
     async setMenuItems (urls) {
-      for (var i = 0; i < urls.length; i++) {
-        var menuItems = await this.getData(urls[i].url)
-        var values = []
-        for (var j= 0; j < menuItems.length; j++) {
-          // console.log('menuItem: ', menuItems[j][urls[i].key])
-          values.push(menuItems[j][urls[i].key])
-        }
-        for (var k = 0; k < this.newItem.length; k++) {
-          if (this.newItem[k].cellLabel === urls[i].attr)
-            this.newItem[k].menuItems = values
+      if (urls !== [] || urls !== null) {
+        for (var i = 0; i < urls.length; i++) {
+          var menuItems = await this.getData(urls[i].url)
+          var values = []
+          for (var j= 0; j < menuItems.length; j++) {
+            // console.log('menuItem: ', menuItems[j][urls[i].key])
+            values.push(menuItems[j][urls[i].key])
+          }
+          for (var k = 0; k < this.newItem.length; k++) {
+            if (this.newItem[k].cellLabel === urls[i].attr)
+              this.newItem[k].menuItems = values
+          }
         }
       }
     },
@@ -59,7 +61,7 @@ export const crudOperations = {
       this.loaded = false
       this.hide = false
       var sysadmins = await this.getData(this.readUrl)
-      // console.log("fdgfdsgfsg: ", sysadmins);
+      console.log("fdgfdsgfsg: ", sysadmins);
       this.items = sysadmins
       this.setMenuItems(this.urls)
       this.error = false

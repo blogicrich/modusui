@@ -9,6 +9,7 @@
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
       :addRecordIcon="iconAdd"
+      addBtnTitle="New Administrator"
       :loading="loading"
       :loaded="loaded"
       :error="error"

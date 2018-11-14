@@ -29,7 +29,7 @@
           inset
           vertical
         ></v-divider>
-        <v-btn @click="newDialog = true" :color="primaryColor">new administrator
+        <v-btn @click="newDialog = true" :color="primaryColor">{{ addBtnTitle }}
           <v-icon class="ml-2">{{ addRecordIcon }}</v-icon>
         </v-btn>
       </v-toolbar>
@@ -706,6 +706,7 @@ export default {
     titleDel: String,
     recordIcon: String,
     addRecordIcon: String,
+    addBtnTitle: String
   },
   computed: {
     pages () {
