@@ -8,6 +8,11 @@
       :overHydration="overHydration"
       :underHydration="underHydration"
       :severeUnderHydration="severeUnderHydration"
+      :colorRed="colorRed"
+      :colorAmber="colorAmber"
+      :colorGreen="colorGreen"
+      :colorBlue="colorBlue"
+      :colorDarkBlue="colorDarkBlue"
     />
   </div>
 </template>
@@ -27,7 +32,12 @@ export default {
       severeOverHydration: 200,
       overHydration: 120,
       underHydration: 50,
-      severeUnderHydration: 20
+      severeUnderHydration: 20,
+      colorRed: '#FF0000',
+      colorAmber: '#FFBF00',
+      colorGreen: '#008000',
+      colorBlue: '#0000FF',
+      colorDarkBlue: '#0000A0'
     }
   }
 }
