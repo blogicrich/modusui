@@ -22,7 +22,7 @@
             >{{ severeOverHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card id="expandBox2" class="yellowBox" onclick="this.style.height = '150px'" v-model="overHydration"></v-card>
+            <v-card id="expandBox2" class="yellowBox" v-model="overHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
@@ -50,7 +50,7 @@
             ></v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card id="expandBox3" class="yellowBox" onclick="this.style.height = '150px'" v-model="underHydration"></v-card>
+            <v-card id="expandBox3" class="yellowBox" v-model="underHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
@@ -67,7 +67,7 @@
             >{{ underHydration }}</v-text-field>
           </v-flex>
           <v-flex xs6>
-            <v-card id="expandBox4" class="redBox" onclick="this.style.height = '150px'" v-model="severeUnderHydration"></v-card>
+            <v-card id="expandBox4" class="redBox" v-model="severeUnderHydration"></v-card>
           </v-flex>
           <v-flex xs6>
             <v-text-field
@@ -106,6 +106,9 @@ export default {
     overHydration: Number,
     underHydration: Number,
     severeUnderHydration: Number
+  },
+  methods: {
+    // revert box when not focussed method
   }
 }
 </script>
