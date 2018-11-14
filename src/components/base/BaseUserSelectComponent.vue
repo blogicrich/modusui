@@ -9,7 +9,7 @@
         <v-card height="500px">
           <v-card-title>
             <v-layout justify-center fill-height>
-              <h2>{{ btnTitle }}</h2>
+              <h2 class="table-header">{{ btnTitle }}</h2>
             </v-layout>
           </v-card-title>
           <v-divider></v-divider>
