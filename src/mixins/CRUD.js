@@ -68,6 +68,7 @@ export const crudOperations = {
       this.loading = false
       this.loaded = true
       this.hide = true
+      return items
     },
   }
 }

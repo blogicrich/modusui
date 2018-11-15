@@ -91,7 +91,7 @@
           :key="header.text"
           :color="primaryColor"
         >
-          <v-edit-dialog
+          <!-- <v-edit-dialog
              :return-value.sync="props.item[header.value]"
              lazy
              large
@@ -100,9 +100,9 @@
              @save="msgSave"
              @cancel="msgCancel"
              @close="msgClose"
-           >
+           > -->
            <div>{{ props.item[header.value] }}</div>
-           <div slot="input" class="my-3 title">{{ header.text }}</div>
+           <!-- <div slot="input" class="my-3 title">{{ header.text }}</div>
              <v-text-field
                v-if="header.cellType == 'tb'"
                slot="input"
@@ -122,7 +122,7 @@
                large
                outline
              ></v-select>
-         </v-edit-dialog>
+         </v-edit-dialog> -->
         </td>
       </tr>
     </template>
@@ -194,15 +194,15 @@
                 <v-icon>edit</v-icon>
               </v-btn>
               </v-btn>
-              <!-- <v-btn
-                @click="save"
+              <v-btn
+                @click="newDialog"
                 fab
                 dark
                 medium
-                color="error"
+                color="success"
               >
-              <v-icon>save</v-icon>
-              </v-btn> -->
+              <v-icon>add</v-icon>
+              </v-btn>
               <v-btn
                 v-if="selected.length > 0"
                 @click="delDialog = true"
@@ -244,7 +244,7 @@
               </v-card-title>
               <v-card-text>
                 <v-container>
-                  <v-layout row justify-space-around>
+                  <v-layout row>
                     <v-flex v-for="(item, key) in newItem" :key="key">
                       <v-text-field
                         v-if="item.cellType === 'tb'"
@@ -280,12 +280,12 @@
           <v-dialog v-model="editDialog" max-width="98%">
             <v-card class="pa-0">
               <v-card-title>
-                <span class="table-header">{{ editDialogTitle }}</span>
+                <span class="pg-subheader">{{ editDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
-                  <v-layout v-for="(item, index) in selected" :key="index" row wrap justify-space-around>
-                    <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)" xs12 md6 lg2>
+                  <v-layout v-for="(item, index) in selected" :key="index">
+                    <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)">
                       <v-text-field
                           v-if="inputType(key, 'tb')"
                           class="ma-1"
@@ -383,15 +383,15 @@
         >
           <v-icon>edit</v-icon>
         </v-btn>
-        <!-- <v-btn
+        <v-btn
           @click="save"
           fab
           dark
           small
           color="error"
         >
-        <v-icon>save</v-icon>
-        </v-btn> -->
+        <v-icon>search</v-icon>
+        </v-btn>
         <v-btn
           @click="newDialog = true"
           fab
@@ -431,7 +431,6 @@
             append-outer-icon="close"
           ></v-text-field>
         </v-layout>
-  <!-- </v-card-title> -->
       </v-fade-transition>
   <!-- </v-toolbar> -->
       <v-data-table
@@ -491,7 +490,7 @@
           :hidden="header.hidden"
           :key="header.text"
         >
-          <v-edit-dialog
+          <!-- <v-edit-dialog
              :return-value.sync="props.item[header.value]"
              lazy
              large
@@ -500,9 +499,9 @@
              @save="msgSave"
              @cancel="msgCancel"
              @close="msgClose"
-           >
+           > -->
            <div>{{ props.item[header.value] }}</div>
-           <div slot="input" class="my-3 title">{{ header.text }}</div>
+           <!-- <div slot="input" class="my-3 title">{{ header.text }}</div>
              <v-text-field
                v-if="header.cellType == 'tb'"
                slot="input"
@@ -522,7 +521,7 @@
                large
                outline
              ></v-select>
-           </v-edit-dialog>
+           </v-edit-dialog> -->
         </td>
       </tr>
     </template>
@@ -604,11 +603,22 @@
   <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="500px">
             <v-card>
-              <v-card-title>
-                <span class="table-header">{{ editDialogTitle }}</span>
+              <v-card-title class="pa-0">
+                <v-layout class="ma-0 pa-0" row fill-height justify-center>
+                  <span class="table-header mt-3">{{ editDialogTitle }}</span>
+                </v-layout>
               </v-card-title>
               <v-card-text>
-                <v-container>
+                <v-container class="ma-0 pa-0">
+                  <v-layout class="mx-3 my-2" row fill-height justify-center>
+                    <v-btn class="mx-3 my-0" fab small :color="primaryColor">
+                      <v-icon>arrow_left</v-icon>
+                    </v-btn>
+                      <v-btn class="mx-3 mt-0" fab small :color="primaryColor">
+                        <v-icon>arrow_right</v-icon>
+                      </v-btn>
+                    </v-btn>
+                  </v-layout>
                   <v-layout row wrap justify-space-around>
                     <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
                       <v-text-field
@@ -634,10 +644,15 @@
                   </v-layout>
                 </v-container>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
-                <v-btn :color="secondaryColor" flat @click.native="save">Save</v-btn>
+              <v-card-actions colum>
+
+
+                <v-layout row wrap>
+                  <v-spacer></v-spacer>
+                  <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
+                  <v-btn :color="secondaryColor" flat @click.native="save">Save</v-btn>
+                </v-layout>
+
               </v-card-actions>
             </v-card>
           </v-dialog>
