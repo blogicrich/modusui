@@ -4,41 +4,46 @@
     <br><br><br>
     <BaseToleranceSetter
       class="baseToleranceSetter"
-      :severeOverHydration="severeOverHydration"
-      :overHydration="overHydration"
-      :underHydration="underHydration"
-      :severeUnderHydration="severeUnderHydration"
-      :colorRed="colorRed"
-      :colorAmber="colorAmber"
+      :level4="level4"
+      :level3="level3"
+      :level2="level2"
+      :level1="level1"
+      :level4q="level4q"
+      :level3q="level3q"
       :colorGreen="colorGreen"
-      :colorBlue="colorBlue"
-      :colorDarkBlue="colorDarkBlue"
+      :level2q="level2q"
+      :level1q="level1q"
     />
   </div>
 </template>
 
 <script>
-// import { getMeta } from '@/mixins/apiRequests'
 import BaseToleranceSetter from '@/components/base/BaseToleranceSetterComponent.vue'
+import { getData } from '@/mixins/apiRequests'
 
 export default {
   name: 'HydrationParameters',
-  // mixins: [getMeta],
+  mixins: [getData],
   components: {
     BaseToleranceSetter
   },
   data () {
     return {
-      severeOverHydration: 200,
-      overHydration: 120,
-      underHydration: 50,
-      severeUnderHydration: 20,
-      colorRed: '#FF0000',
-      colorAmber: '#FFBF00',
+      level4: 0,
+      level3: 0,
+      level2: 0,
+      level1: 0,
+      level4q: '#FF0000',
+      level3q: '#FFBF00',
       colorGreen: '#008000',
-      colorBlue: '#0000FF',
-      colorDarkBlue: '#0000A0'
+      level2q: '#0000FF',
+      level1q: '#0000A0'
     }
+  },
+  mounted () {
+    this.getData('hydrationtolerancesdisplay')
+      // .then((response) => { this.level4 = response.data })
+      // .catch(error => { console.log(error) })
   }
 }
 </script>

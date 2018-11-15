@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row wrap>
       <v-flex xs6>
-        <v-card id="expandBox1" class="cardBox" :color="colorRed" v-model="severeOverHydration"></v-card>
+        <v-card id="expandBox1" class="cardBox" :color="level4q" v-model="level4"></v-card>
       </v-flex>
       <v-flex xs6>
         <v-text-field
@@ -15,12 +15,12 @@
           required
           min="20" max="200"
           type="number"
-          v-model="severeOverHydration"
+          v-model="level4"
           box
-        >{{ severeOverHydration }}</v-text-field>
+        >{{ level4 }}</v-text-field>
       </v-flex>
       <v-flex xs6>
-        <v-card id="expandBox2" class="cardBox" :color="colorAmber" v-model="overHydration"></v-card>
+        <v-card id="expandBox2" class="cardBox" :color="level3q" v-model="level3"></v-card>
       </v-flex>
       <v-flex xs6>
         <v-text-field
@@ -33,9 +33,9 @@
           required
           min="20" max="200"
           type="number"
-          v-model="overHydration"
+          v-model="level3"
           box
-        >{{ overHydration }}</v-text-field>
+        >{{ level3 }}</v-text-field>
       </v-flex>
       <v-flex xs6>
         <v-card class="cardBox" :color="colorGreen"></v-card>
@@ -49,7 +49,7 @@
         ></v-text-field>
       </v-flex>
       <v-flex xs6>
-        <v-card id="expandBox3" class="cardBox" :color="colorBlue" v-model="underHydration"></v-card>
+        <v-card id="expandBox3" class="cardBox" :color="level2q" v-model="level2"></v-card>
       </v-flex>
       <v-flex xs6>
         <v-text-field
@@ -62,12 +62,12 @@
           required
           min="20" max="200"
           type="number"
-          v-model="underHydration"
+          v-model="level2"
           box
-        >{{ underHydration }}</v-text-field>
+        >{{ level2 }}</v-text-field>
       </v-flex>
       <v-flex xs6>
-        <v-card id="expandBox4" class="cardBox" :color="colorDarkBlue" v-model="severeUnderHydration"></v-card>
+        <v-card id="expandBox4" class="cardBox" :color="level1q" v-model="level1"></v-card>
       </v-flex>
       <v-flex xs6>
         <v-text-field
@@ -80,9 +80,9 @@
           required
           min="20" max="200"
           type="number"
-          v-model="severeUnderHydration"
+          v-model="level1"
           box
-        >{{ severeUnderHydration }}</v-text-field>
+        >{{ level1 }}</v-text-field>
       </v-flex>
     </v-layout>
   </v-container>
@@ -101,15 +101,15 @@ export default {
     }
   },
   props: {
-    severeOverHydration: Number,
-    overHydration: Number,
-    underHydration: Number,
-    severeUnderHydration: Number,
-    colorRed: String,
-    colorAmber: String,
+    level4: Number,
+    level3: Number,
+    level2: Number,
+    level1: Number,
+    level4q: String,
+    level3q: String,
     colorGreen: String,
-    colorBlue: String,
-    colorDarkBlue: String
+    level2q: String,
+    level1q: String
   }
 }
 </script>
@@ -117,6 +117,5 @@ export default {
 <style scoped>
   .cardBox {
     height: 65%;
-    border: 5px solid pink;
   }
 </style>
