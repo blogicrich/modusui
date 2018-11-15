@@ -87,15 +87,7 @@ export default {
   },
   methods: {
     checkValues () {
-      if (this.input.password !== null && this.input.username !== null) {
-        this.$emit('authenticated', { password:this.input.password, username: this.input.username })
-      } else if (this.input.password === null || this.input.username === null) {
-        this.msg = 'You must complete both fields.'
-        this.isActive = true
-      } else {
-        this.msg = 'Incorrect user id or password.'
-        this.isActive = true
-      }
+      this.$emit('authenticate', { password:this.input.password, username: this.input.username })
     }
   }
 }

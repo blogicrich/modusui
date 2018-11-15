@@ -1,7 +1,9 @@
 <template>
   <v-container grid-list-md text-xs-center>
+    <v-dialog v-if="redirecting" max-width="87%">
+    </v-dialog>
     <h1 class="pg-header">eDroplet Administration</h1>
-      <v-layout row wrap>
+      <v-layout v-if="this.user == 'SYSTEM ADMINISTRATOR'" row wrap>
         <v-flex xs12 md6>
           <h2 class="pg-subheader">Administrator Management</h2>
           <v-divider class="mb-2" color="#00a1cd"></v-divider>
@@ -59,7 +61,7 @@
           />
         </v-flex>
     </v-layout>
-    <div class="landing-cli-admin">
+    <div v-if="this.user == 'CLIENT ADMINISTRATOR'" class="landing-cli-admin">
       <h1 class="pg-header">Main Menu</h1>
         <v-layout row wrap>
         <v-flex xs12 md6>
@@ -114,8 +116,17 @@ export default {
   components: {
     SubLandingNavButton
   },
+  data () {
+    return {
+      user: JSON.parse(localStorage.auth).level,
+      redirecting: false
+    }
+  },
+  watch: {
+
+  },
   mounted () {
-      console.log(this.$route.params)
+    console.log(this.$route)
   }
 }
 </script>

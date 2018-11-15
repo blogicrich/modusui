@@ -3,7 +3,7 @@
     :msg="msg"
     :isAuthenticating="isAuthenticating"
     :isActive="isActive"
-    @authenticated="submitCredentials"
+    @authenticate="submitCredentials"
   />
 </template>
 
@@ -28,27 +28,19 @@ export default {
   },
   methods: {
     async submitCredentials (item) {
-      if (item.username === null || item.password === null) {
-        this.msg = 'You must complete both fields.'
-        this.isActive = true
-      }
-      // else if (item.username === null && item.password === null) {
-      //
-      // }
+      // this.isAuthenticating = true
       var response = await this.postData('login', item)
-      // if (response != 'Error logging in' || response != 'Invalid Login Request' || response != 'User inactive' || response != 'Invalid Login Request' ) {
-      //  this.msg = 'Incorrect user id or password.'
-      //  this.isActive = true
-      // }
-      if (response != 'Error logging in' || response != 'Invalid Login Request' || response != 'User inactive' || response != 'Invalid Login Request' ) {
-        this.$router.push('/landing')
-        this.isActive = true
-      }
-      if (response.description != ' ') {
-        this.$emit('authenticated', {state:true, username: item.username })
-        this.$router.push('/landing')
-      }
-    console.log(this.msg)
+        for (var i = 0; i < response.length; i++) {
+          if (response[i].description) {
+            this.isActive = false
+            this.$emit('authenticated', {state: true, level: response[i].description })
+          } else {
+            this.$emit('authenticated', {state: false, level: null})
+            this.msg = response
+            this.isActive = true
+          }
+        }
+      this.isAuthenticating = false
     }
   },
   mounted () {

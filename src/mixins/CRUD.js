@@ -60,9 +60,9 @@ export const crudOperations = {
       this.loading = true
       this.loaded = false
       this.hide = false
-      var sysadmins = await this.getData(this.readUrl)
-      console.log("fdgfdsgfsg: ", sysadmins);
-      this.items = sysadmins
+      var items = await this.getData(this.readUrl)
+      // console.log("fdgfdsgfsg: ", items);
+      this.items = items
       this.setMenuItems(this.urls)
       this.error = false
       this.loading = false

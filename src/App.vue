@@ -53,9 +53,9 @@
         <!-- <v-container fluid> -->
         <v-slide-y-transition mode="out-in">
           <!-- <v-container xs12> -->
-          <keep-alive>
+          <!-- <keep-alive> -->
             <router-view class="px-0" @authenticated="setAuthenticated"/>
-          </keep-alive>
+          <!-- </keep-alive> -->
         <!-- </v-container> -->
         </v-slide-y-transition>
         <!-- </v-container> -->
@@ -80,7 +80,7 @@ export default {
     return {
       authenticated: {
         state: false,
-        userId: null
+        level: null
       },
       clipped: true,
       drawer: false,
@@ -92,14 +92,16 @@ export default {
   methods: {
     setAuthenticated (newStatus) {
       this.authenticated.state = newStatus.state
-      this.authenticated.username = newStatus.username
+      this.authenticated.level = newStatus.level
       localStorage.auth = JSON.stringify(this.authenticated)
+      // console.log(JSON.parse(localStorage.auth))
       if (newStatus.state) {
         this.$router.push('/landing')
       }
     },
     logout () {
-      this.authenticated = { state: false, userId: null }
+      this.authenticated = { state: false, level: null }
+      localStorage.auth = JSON.stringify(this.authenticated)
       this.$router.push('/login')
     },
     home () {
