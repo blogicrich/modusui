@@ -24,7 +24,6 @@
           :groupDescription="voiceRadioDescription"
           :radioHeader="voiceRadioHeader"
           :height="height"
-
         />
       </v-flex>
     </v-layout>
@@ -42,7 +41,6 @@
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
           :height="height"
-
         />
       </v-flex>
       <v-flex xs12 lg6>
@@ -52,7 +50,6 @@
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
           :height="height"
-
         />
       </v-flex>
     </v-layout>
@@ -124,5 +121,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-@import "./public/scss/main.scss";
+  @import "./public/scss/main.scss";
 </style>

@@ -2,12 +2,19 @@
 
 $main-blue: #00a1cd;
 $main-blue-highlight: rgba(0, 161, 205, 0.1);
+$main-error: #ff5252;
 $bg-grey: #f2f4f4;
 $text-body: #4d504f;
 $bg-white: #ffff;
 
 // Headers
-
+//
+.blue-header {
+  color: $main-blue;
+}
+.grey-header {
+  color: $bg-grey;
+}
 .app-header {
   margin: 1vw;
   font-size: 1.5em;
@@ -26,14 +33,13 @@ $bg-white: #ffff;
   font-weight: bold;
   color: $main-blue;
 }
-.table-dialog-header .pg-dialog-header {
+.table-dialog-header {
   margin: 1vw;
   font-size: 1.5em;
   font-weight: bold;
   color: $main-blue;
 }
 .subheader {
-  // margin: 1vw;
   font-size: 1em;
   font-weight: bold;
   color: $main-blue;
@@ -48,6 +54,18 @@ $bg-white: #ffff;
   // font-size: 1em;
   // margin: 10px;
   text-align:left;
+}
+.text-white {
+  color: white;
+}
+.text-error {
+  color: #ff5252;
+}
+.text-intervals {
+  margin: 1vw;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: $text-body;
 }
 //Subheaders
 
@@ -99,14 +117,9 @@ $bg-white: #ffff;
   color: $bg-white !important;
   font-size: 1em;
 }
-.table-fab {
-  // position: absolute;
-  // z-index: 2;
-  // top: 1.5vw;
-  // right: 1.5vw;
-}
 
 // Table
+
 .table-cell-header {
   margin-right: 1vw;
   font-size: 1em;

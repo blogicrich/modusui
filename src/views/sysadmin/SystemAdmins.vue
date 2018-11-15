@@ -1,194 +1,114 @@
 <template>
   <v-container>
-    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-center" text-xs-center>System Administrators</h2>
+    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-center mx-3" text-xs-center>System Administrators</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
       :newItem="newItem"
-      :menuItems="menuItems"
+      :primaryColor="primaryColor"
+      :secondaryColor="secondaryColor"
+      :recordIcon="icon"
+      :addRecordIcon="iconAdd"
+      addBtnTitle="New Administrator"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
+      item-key="username"
       searchLabel="Search Records..."
       tableTitle="System Administrator Records"
-      btnTitle="+"
       newDialogTitle="Add a New Administrator Record"
       editDialogTitle="Edit Administrator Records"
       delDialogTitle="Confirm deletetion of selected items?"
-      itemKey="name"
       msgDel="Are you sure you want to delete the selected items?"
       @newItem="addItem"
+      @itemsEdited="editItems"
       @deleteSelected="deleteItem"
     />
   </v-container>
 </template>
 
 <script>
+import { getData, postData } from '@/mixins/apiRequests'
+import { crudOperations } from '@/mixins/CRUD'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+
 export default {
   name: 'SystemAdmins',
+  mixins: [getData, postData, crudOperations],
   components: {
     BaseDataTable
   },
   data () {
     return {
-      items: [
-        {
-          // value: false,
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%'
-        },
-        {
-          // value: false,
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%'
-        },
-        {
-          // value: false,
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%'
-        },
-        {
-          // value: false,
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%'
-        },
-        {
-          // value: false,
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%'
-        },
-        {
-          // value: false,
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%'
-        },
-        {
-          // value: false,
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%'
-        },
-        {
-          // value: false,
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: '45%'
-        },
-        {
-          // value: false,
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: '22%'
-        },
-        {
-          // value: false,
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%'
-        }
-      ],
+      items: [],
+      name: 'name',
+      loading: true,
+      loaded: false,
+      error: false,
+      delUrl: 'sysaddelete',
+      updateUrl: 'sysadupdate',
+      readUrl: 'sysadget',
+      createUrl: 'sysadcreate',
+      itemKey: 'username',
+      idKey: 'personsId',
+      primaryColor: 'primary',
+      secondaryColor: 'primary darken-2',
+      icon: 'person',
+      iconAdd: 'person_add',
       headers: [
-        {
-          text: 'Dessert',
-          align: 'left',
-          sortable: false,
-          value: 'name',
-          cellType: 'tb'
-        },
-        { text: 'Calories', value: 'calories', cellType: 'md' },
-        { text: 'Fat (g)', value: 'fat', cellType: 'md' },
-        { text: 'Carbs (g)', value: 'carbs', cellType: 'md' },
-        { text: 'Protein (g)', value: 'protein', cellType: 'md' }
+        { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
+        { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
+        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Mobile Number', align: 'left', sortable: false, value: 'mobileNo', cellType: 'tb', hidden: true, editable: true },
+        { text: 'password', align: 'left', sortable: false, value: 'password', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Email', align: 'left', sortable: false, value: 'email', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true},
+        { text: 'Given Name', value: 'givenName', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Family Name', value: 'familyName', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: false, editable: true },
+        { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { name: '', cellType: 'tb', cellLabel: 'name' },
-        { calories: 0, cellType: 'md', cellLabel: 'calories' },
-        { fat: 0, cellType: 'md', cellLabel: 'fat' },
-        { carbs: 0, cellType: 'md', cellLabel: 'carbs' },
-        { protein: 0, cellType: 'md', cellLabel: 'protein' }
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators:[]  },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators:[]  },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators:[] },
+        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators:[] },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators:[] },
+        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators:[] },
+        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators:[] }
       ],
       defaultItem: [
-        { name: '', calories: 0, fat: 0, carbs: 0, protein: 0 }
+        { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ],
-      menuItems: [
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' }
-      ]
+      urls: [
+        { url:'titleget', attr: 'titleId', key: 'shortDescription'},
+        { url:'sysadget', attr: 'username', key: 'username'},
+      ],
     }
   },
   methods: {
-    addItem (item) {
-      for (var i = 0; i < item.length; i++) {
-        if (item[i].hasOwnProperty('sync')) {
-          this.defaultItem[item[i].cellLabel] = item[i].sync
-          console.log(item[i].cellLabel, item[i].sync)
-        }
-      }
-      this.items.push(this.defaultItem)
-      console.log('item: ', item)
-      this.resetItem()
-    },
-    deleteItem (items) {
-      console.log(items)
-      var index = 0
-      for (var i = 0; i < items.length; i++) {
-        index = this.items.indexOf(items[i])
-        console.log(items[i].name)
-        this.items.splice(index, 1)
-      }
-      console.log(this.items)
-    },
     resetItem () {
       this.newItem = [
-        { name: '', cellType: 'tb', cellLabel: 'name' },
-        { calories: 0, cellType: 'md', cellLabel: 'calories' },
-        { fat: 0, cellType: 'md', cellLabel: 'fat' },
-        { carbs: 0, cellType: 'md', cellLabel: 'carbs' },
-        { protein: 0, cellType: 'md', cellLabel: 'protein' }
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators:[]  },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators:[]  },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators:[] },
+        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators:[] },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators:[] },
+        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators:[] },
+        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators:[] },
       ]
       this.defaultItem = [
-        { name: '', calories: 0, fat: 0, carbs: 0, protein: 0 }
+        { titleId: 0, givenName: ' ', familyName: ' ', corporateIdentification: ' ', username: ' ', mobileNo: ' ', password: ' ', email: ' ' }
       ]
     }
+  },
+  created () {
+    this.getItems(this.readUrl)
   }
 }
 </script>
 <style scoped lang="scss">
-@import "./public/scss/main.scss";
+  @import "./public/scss/main.scss";
 </style>

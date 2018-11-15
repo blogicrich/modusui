@@ -3,7 +3,7 @@
     <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
         <h2 class="table-header">{{ tableTitle }}</h2>
-        <v-icon medium color="primary">person</v-icon>
+        <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
         <v-divider
           class="mx-2"
           inset
@@ -29,11 +29,12 @@
           inset
           vertical
         ></v-divider>
-        <v-btn @click="newDialog = true" color="primary">new administrator
-          <v-icon class="ml-2">person_add</v-icon>
+        <v-btn @click="newDialog = true" :color="primaryColor">{{ addBtnTitle }}
+          <v-icon class="ml-2">{{ addRecordIcon }}</v-icon>
         </v-btn>
       </v-toolbar>
       <v-data-table
+      id="table"
         :headers="headers"
         :items="items"
         :search="search"
@@ -59,6 +60,7 @@
       <th
         v-for="header in props.headers"
         :key="header.text"
+        :hidden="header.hidden"
         class="table-cell-header text-xs-left"
         :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
         @click="changeSort(header.value)"
@@ -84,10 +86,12 @@
         </td>
         <td
           class="text-xs-left"
+          :hidden="header.hidden"
           v-for="header in headers"
           :key="header.text"
+          :color="primaryColor"
         >
-          <v-edit-dialog
+          <!-- <v-edit-dialog
              :return-value.sync="props.item[header.value]"
              lazy
              large
@@ -96,9 +100,9 @@
              @save="msgSave"
              @cancel="msgCancel"
              @close="msgClose"
-           >
+           > -->
            <div>{{ props.item[header.value] }}</div>
-           <div slot="input" class="my-3 title">{{ header.text }}</div>
+           <!-- <div slot="input" class="my-3 title">{{ header.text }}</div>
              <v-text-field
                v-if="header.cellType == 'tb'"
                slot="input"
@@ -114,13 +118,26 @@
                v-model="props.item[header.value]"
                :items="menuItems"
                :label="header.text"
-               color="primary"
+               :color="primaryColor"
                large
                outline
              ></v-select>
-         </v-edit-dialog>
+         </v-edit-dialog> -->
         </td>
       </tr>
+    </template>
+  <!-- Table: No Data Slot - spinner Loading, display Error -->
+    <template slot="no-data">
+      <BaseDataTableInfoCard
+      errorMsg="Unable to retrieve data from the server - Please contact your system administrator"
+      infoMsg="Loading data from the server - Please wait"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
+      :color="primaryColor"
+      :spinner="loading"
+      :hide="loading"
+      />
     </template>
     </v-data-table>
   <!-- Table: Footer Pagination CRUD function buttons -->
@@ -133,7 +150,7 @@
                 v-model="pagination.rowsPerPage"
                 :items="rows"
                 label="rows"
-                color="primary"
+                :color="primaryColor"
               ></v-select>
             </v-flex >
             <v-pagination
@@ -159,7 +176,7 @@
               <v-btn
                 slot="activator"
                 v-model="fab"
-                color="primary"
+                :color="primaryColor"
                 dark
                 fab
               >
@@ -167,25 +184,27 @@
                 <v-icon>close</v-icon>
               </v-btn>
               <v-btn
+                v-if="selected.length > 0"
                 @click="editDialog = true"
                 fab
                 dark
                 medium
-                color="green"
+                color="success"
               >
                 <v-icon>edit</v-icon>
               </v-btn>
               </v-btn>
               <v-btn
-                @click="save"
+                @click="newDialog"
                 fab
                 dark
                 medium
-                color="error"
+                color="success"
               >
-              <v-icon>save</v-icon>
+              <v-icon>add</v-icon>
               </v-btn>
               <v-btn
+                v-if="selected.length > 0"
                 @click="delDialog = true"
                 fab
                 dark
@@ -198,7 +217,7 @@
                 fab
                 dark
                 medium
-                color="primary"
+                :color="primaryColor"
                 @click="searchDisplay"
               >
                 <v-icon dark>search</v-icon>
@@ -212,8 +231,8 @@
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native.prevent="close">Cancel</v-btn>
-                <v-btn color="primary" flat @click.native.prevent="deleteItem">Delete</v-btn>
+                <v-btn :color="primaryColor" flat @click.native.prevent="close">Cancel</v-btn>
+                <v-btn :color="primaryColor" flat @click.native.prevent="deleteItem">Delete</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -225,14 +244,14 @@
               </v-card-title>
               <v-card-text>
                 <v-container>
-                  <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6 lg2>
+                  <v-layout row>
+                    <v-flex v-for="(item, key) in newItem" :key="key">
                       <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
                         :label="item.cellLabel"
                         v-model="newItem[key].sync"
-                        color="primary"
+                        :color="primaryColor"
                         outline
                         required
                       ></v-text-field>
@@ -240,9 +259,9 @@
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
                         v-model="newItem[key].sync"
-                        :items="menuItems"
+                        :items="newItem[key].menuItems"
                         :label="newItem[key].cellLabel"
-                        color="primary"
+                        :color="primaryColor"
                         outline
                         required
                       ></v-select>
@@ -252,54 +271,58 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
-                <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
+                <v-btn :color="secondaryColor" flat @click.native="close">Cancel</v-btn>
+                <v-btn :color="secondaryColor" flat @click.native="save">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
     <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="98%">
-            <v-card>
+            <v-card class="pa-0">
               <v-card-title>
-                <span class="table-header">{{ editDialogTitle }}</span>
+                <span class="pg-subheader">{{ editDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
-                  <v-layout v-for="(item, index) in selected" :key="index" row wrap justify-space-around>
-                    <v-flex v-for="(property, key) in item" :key="key" xs12 md6 lg2>
+                  <v-layout v-for="(item, index) in selected" :key="index">
+                    <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)">
                       <v-text-field
-                        class="ma-1"
-                        :label="key"
-                        v-model.sync="item[key]"
-                        color="primary"
-                        outline
-                        required
-                      >{{ item[key].value }}</v-text-field>
-                      <!-- <v-select
-                        v-else-if="item.cellType === 'md'"
-                        class="ma-1"
-                        v-model="newItem[key].sync"
-                        :items="menuItems"
-                        :label="newItem[key].cellLabel"
-                        color="primary"
-                        outline
-                        required
-                      ></v-select> -->
+                          v-if="inputType(key, 'tb')"
+                          class="ma-1"
+                          :label="key"
+                          v-model.sync="item[key]"
+                          :color="primaryColor"
+                          outline
+                          required
+                        >{{ item[key].value }}
+                      </v-text-field>
+                      <v-select
+                          v-if="inputType(key, 'md')"
+                          class="ma-1"
+                          v-model="item[key].sync"
+                          :items="menuItems(key)"
+                          :label="key"
+                          :placeholder="String(item[key])"
+                          :color="primaryColor"
+                          outline
+                          required
+                        >{{ item[key].value }}
+                      </v-select>
                     </v-flex>
                   </v-layout>
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
-                <v-btn color="primary darken-1" flat @click.native="saveChanges">save</v-btn>
+                <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
+                <v-btn :color="secondaryColor" flat @click.native="saveChanges">save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-container>
       </v-card>
       <v-layout row justify-center align-center ma-3>
-        <v-fade-transition>
+        <!-- <v-fade-transition>
           <v-btn class="pg-foot-btn" @click="$router.push('/landing')" color="primary" large>home
             <v-icon class="ml-2">home</v-icon>
           </v-btn>
@@ -308,14 +331,14 @@
           <v-btn class="pg-foot-btn" @click="" color="primary" large>save
             <v-icon class="ml-2">save</v-icon>
           </v-btn>
-        </v-fade-transition>
+        </v-fade-transition> -->
         <v-fade-transition>
-          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="editDialog = true" color="primary" large>edit record
+          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="editDialog = true" :color="primaryColor" large>edit record
             <v-icon class="ml-2">edit</v-icon>
           </v-btn>
         </v-fade-transition>
         <v-fade-transition>
-          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="delDialog = true" color="primary" large>delete
+          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="delDialog = true" :color="primaryColor" large>delete
             <v-icon class="ml-2">delete</v-icon>
           </v-btn>
         </v-fade-transition>
@@ -342,7 +365,7 @@
         <v-btn
           slot="activator"
           v-model="fab"
-          color="primary"
+          :color="primaryColor"
           dark
           small
           fab
@@ -350,16 +373,16 @@
           <v-icon>menu</v-icon>
           <v-icon>close</v-icon>
         </v-btn>
-        <!-- <v-btn
-          v-if="selected.length < 2"
+        <v-btn
+          v-if="selected.length > 0"
           @click="editDialog = true"
           fab
           dark
           small
-          color="green"
+          color="success"
         >
           <v-icon>edit</v-icon>
-        </v-btn> -->
+        </v-btn>
         <v-btn
           @click="save"
           fab
@@ -367,18 +390,19 @@
           small
           color="error"
         >
-        <v-icon>save</v-icon>
+        <v-icon>search</v-icon>
         </v-btn>
         <v-btn
           @click="newDialog = true"
           fab
           dark
           small
-          color="green"
+          :color="primaryColor"
         >
           <v-icon>add</v-icon>
         </v-btn>
         <v-btn
+          v-if="selected.length > 0"
           @click="delDialog = true"
           fab
           dark
@@ -387,7 +411,7 @@
         >
           <v-icon>delete</v-icon>
         </v-btn>
-        <v-btn fab dark small color="primary" @click="searchDisplay">
+        <v-btn fab dark small :color="primaryColor" @click="searchDisplay">
           <v-icon dark>search</v-icon>
         </v-btn>
       </v-speed-dial>
@@ -407,15 +431,14 @@
             append-outer-icon="close"
           ></v-text-field>
         </v-layout>
-  <!-- </v-card-title> -->
       </v-fade-transition>
   <!-- </v-toolbar> -->
       <v-data-table
         :headers="headers"
         :items="items"
         :search="search"
-        v-model="selected"
         :item-key="itemKey"
+        v-model="selected"
         select-all
         hide-actions
         :pagination.sync="pagination"
@@ -437,6 +460,7 @@
       <th
         v-for="header in props.headers"
         :key="header.text"
+        :hidden="header.hidden"
         class="table-cell-header text-xs-left"
         :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
         @click="changeSort(header.value)"
@@ -463,9 +487,10 @@
         <td
           class="text-xs-left"
           v-for="header in headers"
+          :hidden="header.hidden"
           :key="header.text"
         >
-          <v-edit-dialog
+          <!-- <v-edit-dialog
              :return-value.sync="props.item[header.value]"
              lazy
              large
@@ -474,9 +499,9 @@
              @save="msgSave"
              @cancel="msgCancel"
              @close="msgClose"
-           >
+           > -->
            <div>{{ props.item[header.value] }}</div>
-           <div slot="input" class="my-3 title">{{ header.text }}</div>
+           <!-- <div slot="input" class="my-3 title">{{ header.text }}</div>
              <v-text-field
                v-if="header.cellType == 'tb'"
                slot="input"
@@ -490,13 +515,13 @@
                slot="input"
                class="ma-1"
                v-model="props.item[header.value]"
-               :items="menuItems"
+               :items="headers"
                :label="header.text"
-               color="primary"
+               :color="primaryColor"
                large
                outline
              ></v-select>
-           </v-edit-dialog>
+           </v-edit-dialog> -->
         </td>
       </tr>
     </template>
@@ -511,7 +536,7 @@
                 v-model="pagination.rowsPerPage"
                 :items="rows"
                 label="rows"
-                color="primary"
+                :color="primaryColor"
               ></v-select>
             </v-flex >
             <v-pagination
@@ -530,8 +555,8 @@
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.native="close">Cancel</v-btn>
-                <v-btn color="primary" flat @click.native="deleteItem">Delete</v-btn>
+                <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
+                <v-btn :color="secondaryColor" flat @click.native="deleteItem">Delete</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -544,13 +569,13 @@
               <v-card-text>
                 <v-container>
                   <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                    <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
                       <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
                         :label="item.cellLabel"
                         v-model="newItem[key].sync"
-                        color="primary"
+                        :color="primaryColor"
                         outline
                         required
                       ></v-text-field>
@@ -558,9 +583,9 @@
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
                         v-model="newItem[key].sync"
-                        :items="menuItems"
+                        :items="menuItems(key)"
                         :label="newItem[key].cellLabel"
-                        color="primary"
+                        :color="primaryColor"
                         outline
                         required
                       ></v-select>
@@ -570,27 +595,38 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary darken-1" flat @click.native.stop="close">Cancel</v-btn>
-                <v-btn color="primary darken-1" flat @click.native.stop="save">Save</v-btn>
+                <v-btn :color="primaryColor" flat @click.native.stop="close">Cancel</v-btn>
+                <v-btn :color="secondaryColor" flat @click.native.stop="save">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
   <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="500px">
             <v-card>
-              <v-card-title>
-                <span class="table-header">{{ editDialogTitle }}</span>
+              <v-card-title class="pa-0">
+                <v-layout class="ma-0 pa-0" row fill-height justify-center>
+                  <span class="table-header mt-3">{{ editDialogTitle }}</span>
+                </v-layout>
               </v-card-title>
               <v-card-text>
-                <v-container>
+                <v-container class="ma-0 pa-0">
+                  <v-layout class="mx-3 my-2" row fill-height justify-center>
+                    <v-btn class="mx-3 my-0" fab small :color="primaryColor">
+                      <v-icon>arrow_left</v-icon>
+                    </v-btn>
+                      <v-btn class="mx-3 mt-0" fab small :color="primaryColor">
+                        <v-icon>arrow_right</v-icon>
+                      </v-btn>
+                    </v-btn>
+                  </v-layout>
                   <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="item.name" xs12 md6>
+                    <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
                       <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
                         :label="item.cellLabel"
                         v-model="newItem[key].sync"
-                        color="primary"
+                        :color="primaryColor"
                         outline
                         required
                       ></v-text-field>
@@ -598,9 +634,9 @@
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
                         v-model="newItem[key].sync"
-                        :items="menuItems"
+                        :items="menuItems(key)"
                         :label="newItem[key].cellLabel"
-                        color="primary"
+                        :color="primaryColor"
                         outline
                         required
                       ></v-select>
@@ -608,10 +644,15 @@
                   </v-layout>
                 </v-container>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary darken-1" flat @click.native="close">Cancel</v-btn>
-                <v-btn color="primary darken-1" flat @click.native="save">Save</v-btn>
+              <v-card-actions colum>
+
+
+                <v-layout row wrap>
+                  <v-spacer></v-spacer>
+                  <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
+                  <v-btn :color="secondaryColor" flat @click.native="save">Save</v-btn>
+                </v-layout>
+
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -626,11 +667,11 @@
 </template>
 
 <script>
-import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
+import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
   components: {
-    SubPageNavButton
+    BaseDataTableInfoCard
   },
   name: 'BaseDataTable',
   data () {
@@ -661,19 +702,26 @@ export default {
     }
   },
   props: {
+    loading: Boolean,
+    loaded: Boolean,
+    error: Boolean,
     items: Array,
     headers: Array,
-    menuItems: Array,
-    btnTitle: String,
+    primaryColor: String,
+    secondaryColor: String,
     newDialogTitle: String,
     editDialogTitle: String,
     delDialogTitle: String,
     tableTitle: String,
     newItem: Array,
+    editItem: Object,
     itemKey: String,
     searchLabel: String,
     msgDel: String,
-    titleDel: String
+    titleDel: String,
+    recordIcon: String,
+    addRecordIcon: String,
+    addBtnTitle: String
   },
   computed: {
     pages () {
@@ -691,8 +739,26 @@ export default {
       this.selected = []
       this.delDialog = false
     },
+    inputType (key, type) {
+      for (var i = 0; i < this.newItem.length; i++) {
+        if (this.newItem[i].cellLabel) {
+          if (this.newItem[i].cellType === type) {
+            return true
+          } else {
+            return false
+          }
+        }
+      }
+    },
+    menuItems (key) {
+      for (var i = 0; i < this.newItem.length; i++) {
+        console.log("retrun menItem: ", this.newItem[i].menuItems, i)
+        if (this.newItem[i].cellLabel === key) return this.newItem[i].menuItems
+      }
+    },
     close () {
-      if(this.selected.length) this.selected = []
+      // console.log(this.selected);
+      if (this.selected.length) this.selected = []
       this.editDialog = false
       this.newDialog = false
       this.delDialog = false
@@ -716,13 +782,11 @@ export default {
       }
     },
     save () {
-      console.log('Fired')
       this.$emit('newItem', this.newItem)
       this.close()
     },
     saveChanges () {
-      console.log(this.selected)
-      console.log(this.items)
+      this.$emit('itemsEdited', this.selected)
       this.close()
       this.selected = []
     },
@@ -738,15 +802,12 @@ export default {
     },
     msgOpen () {
       this.snack = true
-      this.snackColor = 'info'
+      this.snackColor = 'success'
       this.snackText = 'Dialog opened'
     },
     msgClose () {
       console.log('Snackbar closed')
     }
-  },
-  mounted () {
-    console.log(this.items)
   }
 }
 </script>

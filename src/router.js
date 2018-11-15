@@ -5,16 +5,14 @@ import Login from './views/common/Login.vue'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
-    { path: '',
-      redirect: { name: 'Login' },
-      component: Login
-    },
     // Common routes
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
+      // redirect: { name: 'Login' }
     },
     {
       path: '/landing',
