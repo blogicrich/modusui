@@ -608,38 +608,42 @@
                   <span class="table-header mt-3">{{ editDialogTitle }}</span>
                 </v-layout>
               </v-card-title>
-              <v-card-text>
-                <v-container class="ma-0 pa-0">
-                  <v-layout class="mx-3 my-2" row fill-height justify-center>
-                    <v-btn class="mx-3 my-0" fab small :color="primaryColor">
-                      <v-icon>arrow_left</v-icon>
-                    </v-btn>
-                      <v-btn class="mx-3 mt-0" fab small :color="primaryColor">
-                        <v-icon>arrow_right</v-icon>
+                <v-card-text>
+                  <v-container class="ma-0 pa-0">
+                    <v-layout v-for="(item, index) in selected" :key="index" v-if="index === editIndex" column>
+                    <v-layout class="mx-3 my-2" row fill-height justify-center>
+                      <v-btn class="mx-3 my-0" fab small :color="primaryColor" @click="decrement(index)">
+                        <v-icon large>arrow_left</v-icon>
+                      </v-btn>
+                      <v-btn class="mx-3 mt-0" fab small :color="primaryColor" @click="increment(index)">
+                        <v-icon large>arrow_right</v-icon>
                       </v-btn>
                     </v-btn>
                   </v-layout>
-                  <v-layout row wrap justify-space-around>
-                    <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
+
+                    <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)" xs12>
                       <v-text-field
-                        v-if="item.cellType === 'tb'"
-                        class="ma-1"
-                        :label="item.cellLabel"
-                        v-model="newItem[key].sync"
-                        :color="primaryColor"
-                        outline
-                        required
-                      ></v-text-field>
+                          v-if="inputType(key, 'tb')"
+                          class="ma-1"
+                          :label="key"
+                          v-model.sync="item[key]"
+                          :color="primaryColor"
+                          outline
+                          required
+                        >{{ item[key].value }}
+                      </v-text-field>
                       <v-select
-                        v-else-if="item.cellType === 'md'"
-                        class="ma-1"
-                        v-model="newItem[key].sync"
-                        :items="menuItems(key)"
-                        :label="newItem[key].cellLabel"
-                        :color="primaryColor"
-                        outline
-                        required
-                      ></v-select>
+                          v-if="inputType(key, 'md')"
+                          class="ma-1"
+                          v-model="item[key].sync"
+                          :items="menuItems(key)"
+                          :label="key"
+                          :placeholder="String(item[key])"
+                          :color="primaryColor"
+                          outline
+                          required
+                        >{{ item[key].value }}
+                      </v-select>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -676,6 +680,7 @@ export default {
   data () {
     return {
       rows: [ 5, 10, 15, 20, 25, 50, 100 ],
+      editIndex: 0,
       editDialog: false,
       search: '',
       selected: [],
@@ -733,6 +738,20 @@ export default {
     }
   },
   methods: {
+    decrement (index) {
+      if (this.selected[index] && this.selected[index-1]) {
+        this.editIndex = index - 1
+      } else {
+        return 0
+      }
+    },
+    increment (index) {
+      if (this.selected[index] && this.selected[index+1]) {
+        this.editIndex = index + 1
+      } else {
+        return this.selected.length
+      }
+    },
     deleteItem () {
       this.$emit('deleteSelected', this.selected)
       this.selected = []
