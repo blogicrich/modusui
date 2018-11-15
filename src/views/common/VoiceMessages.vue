@@ -1,11 +1,11 @@
 <template lang="html">
-  <selectComponent
-    :users= "users"
-    btnTitle= "Select Users"
-    selectAll= "Select all"
-    searchName= "Search user.."
-  ></selectComponent>
   <v-container>
+    <selectComponent
+      :users="users"
+      btnTitle="Select Users"
+      selectAll="Select all"
+      searchName="Search user.."
+    ></selectComponent>
     <v-layout>
       <v-flex xs12>
         <v-layout row align-start justify-space-between>
@@ -92,7 +92,7 @@
 
 <script>
 import { getData } from '@/mixins/apiRequests'
-import selectComponent from '../../components/base/BaseUserSelectComponent.vue'
+import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
 export default {
   name: 'VoiceMessageViewComponent',
@@ -103,6 +103,7 @@ export default {
   mixins: [getData],
   data () {
     return {
+      users: ["Tamara", "Justin", "David", "Jon", "Me"],
       uploadIcon: 'cloud_upload',
       // Messages reminders
       msgReminderIntervalSettings: [

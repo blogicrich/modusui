@@ -646,7 +646,6 @@
               </v-card-text>
               <v-card-actions colum>
 
-
                 <v-layout row wrap>
                   <v-spacer></v-spacer>
                   <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
@@ -752,7 +751,7 @@ export default {
     },
     menuItems (key) {
       for (var i = 0; i < this.newItem.length; i++) {
-        console.log("retrun menItem: ", this.newItem[i].menuItems, i)
+        console.log('retrun menItem: ', this.newItem[i].menuItems, i)
         if (this.newItem[i].cellLabel === key) return this.newItem[i].menuItems
       }
     },

@@ -62,42 +62,42 @@ export default {
         { text: 'Mobile Number', align: 'left', sortable: false, value: 'mobileNo', cellType: 'tb', hidden: true, editable: true },
         { text: 'password', align: 'left', sortable: false, value: 'password', cellType: 'tb', hidden: true, editable: true },
         { text: 'Email', align: 'left', sortable: false, value: 'email', cellType: 'tb', hidden: true, editable: true },
-        { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true},
+        { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
         { text: 'Given Name', value: 'givenName', cellType: 'tb', hidden: false, editable: true },
         { text: 'Family Name', value: 'familyName', cellType: 'tb', hidden: false, editable: true },
         { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: false, editable: true },
         { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
-        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators:[]  },
-        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators:[]  },
-        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators:[] },
-        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators:[] },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators:[] },
-        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators:[] },
-        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators:[] }
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators: [] },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators: [] },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators: [] },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators: [] },
+        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators: [] },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators: [] },
+        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators: [] },
+        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators: [] }
       ],
       defaultItem: [
         { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ],
       urls: [
-        { url:'titleget', attr: 'titleId', key: 'shortDescription'},
-        { url:'sysadget', attr: 'username', key: 'username'},
-      ],
+        { url: 'titleget', attr: 'titleId', key: 'shortDescription' },
+        { url: 'sysadget', attr: 'username', key: 'username' }
+      ]
     }
   },
   methods: {
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
-        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators:[]  },
-        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators:[]  },
-        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators:[] },
-        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators:[] },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators:[] },
-        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators:[] },
-        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators:[] },
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators: [] },
+        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators: [] },
+        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators: [] },
+        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators: [] },
+        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators: [] },
+        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators: [] },
+        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators: [] },
+        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
         { titleId: 0, givenName: ' ', familyName: ' ', corporateIdentification: ' ', username: ' ', mobileNo: ' ', password: ' ', email: ' ' }

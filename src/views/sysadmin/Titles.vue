@@ -58,12 +58,12 @@ export default {
       headers: [
         { text: 'titleId', align: 'left', sortable: false, value: 'titleId', cellType: 'tb', hidden: true },
         { text: 'shortDescription', align: 'left', sortable: false, value: 'shortDescription', cellType: 'tb', hidden: false },
-        { text: 'LongDescription', align: 'left', sortable: false, value: 'longDescription', cellType: 'tb', hidden: false },
+        { text: 'LongDescription', align: 'left', sortable: false, value: 'longDescription', cellType: 'tb', hidden: false }
       ],
       newItem: [
         // { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
-        { shortDescription: '', cellType: 'tb', cellLabel: 'shortDescription', menuItems: [], validators:[]  },
-        { LongDescription: '', cellType: 'tb', cellLabel: 'longDescription', menuItems: [], validators:[]  },
+        { shortDescription: '', cellType: 'tb', cellLabel: 'shortDescription', menuItems: [], validators: [] },
+        { LongDescription: '', cellType: 'tb', cellLabel: 'longDescription', menuItems: [], validators: [] }
       ],
       defaultItem: [
         { titleId: 0, shortDescription: ' ', longDesription: ' ' }
@@ -74,9 +74,9 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
-        { shortDescription: '', cellType: 'tb', cellLabel: 'Abbreviation', menuItems: [], validators:[]  },
-        { LongDescription: '', cellType: 'tb', cellLabel: 'Long Desription', menuItems: [], validators:[]  },
+        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators: [] },
+        { shortDescription: '', cellType: 'tb', cellLabel: 'Abbreviation', menuItems: [], validators: [] },
+        { LongDescription: '', cellType: 'tb', cellLabel: 'Long Desription', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
         { titleId: 0, shortDescription: ' ', longDesription: ' ' }

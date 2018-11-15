@@ -42,8 +42,8 @@ export default {
   },
   mounted () {
     this.getData('hydrationtolerancesdisplay')
-      // .then((response) => { this.level4 = response.data })
-      // .catch(error => { console.log(error) })
+    // .then((response) => { this.level4 = response.data })
+    // .catch(error => { console.log(error) })
   }
 }
 </script>
