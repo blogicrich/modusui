@@ -17,9 +17,9 @@
             <v-layout justify-space-between>
               <div>
                 <v-checkbox
-                  v-bind:label="SelectAll"
-                  v-model="allUsers"
-                  @click.native="selectAll">
+                  v-model="allSelected"
+                  v-bind:label="selectAll"
+                  @change="toggleAll">
                 </v-checkbox>
               </div>
               <div>
@@ -74,8 +74,8 @@ export default {
   data () {
     return {
       dialog: true,
+      allSelectSave: '',
       allSelected: false,
-      allUsers: [],
       savedUsers: [],
       selectedUsers: [],
       search: ''
@@ -84,7 +84,7 @@ export default {
   props: {
     users: Array,
     btnTitle: String,
-    SelectAll: String,
+    selectAll: String,
     searchName: String
   },
   methods: {
@@ -92,39 +92,31 @@ export default {
       if (this.savedUsers.length >= 1) {
         this.dialog = false
         this.selectedUsers = this.savedUsers
+        this.allSelected = this.allSelectSave
       }
     },
     save () {
       if (this.selectedUsers.length >= 1) {
         this.dialog = false
         this.savedUsers = this.selectedUsers
+        this.allSelectSave = this.allSelected
       }
     },
-    selectAll () {
-      this.allSelected = !this.allSelected
-      if (this.allSelected) {
-        let name
-        for (name in this.users) {
-          this.allUsers.push(this.users[name].name.toString())
+    toggleAll (checked) {
+      if (checked) {
+        this.selectedUsers = []
+        for (var i = 0; i < this.users.length; i++) {
+          this.selectedUsers.push(this.users[i].name.toString())
         }
-        this.selectedUsers = this.allUsers
-        this.selectedUsers = this.selectedUsers.slice(1, this.selectedUsers.length)
-      }
-      else {
-        this.allUsers = []
+      } else {
         this.selectedUsers = []
       }
     },
     select () {
       if (this.selectedUsers.length === this.users.length) {
         this.allSelected = true
-        for (var i = 0; i < this.users.length; i++) {
-          this.allUsers.push(this.users[i].name.toString())
-        }
-      }
-      else{
+      } else {
         this.allSelected = false
-        this.allUsers = []
       }
     }
   },

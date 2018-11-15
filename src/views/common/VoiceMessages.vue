@@ -2,7 +2,7 @@
   <selectComponent
     :users= "users"
     btnTitle= "Select Users"
-    SelectAll= "Select all"
+    selectAll= "Select all"
     searchName= "Search user.."
   ></selectComponent>
 </template>
