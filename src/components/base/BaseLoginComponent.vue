@@ -76,18 +76,18 @@ export default {
       errMsg: undefined,
       hide: false,
       meta: null,
-      values: null,
+      values: null
     }
   },
   props: {
     msg: String,
     isActive: Boolean,
-    isAuthenticating: Boolean,
+    isAuthenticating: Boolean
 
   },
   methods: {
     checkValues () {
-      this.$emit('authenticate', { password:this.input.password, username: this.input.username })
+      this.$emit('authenticate', { password: this.input.password, username: this.input.username })
     }
   }
 }

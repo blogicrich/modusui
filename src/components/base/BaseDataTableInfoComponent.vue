@@ -45,22 +45,22 @@
 
 <script>
 
-  export default {
-    name: 'BaseGermDataTableComponent',
-    props: {
-      // Messages
-      infoMsg: String,
-      infoTitle: String,
-      spinner: Boolean,
-      errorMsg: String,
-      color: String,
-      // Bools
-      loading: Boolean,
-      loaded: Boolean,
-      error: Boolean,
-      hide: Boolean
-    }
+export default {
+  name: 'BaseGermDataTableComponent',
+  props: {
+    // Messages
+    infoMsg: String,
+    infoTitle: String,
+    spinner: Boolean,
+    errorMsg: String,
+    color: String,
+    // Bools
+    loading: Boolean,
+    loaded: Boolean,
+    error: Boolean,
+    hide: Boolean
   }
+}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">

@@ -16,13 +16,13 @@ export default {
   components: {
     BaseLogin
   },
-  mixins:[getData, postData],
+  mixins: [getData, postData],
   data: function () {
     return {
       msg: '',
       active: false,
       isAuthenticating: false,
-      isActive: false,
+      isActive: false
       // src: './src/assets/ed_logo.svg'
     }
   },
@@ -30,21 +30,21 @@ export default {
     async submitCredentials (item) {
       // this.isAuthenticating = true
       var response = await this.postData('login', item)
-        for (var i = 0; i < response.length; i++) {
-          if (response[i].description) {
-            this.isActive = false
-            this.$emit('authenticated', {state: true, level: response[i].description })
-          } else {
-            this.$emit('authenticated', {state: false, level: null})
-            this.msg = response
-            this.isActive = true
-          }
+      for (var i = 0; i < response.length; i++) {
+        if (response[i].description) {
+          this.isActive = false
+          this.$emit('authenticated', { state: true, level: response[i].description })
+        } else {
+          this.$emit('authenticated', { state: false, level: null })
+          this.msg = response
+          this.isActive = true
         }
+      }
       this.isAuthenticating = false
     }
   },
   mounted () {
-      console.log(this.$route.params)
+    console.log(this.$route.params)
   }
 }
 </script>
