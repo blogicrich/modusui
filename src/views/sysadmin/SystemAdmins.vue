@@ -23,7 +23,18 @@
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
+      @itemsCancelled="notify"
     />
+  <v-snackbar
+    v-model="snack"
+    bottom
+    :timeout="timeout"
+    :color="snackColor"
+  >
+  <!-- <v-snackbar v-if="this.$vuetify.breakpoint.xsAndUp" v-model="snack" :timeout="3000" :color="snackColor"> -->
+    {{ snackText }}
+    <v-btn flat @click="snack = false">Close</v-btn>
+  </v-snackbar>
   </v-container>
 </template>
 
@@ -42,6 +53,10 @@ export default {
     return {
       items: [],
       name: 'name',
+      snackColor: 'primary',
+      snackText: '',
+      snack: false,
+      timeout: 6000,
       loading: true,
       loaded: false,
       error: false,
@@ -69,14 +84,14 @@ export default {
         { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { titleId: 0, cellType: 'md', cellLabel: 'titleId', menuItems: [], validators: [] },
-        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators: [] },
-        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators: [] },
-        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators: [] },
-        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators: [] },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators: [] },
-        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators: [] },
-        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators: [] }
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
+        { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
+        { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
+        { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
+        { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
+        { mobileNo: ' ', cellType: 'tb', attr: 'mobileNo', cellLabel: 'Mobile Number', menuItems: [], validators: [] },
+        { email: ' ', cellType: 'tb', attr: 'email', cellLabel: 'Email', menuItems: [], validators: [] },
+        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ],
       defaultItem: [
         { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
@@ -90,18 +105,21 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'md', cellLabel: 'titleId', menuItems: [], validators: [] },
-        { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators: [] },
-        { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators: [] },
-        { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators: [] },
-        { username: '', cellType: 'tb', cellLabel: 'username', menuItems: [], validators: [] },
-        { mobileNo: '', cellType: 'tb', cellLabel: 'mobileNo', menuItems: [], validators: [] },
-        { email: '', cellType: 'tb', cellLabel: 'email', menuItems: [], validators: [] },
-        { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators: [] }
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
+        { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
+        { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
+        { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
+        { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
+        { mobileNo: ' ', cellType: 'tb', attr: 'mobileNo', cellLabel: 'Mobile Number', menuItems: [], validators: [] },
+        { email: ' ', cellType: 'tb', attr: 'email', cellLabel: 'Email', menuItems: [], validators: [] },
+        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
         { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ]
+    },
+    notify(items) {
+      this.showSnack(items.snackText, items.snackColor)
     }
   },
   created () {

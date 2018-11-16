@@ -1,4 +1,11 @@
 export const crudOperations = {
+  // data () {
+  //   return {
+  //     snackColor: 'primary',
+  //     snackText: '',
+  //     snack: false
+  //   }
+  // },
   methods: {
     async addItem (item) {
       var row = {}
@@ -40,7 +47,7 @@ export const crudOperations = {
         }
       }
       this.resetItem()
-      this.showSnack('Items Edited', 'sucess')
+      this.showSnack('Items Edited', 'success')
       this.getItems(this.readUrl)
       // console.log(this.defaultItem)
     },
@@ -72,7 +79,7 @@ export const crudOperations = {
             values.push(menuItems[j][urls[i].key])
           }
           for (var k = 0; k < this.newItem.length; k++) {
-            if (this.newItem[k].cellLabel === urls[i].attr)
+            if (this.newItem[k].attr === urls[i].attr)
               this.newItem[k].menuItems = values
           }
         }

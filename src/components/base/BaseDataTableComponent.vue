@@ -1,16 +1,5 @@
 <template>
   <div>
-    <v-snackbar
-      v-model="snack"
-      bottom
-      absolute
-      :timeout="timeout"
-      :color="snackColor"
-    >
-    <!-- <v-snackbar v-if="this.$vuetify.breakpoint.xsAndUp" v-model="snack" :timeout="3000" :color="snackColor"> -->
-      {{ snackText }}
-      <v-btn flat @click="snack = false">Close</v-btn>
-    </v-snackbar>
     <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
         <h2 class="table-header">{{ tableTitle }}</h2>
@@ -206,7 +195,7 @@
               </v-btn>
               </v-btn>
               <v-btn
-                @click="newDialog"
+                @click="newDialog = true"
                 fab
                 dark
                 medium
@@ -270,7 +259,7 @@
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
                         v-model="newItem[key].sync"
-                        :items="newItem[key].menuItems"
+                        :items="item.menuItems"
                         :label="newItem[key].cellLabel"
                         :color="primaryColor"
                         outline
@@ -296,11 +285,11 @@
               <v-card-text>
                 <v-container>
                   <v-layout v-for="(item, index) in selected" :key="index">
-                    <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attr => attr.cellLabel === key)">
+                    <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attribute => attribute.attr === key)">
                       <v-text-field
                         v-if="inputType(item, key, 'tb')"
                         class="ma-1"
-                        :label="key"
+                        :label="getCellLabel(item, key, index)"
                         v-model.sync="item[key]"
                         :color="primaryColor"
                         outline
@@ -390,21 +379,21 @@
         >
           <v-icon>edit</v-icon>
         </v-btn>
-        <v-btn
-          @click="save"
+        <!-- <v-btn
+          @click="searchBarHidden = !searchBarHidden"
           fab
           dark
           small
           color="error"
         >
         <v-icon>search</v-icon>
-        </v-btn>
+        </v-btn> -->
         <v-btn
           @click="newDialog = true"
           fab
           dark
           small
-          :color="primaryColor"
+          color="success"
         >
           <v-icon>add</v-icon>
         </v-btn>
@@ -418,7 +407,7 @@
         >
           <v-icon>delete</v-icon>
         </v-btn>
-        <v-btn fab dark small :color="primaryColor" @click="searchDisplay">
+        <v-btn fab dark small :color="primaryColor" @click="searchBarHidden = !searchBarHidden">
           <v-icon dark>search</v-icon>
         </v-btn>
       </v-speed-dial>
@@ -627,28 +616,28 @@
                       </v-btn>
                     </v-btn>
                   </v-layout>
-                    <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attr => attr.cellLabel === key)">
+                    <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attribute => attribute.attr === key)">
                       <v-text-field
-                          v-if="inputType(item, key, 'tb')"
-                          class="ma-1"
-                          :label="key"
-                          v-model.sync="item[key]"
-                          :color="primaryColor"
-                          outline
-                          required
-                        >{{ item[key].value }}
+                        v-if="inputType(item, key, 'tb')"
+                        class="ma-1"
+                        :label="getCellLabel(item, key, index)"
+                        v-model.sync="item[key]"
+                        :color="primaryColor"
+                        outline
+                        required
+                      >{{ item[key].value }}
                       </v-text-field>
                       <v-select
-                          v-if="inputType(item, key, 'md')"
-                          class="ma-1"
-                          v-model="item[key]"
-                          :items="menuItems(key)"
-                          :label="key"
-                          :placeholder="item[key].value"
-                          :color="primaryColor"
-                          outline
-                          required
-                        >{{ item[key].value }}
+                        v-if="inputType(item, key, 'md')"
+                        class="ma-1"
+                        v-model="item[key]"
+                        :items="menuItems(key)"
+                        :label="getCellLabel(item, key, index)"
+                        :placeholder="item[key].value"
+                        :color="primaryColor"
+                        outline
+                        required
+                        >
                       </v-select>
                     </v-flex>
                   </v-layout>
@@ -679,7 +668,6 @@ export default {
   name: 'BaseDataTable',
   data () {
     return {
-      timeout: 6000,
       rows: [ 5, 10, 15, 20, 25, 50, 100 ],
       editIndex: 0,
       editDialog: false,
@@ -687,9 +675,6 @@ export default {
       selected: [],
       searchBarHidden: false,
       pagination: {},
-      snackColor: 'primary',
-      snackText: '',
-      snack: false,
       delDialog: false,
       editDialog: false,
       newDialog: false,
@@ -739,6 +724,23 @@ export default {
     }
   },
   methods: {
+    changeSort (column) {
+      if (this.pagination.sortBy === column) {
+        this.pagination.descending = !this.pagination.descending
+      } else {
+        this.pagination.sortBy = column
+        this.pagination.descending = false
+      }
+    },
+    close () {
+      // console.log(this.selected);
+      if (this.selected.length) this.selected = []
+      this.editDialog = false
+      this.newDialog = false
+      this.delDialog = false
+      this.$emit('itemsCancelled', { snackText:'Items Cancelled', snackColor: 'error' })
+      // console.log('Dialog Closing')
+    },
     decrement (index) {
       if (this.selected[index] && this.selected[index-1]) {
         this.editIndex = index - 1
@@ -746,21 +748,28 @@ export default {
         return 0
       }
     },
+    deleteItem () {
+      this.$emit('deleteSelected', this.selected)
+      this.selected = []
+      this.delDialog = false
+    },
+    getCellLabel(item, key, index) {
+      for (var i = 0; i < this.newItem.length; i++) {
+        console.log(this.newItem[i].attr, key);
+        if (this.newItem[i].attr === key) return this.newItem[i].cellLabel
+      }
+    },
     increment (index) {
+      console.log(this.selected);
       if (this.selected[index] && this.selected[index+1]) {
         this.editIndex = index + 1
       } else {
         return this.selected.length
       }
     },
-    deleteItem () {
-      this.$emit('deleteSelected', this.selected)
-      this.selected = []
-      this.delDialog = false
-    },
     inputType (item, key, type) {
       for (var i = 0; i < this.newItem.length; i++) {
-        if (this.newItem[i].cellLabel === key) {
+        if (this.newItem[i].attr === key) {
           if (this.newItem[i].cellType === type) {
             return true
           } else {
@@ -772,16 +781,8 @@ export default {
     menuItems (key) {
       for (var i = 0; i < this.newItem.length; i++) {
         // console.log('retrun menItem: ', this.newItem[i].menuItems, i)
-        if (this.newItem[i].cellLabel === key) return this.newItem[i].menuItems
+        if (this.newItem[i].attr === key) return this.newItem[i].menuItems
       }
-    },
-    close () {
-      // console.log(this.selected);
-      if (this.selected.length) this.selected = []
-      this.editDialog = false
-      this.newDialog = false
-      this.delDialog = false
-      // console.log('Dialog Closing')
     },
     searchDisplay () {
       this.searchBarHidden = !this.searchBarHidden
@@ -791,14 +792,6 @@ export default {
     toggleAll () {
       if (this.selected.length) this.selected = []
       else this.selected = this.items.slice()
-    },
-    changeSort (column) {
-      if (this.pagination.sortBy === column) {
-        this.pagination.descending = !this.pagination.descending
-      } else {
-        this.pagination.sortBy = column
-        this.pagination.descending = false
-      }
     },
     save () {
       this.$emit('newItem', this.newItem)
