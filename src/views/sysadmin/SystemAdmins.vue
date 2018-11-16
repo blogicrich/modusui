@@ -69,7 +69,7 @@ export default {
         { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', cellLabel: 'titleId', menuItems: [], validators: [] },
         { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators: [] },
         { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators: [] },
         { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators: [] },
@@ -82,7 +82,7 @@ export default {
         { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ],
       urls: [
-        { url: 'titleget', attr: 'titleId', key: 'shortDescription' },
+        { url: 'titleget', attr: 'titleId', key: 'titleId' },
         { url: 'sysadget', attr: 'username', key: 'username' }
       ]
     }
@@ -90,7 +90,7 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', cellLabel: 'titleId', menuItems: [], validators: [] },
         { givenName: '', cellType: 'tb', cellLabel: 'givenName', menuItems: [], validators: [] },
         { familyName: '', cellType: 'tb', cellLabel: 'familyName', menuItems: [], validators: [] },
         { corporateIdentification: 0, cellType: 'tb', cellLabel: 'corporateIdentification', menuItems: [], validators: [] },
@@ -100,7 +100,7 @@ export default {
         { password: '', cellType: 'tb', cellLabel: 'password', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { titleId: 0, givenName: ' ', familyName: ' ', corporateIdentification: ' ', username: ' ', mobileNo: ' ', password: ' ', email: ' ' }
+        { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ]
     }
   },

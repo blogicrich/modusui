@@ -45,8 +45,8 @@ export default {
       loading: true,
       loaded: false,
       error: false,
-      delUrl: 'titlesdelete',
-      updateUrl: 'titlesupdate',
+      delUrl: 'titledelete',
+      updateUrl: 'titleupdate',
       readUrl: 'titleget',
       createUrl: 'titlecreate',
       itemKey: 'titleId',
@@ -66,7 +66,7 @@ export default {
         { LongDescription: '', cellType: 'tb', cellLabel: 'longDescription', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { titleId: 0, shortDescription: ' ', longDesription: ' ' }
+        { titleId: 0, shortDescription: ' ', longDescription: ' ' }
       ],
       urls: []
     }
@@ -74,12 +74,12 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators: [] },
-        { shortDescription: '', cellType: 'tb', cellLabel: 'Abbreviation', menuItems: [], validators: [] },
-        { LongDescription: '', cellType: 'tb', cellLabel: 'Long Desription', menuItems: [], validators: [] }
+        // { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
+        { shortDescription: '', cellType: 'tb', cellLabel: 'shortDescription', menuItems: [], validators: [] },
+        { LongDescription: '', cellType: 'tb', cellLabel: 'longDescription', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { titleId: 0, shortDescription: ' ', longDesription: ' ' }
+        { titleId: 0, shortDescription: ' ', longDescription: ' ' }
       ]
     }
   },

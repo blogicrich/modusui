@@ -1,5 +1,16 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snack"
+      bottom
+      absolute
+      :timeout="timeout"
+      :color="snackColor"
+    >
+    <!-- <v-snackbar v-if="this.$vuetify.breakpoint.xsAndUp" v-model="snack" :timeout="3000" :color="snackColor"> -->
+      {{ snackText }}
+      <v-btn flat @click="snack = false">Close</v-btn>
+    </v-snackbar>
     <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
         <h2 class="table-header">{{ tableTitle }}</h2>
@@ -285,28 +296,28 @@
               <v-card-text>
                 <v-container>
                   <v-layout v-for="(item, index) in selected" :key="index">
-                    <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)">
+                    <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attr => attr.cellLabel === key)">
                       <v-text-field
-                          v-if="inputType(key, 'tb')"
-                          class="ma-1"
-                          :label="key"
-                          v-model.sync="item[key]"
-                          :color="primaryColor"
-                          outline
-                          required
-                        >{{ item[key].value }}
+                        v-if="inputType(item, key, 'tb')"
+                        class="ma-1"
+                        :label="key"
+                        v-model.sync="item[key]"
+                        :color="primaryColor"
+                        outline
+                        required
+                      >{{ item[key].value }}
                       </v-text-field>
                       <v-select
-                          v-if="inputType(key, 'md')"
-                          class="ma-1"
-                          v-model="item[key].sync"
-                          :items="menuItems(key)"
-                          :label="key"
-                          :placeholder="String(item[key])"
-                          :color="primaryColor"
-                          outline
-                          required
-                        >{{ item[key].value }}
+                        v-if="inputType(item, key, 'md')"
+                        class="ma-1"
+                        v-model="item[key]"
+                        :items="menuItems(key)"
+                        :label="key"
+                        :placeholder="item[key].value"
+                        :color="primaryColor"
+                        outline
+                        required
+                      >{{ item[key].value }}
                       </v-select>
                     </v-flex>
                   </v-layout>
@@ -343,12 +354,8 @@
           </v-btn>
         </v-fade-transition>
       </v-layout>
-      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-        {{ snackText }}
-        <v-btn flat @click="snack = false">Close</v-btn>
-      </v-snackbar>
     </div>
-  <!-- BREAKPOINT SMANDDOWN / MOBILE -->
+  <!-- BREAKPOINT MDANDDOWN / MOBILE -->
     <v-container v-if="this.$vuetify.breakpoint.mdAndDown" fluid>
       <v-speed-dial
         v-model="fab"
@@ -583,7 +590,7 @@
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
                         v-model="newItem[key].sync"
-                        :items="menuItems(key)"
+                        :items="newItem[key].menuItems"
                         :label="newItem[key].cellLabel"
                         :color="primaryColor"
                         outline
@@ -620,10 +627,9 @@
                       </v-btn>
                     </v-btn>
                   </v-layout>
-
-                    <v-flex v-for="(property, key) in item" :key="key" v-if="newItem.find(attr => attr.cellLabel === key)" xs12>
+                    <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attr => attr.cellLabel === key)">
                       <v-text-field
-                          v-if="inputType(key, 'tb')"
+                          v-if="inputType(item, key, 'tb')"
                           class="ma-1"
                           :label="key"
                           v-model.sync="item[key]"
@@ -633,12 +639,12 @@
                         >{{ item[key].value }}
                       </v-text-field>
                       <v-select
-                          v-if="inputType(key, 'md')"
+                          v-if="inputType(item, key, 'md')"
                           class="ma-1"
-                          v-model="item[key].sync"
+                          v-model="item[key]"
                           :items="menuItems(key)"
                           :label="key"
-                          :placeholder="String(item[key])"
+                          :placeholder="item[key].value"
                           :color="primaryColor"
                           outline
                           required
@@ -649,22 +655,16 @@
                 </v-container>
               </v-card-text>
               <v-card-actions colum>
-
                 <v-layout row wrap>
                   <v-spacer></v-spacer>
                   <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
-                  <v-btn :color="secondaryColor" flat @click.native="save">Save</v-btn>
+                  <v-btn :color="secondaryColor" flat @click.native="saveChanges">Save</v-btn>
                 </v-layout>
-
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-container>
       </v-card>
-      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-        {{ snackText }}
-        <v-btn flat @click="snack = false">Close</v-btn>
-      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -679,6 +679,7 @@ export default {
   name: 'BaseDataTable',
   data () {
     return {
+      timeout: 6000,
       rows: [ 5, 10, 15, 20, 25, 50, 100 ],
       editIndex: 0,
       editDialog: false,
@@ -757,9 +758,9 @@ export default {
       this.selected = []
       this.delDialog = false
     },
-    inputType (key, type) {
+    inputType (item, key, type) {
       for (var i = 0; i < this.newItem.length; i++) {
-        if (this.newItem[i].cellLabel) {
+        if (this.newItem[i].cellLabel === key) {
           if (this.newItem[i].cellType === type) {
             return true
           } else {
@@ -770,7 +771,7 @@ export default {
     },
     menuItems (key) {
       for (var i = 0; i < this.newItem.length; i++) {
-        console.log('retrun menItem: ', this.newItem[i].menuItems, i)
+        // console.log('retrun menItem: ', this.newItem[i].menuItems, i)
         if (this.newItem[i].cellLabel === key) return this.newItem[i].menuItems
       }
     },
@@ -780,7 +781,7 @@ export default {
       this.editDialog = false
       this.newDialog = false
       this.delDialog = false
-      console.log('Dialog Closing')
+      // console.log('Dialog Closing')
     },
     searchDisplay () {
       this.searchBarHidden = !this.searchBarHidden
@@ -807,24 +808,6 @@ export default {
       this.$emit('itemsEdited', this.selected)
       this.close()
       this.selected = []
-    },
-    msgSave () {
-      this.snack = true
-      this.snackColor = 'success'
-      this.snackText = 'Data saved'
-    },
-    msgCancel () {
-      this.snack = true
-      this.snackColor = 'error'
-      this.snackText = 'Canceled'
-    },
-    msgOpen () {
-      this.snack = true
-      this.snackColor = 'success'
-      this.snackText = 'Dialog opened'
-    },
-    msgClose () {
-      console.log('Snackbar closed')
     }
   }
 }
