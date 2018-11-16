@@ -103,7 +103,28 @@ export default {
   mixins: [getData],
   data () {
     return {
-      users: ["Tamara", "Justin", "David", "Jon", "Me"],
+      users: [
+        { name: 'Elsa' },
+        { name: 'Tamara' },
+        { name: 'Daniek' },
+        { name: 'Mitchell' },
+        { name: 'Jasper' },
+        { name: 'Bram' },
+        { name: 'Kevin' },
+        { name: 'Julian' },
+        { name: 'Patricia' },
+        { name: 'Marcel' },
+        { name: 'Fred' },
+        { name: 'Joke' },
+        { name: 'Kaily' },
+        { name: 'Bryan' },
+        { name: 'Michelle' },
+        { name: 'Lisa' },
+        { name: 'Cheyenne' },
+        { name: 'Shalina' },
+        { name: 'Naomi' },
+        { name: 'Leeroy' }
+      ],
       uploadIcon: 'cloud_upload',
       // Messages reminders
       msgReminderIntervalSettings: [
