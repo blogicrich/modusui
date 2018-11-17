@@ -24,7 +24,7 @@
         </v-layout>
         </v-flex>
         <v-flex class="mx-3" md3>
-          <h2 class="text-white pg-subheader">0.00</h2>
+          <h2 class="pg-subheader text-white">0.00</h2>
         </v-flex>
       </v-layout>
     </v-flex>

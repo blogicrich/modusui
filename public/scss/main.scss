@@ -3,6 +3,7 @@
 $main-blue: #00a1cd;
 $main-blue-highlight: rgba(0, 161, 205, 0.1);
 $main-error: #ff5252;
+$main-warning: #FFC107;
 $bg-grey: #f2f4f4;
 $text-body: #4d504f;
 $bg-white: #ffff;
@@ -58,8 +59,14 @@ $bg-white: #ffff;
 .text-white {
   color: white;
 }
+.text-warning {
+  color: #FFC107;
+}
 .text-error {
   color: #ff5252;
+}
+.text-primary {
+  color: #00a1cd;
 }
 .text-intervals {
   margin: 1vw;
@@ -75,11 +82,9 @@ $bg-white: #ffff;
   text-align: left;
   font-size: 1.5em;
   font-weight: bold;
-  color: $main-blue;
 }
 .card-subhead {
   font-size: 1em;
-  color: $text-body;
 }
 .input-subhead-search{
   outline: none;

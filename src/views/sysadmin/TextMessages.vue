@@ -34,6 +34,14 @@ export default {
         { name: 'No Drink', subject: 'No drink', text: 'No drink :(' }
       ]
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+    if (answer) {
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>

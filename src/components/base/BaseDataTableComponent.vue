@@ -129,14 +129,13 @@
   <!-- Table: No Data Slot - spinner Loading, display Error -->
     <template slot="no-data">
       <BaseDataTableInfoCard
-      errorMsg="Unable to retrieve data from the server - Please contact your system administrator"
-      infoMsg="Loading data from the server - Please wait"
+      :errorMsg="errorMsg"
+      :loadingMsg="loadingMsg"
+      :loadedMsg="loadedMsg"
       :loading="loading"
       :loaded="loaded"
       :error="error"
       :color="primaryColor"
-      :spinner="loading"
-      :hide="loading"
       />
     </template>
     </v-data-table>
@@ -280,7 +279,7 @@
           <v-dialog v-model="editDialog" max-width="98%">
             <v-card class="pa-0">
               <v-card-title>
-                <span class="pg-subheader">{{ editDialogTitle }}</span>
+                <span class="pg-subheader text-primary">{{ editDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -521,6 +520,17 @@
         </td>
       </tr>
     </template>
+    <template slot="no-data">
+      <BaseDataTableInfoCard
+      :errorMsg="errorMsg"
+      :loadingMsg="loadingMsg"
+      :loadedMsg="loadedMsg"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
+      :color="primaryColor"
+      />
+    </template>
     </v-data-table>
   <!-- Table: Footer Pagination CRUD function buttons -->
       <v-card>
@@ -542,7 +552,6 @@
               :length="pages"
               >
             </v-pagination>
-  <!-- Table: Footer Speed dial -->
           </v-layout>
   <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
@@ -695,6 +704,9 @@ export default {
     loading: Boolean,
     loaded: Boolean,
     error: Boolean,
+    errorMsg: String,
+    loadingMsg: String,
+    loadedMsg: String,
     items: Array,
     headers: Array,
     primaryColor: String,
@@ -738,11 +750,11 @@ export default {
       this.editDialog = false
       this.newDialog = false
       this.delDialog = false
-      this.$emit('itemsCancelled', { snackText:'Items Cancelled', snackColor: 'error' })
+      this.$emit('itemsCancelled', { snackText: 'Items Cancelled', snackColor: 'error' })
       // console.log('Dialog Closing')
     },
     decrement (index) {
-      if (this.selected[index] && this.selected[index-1]) {
+      if (this.selected[index] && this.selected[index - 1]) {
         this.editIndex = index - 1
       } else {
         return 0
@@ -753,15 +765,15 @@ export default {
       this.selected = []
       this.delDialog = false
     },
-    getCellLabel(item, key, index) {
+    getCellLabel (item, key, index) {
       for (var i = 0; i < this.newItem.length; i++) {
-        console.log(this.newItem[i].attr, key);
+        console.log(this.newItem[i].attr, key)
         if (this.newItem[i].attr === key) return this.newItem[i].cellLabel
       }
     },
     increment (index) {
-      console.log(this.selected);
-      if (this.selected[index] && this.selected[index+1]) {
+      console.log(this.selected)
+      if (this.selected[index] && this.selected[index + 1]) {
         this.editIndex = index + 1
       } else {
         return this.selected.length

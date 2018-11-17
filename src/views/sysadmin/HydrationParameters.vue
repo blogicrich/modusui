@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="pg-subheader text-center" text-xs-center>Hydration Parameters</h2>
+    <h2 class="pg-subheader text-primary text-center" text-xs-center>Hydration Parameters</h2>
     <br><br><br>
     <BaseToleranceSetter
       class="baseToleranceSetter"
@@ -44,6 +44,14 @@ export default {
     this.getData('hydrationtolerancesdisplay')
     // .then((response) => { this.level4 = response.data })
     // .catch(error => { console.log(error) })
+  },
+  beforeRouteLeave (to, from, next) {
+    const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+    if (answer) {
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>

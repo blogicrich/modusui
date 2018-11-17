@@ -14,7 +14,7 @@
           <selectComponent class="mx-2"></selectComponent>
         </v-layout>
         <v-card class="pa-2 my-3">
-          <h2 class="pg-subheader ma-2">{{ msgReminderGroupHeader}}</h2>
+          <h2 class="ma-2 pg-subheader text-primary">{{ msgReminderGroupHeader}}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
@@ -38,7 +38,7 @@
           </v-divider>
         </v-card>
         <v-card class="pa-2 my-3">
-          <h2 class="pg-subheader ma-2">{{ msgInstructGroupHeader }}</h2>
+          <h2 class="pg-subheader text-primary ma-2">{{ msgInstructGroupHeader }}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
@@ -62,7 +62,7 @@
           </v-divider>
         </v-card>
         <v-card class="pa-2 my-2">
-          <h2 class="pg-subheader ma-2">{{ msgPraiseGroupHeader }}</h2>
+          <h2 class="pg-subheader text-primary ma-2">{{ msgPraiseGroupHeader }}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
@@ -171,6 +171,14 @@ export default {
         { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
         { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ]
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+    if (answer) {
+      next()
+    } else {
+      next(false)
     }
   }
 }

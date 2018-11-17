@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md text-xs-center>
     <h1 class="pg-header">eDroplet Administration</h1>
-    <h2 class="pg-subheader">eDroplet Reminder Interval Options</h2>
+    <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
     <v-divider
       class="mx-2"
       color="#00a1cd"
@@ -27,7 +27,7 @@
         />
       </v-flex>
     </v-layout>
-      <h2 class="pg-subheader">eDroplet Comms Interval Options</h2>
+      <h2 class="pg-subheader text-primary">eDroplet Comms Interval Options</h2>
       <v-divider
         class="mx-2"
         color="#00a1cd"

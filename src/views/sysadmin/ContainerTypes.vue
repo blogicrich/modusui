@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-center mx-3" text-xs-center>Container Types</h2>
+    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-primary text-center mx-3" text-xs-center>Container Types</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -13,6 +13,9 @@
       :loading="loading"
       :loaded="loaded"
       :error="error"
+      :errorMsg="errorMsg"
+      :loadingMsg="loadingMsg"
+      :loadedMsg="loadedMsg"
       item-key="containerTypeId"
       searchLabel="Search Records..."
       tableTitle="Container Type Records"
@@ -31,7 +34,6 @@
     :timeout="timeout"
     :color="snackColor"
   >
-  <!-- <v-snackbar v-if="this.$vuetify.breakpoint.xsAndUp" v-model="snack" :timeout="3000" :color="snackColor"> -->
     {{ snackText }}
     <v-btn flat @click="snack = false">Close</v-btn>
   </v-snackbar>
@@ -52,7 +54,6 @@ export default {
   data () {
     return {
       items: [],
-      name: 'name',
       snackColor: '',
       snackText: '',
       snack: false,
@@ -60,15 +61,16 @@ export default {
       loading: true,
       loaded: false,
       error: false,
+      errorMsg: ' ',
+      loadingMsg: ' ',
+      loadedMsg: ' ',
       delUrl: 'containerdelete',
       updateUrl: 'containerupdate',
       readUrl: 'containerget',
       createUrl: 'containercreate',
-      itemKey: 'username',
-      idKey: 'personsId',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
-      icon: 'wc',
+      icon: 'local_drink',
       iconAdd: 'add',
       headers: [
         { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
@@ -79,13 +81,12 @@ export default {
         { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        // { containerTypeId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
         { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] },
+        { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { deptPersonsId: 0, personsId: 0, description: ' ', volume: 0 }
-      ],
+        { deptPersonsId: 0, personsId: 0, containerTypeId: 0, description: ' ', volume: 0 }
+      ]
       // urls: [
       //   { url: 'titleget', attr: 'titleId', key: 'titleId' },
       //   { url: 'sysadget', attr: 'username', key: 'username' }
@@ -96,13 +97,13 @@ export default {
     resetItem () {
       this.newItem = [
         { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] },
+        { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { deptPersonsId: 0, personsId: 0, description: ' ', volume: 0 }
+        { deptPersonsId: 0, personsId: 0, containerTypeId: 0, description: ' ', volume: 0 }
       ]
     },
-    notify(items) {
+    notify (items) {
       this.showSnack(items.snackText, items.snackColor)
     }
   },

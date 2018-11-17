@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-center mx-3" text-xs-center>System Administrators</h2>
+    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-primary text-center mx-3" text-xs-center>System Administrators</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -13,6 +13,9 @@
       :loading="loading"
       :loaded="loaded"
       :error="error"
+      :errorMsg="errorMsg"
+      :loadingMsg="loadingMsg"
+      :loadedMsg="loadedMsg" 
       item-key="username"
       searchLabel="Search Records..."
       tableTitle="System Administrator Records"
@@ -31,7 +34,6 @@
     :timeout="timeout"
     :color="snackColor"
   >
-  <!-- <v-snackbar v-if="this.$vuetify.breakpoint.xsAndUp" v-model="snack" :timeout="3000" :color="snackColor"> -->
     {{ snackText }}
     <v-btn flat @click="snack = false">Close</v-btn>
   </v-snackbar>
@@ -52,7 +54,6 @@ export default {
   data () {
     return {
       items: [],
-      name: 'name',
       snackColor: 'primary',
       snackText: '',
       snack: false,
@@ -60,12 +61,13 @@ export default {
       loading: true,
       loaded: false,
       error: false,
+      errorMsg: ' ',
+      loadingMsg: ' ',
+      loadedMsg: ' ',
       delUrl: 'sysaddelete',
       updateUrl: 'sysadupdate',
       readUrl: 'sysadget',
       createUrl: 'sysadcreate',
-      itemKey: 'username',
-      idKey: 'personsId',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'person',
@@ -118,7 +120,7 @@ export default {
         { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ]
     },
-    notify(items) {
+    notify (items) {
       this.showSnack(items.snackText, items.snackColor)
     }
   },

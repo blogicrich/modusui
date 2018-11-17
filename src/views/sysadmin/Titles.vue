@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-center mx-3" text-xs-center>Titles</h2>
+    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-primary text-center mx-3" text-xs-center>Titles</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -13,6 +13,9 @@
       :loading="loading"
       :loaded="loaded"
       :error="error"
+      :errorMsg="errorMsg"
+      :loadingMsg="loadingMsg"
+      :loadedMsg:="loadedMsg"
       item-key="titleId"
       searchLabel="Search Records..."
       tableTitle="Titles"
@@ -45,6 +48,9 @@ export default {
       loading: true,
       loaded: false,
       error: false,
+      errorMsg: ' ',
+      loadingMsg: ' ',
+      loadedMsg: ' ',
       delUrl: 'titledelete',
       updateUrl: 'titleupdate',
       readUrl: 'titleget',

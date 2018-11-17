@@ -5,7 +5,7 @@
     <h1 class="pg-header">eDroplet Administration</h1>
       <v-layout v-if="this.user == 'SYSTEM ADMINISTRATOR'" row wrap>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">Administrator Management</h2>
+          <h2 class="pg-subheader text-primary">Administrator Management</h2>
           <v-divider class="mb-2" color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="System Administrators"
@@ -13,7 +13,7 @@
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">Defaults Administration</h2>
+          <h2 class="pg-subheader text-primary text-primary">Defaults Administration</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="Interval Options"
@@ -21,7 +21,7 @@
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">Data Tables</h2>
+          <h2 class="pg-subheader text-primary text-primary">Data Tables</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="Titles"
@@ -36,12 +36,12 @@
             route="/genderoptions"
           />
           <SubLandingNavButton
-            title="Conditions"
-            route="/conditions"
+            title="Conditions Options"
+            route="/conditionsoptions"
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">Message options</h2>
+          <h2 class="pg-subheader text-primary text-primary">Message options</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="Text/Email Messages"
@@ -53,7 +53,7 @@
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">Hydration Parameters</h2>
+          <h2 class="pg-subheader text-primary text-primary">Hydration Parameters</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="Hydration Parameters"
@@ -65,7 +65,7 @@
       <h1 class="pg-header">Main Menu</h1>
         <v-layout row wrap>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">Authorised Persons</h2>
+          <h2 class="pg-subheader text-primary text-primary">Authorised Persons</h2>
           <v-divider class="my-1" color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="Personal Details"
@@ -73,7 +73,7 @@
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">eDroplet Settings</h2>
+          <h2 class="pg-subheader text-primary text-primary">eDroplet Settings</h2>
           <v-divider color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="Voice Message Management"
@@ -89,7 +89,7 @@
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader">eDroplet Management</h2>
+          <h2 class="pg-subheader text-primary text-primary">eDroplet Management</h2>
           <v-divider color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="eDroplet Management"
@@ -97,7 +97,7 @@
           />
         </v-flex>
         <v-flex xs12 md6>
-          <h2 class="pg-subheader text-center">Carer Settings</h2>
+          <h2 class="pg-subheader text-primary text-primary text-center">Carer Settings</h2>
           <v-divider color="#00a1cd"></v-divider>
           <SubLandingNavButton
             title="Personnel Settings"

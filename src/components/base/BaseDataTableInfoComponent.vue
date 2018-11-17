@@ -1,43 +1,55 @@
 <template>
   <v-fade-transition>
     <v-layout row fill-height align-center justify-center>
-      <v-flex class="mx-2 mb-5" v-if="loading" xs12>
-        <!-- <v-card class="elevation-3 ma-2 my-5" color="inherit"> -->
-          <!-- <v-card-title primary-title> -->
-              <v-layout class="my-3" row fill-height align-center justify-center>
-                <v-icon :color="color" size="36">info</v-icon>
-                <h2 class="text-xs-center pg-subheader">{{ infoMsg }}</h2>
-              </v-layout>
-          <!-- </v-card-title> -->
-          <!-- <v-card-text class="elevation-3" color="error"> -->
-
-            <v-layout justify-center>
-              <v-progress-circular
-                v-if="spinner"
-                :size="100"
-                :width="7"
-                :color="color"
-                indeterminate
-              ></v-progress-circular>
-            </v-layout>
-          <!-- </v-card-text> -->
-        <!-- </v-card> -->
+      <v-flex v-if="loading && this.$vuetify.breakpoint.mdAndUp" class="mx-2 mb-5" xs12>
+        <v-layout v-if="loading" class="my-3" row fill-height align-center justify-center>
+          <v-icon color="primary" size="36">info</v-icon>
+          <h2 class="text-xs-center pg-subheader text-primary">{{ loadingMsg }}</h2>
+        </v-layout>
+        <v-layout justify-center>
+          <v-progress-circular
+            v-if="loading"
+            :size="100"
+            :width="7"
+            :color="color"
+            indeterminate
+          ></v-progress-circular>
+        </v-layout>
       </v-flex>
-      <v-flex v-if="error" xs12>
-        <!-- <v-card class="elevation-3 ma-2 my-5" color="inherit"> -->
-          <!-- <v-card-title primary-title> -->
-              <v-layout class="my-3" row fill-height align-center justify-center>
-                <v-icon color="error" size="48">error</v-icon>
-                <h2 class="text-xs-center pg-header text-error">{{ errorMsg }}</h2>
-              </v-layout>
-          <!-- </v-card-title> -->
-          <!-- <v-card-text class="elevation-3" color="error"> -->
-
-            <v-layout justify-center>
-
-            </v-layout>
-          <!-- </v-card-text> -->
-        <!-- </v-card> -->
+      <v-flex v-if="loading && this.$vuetify.breakpoint.smAndDown" class="mx-2 mb-5" xs12>
+        <v-layout v-if="loading" class="my-3" row fill-height align-center justify-center>
+          <v-icon color="primary" size="24">info</v-icon>
+          <h2 class="text-xs-center card-subhead text-primary">{{ loadingMsg }}</h2>
+        </v-layout>
+        <v-layout justify-center>
+          <v-progress-circular
+            v-if="loading"
+            :size="50"
+            :width="5"
+            :color="color"
+            indeterminate
+          ></v-progress-circular>
+        </v-layout>
+      </v-flex>
+      <v-flex class="mx-2" v-if="loaded" xs12>
+        <v-layout v-if="loaded && this.$vuetify.breakpoint.mdAndUp"  class="my-3" row fill-height align-center justify-center>
+          <v-icon color="warning" size="36">warning</v-icon>
+          <h3 class="text-xs-center pg-subheader text-warning">{{ loadedMsg }}</h3>
+        </v-layout>
+        <v-layout v-if="loaded && this.$vuetify.breakpoint.smAndDown" class="my-3" row fill-height align-center justify-center>
+          <v-icon color="warning" size="24">warning</v-icon>
+          <h2 class="text-xs-center card-subhead text-warning">{{ loadedMsg }}</h2>
+        </v-layout>
+      </v-flex>
+      <v-flex class="mx-2" v-if="error" xs12>
+        <v-layout v-if="error && this.$vuetify.breakpoint.mdAndUp" class="my-3" row fill-height align-center justify-center>
+          <v-icon color="error" size="36">error</v-icon>
+          <h2 class="text-xs-center pg-subheader text-error">{{ errorMsg }}</h2>
+        </v-layout>
+        <v-layout v-if="error && this.$vuetify.breakpoint.smAndDown" class="my-3" row fill-height align-center justify-center>
+          <v-icon color="error" size="24">error</v-icon>
+          <h2 class="text-xs-center card-subhead text-error">{{ errorMsg }}</h2>
+        </v-layout>
       </v-flex>
     </v-layout>
 </v-fade-transition>
@@ -49,16 +61,14 @@ export default {
   name: 'BaseGermDataTableComponent',
   props: {
     // Messages
-    infoMsg: String,
-    infoTitle: String,
-    spinner: Boolean,
+    loadingMsg: String,
+    loadedMsg: String,
     errorMsg: String,
     color: String,
     // Bools
     loading: Boolean,
     loaded: Boolean,
     error: Boolean,
-    hide: Boolean
   }
 }
 </script>
