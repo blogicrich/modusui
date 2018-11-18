@@ -43,6 +43,9 @@ export default {
       this.isAuthenticating = false
     }
   },
+  created () {
+    this.$emit('authenticated', { state: false, level: null })
+  },
   mounted () {
     console.log(this.$route.params)
   }

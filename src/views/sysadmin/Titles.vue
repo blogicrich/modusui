@@ -26,7 +26,17 @@
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
+      @itemsCancelled="notify"
     />
+    <v-snackbar
+      v-model="snack"
+      bottom
+      :timeout="timeout"
+      :color="snackColor"
+    >
+      {{ snackText }}
+      <v-btn flat @click="snack = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -53,8 +63,8 @@ export default {
       loadedMsg: ' ',
       delUrl: 'titledelete',
       updateUrl: 'titleupdate',
-      readUrl: 'titleget',
-      createUrl: 'titlecreate',
+      readUrl: 'tileget',
+      createUrl: 'tilecreate',
       itemKey: 'titleId',
       idKey: 'titleId',
       primaryColor: 'primary',

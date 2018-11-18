@@ -34,7 +34,6 @@
     :timeout="timeout"
     :color="snackColor"
   >
-  <!-- <v-snackbar v-if="this.$vuetify.breakpoint.xsAndUp" v-model="snack" :timeout="3000" :color="snackColor"> -->
     {{ snackText }}
     <v-btn flat @click="snack = false">Close</v-btn>
   </v-snackbar>

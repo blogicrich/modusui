@@ -6,12 +6,12 @@
       app
       :clipped-left="clipped"
     >
-      <v-toolbar-side-icon v-if="$vuetify.breakpoint.mdAndUp" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <!-- <v-toolbar-side-icon v-if="$vuetify.breakpoint.mdAndUp" @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
-      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="home">
+      <!-- <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="home">
         <v-icon medium>home</v-icon>
       </v-btn>
       <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="home">
@@ -22,9 +22,9 @@
       </v-btn>
       <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="logout">
         <v-icon medium>exit_to_app</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-toolbar>
-    <v-navigation-drawer id ='nav-drawer' v-if="authenticated.state"
+    <!-- <v-navigation-drawer id ='nav-drawer' v-if="authenticated.state"
       width=160
       :clipped="clipped"
       v-model="drawer"
@@ -32,7 +32,7 @@
       fixed
       app
       value="false"
-    >
+    > -->
         <!-- <v-list>
             <img alt="" src="./assets/ed_logo.svg"><img>
             <v-list-tile
@@ -48,7 +48,7 @@
             </v-list-tile-content>
             </v-list-tile>
         </v-list> -->
-    </v-navigation-drawer>
+    <!-- </v-navigation-drawer> -->
       <v-content>
         <!-- <v-container fluid> -->
         <v-slide-y-transition mode="out-in">
@@ -61,21 +61,60 @@
         <!-- </v-container> -->
       </v-content>
     <v-footer
-      class="elevation-5 pa-1"
-      v-if="authenticated.state"
+      v-if="authenticated.state && $vuetify.breakpoint.smAndUp"
+      class="elevation-5 pa-4"
       :fixed="fixed"
       color="white"
       app
     >
-      <span v-if="$vuetify.breakpoint.smAndUp">Version: 0.1.0</span>
+    <v-layout row fill height align-space-between justify-space-between>
+      <v-layout class="pt-2" row fill height align-start justify-start>
+        <p>Version: 0.1.0</p>
+      </v-layout>
+      <!-- <v-spacer></v-spacer> -->
+      <BaseAppNavBtn
+        btnIcon="home"
+        btnColor="primary"
+        route="landing"
+      />
+      <!-- <v-spacer></v-spacer> -->
+      <BaseAppNavBtn
+        btnIcon="dashboard"
+        btnColor="primary"
+        route="landing"
+      />
+      <!-- <v-spacer></v-spacer> -->
+      <BaseAppNavBtn
+        btnIcon="chrome_reader_mode"
+        btnColor="primary"
+        route="landing"
+      />
+      <!-- <v-spacer></v-spacer> -->
+      <BaseAppNavBtn
+        btnIcon="settings"
+        btnColor="primary"
+        route="landing"
+      />
+      <!-- <v-spacer></v-spacer> -->
+      <BaseAppNavBtn
+        btnIcon="exit_to_app"
+        btnColor="primary"
+        route="login"
+      />
+      <!-- <v-spacer></v-spacer> -->
+    </v-layout>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
 
 export default {
   name: 'App',
+  components: {
+    BaseAppNavBtn
+  },
   data () {
     return {
       authenticated: {
@@ -94,6 +133,7 @@ export default {
       this.authenticated.state = newStatus.state
       this.authenticated.level = newStatus.level
       localStorage.auth = JSON.stringify(this.authenticated)
+      this.user = newStatus.level
       // console.log(JSON.parse(localStorage.auth))
       if (newStatus.state) {
         this.$router.push('/landing')
@@ -102,6 +142,7 @@ export default {
     logout () {
       this.authenticated = { state: false, level: null }
       localStorage.auth = JSON.stringify(this.authenticated)
+      this.user = ''
       this.$router.push('/login')
     },
     home () {

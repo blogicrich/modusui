@@ -14,17 +14,18 @@ export const crudOperations = {
       this.resetItem()
       this.showSnack('Item Added', 'success')
     },
-    deleteItem (items) {
+    async deleteItem (items) {
       var index = 0
       for (var i = 0; i < items.length; i++) {
         index = this.items.indexOf(items[i])
         // console.log(items[i][this.idKey], items[i], this.idKey)
-        this.postData(this.delUrl, { personsId: items[i][this.idKey] })
+        await this.postData(this.delUrl, { personsId: items[i][this.idKey] })
         this.items.splice(index, 1)
       }
+      this.getItems(this.readUrl)
       this.showSnack('Items Deleted', 'success')
     },
-    editItems (items) {
+    async editItems (items) {
       // console.log("FIRING!!");
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
@@ -35,13 +36,13 @@ export const crudOperations = {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
             // console.log("Looping Inner: ", key, defaultItem[j][key], items[i][key])
           })
-          this.postData(this.updateUrl, defaultItem[j])
-          // console.log(this.defaultItem)
+          await this.postData(this.updateUrl, defaultItem[j])
+          console.log(this.defaultItem[j])
         }
       }
-      this.resetItem()
       this.showSnack('Items Edited', 'success')
       this.getItems(this.readUrl)
+      this.resetItem()
       // console.log(this.defaultItem)
     },
     async getItems (url) {
@@ -74,9 +75,9 @@ export const crudOperations = {
 
     },
     showSnack (message, color) {
-      this.snack = true
       this.snackColor = color
       this.snackText = message
+      this.snack = true
     },
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {
