@@ -1,29 +1,34 @@
 <template>
   <v-app>
-    <v-toolbar
-      v-if="authenticated.state"
-      color="white"
-      app
-      :clipped-left="clipped"
-    >
-      <!-- <v-toolbar-side-icon v-if="$vuetify.breakpoint.mdAndUp" @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-      <img alt="" src="./assets/ed_logo.svg"><img>
-      <v-spacer></v-spacer>
-      <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
-      <!-- <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="home">
-        <v-icon medium>home</v-icon>
-      </v-btn>
-      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="home">
-        <v-icon medium>home</v-icon>
-      </v-btn>
-      <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="logout">
-        <v-icon medium>exit_to_app</v-icon>
-      </v-btn>
-      <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="logout">
-        <v-icon medium>exit_to_app</v-icon>
-      </v-btn> -->
-    </v-toolbar>
+    <v-fade-transition>
+      <v-toolbar
+        v-if="authenticated.state"
+        color="white"
+        app
+        :clipped-left="clipped"
+      >
+        <!-- <v-toolbar-side-icon v-if="$vuetify.breakpoint.mdAndUp" @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
+        <v-toolbar-title v-text="title"></v-toolbar-title>
+        <img alt="" src="./assets/ed_logo.svg"><img>
+        <v-spacer></v-spacer>
+        <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
+        <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
+
+        <!-- <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="home">
+          <v-icon medium>home</v-icon>
+        </v-btn>
+        <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="home">
+          <v-icon medium>home</v-icon>
+        </v-btn>
+        <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="logout">
+          <v-icon medium>exit_to_app</v-icon>
+        </v-btn>
+        <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="logout">
+          <v-icon medium>exit_to_app</v-icon>
+        </v-btn> -->
+      </v-toolbar>
+    </v-fade-transition>
+    <!-- </v-slide-y-transition> -->
     <!-- <v-navigation-drawer id ='nav-drawer' v-if="authenticated.state"
       width=160
       :clipped="clipped"
@@ -49,61 +54,51 @@
             </v-list-tile>
         </v-list> -->
     <!-- </v-navigation-drawer> -->
-      <v-content>
-        <!-- <v-container fluid> -->
-        <v-slide-y-transition mode="out-in">
-          <!-- <v-container xs12> -->
-          <!-- <keep-alive> -->
-            <router-view class="px-0" @authenticated="setAuthenticated"/>
-          <!-- </keep-alive> -->
-        <!-- </v-container> -->
-        </v-slide-y-transition>
-        <!-- </v-container> -->
-      </v-content>
-    <v-footer
-      v-if="authenticated.state && $vuetify.breakpoint.smAndUp"
-      class="elevation-5 pa-4"
-      :fixed="fixed"
-      color="white"
-      app
-    >
-    <v-layout row fill height align-space-between justify-space-between>
-      <v-layout class="pt-2" row fill height align-start justify-start>
-        <p>Version: 0.1.0</p>
+    <v-content>
+      <v-slide-y-transition mode="out-in">
+        <router-view class="px-0" @authenticated="setAuthenticated"/>
+      </v-slide-y-transition>
+    </v-content>
+      <v-fade-transition>
+      <v-footer
+        v-if="authenticated.state && $vuetify.breakpoint.smAndUp"
+        class="elevation-5 pa-4"
+        :fixed="fixed"
+        color="white"
+        app
+      >
+      <v-layout row fill height align-space-between justify-space-between>
+        <v-layout class="pt-2" row align-center justify-start>
+          <span style="align-center">Version: 0.1.0</span>
+        </v-layout>
+        <BaseAppNavBtn
+          btnIcon="home"
+          btnColor="primary"
+          route="landing"
+        />
+        <BaseAppNavBtn
+          btnIcon="dashboard"
+          btnColor="primary"
+          route="landing"
+        />
+        <BaseAppNavBtn
+          btnIcon="chrome_reader_mode"
+          btnColor="primary"
+          route="landing"
+        />
+        <BaseAppNavBtn
+          btnIcon="settings"
+          btnColor="primary"
+          route="landing"
+        />
+        <BaseAppNavBtn
+          btnIcon="exit_to_app"
+          btnColor="primary"
+          route="login"
+        />
       </v-layout>
-      <!-- <v-spacer></v-spacer> -->
-      <BaseAppNavBtn
-        btnIcon="home"
-        btnColor="primary"
-        route="landing"
-      />
-      <!-- <v-spacer></v-spacer> -->
-      <BaseAppNavBtn
-        btnIcon="dashboard"
-        btnColor="primary"
-        route="landing"
-      />
-      <!-- <v-spacer></v-spacer> -->
-      <BaseAppNavBtn
-        btnIcon="chrome_reader_mode"
-        btnColor="primary"
-        route="landing"
-      />
-      <!-- <v-spacer></v-spacer> -->
-      <BaseAppNavBtn
-        btnIcon="settings"
-        btnColor="primary"
-        route="landing"
-      />
-      <!-- <v-spacer></v-spacer> -->
-      <BaseAppNavBtn
-        btnIcon="exit_to_app"
-        btnColor="primary"
-        route="login"
-      />
-      <!-- <v-spacer></v-spacer> -->
-    </v-layout>
-    </v-footer>
+      </v-footer>
+    </v-fade-transition>>
   </v-app>
 </template>
 

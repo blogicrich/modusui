@@ -70,7 +70,7 @@ export default {
       createUrl: 'gendercreate',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
-      icon: 'local_drink',
+      icon: 'wc',
       iconAdd: 'add',
       headers: [
         { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },

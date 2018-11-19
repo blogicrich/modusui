@@ -2,8 +2,8 @@
   <div>
     <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
-        <h2 class="table-header">{{ tableTitle }}</h2>
         <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
+        <h2 class="table-header">{{ tableTitle }}</h2>
         <v-divider
           class="mx-2"
           inset
@@ -239,6 +239,7 @@
           <v-dialog v-model="newDialog" max-width="96%">
             <v-card>
               <v-card-title>
+                <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
                 <span class="table-header">{{ newDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
@@ -270,7 +271,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn :color="secondaryColor" flat @click.native="close">Cancel</v-btn>
+                <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
                 <v-btn :color="secondaryColor" flat @click.native="save">Save</v-btn>
               </v-card-actions>
             </v-card>
@@ -279,6 +280,7 @@
           <v-dialog v-model="editDialog" max-width="98%">
             <v-card class="pa-0">
               <v-card-title>
+                <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
                 <span class="pg-subheader text-primary">{{ editDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
@@ -569,6 +571,7 @@
           <v-dialog v-model="newDialog" max-width="500px">
             <v-card>
               <v-card-title>
+                <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
                 <span class="table-header">{{ newDialogTitle }}</span>
               </v-card-title>
               <v-card-text>
@@ -610,6 +613,7 @@
             <v-card>
               <v-card-title class="pa-0">
                 <v-layout class="ma-0 pa-0" row fill-height justify-center>
+                  <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
                   <span class="table-header mt-3">{{ editDialogTitle }}</span>
                 </v-layout>
               </v-card-title>
@@ -685,7 +689,6 @@ export default {
       searchBarHidden: false,
       pagination: {},
       delDialog: false,
-      editDialog: false,
       newDialog: false,
       mbDirection: 'top',
       dtDirection: 'left',

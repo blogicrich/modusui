@@ -2,7 +2,9 @@
   <div>
     <v-tabs
         v-model="currentItem"
-        slider-color="blue"
+        slider-color="white"
+        color="primary"
+        dark
       >
       <v-layout justify-space-around>
         <v-tab
@@ -71,11 +73,11 @@
                     ></SubPageNavButton>
                   </div>
                   &nbsp;
-                  <SubLandingNavButton
+                  <!-- <SubLandingNavButton
                     title="Home"
                     route="/landing"
                   >
-                  </SubLandingNavButton>
+                  </SubLandingNavButton> -->
                 </v-layout>
               </v-container>
             </v-card-actions>

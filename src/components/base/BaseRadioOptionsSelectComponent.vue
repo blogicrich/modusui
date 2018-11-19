@@ -21,6 +21,7 @@
                 <v-radio
                   class="ma-2"
                   v-for="radio in radioConfig"
+                  color="primary"
                   :key="radio.label"
                   :label="radio.label"
                   :value="radio.value"
