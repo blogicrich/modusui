@@ -1,45 +1,69 @@
 <template>
-  <div>
-    <v-layout column align-start>
-      <div>
-        <router-link
-          class="text-landing"
-          :to="link"
-          v-bind:style="{color: colorIcon}"
-        >
-          <v-icon
-            :color="colorIcon"
-            :to="link"
-          >
-            {{ icon }}
-          </v-icon>
-          <img alt="" src="test"><img>
-          <span>{{ routerTitel }}</span>
-        </router-link>
-      </div>
-      <div class="text-tooltip">
-        <span>{{ tooltipText }}</span>
-      </div>
+  <v-container :class="hovering ? 'enter-style' : 'leave-style' " @click="navigate" @mouseenter="setHover" @mouseleave="setHover">
+    <v-layout row wrap fill-height align-center justify-start>
+      <v-icon
+        class="mr-2"
+        :size="hovering ? '28' : '24'"
+        :color="colorIcon"
+        :to="link"
+      >
+        {{ icon }}
+      </v-icon>
+      <span class="subheader">{{ routerTitle }}</span>
     </v-layout>
-    <br/>
-  </div>
+    <v-layout class="mt-2" row wrap fill-height align-center justify-start>
+      <span class="text-secondary">{{ tooltipText }}</span>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 
 export default {
   name: 'BaseLinkComponent',
+  data () {
+    return {
+      hovering: false
+    }
+  },
   props: {
-    routerTitel: String,
+    routerTitle: String,
     link: String,
     tooltipText: String,
     icon: String,
     colorIcon: String,
     test: String
+  },
+  methods: {
+    navigate () {
+      this.$router.push(this.link)
+    },
+    setHover () {
+      this.hovering = !this.hovering
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+
+  .enter-style {
+    cursor: pointer;
+    .subheader {
+      font-size: 1.2em;
+    }
+    .text-secondary {
+      font-style: italic;
+    }
+  }
+  .leave-style {
+    cursor: none;
+    .subheader {
+      font-size: 1em;
+    }
+    .text-secondary {
+      font-style: normal;
+    }
+  }
 </style>

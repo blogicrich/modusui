@@ -7,59 +7,21 @@
         app
         :clipped-left="clipped"
       >
-        <!-- <v-toolbar-side-icon v-if="$vuetify.breakpoint.mdAndUp" @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
         <v-toolbar-title v-text="title"></v-toolbar-title>
         <img alt="" src="./assets/ed_logo.svg"><img>
         <v-spacer></v-spacer>
         <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
         <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
-
-        <!-- <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="home">
-          <v-icon medium>home</v-icon>
-        </v-btn>
-        <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="home">
-          <v-icon medium>home</v-icon>
-        </v-btn>
-        <v-btn v-if="$vuetify.breakpoint.lgAndUp" class="ml-2" id="logout" icon @click.stop="logout">
-          <v-icon medium>exit_to_app</v-icon>
-        </v-btn>
-        <v-btn v-if="$vuetify.breakpoint.mdAndDown" class="ml-1" id="logout" icon @click.stop="logout">
-          <v-icon medium>exit_to_app</v-icon>
-        </v-btn> -->
       </v-toolbar>
     </v-fade-transition>
-    <!-- </v-slide-y-transition> -->
-    <!-- <v-navigation-drawer id ='nav-drawer' v-if="authenticated.state"
-      width=160
-      :clipped="clipped"
-      v-model="drawer"
-      enable-resize-watcher
-      fixed
-      app
-      value="false"
-    > -->
-        <!-- <v-list>
-            <img alt="" src="./assets/ed_logo.svg"><img>
-            <v-list-tile
-                value="true"
-                v-for="(item, i) in items"
-                :key="i"
-            >
-            <v-list-tile-action>
-                <v-icon id="menu-icon" size="50" v-html="item.icon"></v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-                <v-list-tile-title v-text="item.title"></v-list-tile-title>
-            </v-list-tile-content>
-            </v-list-tile>
-        </v-list> -->
-    <!-- </v-navigation-drawer> -->
-    <v-content>
-      <v-slide-y-transition mode="out-in">
-        <router-view class="px-0" @authenticated="setAuthenticated"/>
-      </v-slide-y-transition>
-    </v-content>
-      <v-fade-transition>
+    <v-container fluid>
+      <v-content>
+        <v-slide-y-transition mode="out-in">
+          <router-view class="px-0" @authenticated="setAuthenticated"/>
+        </v-slide-y-transition>
+      </v-content>
+    </v-container>
+    <v-fade-transition>
       <v-footer
         v-if="authenticated.state && $vuetify.breakpoint.smAndUp"
         class="elevation-5 pa-4"
@@ -67,38 +29,38 @@
         color="white"
         app
       >
-      <v-layout row fill height align-space-between justify-space-between>
-        <v-layout class="pt-2" row align-center justify-start>
-          <span style="align-center">Version: 0.1.0</span>
+        <v-layout row fill height align-space-between justify-space-between>
+          <v-layout class="pt-2" row align-center justify-start>
+            <span style="align-center">Version: 0.1.0</span>
+          </v-layout>
+          <BaseAppNavBtn
+            btnIcon="home"
+            btnColor="primary"
+            route="landing"
+          />
+          <BaseAppNavBtn
+            btnIcon="dashboard"
+            btnColor="primary"
+            route="landing"
+          />
+          <BaseAppNavBtn
+            btnIcon="chrome_reader_mode"
+            btnColor="primary"
+            route="landing"
+          />
+          <BaseAppNavBtn
+            btnIcon="settings"
+            btnColor="primary"
+            route="landing"
+          />
+          <BaseAppNavBtn
+            btnIcon="exit_to_app"
+            btnColor="primary"
+            route="login"
+          />
         </v-layout>
-        <BaseAppNavBtn
-          btnIcon="home"
-          btnColor="primary"
-          route="landing"
-        />
-        <BaseAppNavBtn
-          btnIcon="dashboard"
-          btnColor="primary"
-          route="landing"
-        />
-        <BaseAppNavBtn
-          btnIcon="chrome_reader_mode"
-          btnColor="primary"
-          route="landing"
-        />
-        <BaseAppNavBtn
-          btnIcon="settings"
-          btnColor="primary"
-          route="landing"
-        />
-        <BaseAppNavBtn
-          btnIcon="exit_to_app"
-          btnColor="primary"
-          route="login"
-        />
-      </v-layout>
       </v-footer>
-    </v-fade-transition>>
+    </v-fade-transition>
   </v-app>
 </template>
 

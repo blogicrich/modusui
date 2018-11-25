@@ -1,10 +1,12 @@
 <template>
-  <BaseLogin
-    :msg="msg"
-    :isAuthenticating="isAuthenticating"
-    :isActive="isActive"
-    @authenticate="submitCredentials"
-  />
+  <v-layout class="login-container" row fill-height align-center justify-space-around>
+    <BaseLogin
+      :msg="msg"
+      :isAuthenticating="isAuthenticating"
+      :isActive="isActive"
+      @authenticate="submitCredentials"
+    />
+  </v-layout>
 </template>
 
 <script>
@@ -55,7 +57,10 @@ export default {
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
 
-#login {
+.login-container {
+  height: 96vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
   background-color: inherit;
 }
 </style>
