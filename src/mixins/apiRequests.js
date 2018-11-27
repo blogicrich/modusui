@@ -41,6 +41,7 @@ export const postData = {
             data: JSON.stringify(params)
           })
           // console.log('postData: ', axGet.data)
+          console.log('http://172.16.16.79:3000/' + url)
           return axGet.data
         } catch (err) {
           // console.log(err)

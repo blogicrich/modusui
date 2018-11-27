@@ -3,7 +3,7 @@
     <h1 class="pg-header">eDroplet Administration</h1>
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
     <v-divider
-      class="mx-2"
+      class="mx-1"
       color="#00a1cd"
       >
     </v-divider>
@@ -63,14 +63,20 @@
 <script>
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
+import { getData, postData } from '@/mixins/apiRequests'
+import { crudOperations } from '@/mixins/CRUD'
 export default {
   name: 'IntervalOptions',
   components: {
     BaseRadioOptions,
     SubPageNavButton
   },
+  mixins: [crudOperations, getData, postData],
   data () {
     return {
+      items: [],
+      readUrl: 'intervalget',
+      intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
       drinkIntervalSettings: [
         { label: 'Radio-1', value: '1' },
         { label: 'Radio-2', value: '2' },
@@ -110,6 +116,19 @@ export default {
       commsRadioHeader: 'Time interval in minutes'
     }
   },
+  methods: {
+    setValues (items) {
+      for (var i = 0; i < items.length; i++) {
+        if (this.items[i].blueLightFlashingIntervalId) {
+          for (var j = 0; j < this.drinkIntervalSettings.length; j++) {
+            console.log(this.items[i].time)
+            this.drinkIntervalSettings[j].label = this.items[i].time
+          }
+        }
+      }
+      console.log(this.drinkIntervalSettings)
+    }
+  },
   computed: {
     height () {
       var cardHeight = 0
@@ -117,6 +136,46 @@ export default {
       if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
       return cardHeight
     }
+  },
+  created () {
+
+      switch (this.intervalTypes[i]) {
+        case '/bluelight':
+        for (var i = 0; i < vals.length; i++) {
+          for (var j = 0; j < this.drinkIntervalSettings.length; j++) {
+            // console.log('Hi');
+            // console.log(this.drinkIntervalSettings[j].value)
+            // console.log(this.drinkIntervalSettings[j])
+            // this.drinkIntervalSettings[j].value = String(vals[i].time)
+          }
+          // this.drinkIntervalSettings.assign
+        }
+          this.items.push(vals)
+          break
+        case '/wakeup':
+          this.items.push(vals)
+          break
+        case '/voice':
+          this.items.push(vals)
+          break
+        case '/communication':
+          this.items.push(vals)
+          break
+        default:
+      }
+      // console.log(url);
+    },
+    // this.items = arr
+    // console.log(this.drinkIntervalSettings[0].value)
+  // },
+  mounted () {
+    // let arr = []
+    // for (var i = 0; i < this.intervalTypes.length; i++) {
+    //   let url = this.readUrl + this.intervalTypes[i]
+    //   this.items.push(this.getData(url))
+    // }
+    // console.log(this.items)
+    this.setValues(this.items)
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
