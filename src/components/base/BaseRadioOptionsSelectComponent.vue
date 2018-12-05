@@ -13,20 +13,23 @@
               <h3 class="subheader text-left"> {{ radioHeader }}</h3>
               <v-spacer></v-spacer>
               <v-radio-group
+                class="mx-3 my-2"
                 v-model="value"
                 :mandatory="false"
                 color="primary"
                 row
               >
+              <v-layout row wrap align-center justify-space-around>
                 <v-radio
                   class="ma-2"
                   v-for="radio in radioConfig"
                   color="primary"
                   :key="radio.label"
                   :label="radio.label"
-                  :value="radio.value"
+                  :value="radio.time"
                   >
                 </v-radio>
+              </v-layout>
               </v-radio-group>
             </v-flex>
         </v-card>
@@ -45,14 +48,16 @@
                 :mandatory="false"
                 color="primary"
               >
-                <v-radio
-                  class="ma-2"
-                  v-for="radio in radioConfig"
-                  :key="radio.label"
-                  :label="radio.label"
-                  :value="radio.value"
-                  >
-                </v-radio>
+                <v-layout row wrap align-center justify-space-around>
+                  <v-radio
+                    class="ma-2"
+                    v-for="radio in radioConfig"
+                    color="primary"
+                    :key="radio.label"
+                    :label="radio.label"
+                    >
+                  </v-radio>
+                </v-layout>
               </v-radio-group>
             </v-flex>
         </v-card>
@@ -72,6 +77,7 @@ export default {
   },
   props: {
     radioConfig: Array,
+    groupDefault: String,
     groupHeader: String,
     groupDescription: String,
     radioHeader: String,
