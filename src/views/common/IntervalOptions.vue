@@ -10,18 +10,21 @@
       <v-layout row wrap fill-height justify-space-between>
         <v-flex xs12 lg6>
           <BaseRadioOptions
-            :radioConfig="setValues(lightOptions, 'time', ' minutes')"
+            @radio-option-changed="setNewValue"
+            :radioConfig="lightOptions"
+            :defaultValue="setValues(lightOptions)"
             :groupHeader="drinkGroupHeader"
             :groupDescription="drinkRadioDescription"
             :radioHeader="drinkRadioHeader"
             :height="height"
-            v-on:value-changed="valueChanged"
           />
         </v-flex>
         <v-flex xs12 lg6>
           <BaseRadioOptions
-            :radioConfig="setValues(voiceOptions, 'time', ' minutes')"
+            @radio-option-changed="setNewValue"
+            :radioConfig="voiceOptions"
             :groupHeader="voiceGroupHeader"
+            :defaultValue="setValues(voiceOptions)"
             :groupDescription="voiceRadioDescription"
             :radioHeader="voiceRadioHeader"
             :height="height"
@@ -37,7 +40,9 @@
     <v-layout row wrap fill-height justify-space-between>
       <v-flex xs12 lg6>
         <BaseRadioOptions
-          :radioConfig="setValues(wakeUpOptions, 'time', ' minutes')"
+          @radio-option-changed="setNewValue"
+          :radioConfig="wakeUpOptions"
+          :defaultValue="setValues(wakeUpOptions)"
           :groupHeader="wakeUpGroupHeader"
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
@@ -46,7 +51,9 @@
       </v-flex>
       <v-flex xs12 lg6>
         <BaseRadioOptions
-          :radioConfig="setValues(commsOptions, 'time', ' minutes')"
+          @radio-option-changed="setNewValue"
+          :radioConfig="commsOptions"
+          :defaultValue="setValues(commsOptions)"
           :groupHeader="commsGroupHeader"
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
@@ -56,7 +63,7 @@
     </v-layout>
     <v-layout row justify-center align-center>
       <SubPageNavButton title="Home" route="/landing" large/>
-      <SubPageNavButton title="Save" large/>
+      <v-btn class="root-nav-btn" @click="save(lightOptions, voiceOptions, wakeUpOptions, commsOptions)" color="primary" large>Save</v-btn>
     </v-layout>
   </v-container>
 </template>
@@ -77,8 +84,8 @@ export default {
   mixins: [crudOperations, getData, postData],
   data () {
     return {
-      items: [],
       readUrl: 'intervalget',
+      writeUrl: 'intervalsave',
       intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
       voiceOptions: [],
       drinkGroupHeader: 'Blue light flashing interval options',
@@ -105,33 +112,46 @@ export default {
         let arr = await this.getData(url)
         switch (this.intervalTypes[i]) {
           case '/bluelight':
-            this.lightOptions.push(arr)
+            this.lightOptions = arr
             break
           case '/wakeup':
-            this.wakeUpOptions.push(arr)
+            this.wakeUpOptions = arr
             break
           case '/voice':
-            this.voiceOptions.push(arr)
+            this.voiceOptions = arr
             break
           case '/communication':
-            this.commsOptions.push(arr)
+            this.commsOptions = arr
             break
           default:
         }
       }
     },
-    setValues (items, key, suffix) {
-      let arr = []
-      for (var i = 0; i < items.length; i++) {
-        for (var item in items[i]) {
-          arr.push({ time:items[i][item][key], label:String(items[i][item][key] + suffix), value:items[i][item][key], default:items[i][item]['default'] })
-          console.log(arr)
+    // Sets the default radio button value
+    setValues (arr) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].default === 'Y') return Number(arr[i].time)
+      }
+    },
+    setNewValue (obj) {
+      console.log(obj)
+      this.radioConfig[Number(obj.index)].time = obj.value
+      this.radioConfig[Number(obj.index)].default = 'Y'
+      for (var i = 0; i < this.radioConfig.length; i++) {
+        if (i !== obj.index) {
+          this.radioConfig[i].default = 'N'
         }
       }
-      return arr
+      this.setValues()// console.log(arr)
     },
-    valueChanged(selected) {
-      console.log(selected);
+    save (...intervalObjs) {
+      for (var ints of intervalObjs) {
+        for (var i = 0; i < ints.length; i++) {
+          if (ints[i].default === 'Y') {
+            console.log(ints[i])
+          }
+        }
+      }
     }
   },
   computed: {

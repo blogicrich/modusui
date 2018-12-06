@@ -14,25 +14,23 @@
               <v-spacer></v-spacer>
               <v-radio-group
                 class="mx-3 my-2"
-                v-model="value"
+                v-model="defaultValue"
                 :mandatory="false"
                 color="primary"
                 row
               >
-              <!-- <v-layout row wrap align-center justify-space-around> -->
                 <v-radio
                   class="ma-2"
-                  v-for="radio in radioConfig"
                   color="primary"
+                  v-for="(radio, index) in radioConfig"
                   :key="radio.time"
-                  :label="radio.label"
+                  :label="String(radio.time)"
                   :value="radio.time"
-                  @click="$emit('value-changed', { selected:radio.time })"
+                  @change="$emit('radio-option-changed', {items:radioConfig, value:radio.time, index:index} )"
                   >
                 </v-radio>
-              <!-- </v-layout> -->
-              </v-radio-group>
-            </v-flex>
+            </v-radio-group>
+          </v-flex>
         </v-card>
         <v-card v-if="$vuetify.breakpoint.xsOnly" class="ma-0 pa-3" color="white" :height="height">
           <h3 class="subheader text-left"> {{ groupHeader }} </h3>
@@ -71,13 +69,9 @@
 
 export default {
   name: 'BaseRadioOptionsSelectComponent',
-  data () {
-    return {
-      value: '60'
-    }
-  },
   props: {
     radioConfig: Array,
+    defaultValue: Number,
     groupDefault: String,
     groupHeader: String,
     groupDescription: String,
