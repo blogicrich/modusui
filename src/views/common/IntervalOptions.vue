@@ -15,6 +15,7 @@
             :groupDescription="drinkRadioDescription"
             :radioHeader="drinkRadioHeader"
             :height="height"
+            v-on:value-changed="valueChanged"
           />
         </v-flex>
         <v-flex xs12 lg6>
@@ -128,6 +129,9 @@ export default {
         }
       }
       return arr
+    },
+    valueChanged(selected) {
+      console.log(selected);
     }
   },
   computed: {

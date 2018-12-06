@@ -19,17 +19,18 @@
                 color="primary"
                 row
               >
-              <v-layout row wrap align-center justify-space-around>
+              <!-- <v-layout row wrap align-center justify-space-around> -->
                 <v-radio
                   class="ma-2"
                   v-for="radio in radioConfig"
                   color="primary"
-                  :key="radio.label"
+                  :key="radio.time"
                   :label="radio.label"
                   :value="radio.time"
+                  @click="$emit('value-changed', { selected:radio.time })"
                   >
                 </v-radio>
-              </v-layout>
+              <!-- </v-layout> -->
               </v-radio-group>
             </v-flex>
         </v-card>
@@ -45,8 +46,8 @@
               <v-spacer></v-spacer>
               <v-radio-group
                 v-model="value"
-                :mandatory="false"
                 color="primary"
+                :mandatory="false"
               >
                 <v-layout row wrap align-center justify-space-around>
                   <v-radio
@@ -72,7 +73,7 @@ export default {
   name: 'BaseRadioOptionsSelectComponent',
   data () {
     return {
-      value: ''
+      value: '60'
     }
   },
   props: {
