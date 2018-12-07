@@ -17,6 +17,7 @@
             :groupDescription="drinkRadioDescription"
             :radioHeader="drinkRadioHeader"
             :height="height"
+            suffix=" mins"
           />
         </v-flex>
         <v-flex xs12 lg6>
@@ -28,6 +29,7 @@
             :groupDescription="voiceRadioDescription"
             :radioHeader="voiceRadioHeader"
             :height="height"
+            suffix=" mins"
           />
         </v-flex>
       </v-layout>
@@ -47,6 +49,7 @@
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
           :height="height"
+          suffix=" mins"
         />
       </v-flex>
       <v-flex xs12 lg6>
@@ -58,6 +61,7 @@
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
           :height="height"
+          suffix=" mins"
         />
       </v-flex>
     </v-layout>
@@ -73,7 +77,6 @@
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import { getData, postData } from '@/mixins/apiRequests'
-import { crudOperations } from '@/mixins/CRUD'
 
 export default {
   name: 'IntervalOptions',
@@ -81,17 +84,19 @@ export default {
     BaseRadioOptions,
     SubPageNavButton
   },
-  mixins: [crudOperations, getData, postData],
+  mixins: [getData, postData],
   data () {
     return {
       readUrl: 'intervalget',
-      writeUrl: 'intervalsave',
+      writeUrl: 'intervalupdate',
       intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
-      voiceOptions: [],
+      intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId','buServerIntervalId'],
+
+      lightOptions: [],
       drinkGroupHeader: 'Blue light flashing interval options',
       drinkRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       drinkRadioHeader: 'Please select an option from the following:',
-      lightOptions: [],
+      voiceOptions: [],
       voiceGroupHeader: 'Voice Interval Options',
       voiceRadioDescription: 'Time betweeen drink reminders - (Voice message)',
       voiceRadioHeader: 'Time interval in minutes',
@@ -133,26 +138,45 @@ export default {
         if (arr[i].default === 'Y') return Number(arr[i].time)
       }
     },
-    setNewValue (obj) {
-      console.log(obj)
-      this.radioConfig[Number(obj.index)].time = obj.value
-      this.radioConfig[Number(obj.index)].default = 'Y'
-      for (var i = 0; i < this.radioConfig.length; i++) {
-        if (i !== obj.index) {
-          this.radioConfig[i].default = 'N'
-        }
-      }
-      this.setValues()// console.log(arr)
-    },
-    save (...intervalObjs) {
-      for (var ints of intervalObjs) {
-        for (var i = 0; i < ints.length; i++) {
-          if (ints[i].default === 'Y') {
-            console.log(ints[i])
+    async setNewValue (obj) {
+      for (var i = 0; i < this.intervalIds.length; i++) {
+        if (obj.items[obj.index].hasOwnProperty(this.intervalIds[i])) {
+          let type = ''
+          let url = ''
+          let id = obj.items[obj.index][this.intervalIds[i]]
+          let interval = obj.items[obj.index].time
+          switch (this.intervalIds[i]) {
+            case 'blueLightFlashingIntervalId':
+              type = 'blue light'
+              break
+            case 'wakeUpIntervalId':
+              type = 'wakeup'
+              break
+            case 'buServerIntervalId':
+              type = 'voice'
+              break
+            case 'spokenReminderId':
+              type = 'communication'
+              break
+            default:
           }
+          await this.postData(this.writeUrl, { id:id, type:type })
+          await this.getValues()
+          console.log(id)
+          console.log(type)
+          console.log(this.writeUrl)
         }
       }
-    }
+    },
+    // save (...intervalObjs) {
+    //   for (var ints of intervalObjs) {
+    //     for (var i = 0; i < ints.length; i++) {
+    //       if (ints[i].default === 'Y') {
+    //         console.log(ints[i])
+    //       }
+    //     }
+    //   }
+    // }
   },
   computed: {
     height () {

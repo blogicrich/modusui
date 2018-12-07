@@ -24,9 +24,9 @@
                   color="primary"
                   v-for="(radio, index) in radioConfig"
                   :key="radio.time"
-                  :label="String(radio.time)"
+                  :label="String(radio.time) + suffix"
                   :value="radio.time"
-                  @change="$emit('radio-option-changed', {items:radioConfig, value:radio.time, index:index} )"
+                  @change="$emit('radio-option-changed', { items:radioConfig, index:index } )"
                   >
                 </v-radio>
             </v-radio-group>
@@ -43,22 +43,24 @@
               <h3 class="subheader text-left"> {{ radioHeader }}</h3>
               <v-spacer></v-spacer>
               <v-radio-group
-                v-model="value"
-                color="primary"
+                class="mx-3 my-2"
+                v-model="defaultValue"
                 :mandatory="false"
+                color="primary"
+                row
               >
-                <v-layout row wrap align-center justify-space-around>
-                  <v-radio
-                    class="ma-2"
-                    v-for="radio in radioConfig"
-                    color="primary"
-                    :key="radio.label"
-                    :label="radio.label"
-                    >
-                  </v-radio>
-                </v-layout>
-              </v-radio-group>
-            </v-flex>
+                <v-radio
+                  class="ma-2"
+                  color="primary"
+                  v-for="(radio, index) in radioConfig"
+                  :key="radio.time"
+                  :label="String(radio.time) + suffix"
+                  :value="radio.time"
+                  @change="$emit('radio-option-changed', { items:radioConfig, index:index } )"
+                  >
+                </v-radio>
+            </v-radio-group>
+          </v-flex>
         </v-card>
       </v-flex>
     </v-layout>
@@ -68,6 +70,11 @@
 <script>
 
 export default {
+  // data () {
+  //   return {
+  //     selected: this.defaultValue
+  //   }
+  // },
   name: 'BaseRadioOptionsSelectComponent',
   props: {
     radioConfig: Array,
@@ -76,7 +83,8 @@ export default {
     groupHeader: String,
     groupDescription: String,
     radioHeader: String,
-    height: String
+    height: String,
+    suffix: String
   }
 }
 </script>
