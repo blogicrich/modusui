@@ -26,7 +26,7 @@
                   :key="radio.time"
                   :label="String(radio.time) + suffix"
                   :value="radio.time"
-                  @change="$emit('radio-option-changed', { items:radioConfig, index:index } )"
+                  @change="$emit('radio-option-changed', { items: radioConfig, index: index } )"
                   >
                 </v-radio>
             </v-radio-group>
@@ -56,7 +56,7 @@
                   :key="radio.time"
                   :label="String(radio.time) + suffix"
                   :value="radio.time"
-                  @change="$emit('radio-option-changed', { items:radioConfig, index:index } )"
+                  @change="$emit('radio-option-changed', { items: radioConfig, index: index } )"
                   >
                 </v-radio>
             </v-radio-group>

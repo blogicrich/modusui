@@ -90,7 +90,7 @@ export default {
       readUrl: 'intervalget',
       writeUrl: 'intervalupdate',
       intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
-      intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId','buServerIntervalId'],
+      intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
 
       lightOptions: [],
       drinkGroupHeader: 'Blue light flashing interval options',
@@ -142,25 +142,25 @@ export default {
       for (var i = 0; i < this.intervalIds.length; i++) {
         if (obj.items[obj.index].hasOwnProperty(this.intervalIds[i])) {
           let type = ''
-          let url = ''
+          // let url = ''
           let id = obj.items[obj.index][this.intervalIds[i]]
           let interval = obj.items[obj.index].time
           switch (this.intervalIds[i]) {
             case 'blueLightFlashingIntervalId':
-              type = 'blue light'
+              type = 'bluelight'
               break
             case 'wakeUpIntervalId':
               type = 'wakeup'
               break
-            case 'buServerIntervalId':
+            case 'spokenReminderId':
               type = 'voice'
               break
-            case 'spokenReminderId':
+            case 'buServerIntervalId':
               type = 'communication'
               break
             default:
           }
-          await this.postData(this.writeUrl, { id:id, type:type })
+          await this.postData(this.writeUrl + '/' + type, { id: id, type: type })
           await this.getValues()
           console.log(id)
           console.log(type)
