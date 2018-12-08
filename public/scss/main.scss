@@ -107,6 +107,7 @@ $bg-white: #ffff;
   margin-top: 1vw;
   border-radius: 4px;
   font-size: 1em;
+  opacity: 100%;
 }
 .table-btn {
   color: $main-blue;
@@ -162,3 +163,5 @@ input[type=checkbox]:checked + label{
   color: $main-blue !important;
   font-weight: bold;
 }
+
+// Transitions

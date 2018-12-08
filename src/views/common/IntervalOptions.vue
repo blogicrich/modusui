@@ -66,9 +66,27 @@
       </v-flex>
     </v-layout>
     <v-layout row justify-center align-center>
-      <SubPageNavButton title="Home" route="/landing" large/>
-      <v-btn class="root-nav-btn" @click="save(lightOptions, voiceOptions, wakeUpOptions, commsOptions)" color="primary" large>Save</v-btn>
+      <v-fade-transition>
+        <v-btn
+        v-if="newDefaultValue"
+        class="root-nav-btn"
+        @click="save"
+        color="primary"
+        large
+        >Save
+        <v-icon class="ma-1">save</v-icon>
+      </v-btn>
+    </v-fade-transition>
     </v-layout>
+    <v-snackbar
+      v-model="snack"
+      bottom
+      :timeout="timeout"
+      :color="snackColor"
+    >
+      {{ snackText }}
+      <v-btn flat @click="snack = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -89,9 +107,14 @@ export default {
     return {
       readUrl: 'intervalget',
       writeUrl: 'intervalupdate',
+      newDefaultValue: false,
+      editedItems: [],
       intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
       intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
-
+      snackColor: 'primary',
+      snackText: '',
+      snack: false,
+      timeout: 6000,
       lightOptions: [],
       drinkGroupHeader: 'Blue light flashing interval options',
       drinkRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
@@ -132,19 +155,24 @@ export default {
         }
       }
     },
-    // Sets the default radio button value
+    // Sets the default radio button value following getValues
     setValues (arr) {
       for (var i = 0; i < arr.length; i++) {
         if (arr[i].default === 'Y') return Number(arr[i].time)
       }
     },
-    async setNewValue (obj) {
+    // Sets the new value of the radio group and appends to editedItems
+    setNewValue (obj) {
+      if (obj.defaultValue === obj.newValue) {
+        this.newDefaultValue = false
+      } else {
+        this.newDefaultValue = true
+      }
       for (var i = 0; i < this.intervalIds.length; i++) {
         if (obj.items[obj.index].hasOwnProperty(this.intervalIds[i])) {
           let type = ''
-          // let url = ''
           let id = obj.items[obj.index][this.intervalIds[i]]
-          let interval = obj.items[obj.index].time
+
           switch (this.intervalIds[i]) {
             case 'blueLightFlashingIntervalId':
               type = 'bluelight'
@@ -159,24 +187,31 @@ export default {
               type = 'communication'
               break
             default:
+              type = 'error'
           }
-          await this.postData(this.writeUrl + '/' + type, { id: id, type: type })
-          await this.getValues()
-          console.log(id)
-          console.log(type)
-          console.log(this.writeUrl)
+          for (var j = 0; j < this.editedItems.length; j++) {
+            if (this.editedItems[j].type === type) this.editedItems.splice(j - 1, 1)
+          }
+          this.editedItems.push({ id: id, type: type })
         }
       }
     },
-    // save (...intervalObjs) {
-    //   for (var ints of intervalObjs) {
-    //     for (var i = 0; i < ints.length; i++) {
-    //       if (ints[i].default === 'Y') {
-    //         console.log(ints[i])
-    //       }
-    //     }
-    //   }
-    // }
+    // Posts update requests
+    async save () {
+      for (var i = 0; i < this.editedItems.length; i++) {
+        this.snackText = await this.postData(this.writeUrl + '/' + this.editedItems[i].type, { id: this.editedItems[i].id, type: this.editedItems[i].type })
+        if (this.snackText === 'Updated Interval Options') {
+          this.snackColor = 'success'
+          this.snack = true
+        } else {
+          this.snackColor = 'error'
+          this.snack = true
+        }
+      }
+      await this.getValues()
+      this.newDefaultValue = false
+      this.editedItems = []
+    }
   },
   computed: {
     height () {
@@ -190,11 +225,15 @@ export default {
     this.getValues()
   },
   beforeRouteLeave (to, from, next) {
-    const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
-    if (answer) {
-      next()
+    if (this.newDefaultValue === true) {
+      let answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+      if (answer) {
+        next()
+      } else {
+        next(false)
+      }
     } else {
-      next(false)
+      next()
     }
   }
 }

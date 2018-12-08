@@ -14,7 +14,7 @@
               <v-spacer></v-spacer>
               <v-radio-group
                 class="mx-3 my-2"
-                v-model="defaultValue"
+                v-model="newValue"
                 :mandatory="false"
                 color="primary"
                 row
@@ -26,7 +26,7 @@
                   :key="radio.time"
                   :label="String(radio.time) + suffix"
                   :value="radio.time"
-                  @change="$emit('radio-option-changed', { items: radioConfig, index: index } )"
+                  @change="$emit('radio-option-changed', { items: radioConfig, index: index, newValue:radio.time, defaultValue:defaultValue } )"
                   >
                 </v-radio>
             </v-radio-group>
@@ -44,7 +44,7 @@
               <v-spacer></v-spacer>
               <v-radio-group
                 class="mx-3 my-2"
-                v-model="defaultValue"
+                v-model="newValue"
                 :mandatory="false"
                 color="primary"
                 row
@@ -56,7 +56,7 @@
                   :key="radio.time"
                   :label="String(radio.time) + suffix"
                   :value="radio.time"
-                  @change="$emit('radio-option-changed', { items: radioConfig, index: index } )"
+                  @change="$emit('radio-option-changed', { items: radioConfig, index: index , newValue:newValue, defaultValue:defaultValue } )"
                   >
                 </v-radio>
             </v-radio-group>
@@ -70,12 +70,8 @@
 <script>
 
 export default {
-  // data () {
-  //   return {
-  //     selected: this.defaultValue
-  //   }
-  // },
   name: 'BaseRadioOptionsSelectComponent',
+
   props: {
     radioConfig: Array,
     defaultValue: Number,
@@ -85,6 +81,22 @@ export default {
     radioHeader: String,
     height: String,
     suffix: String
+  },
+  computed: {
+    newValue: {
+      // getter
+      get () {
+        return this.defaultValue
+      },
+      // setter
+      set (newValue) {
+        return newValue
+      }
+    }
+  // beforeMount () {
+  //   // this.newValue = this.defaultValue
+  //   // console.log('mounted val:', this.newValue);
+  // }
   }
 }
 </script>
