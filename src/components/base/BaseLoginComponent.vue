@@ -103,15 +103,15 @@ img {
   width: 35vh;
 }
 h2 {
-  color: $text-body;
+  color: $dark-blue-grey;
 }
 input[type=text], input[type=password] {
   width:30vh;
   padding: 0.5vh;
   margin:1vh;
   border-radius: 0.5vh;
-  color:$text-body;
-  border-color: $main-blue;
+  color:$dark-blue-grey;
+  border-color: $vuetify-primary;
   border-style: solid;
 }
 .creds-input {
@@ -119,18 +119,18 @@ input[type=text], input[type=password] {
   padding: 0.5vh;
   margin:1vh;
   border-radius: 0.5vh;
-  border-color: $main-blue;
+  border-color: $vuetify-primary;
   border-style: solid;
   background-color: rgb(250, 245, 240);
 }
 button {
   float: right;
-  color: $text-body;
+  color: $dark-blue-grey;
   background-color: inherit;
-  border-color: $main-blue;
+  border-color: $vuetify-primary;
   border-style: solid;
   border-radius: 1vh;
-  box-shadow: 0 0 0.5vh 0.5vh $bg-grey;
+  box-shadow: 0 0 0.5vh 0.5vh $vuetify-secondary;
   padding: 1vh;
   cursor: pointer;
 }
@@ -138,11 +138,11 @@ button:hover {
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
   float: right;
-  color: $text-body;
+  color: $dark-blue-grey;
   background-color:inherit;
   border-style: solid;
   border-radius: 1vh;
-  border-color:  $main-blue;;
+  border-color:  $vuetify-primary;
   box-shadow:0.1vh 0.1vh rgba(0, 181, 229,0.25), 0.5vh 0.5vh rgba(0, 181, 229,0.08);
   padding: 1vh;
   cursor: pointer;

@@ -122,7 +122,7 @@ export default {
 @import "./public/scss/main.scss";
 
 .app-shell {
-  background-color: $bg-grey;
+  background-color: $vuetify-secondary;
 }
 img {
   height: inherit;

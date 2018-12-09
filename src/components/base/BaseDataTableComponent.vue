@@ -324,22 +324,22 @@
       </v-card>
       <v-layout row justify-center align-center ma-3>
         <!-- <v-fade-transition>
-          <v-btn class="pg-foot-btn" @click="$router.push('/landing')" color="primary" large>home
+          <v-btn class="std-btn" @click="$router.push('/landing')" color="primary" large>home
             <v-icon class="ml-2">home</v-icon>
           </v-btn>
         </v-fade-transition>
         <v-fade-transition>
-          <v-btn class="pg-foot-btn" @click="" color="primary" large>save
+          <v-btn class="std-btn" @click="" color="primary" large>save
             <v-icon class="ml-2">save</v-icon>
           </v-btn>
         </v-fade-transition> -->
         <v-fade-transition>
-          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="editDialog = true" :color="primaryColor" large>edit record
+          <v-btn v-if="selected.length > 0" class="std-btn" @click="editDialog = true" :color="primaryColor" large>edit record
             <v-icon class="ml-2">edit</v-icon>
           </v-btn>
         </v-fade-transition>
         <v-fade-transition>
-          <v-btn v-if="selected.length > 0" class="pg-foot-btn" @click="delDialog = true" :color="primaryColor" large>delete
+          <v-btn v-if="selected.length > 0" class="std-btn" @click="delDialog = true" :color="primaryColor" large>delete
             <v-icon class="ml-2">delete</v-icon>
           </v-btn>
         </v-fade-transition>

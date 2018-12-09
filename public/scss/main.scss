@@ -1,86 +1,35 @@
-// Colour vars
-$vuetify-primary: #00a1cd;
+// Vuetify color vars
+//$vuetify-primary: #00A1CD;
+$vuetify-primary: #00A1CD;
+$vuetify-secondary: #f2f4f4;
 $vuetify-accent: #003C4D;
-$main-blue: #00a1cd;
-$secondary-blue: #003C4D;
-$main-blue-highlight: rgba(0, 161, 205, 0.1);
-$main-error: #ff5252;
-$main-warning: #FFC107;
-$bg-grey: #f2f4f4;
-$text-body: #4d504f;
-$bg-white: #ffff;
+// Project branding colors that are not part of the Vuetify theme
+$table-row-hover: rgba(0, 161, 205, 0.1);
+$dark-blue-grey: #4d504f;
+$white: #ffff;
 
-// Headers
+//  Headers
 
-.blue-header {
-  color: $main-blue;
-}
-.grey-header {
-  color: $bg-grey;
-}
 .app-header {
   margin: 1vw;
   font-size: 1.5em;
   font-weight: bold;
-  color: $text-body;
+  color: $dark-blue-grey;
 }
-.pg-header{
+.pg-header {
   margin: 1vw;
   font-size: 2em;
   font-weight: bold;
-  color: $main-blue;
+  color: $vuetify-primary;
 }
 .table-header {
   margin: 1vw;
   font-size: 1.5em;
   font-weight: bold;
-  color: $main-blue;
-}
-.table-dialog-header {
-  margin: 1vw;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: $main-blue;
-}
-.subheader {
-  font-size: 1em;
-  font-weight: bold;
-  color: $main-blue;
+  color: $vuetify-primary;
 }
 
-// Text common
-
-.text-center {
-  text-align:center;
-}
-.text-left {
-  // font-size: 1em;
-  // margin: 10px;
-  text-align:left;
-}
-.text-white {
-  color: white;
-}
-.text-warning {
-  color: #FFC107;
-}
-.text-error {
-  color: #ff5252;
-}
-.text-primary {
-  color: #00a1cd;
-}
-.text-secondary {
-  color: #003C4D;
-}
-.text-intervals {
-  margin: 1vw;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: $text-body;
-}
-
-//Subheaders
+//  Subheaders
 
 .pg-subheader {
   margin: 1vw;
@@ -89,44 +38,41 @@ $bg-white: #ffff;
   font-size: 1.5em;
   font-weight: bold;
 }
-.card-subhead {
+.subheader {
   font-size: 1em;
-}
-.input-subhead-search{
-  outline: none;
-  border-bottom: solid 1px;
-  border-color: $main-blue;
-  border-radius: 3px;
-}
-.check-subhead-selectall{
   font-weight: bold;
+  color: $vuetify-primary;
 }
 
-// Buttons
+//  Text common
 
-.root-nav-btn {
-  margin-top: 1vw;
-  border-radius: 4px;
-  font-size: 1em;
-  opacity: 100%;
+.text-center {
+  text-align:center;
 }
-.table-btn {
-  color: $main-blue;
-  background-color: $main-blue;
-  border-radius: 4px;
-  font-size: 1em;
+.text-left {
+  text-align:left;
 }
-.pg-foot-btn {
-  background-color: $main-blue;
-  border-radius: 4px;
-  font-size: 1em;
+.text-white {
+  color: $white;
 }
-.dialog-btn {
-  background-color: $main-blue !important;
-  border: solid;
-  border-color: $main-blue;
+.text-warning {
+  color: #FFC107;
+}
+.text-error {
+  color: #ff5252;
+}
+.text-primary {
+  color: $vuetify-primary;
+}
+.text-secondary {
+  color: $vuetify-accent;
+}
+
+//  Buttons
+
+.std-btn {
+  background-color: $vuetify-primary;
   border-radius: 4px;
-  color: $bg-white !important;
   font-size: 1em;
 }
 
@@ -136,33 +82,15 @@ $bg-white: #ffff;
   margin-right: 1vw;
   font-size: 1em;
   font-weight: bold;
-  color: $main-blue;
+  color: $vuetify-primary;
 }
 tr:hover td {
-  background-color: $main-blue-highlight;
-}
-.dialog-btn:hover {
-  background-color: $bg-white !important;
-  border: solid;
-  border-color: $main-blue;
-  border-radius: 4px;
-  color: $main-blue !important;
-  font-size: 1em;
+  background-color: $table-row-hover;
 }
 
-// Hr
-
-.dialog-hr{
-  border: dotted;
-  border-width: 0.5px;
-  color: $main-blue;
-}
-
-// Inputs
+// Input
 
 input[type=checkbox]:checked + label{
-  color: $main-blue !important;
+  color: $vuetify-primary !important;
   font-weight: bold;
 }
-
-// Transitions

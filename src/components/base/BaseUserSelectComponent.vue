@@ -134,4 +134,13 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+  .input-subhead-search {
+    outline: none;
+    border-bottom: solid 1px;
+    border-color: $vuetify-primary;
+    border-radius: 3px;
+  }
+  .check-subhead-selectall {
+    font-weight: bold;
+  }
 </style>
