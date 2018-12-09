@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout v-for="tolerance in hydrationTolerances" column fill-height align-end justify-end>
-      <v-flex v-for="(level, index) in tolerance" xs6>
+      <v-flex v-for="(level, key) in tolerance" xs6>
         <v-layout row wrap fill-height align-start justify-start>
         <v-card
           class="elevation-6 mb-0"
@@ -18,7 +18,7 @@
           required
           min="20" max="200"
           type="number"
-          v-model="tolerance[index]"
+          v-model="tolerance[key]"
           outline
           >{{ level }}
         </v-text-field>
