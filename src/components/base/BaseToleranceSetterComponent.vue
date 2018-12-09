@@ -1,17 +1,93 @@
 <template>
   <v-container>
-    <v-layout v-for="tolerance in hydrationTolerances" column fill-height align-end justify-end>
-      <v-flex v-for="(level, key) in tolerance" xs6>
-        <v-layout row wrap fill-height align-start justify-start>
-        <v-card
-          class="elevation-6 mb-0"
-          :height="height"
-          color="blue"
-          >
-        </v-card>
+    <v-layout row wrap>
+      <!-- <div class="" style="position: relative; top:75%; right: 0%; height:20%; width:100%; background-color:black;">
+
+      </div> -->
+      <v-card class="elevation-8 ma-2 bg">
+      <v-container
+        fluid
+        grid-list-lg
+      >
+        <v-layout row xs12>
+          <!-- <v-flex xs12> -->
+          <v-spacer></v-spacer>
+          <!-- </v-flex> -->
+        </v-layout>
+      </v-container>
+      </v-card>
+
+
+      <!-- <v-layout column> -->
+
+
+          <v-layout v-for="tolerance in hydrationTolerances" column>
+            <div class="setters-container">
+              <v-text-field
+                v-for="(level, key) in tolerance"
+                class="ma-2"
+                label="Severe Over Hydration"
+                placeholder="....."
+                append-icon="%"
+                required
+                type="number"
+                v-model.sync="tolerance[key]"
+                outline
+                >{{ level }}
+              </v-text-field>
+              <v-spacer></v-spacer>
+            </div>
+            <!-- <v-card class="elevation-8 white--text setters-container"> -->
+            <!-- <v-flex > -->
+              <!-- <v-layout row wrap fill-height align-start justify-space-between> -->
+
+              <!-- <v-spacer></v-spacer> -->
+              <!-- <v-layout align-end justify-end> -->
+
+            <!-- </v-layout> -->
+            <!-- </v-layout> -->
+            <!-- </v-flex> -->
+            <!-- </v-card> -->
+            </v-layout>
+          <!-- <v-card-title primary-title>
+            <div>
+              <div class="headline">
+
+              </div>
+              <span></span>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat dark>Button</v-btn>
+          </v-card-actions> -->
+
+      <!-- </v-layout> -->
+    </v-layout>
+
+
+    <!-- <v-card
+      class="elevation-6 mb-2"
+      height="100px"
+      >
+      <div class="tolerance-card" style="height:100%;width:100%">
+
+      </div>
+    </v-card> -->
+
+
+
+
+
+
+
+    <!-- <v-layout v-for="tolerance in hydrationTolerances" column fill-height align-start justify-space-around>
+      <v-flex v-for="(level, key) in tolerance">
+        <v-layout row wrap fill-height align-start justify-space-between> -->
+
         <!-- <v-spacer></v-spacer> -->
-        <v-text-field
-          class="ma-0"
+        <!-- <v-layout align-end justify-end> -->
+        <!-- <v-text-field
+          class="ma-2"
           label="Severe Over Hydration"
           placeholder="....."
           append-icon="%"
@@ -20,10 +96,12 @@
           type="number"
           v-model="tolerance[key]"
           outline
+          reverse
           >{{ level }}
-        </v-text-field>
-      </v-layout>
-      </v-flex>
+        </v-text-field> -->
+      <!-- </v-layout> -->
+      <!-- </v-layout> -->
+      <!-- </v-flex> -->
 
       <!-- <v-flex v-for="(level, index) in tolerance" xs4>
 
@@ -89,7 +167,7 @@
           outline
         >{{ level1 }}</v-text-field>
       </v-flex> -->
-    </v-layout>
+    <!-- </v-layout> -->
   </v-container>
 </template>
 
@@ -116,10 +194,10 @@ export default {
   },
   computed: {
     height () {
-      var cardHeight = 0
-      if (this.$vuetify.breakpoint.smAndUp) cardHeight = '116px'
-      if (this.$vuetify.breakpoint.xsOnly) cardHeight = '90px'
-      return cardHeight
+      // var cardHeight = 0
+      // if (this.$vuetify.breakpoint.smAndUp) cardHeight = '116px'
+      // if (this.$vuetify.breakpoint.xsOnly) cardHeight = '90px'
+      // return cardHeight
     }
   },
 }
@@ -127,4 +205,13 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+  .bg {
+    width: 65%;
+    height: 100%;
+    border-radius: 12px;
+    background-image: linear-gradient(red, yellow, green, $vuetify-primary);
+  }
+  .spacer {
+    height:60vh;
+  }
 </style>
