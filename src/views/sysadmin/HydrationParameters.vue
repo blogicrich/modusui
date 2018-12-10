@@ -4,27 +4,33 @@
       <v-icon medium color="primary">local_drink</v-icon>
       <h1 class="pg-header">Hydration Parameters</h1>
     </v-layout>
-    <v-layout row wrap>
-      <v-flex lg6>
-        <h2 class="pg-subheader text-primary mx-4">Start of Day</h2>
+    <v-layout row>
+      <v-layout column>
+        <v-layout class="mx-4" row fill-height align-center justify-start>
+          <v-icon medium color="primary">schedule</v-icon>
+          <h2 class="pg-subheader text-primary mx-4">Beginning of the Day</h2>
+        </v-layout>
+          <BaseToleranceSetter
+            class="baseToleranceSetter"
+            :tolerances="tolerances"
+          />
+      </v-layout>
+      <v-layout column>
+        <v-layout class="mx-4" row fill-height align-center justify-start>
+          <v-icon medium color="primary">update</v-icon>
+          <h2 class="pg-subheader text-primary mx-4">End of the Day</h2>
+        </v-layout>
         <BaseToleranceSetter
           class="baseToleranceSetter"
-          :hydrationTolerances="hydrationTolerances"
+          :tolerances="tolerances"
         />
-      </v-flex>
-      <v-flex lg6>
-        <h2 class="pg-subheader text-primary mx-4">End of Day</h2>
-        <BaseToleranceSetter
-          class="baseToleranceSetter"
-          :hydrationTolerances="hydrationTolerances"
-        />
-      </v-flex>
+      </v-layout>
     </v-layout>
     <v-layout row justify-center align-center>
       <v-fade-transition>
         <v-btn
         v-if="newDefaultValue"
-        class="root-nav-btn"
+        class="root-nav-btn mt-3"
         @click="save"
         color="primary"
         large
@@ -46,6 +52,7 @@
 </template>
 
 <script>
+
 import BaseToleranceSetter from '@/components/base/BaseToleranceSetterComponent.vue'
 import { getData, postData } from '@/mixins/apiRequests'
 
@@ -57,8 +64,8 @@ export default {
   },
   data () {
     return {
-      hydrationTolerances: [],
-      newDefaultValue: false,
+      tolerances: [],
+      newDefaultValue: true,
       snackColor: 'primary',
       snackText: '',
       snack: false,
@@ -68,7 +75,7 @@ export default {
   methods: {
     async getValues () {
       let data = await this.getData('hydrationtolerancesdisplay')
-      this.hydrationTolerances = data
+      this.tolerances = data
       console.log(data);
     }
   },
@@ -89,8 +96,4 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
-
-  .baseToleranceSetter {
-    margin: 0 auto 0 auto;
-  }
 </style>
