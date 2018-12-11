@@ -13,6 +13,7 @@
           <BaseToleranceSetter
             class="baseToleranceSetter"
             :tolerances="tolerances"
+            v-on:tolerance-changed="toleranceChanged"
           />
       </v-layout>
       <v-layout column>
@@ -23,6 +24,7 @@
         <BaseToleranceSetter
           class="baseToleranceSetter"
           :tolerances="tolerances"
+          v-on:tolerance-changed="toleranceChanged"
         />
       </v-layout>
     </v-layout>
@@ -58,25 +60,53 @@ import { getData, postData } from '@/mixins/apiRequests'
 
 export default {
   name: 'HydrationParameters',
-  mixins: [getData],
+  mixins: [getData, postData],
   components: {
     BaseToleranceSetter,
   },
   data () {
     return {
+      clone: [],
       tolerances: [],
-      newDefaultValue: true,
+      newDefaultValue: false,
       snackColor: 'primary',
       snackText: '',
       snack: false,
       timeout: 6000,
+      writeUrl: 'hydrationtolerancessave'
     }
   },
   methods: {
     async getValues () {
       let data = await this.getData('hydrationtolerancesdisplay')
       this.tolerances = data
-      console.log(data);
+      this.clone = data
+      // console.log(data);
+    },
+    async save () {
+      for (var i = 0; i < this.tolerances.length; i++) {
+        this.snackText = await this.postData(this.writeUrl, { level1:this.tolerances[i].level1, level2:this.tolerances[i].level2, level3:this.tolerances[i].level3, level4:this.tolerances[i].level4 })
+        if (this.snackText === 'Hydration Tolerances Updated') {
+          this.newDefaultValue = false
+          this.snackColor = 'success'
+          this.snack = true
+        } else {
+          this.snackColor = 'error'
+          this.snack = true
+        }
+      }
+      await this.getValues()
+    },
+    toleranceChanged (tol) {
+      console.log(tol)
+      console.log(this.clone)
+      for (var i = 0; i < this.clone.length; i++) {
+        if (this.clone[i][tol]) {
+          this.newDefaultValue = false
+        } else {
+          this.newDefaultValue = true
+        }
+      }
     }
   },
   mounted () {
@@ -84,11 +114,15 @@ export default {
     // console.log(data)
   },
   beforeRouteLeave (to, from, next) {
-    const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
-    if (answer) {
-      next()
+    if (this.newDefaultValue === true) {
+      let answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+      if (answer) {
+        next()
+      } else {
+        next(false)
+      }
     } else {
-      next(false)
+      next()
     }
   }
 }

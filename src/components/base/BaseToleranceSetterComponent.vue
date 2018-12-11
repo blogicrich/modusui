@@ -23,6 +23,7 @@
           required
           type="number"
           v-model="tolerance[key]"
+          @change="$emit('tolerance-changed', tolerance[key])"
           box
           >{{ level }}
         </v-text-field>
