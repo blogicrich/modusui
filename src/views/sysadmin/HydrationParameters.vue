@@ -79,9 +79,10 @@ export default {
   methods: {
     async getValues () {
       let data = await this.getData('hydrationtolerancesdisplay')
+      let dataClone = await this.getData('hydrationtolerancesdisplay')
       this.tolerances = data
-      this.clone = data
-      // console.log(data);
+      this.clone = dataClone
+      // console.log(data)
     },
     async save () {
       for (var i = 0; i < this.tolerances.length; i++) {
@@ -98,10 +99,8 @@ export default {
       await this.getValues()
     },
     toleranceChanged (tol) {
-      console.log(tol)
-      console.log(this.clone)
       for (var i = 0; i < this.clone.length; i++) {
-        if (this.clone[i][tol]) {
+        if (Number(this.clone[i][tol.level]) === Number(this.tolerances[i][tol.level])) {
           this.newDefaultValue = false
         } else {
           this.newDefaultValue = true
