@@ -748,13 +748,11 @@ export default {
       }
     },
     close () {
-      // console.log(this.selected);
-      if (this.selected.length) this.selected = []
       this.editDialog = false
       this.newDialog = false
       this.delDialog = false
+      this.selected = []
       this.$emit('itemsCancelled', { snackText: 'Items Cancelled', snackColor: 'error' })
-      // console.log('Dialog Closing')
     },
     decrement (index) {
       if (this.selected[index] && this.selected[index - 1]) {
@@ -770,7 +768,7 @@ export default {
     },
     getCellLabel (item, key, index) {
       for (var i = 0; i < this.newItem.length; i++) {
-        console.log(this.newItem[i].attr, key)
+        // console.log(this.newItem[i].attr, key)
         if (this.newItem[i].attr === key) return this.newItem[i].cellLabel
       }
     },
