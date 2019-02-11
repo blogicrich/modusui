@@ -2,8 +2,7 @@
   <v-container :class="hovering ? 'enter-style' : 'leave-style' " @click="navigate" @mouseenter="setHover" @mouseleave="setHover">
     <v-layout row wrap fill-height align-center justify-start>
       <v-icon
-        :class="hovering ? 'mr-3' : 'mr-2'"
-        :size="hovering ? '28' : '24'"
+        :size="28"
         :color="colorIcon"
         :to="link"
       >
@@ -48,41 +47,30 @@ export default {
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
 
-  // .hoverTrue {
-  // transition: all 0.3s ease;
-  // // margin: 1vw 0vh 1vw 0vh;
-  // cursor: pointer;
-  // color: $vuetify-accent;
-  //   p {
-  //     transition: all 0.3s ease;
-  //     font-style: italic;
-  //   }
-  // }
-  // .hoverFalse {
-  //   // margin: 1vw 0vh 1vw 0vh;
-  //   color: $vuetify-primary;
-  //   p {
-  //     font-style: normal;
-  //   }
-  // }
-
   .enter-style {
-    transition: all 0.3s ease;
     cursor: pointer;
     .subheader {
+      transition: all 0.6s ease;
+      margin-left: 10px;
       font-size: 1.2em;
     }
     .text-secondary {
+      transition: all 0.6s ease;
       font-style: italic;
+      color: $vuetify-primary;
     }
   }
   .leave-style {
     cursor: none;
     .subheader {
+      transition: all 0.6s ease;
+      margin-left: 4px;
       font-size: 1em;
     }
     .text-secondary {
+      transition: all 0.6s ease;
       font-style: normal;
+      color: $dark-blue-grey;
     }
   }
 </style>

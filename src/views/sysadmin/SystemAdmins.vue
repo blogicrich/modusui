@@ -15,7 +15,7 @@
       :error="error"
       :errorMsg="errorMsg"
       :loadingMsg="loadingMsg"
-      :loadedMsg="loadedMsg" 
+      :loadedMsg="loadedMsg"
       item-key="username"
       searchLabel="Search Records..."
       tableTitle="System Administrator Records"
@@ -26,7 +26,7 @@
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
-      @itemsCancelled="notify"
+      @itemsCancelled="refreshItems"
     />
   <v-snackbar
     v-model="snack"
@@ -119,9 +119,6 @@ export default {
       this.defaultItem = [
         { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ]
-    },
-    notify (items) {
-      this.showSnack(items.snackText, items.snackColor)
     }
   },
   created () {

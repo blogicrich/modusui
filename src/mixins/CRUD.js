@@ -14,6 +14,11 @@ export const crudOperations = {
       this.resetItem()
       this.showSnack('Item Added', 'success')
     },
+    cancelEditItems (items) {
+      localStorage.editItemsCache = JSON.parse(items)
+
+      localStorage.editItemsCache = null
+    },
     async deleteItem (items) {
       var index = 0
       for (var i = 0; i < items.length; i++) {
@@ -26,7 +31,8 @@ export const crudOperations = {
       this.showSnack('Items Deleted', 'success')
     },
     async editItems (items) {
-      // console.log("FIRING!!");
+      console.log('FIRING!!')
+      // localStorage.editItemsCache = JSON.stringify(items)
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
         var row = {}
@@ -37,7 +43,7 @@ export const crudOperations = {
             // console.log("Looping Inner: ", key, defaultItem[j][key], items[i][key])
           })
           await this.postData(this.updateUrl, defaultItem[j])
-          console.log(this.defaultItem[j])
+          // console.log(this.defaultItem[j])
         }
       }
       this.showSnack('Items Edited', 'success')
@@ -47,20 +53,20 @@ export const crudOperations = {
     },
     async getItems (url) {
       this.loading = true
-      this.loadingMsg = "Loading Data - Please Wait"
+      this.loadingMsg = 'Loading Data - Please Wait'
       var response = await this.getData(this.readUrl)
       // console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
         this.items = []
-        this.errorMsg = "Server response error: " + response + " - Please contact your system adminsitrator."
+        this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
         this.loading = false
         this.loaded = false
         this.error = true
         this.errorColor
       } else if (response.length <= 0) {
         this.items = []
-        this.loadedMsg = "No current records to display - There are no entries for this table."
+        this.loadedMsg = 'No current records to display - There are no entries for this table.'
         this.loading = false
         this.loaded = true
         this.error = false
@@ -72,7 +78,10 @@ export const crudOperations = {
         this.loaded = false
         this.error = false
       }
-
+    },
+    async refreshItems (items) {
+      this.showSnack(items.snackText, items.snackColor)
+      await this.getItems(this.readUrl)
     },
     showSnack (message, color) {
       this.snackColor = color
@@ -96,32 +105,3 @@ export const crudOperations = {
     }
   }
 }
-
-// export const postData = {
-//   methods: {
-//     postData (url, params) {
-//       // this.isLoading = true
-//       const response = async function () {
-//         try {
-//           // that.isLoading
-//           const axGet = await axios({
-//             method: 'post',
-//             timeout: 5000,
-//             headers: { 'Content-Type': 'application/json' },
-//             url: 'http://172.16.16.79:3000/' + url,
-//             // url: 'http://127.0.0.1:3000/' + url,
-//             data: JSON.stringify(params),
-//           })
-//           // this.isLoading = false
-//           console.log(axGet.data)
-//           return axGet.data
-//         } catch (err) {
-//           // console.log(err)
-//           return err
-//         }
-//       }
-//       // this.isLoading = false
-//       return response()
-//     }
-//   }
-// }
