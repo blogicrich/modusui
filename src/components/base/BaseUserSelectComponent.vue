@@ -6,7 +6,7 @@
           slot="activator"
           v-bind:title="btnTitle"
         ></SubPageNavButton>
-        <v-card height="500px">
+        <v-card class="selectCard">
           <v-card-title>
             <v-layout justify-center fill-height>
               <h2 class="table-header">{{ btnTitle }}</h2>
@@ -17,6 +17,7 @@
             <v-layout justify-space-between>
               <div>
                 <v-checkbox
+                  v-if="multiple"
                   v-model="allSelected"
                   v-bind:label="selectAll"
                   @change="toggleAll">
@@ -38,7 +39,7 @@
                   v-bind:label="item.name"
                   @click.native="select">
                 </v-checkbox>
-                <p><hr class="dialog-hr"><p/>
+                <p><hr class="dialog-hr"/><p/>
               </div>
             </v-layout>
           </v-card-text>
@@ -78,10 +79,12 @@ export default {
       allSelected: false,
       savedUsers: [],
       selectedUsers: [],
-      search: ''
+      search: '',
+      multiple: false
     }
   },
   props: {
+    // multiple: Boolean,
     users: Array,
     btnTitle: String,
     selectAll: String,
@@ -113,10 +116,17 @@ export default {
       }
     },
     select () {
-      if (this.selectedUsers.length === this.users.length) {
-        this.allSelected = true
+      if (this.multiple) {
+        if (this.selectedUsers.length === this.users.length) {
+          this.allSelected = true
+        } else {
+          this.allSelected = false
+        }
       } else {
-        this.allSelected = false
+        if (this.selectedUsers.length === 2) {
+          this.selectedUsers = this.selectedUsers.slice(1, 2)
+        }
+        console.log(this.selectedUsers)
       }
     }
   },
@@ -142,5 +152,8 @@ export default {
   }
   .check-subhead-selectall {
     font-weight: bold;
+  }
+  .selectCard {
+    height: 500px;
   }
 </style>
