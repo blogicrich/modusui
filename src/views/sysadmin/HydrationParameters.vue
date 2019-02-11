@@ -62,7 +62,7 @@ export default {
   name: 'HydrationParameters',
   mixins: [getData, postData],
   components: {
-    BaseToleranceSetter,
+    BaseToleranceSetter
   },
   data () {
     return {
@@ -86,7 +86,7 @@ export default {
     },
     async save () {
       for (var i = 0; i < this.tolerances.length; i++) {
-        this.snackText = await this.postData(this.writeUrl, { level1:this.tolerances[i].level1, level2:this.tolerances[i].level2, level3:this.tolerances[i].level3, level4:this.tolerances[i].level4 })
+        this.snackText = await this.postData(this.writeUrl, { level1: this.tolerances[i].level1, level2: this.tolerances[i].level2, level3: this.tolerances[i].level3, level4: this.tolerances[i].level4 })
         if (this.snackText === 'Hydration Tolerances Updated') {
           this.newDefaultValue = false
           this.snackColor = 'success'

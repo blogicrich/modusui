@@ -26,7 +26,7 @@
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
-      @itemsCancelled="notify"
+      @itemsCancelled="refreshItems"
     />
     <v-snackbar
       v-model="snack"
