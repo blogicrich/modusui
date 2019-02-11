@@ -54,6 +54,10 @@ export default {
   data () {
     return {
       items: [],
+      snackColor: 'primary',
+      snackText: '',
+      snack: false,
+      timeout: 6000,
       name: 'name',
       loading: true,
       loaded: false,
