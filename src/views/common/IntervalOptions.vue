@@ -1,5 +1,12 @@
 <template>
   <v-container grid-list-md text-xs-center>
+    <selectComponent
+      v-if="userPerms"
+      :users="users"
+      btnTitle="Select Users"
+      selectAll="Select all"
+      searchName="Search user.."
+    />
     <h1 class="pg-header">eDroplet Administration</h1>
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
     <v-divider
@@ -94,17 +101,42 @@
 
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
+import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import { getData, postData } from '@/mixins/apiRequests'
 
 export default {
   name: 'IntervalOptions',
   components: {
     BaseRadioOptions,
-    SubPageNavButton
+    SubPageNavButton,
+    selectComponent
   },
   mixins: [getData, postData],
   data () {
     return {
+      users: [
+        { name: 'Elsa' },
+        { name: 'Tamara' },
+        { name: 'Daniek' },
+        { name: 'Mitchell' },
+        { name: 'Jasper' },
+        { name: 'Bram' },
+        { name: 'Kevin' },
+        { name: 'Julian' },
+        { name: 'Patricia' },
+        { name: 'Marcel' },
+        { name: 'Fred' },
+        { name: 'Joke' },
+        { name: 'Kaily' },
+        { name: 'Bryan' },
+        { name: 'Michelle' },
+        { name: 'Lisa' },
+        { name: 'Cheyenne' },
+        { name: 'Shalina' },
+        { name: 'Naomi' },
+        { name: 'Leeroy' }
+      ],
+      userPerms: false,
       readUrl: 'intervalget',
       writeUrl: 'intervalupdate',
       newDefaultValue: false,
@@ -223,6 +255,7 @@ export default {
   },
   mounted () {
     this.getValues()
+    if (localStorage.auth.level === 'CLIENT ADMINISTRATOR') this.userPerms = true
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {
