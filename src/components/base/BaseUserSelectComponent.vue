@@ -4,12 +4,13 @@
       <v-dialog v-model="dialog" persistent scrollable max-width="500px" >
         <SubPageNavButton
           slot="activator"
-          v-bind:title="btnTitle"
+          v-model="checkUsers"
+          :title="checkUsers"
         ></SubPageNavButton>
         <v-card class="selectCard">
           <v-card-title>
             <v-layout justify-center fill-height>
-              <h2 class="table-header">{{ btnTitle }}</h2>
+              <h2 class="table-header">{{ checkUsers }}</h2>
             </v-layout>
           </v-card-title>
           <v-divider></v-divider>
@@ -79,14 +80,12 @@ export default {
       allSelected: false,
       savedUsers: [],
       selectedUsers: [],
-      search: '',
-      multiple: false
+      search: ''
     }
   },
   props: {
-    // multiple: Boolean,
+    multiple: Boolean,
     users: Array,
-    btnTitle: String,
     selectAll: String,
     searchName: String
   },
@@ -126,7 +125,6 @@ export default {
         if (this.selectedUsers.length === 2) {
           this.selectedUsers = this.selectedUsers.slice(1, 2)
         }
-        console.log(this.selectedUsers)
       }
     }
   },
@@ -137,6 +135,15 @@ export default {
         const searchUppercase = this.search.toUpperCase()
         return Uppercase.match(searchUppercase)
       })
+    },
+    checkUsers () {
+      let title
+      if (this.multiple) {
+        title = 'Select Users'
+      } else {
+        title = 'Select User'
+      }
+      return title
     }
   }
 }
