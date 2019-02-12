@@ -1,15 +1,15 @@
 <template>
   <v-flex class="audio-card">
     <v-card-text class="card-text">
-      <v-btn outline icon class="audio-button" @click.native="playing ? pause() : play()" :disabled="!loaded">
+      <v-btn dark icon class="audio-button" @click.native="playing ? pause() : play()" :disabled="!loaded">
         <v-icon v-if="!playing || paused">play_arrow</v-icon>
         <v-icon v-else>pause</v-icon>
       </v-btn>
-      <v-btn outline icon class="audio-button" @click.native="stop()" :disabled="!loaded">
+      <v-btn dark icon class="audio-button" @click.native="stop()" :disabled="!loaded">
         <v-icon>stop</v-icon>
       </v-btn>
       <v-menu v-model="menu" offset-y>
-        <v-btn slot="activator" dark outline icon class="audio-button" :disabled="!loaded">
+        <v-btn slot="activator" dark icon class="audio-button" :disabled="!loaded">
           <v-icon v-if="volumeValue >= 50">volume_up</v-icon>
           <v-icon v-else-if="volumeValue < 50 && volumeValue !== 0">volume_down</v-icon>
           <v-icon v-else-if="volumeValue === 0">volume_off</v-icon>
@@ -17,13 +17,17 @@
         <v-card>
           <v-list>
             <v-list-tile>
-              <v-slider v-model="volumeValue" thumb-label @input="volume()" :thumb-size="20" style="margin-top:5px;"></v-slider>
+              <v-slider v-model="volumeValue" thumb-label @input="volume()" :thumb-size="20"></v-slider>
             </v-list-tile>
           </v-list>
         </v-card>
       </v-menu>
-      <v-slider class="slider" @click.native="setPosition()" v-model="percentage" dark :disabled="!loaded"></v-slider>
-      <p class="time">{{ currentTime }} / {{ duration }}</p>
+      <v-layout row>
+        <v-flex offset-xs1 xs10>
+          <v-slider dark color="white" class="slider" @click.native="setPosition()" v-model="percentage" :disabled="!loaded"></v-slider>
+        </v-flex>
+      </v-layout>
+      <div class="time text-white">{{ currentTime }} / {{ duration }}</div>
     </v-card-text>
     <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
   </v-flex>
@@ -49,7 +53,7 @@ export default {
     canPlay: {
       type: Function,
       default: () => { }
-    }
+    },
   },
   computed: {
     duration: function () {
@@ -154,8 +158,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "./public/scss/main.scss";
+.audio-card {
+  border-radius: 5em;
+  background-color: $vuetify-primary;
+}
 .audio-button {
-  color: $vuetify-primary;
   padding: 0;
   margin: 5px;
 }

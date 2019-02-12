@@ -9,8 +9,8 @@
         </v-layout>
       </v-flex>
       <v-flex xl5 md3 lg5 sm12 xs12>
-        <v-layout row align-center justify-center style="margin:5px;">
-          <BaseAudioPlayer  class="vuetify-audio" :file="config.source"></BaseAudioPlayer>
+        <v-layout row align-center justify-center style="margin: 5px auto;">
+          <BaseAudioPlayer class="vuetify-audio" :file="config.source"></BaseAudioPlayer>
         </v-layout>
       </v-flex>
       <v-flex xl4 md4 lg4 sm12 xs12>
@@ -56,8 +56,7 @@ export default {
 .vuetify-audio {
   text-align: center;
   padding: 10px;
-  background-color: rgba(0, 161, 205, 0.1);
-  border-radius: 10%/50%;
+  border-radius: 5em;
   height: 130px;
   min-width: 300px;
 }
