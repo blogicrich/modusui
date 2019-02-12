@@ -3,10 +3,10 @@
     <selectComponent
       v-if="userPerms"
       :users="users"
-      btnTitle="Select Users"
-      selectAll="Select all"
-      searchName="Search user.."
-    />
+      :selectAll="selectAll"
+      :searchName="searchName"
+      :multiple="multiple"
+    ></selectComponent>
     <h1 class="pg-header">eDroplet Administration</h1>
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
     <v-divider
@@ -114,6 +114,9 @@ export default {
   mixins: [getData, postData],
   data () {
     return {
+      multiple: false,
+      selectAll: 'Select all',
+      searchName: 'Search user..',
       users: [
         { name: 'Elsa' },
         { name: 'Tamara' },
@@ -128,7 +131,6 @@ export default {
         { name: 'Fred' },
         { name: 'Joke' },
         { name: 'Kaily' },
-        { name: 'Bryan' },
         { name: 'Michelle' },
         { name: 'Lisa' },
         { name: 'Cheyenne' },
