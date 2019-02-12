@@ -1,0 +1,188 @@
+<template>
+  <v-flex class="audio-card">
+    <v-card-text class="card-text">
+      <v-btn outline icon class="audio-button" @click.native="playing ? pause() : play()" :disabled="!loaded">
+        <v-icon v-if="!playing || paused">play_arrow</v-icon>
+        <v-icon v-else>pause</v-icon>
+      </v-btn>
+      <v-btn outline icon class="audio-button" @click.native="stop()" :disabled="!loaded">
+        <v-icon>stop</v-icon>
+      </v-btn>
+      <v-menu v-model="menu" offset-y>
+        <v-btn slot="activator" dark outline icon class="audio-button" :disabled="!loaded">
+          <v-icon v-if="volumeValue >= 50">volume_up</v-icon>
+          <v-icon v-else-if="volumeValue < 50 && volumeValue !== 0">volume_down</v-icon>
+          <v-icon v-else-if="volumeValue === 0">volume_off</v-icon>
+        </v-btn>
+        <v-card>
+          <v-list>
+            <v-list-tile>
+              <v-slider v-model="volumeValue" thumb-label @input="volume()" :thumb-size="20" style="margin-top:5px;"></v-slider>
+            </v-list-tile>
+          </v-list>
+        </v-card>
+      </v-menu>
+      <v-slider class="slider" @click.native="setPosition()" v-model="percentage" dark :disabled="!loaded"></v-slider>
+      <p class="time">{{ currentTime }} / {{ duration }}</p>
+    </v-card-text>
+    <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
+  </v-flex>
+</template>
+<script>
+const formatTime = second => new Date(second * 1000).toISOString().substr(11, 8)
+
+export default {
+  name: 'BaseAudioPlayer',
+  props: {
+    file: {
+      type: String,
+      default: null
+    },
+    autoPlay: {
+      type: Boolean,
+      default: false
+    },
+    ended: {
+      type: Function,
+      default: () => { }
+    },
+    canPlay: {
+      type: Function,
+      default: () => { }
+    }
+  },
+  computed: {
+    duration: function () {
+      return this.audio ? formatTime(this.totalDuration) : ''
+    }
+  },
+  data () {
+    return {
+      firstPlay: true,
+      isMuted: false,
+      loaded: false,
+      playing: false,
+      paused: false,
+      percentage: 0,
+      currentTime: '00:00:00',
+      audio: undefined,
+      totalDuration: 0,
+      menu: false,
+      volumeValue: 100
+    }
+  },
+
+  methods: {
+    // Set position on slider
+    setPosition () {
+      this.audio.currentTime = parseInt(this.audio.duration / 100 * this.percentage)
+    },
+    // Stop playing audio file
+    stop () {
+      // Setting both vars to false
+      this.paused = this.playing = false
+      this.audio.pause()
+      this.audio.currentTime = 0
+    },
+    // Play if not already playing
+    play () {
+      if (this.playing) return
+      this.paused = false
+      // First play then set playing to true
+      this.audio.play().then(setPlaying => this.playing = true)
+    },
+    // Pause if not already paused
+    pause () {
+      this.paused = !this.paused;
+      (this.paused) ? this.audio.pause() : this.audio.play()
+    },
+    // Mute the volume
+    volume () {
+      if (this.volumeValue === 0) {
+        this.isMuted = true
+        this.audio.muted = this.isMuted
+      } else {
+        this.isMuted = false
+        this.audio.muted = this.isMuted
+        this.audio.volume = this.volumeValue / 100
+      }
+    },
+    // Handle audio duration
+    handleLoaded: function () {
+      if (this.audio.readyState >= 2) {
+        this.totalDuration = parseInt(this.audio.duration)
+        this.loaded = true
+        if (this.autoPlay) this.audio.play()
+      } else {
+        console.log('Failed to load audio file')
+      }
+    },
+    // Handle slider position
+    handlePlayingUI: function (e) {
+      this.percentage = this.audio.currentTime / this.audio.duration * 100
+      this.currentTime = formatTime(this.audio.currentTime)
+    },
+    // Handle pausing and playing
+    handlePlayPause: function (e) {
+      if (e.type === 'play' && this.firstPlay) {
+        this.audio.currentTime = 0
+        if (this.firstPlay) this.firstPlay = false
+      }
+      if (e.type === 'pause' && this.paused === false && this.playing === false) this.currentTime = '00:00:00'
+    },
+    // Handle end of audio file
+    handleEnded () {
+      this.paused = this.playing = false
+    },
+    // Initialize the audio file and its controls
+    init: function () {
+      this.audio.addEventListener('timeupdate', this.handlePlayingUI)
+      this.audio.addEventListener('loadeddata', this.handleLoaded)
+      this.audio.addEventListener('pause', this.handlePlayPause)
+      this.audio.addEventListener('play', this.handlePlayPause)
+      this.audio.addEventListener('ended', this.handleEnded)
+    }
+  },
+  mounted () {
+    // Assigning audio to DOM element with ref attribute with value of 'player'
+    this.audio = this.$refs.player
+    this.init()
+    this.audio.volume = this.volumeValue / 100
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+@import "./public/scss/main.scss";
+.audio-button {
+  color: $vuetify-primary;
+  padding: 0;
+  margin: 5px;
+}
+
+.volumeSlider {
+  padding-top: 5px;
+  overflow: hidden;
+}
+
+.audio-slider {
+  margin: 0;
+  padding: 0;
+}
+
+.time {
+  padding: 0;
+  margin: 0;
+}
+
+.card-text {
+  margin: 0;
+  padding: 0;
+}
+
+.slider {
+  margin: 0;
+  padding: 0;
+  height: 40px;
+}
+</style>
