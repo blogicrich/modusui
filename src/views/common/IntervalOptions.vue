@@ -1,6 +1,7 @@
 <template>
   <v-container grid-list-md text-xs-center>
     <selectComponent
+      v-if="userPerms"
       :users="users"
       :selectAll="selectAll"
       :searchName="searchName"
@@ -137,6 +138,7 @@ export default {
         { name: 'Naomi' },
         { name: 'Leeroy' }
       ],
+      userPerms: false,
       readUrl: 'intervalget',
       writeUrl: 'intervalupdate',
       newDefaultValue: false,
@@ -255,6 +257,7 @@ export default {
   },
   mounted () {
     this.getValues()
+    if (localStorage.auth.level === 'CLIENT ADMINISTRATOR') this.userPerms = true
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {

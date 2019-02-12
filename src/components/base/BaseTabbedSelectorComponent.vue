@@ -157,15 +157,15 @@ export default {
       }
     },
     eraseChange () {
-      for (var i = 0; i < this.startData.length; i++) {
-        this.changedData[i].subject = this.startData[i].subject
-        this.changedData[i].text = this.startData[i].text
+      for (var x = 0; x < this.startData.length; x++) {
+        this.changedData[x].subject = this.startData[x].subject
+        this.changedData[x].text = this.startData[x].text
         this.btns = false
       }
     },
     switchTab (event) {
-      for (var x = 0; x < this.changedData.length; x++) {
-        if (this.changedData[x].subject !== this.startData[x].subject || this.changedData[x].text !== this.startData[x].text) {
+      for (var y = 0; y < this.changedData.length; y++) {
+        if (this.changedData[y].subject !== this.startData[y].subject || this.changedData[y].text !== this.startData[y].text) {
           this.dialog = true
           this.activeHash = event.target.hash
           this.activeHash = this.activeHash.replace('#', '')
@@ -175,8 +175,8 @@ export default {
       }
     },
     showBtns () {
-      for (var i = 0; i < this.startData.length; i++) {
-        if (this.changedData[i].subject !== this.startData[i].subject || this.changedData[i].text !== this.startData[i].text) {
+      for (var z = 0; z < this.startData.length; z++) {
+        if (this.changedData[z].subject !== this.startData[z].subject || this.changedData[z].text !== this.startData[z].text) {
           this.btns = true
           return
         } else {
