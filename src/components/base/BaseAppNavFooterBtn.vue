@@ -28,11 +28,11 @@ export default {
   props: {
     route: String,
     btnIcon: String,
-    btnColor: String,
+    btnColor: String
   },
   methods: {
     navigate () {
-      this.$router.push("/" + this.route)
+      this.$router.push('/' + this.route)
     }
   }
 }

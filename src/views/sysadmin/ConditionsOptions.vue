@@ -26,7 +26,7 @@
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
-      @itemsCancelled="notify"
+      @itemsCancelled="refreshItems"
     />
   <v-snackbar
     v-model="snack"
@@ -103,9 +103,6 @@ export default {
         { deptPersonsId: 0, personsId: 0, conditionId: 0, description: ' ', status: ' ' }
       ]
     },
-  notify (items) {
-    this.showSnack(items.snackText, items.snackColor)
-    }
   },
   created () {
     this.getItems(this.readUrl)

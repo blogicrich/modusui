@@ -4,12 +4,13 @@
       <v-dialog v-model="dialog" persistent scrollable max-width="500px" >
         <SubPageNavButton
           slot="activator"
-          v-bind:title="btnTitle"
+          v-model="checkUsers"
+          :title="checkUsers"
         ></SubPageNavButton>
-        <v-card height="500px">
+        <v-card class="selectCard">
           <v-card-title>
             <v-layout justify-center fill-height>
-              <h2 class="table-header">{{ btnTitle }}</h2>
+              <h2 class="table-header">{{ checkUsers }}</h2>
             </v-layout>
           </v-card-title>
           <v-divider></v-divider>
@@ -17,6 +18,7 @@
             <v-layout justify-space-between>
               <div>
                 <v-checkbox
+                  v-if="multiple"
                   v-model="allSelected"
                   v-bind:label="selectAll"
                   @change="toggleAll">
@@ -38,7 +40,7 @@
                   v-bind:label="item.name"
                   @click.native="select">
                 </v-checkbox>
-                <p><hr class="dialog-hr"><p/>
+                <p><hr class="dialog-hr"/><p/>
               </div>
             </v-layout>
           </v-card-text>
@@ -82,8 +84,8 @@ export default {
     }
   },
   props: {
+    multiple: Boolean,
     users: Array,
-    btnTitle: String,
     selectAll: String,
     searchName: String
   },
@@ -113,10 +115,16 @@ export default {
       }
     },
     select () {
-      if (this.selectedUsers.length === this.users.length) {
-        this.allSelected = true
+      if (this.multiple) {
+        if (this.selectedUsers.length === this.users.length) {
+          this.allSelected = true
+        } else {
+          this.allSelected = false
+        }
       } else {
-        this.allSelected = false
+        if (this.selectedUsers.length === 2) {
+          this.selectedUsers = this.selectedUsers.slice(1, 2)
+        }
       }
     }
   },
@@ -127,6 +135,15 @@ export default {
         const searchUppercase = this.search.toUpperCase()
         return Uppercase.match(searchUppercase)
       })
+    },
+    checkUsers () {
+      let title
+      if (this.multiple) {
+        title = 'Select Users'
+      } else {
+        title = 'Select User'
+      }
+      return title
     }
   }
 }
@@ -142,5 +159,8 @@ export default {
   }
   .check-subhead-selectall {
     font-weight: bold;
+  }
+  .selectCard {
+    height: 500px;
   }
 </style>
