@@ -140,7 +140,7 @@ export default {
   },
   props: {
     changedData: Array,
-    startData: Array,
+    startData: Promise,
     dialogTitle: String,
     dialogText: String,
     cardEmailHeader: String,
@@ -148,11 +148,13 @@ export default {
   },
   methods: {
     saveItem () {
-      for (var i = 0; i < this.startData.length; i++) {
-        if (this.startData[i].subject !== this.changedData.subject || this.startData[i].text !== this.changedData[i].text) {
-          this.startData[i].subject = this.changedData[i].subject
-          this.startData[i].text = this.changedData[i].text
-          this.btns = false
+      if (this.startData.length > 0) {
+        for (var i = 0; i < this.startData.length; i++) {
+          if (this.startData[i].subject !== this.changedData.subject || this.startData[i].text !== this.changedData[i].text) {
+            this.startData[i].subject = this.changedData[i].subject
+            this.startData[i].text = this.changedData[i].text
+            this.btns = false
+          }
         }
       }
     },

@@ -22,15 +22,16 @@ export default {
   mixins: [crudOperations, getData, postData],
   data () {
     return {
-      changedData: [
-        { name: 'Dehydrated', subject: 'Dehydrated', text: 'User is Dehydrated!' },
-        { name: 'Still Dehydrated', subject: 'Still Dehydrated', text: 'User is still Dehydrated!' },
-        { name: 'Rehydrated', subject: 'Rehydrated', text: 'User is Rehydrated' },
-        { name: 'Battery', subject: 'Battery', text: 'Ohnoo the battery' },
-        { name: 'Base Unit Offline', subject: 'Base unit offline', text: 'Base unit offline .... ' },
-        { name: 'No Drink', subject: 'No drink', text: 'No drink :(' }
-      ],
+      // changedData: [
+      //   { name: 'Dehydrated', subject: 'Dehydrated', text: 'User is Dehydrated!' },
+      //   { name: 'Still Dehydrated', subject: 'Still Dehydrated', text: 'User is still Dehydrated!' },
+      //   { name: 'Rehydrated', subject: 'Rehydrated', text: 'User is Rehydrated' },
+      //   { name: 'Battery', subject: 'Battery', text: 'Ohnoo the battery' },
+      //   { name: 'Base Unit Offline', subject: 'Base unit offline', text: 'Base unit offline .... ' },
+      //   { name: 'No Drink', subject: 'No drink', text: 'No drink :(' }
+      // ],
       startData: [],
+      changedData: [],
       // startData: [
       //   { name: 'Dehydrated', subject: 'Dehydrated', text: 'User is Dehydrated!' },
       //   { name: 'Still Dehydrated', subject: 'Still Dehydrated', text: 'User is still Dehydrated!' },
@@ -43,14 +44,14 @@ export default {
     }
   },
   methods: {
-    async getMessages (url) {
-      var items = await this.getItems(url)
+    async getMessages () {
+      var items = await this.getItems(this.readUrl)
       return items
     }
   },
-  mounted () {
-    this.startData = this.getMessages(this.readUrl)
-    console.log(this.startData)
+  created () {
+    var items = this.getItems(this.readUrl)
+    this.startData = items
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
