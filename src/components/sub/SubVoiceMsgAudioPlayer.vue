@@ -17,8 +17,7 @@
         <v-layout row warp align-center justify-center>
             <v-radio-group class="radio-group" :value="value" :mandatory="false" :row="this.$vuetify.breakpoint.name !== 'xs'" :column="this.$vuetify.breakpoint.name === 'xs'">
             <h3 slot="label" class="text-intervals mr-3 my-1" >Message Interval in Minutes:</h3>
-            <v-radio color="primary" v-for="radio in radioConfig" :key="radio.label" :label="radio.label" :value="radio.value" class="radio">
-            </v-radio>
+            <v-radio color="primary" v-for="radio in radioConfig" :key="radio.label" :label="radio.label" :value="radio.value" class="radio"></v-radio>
           </v-radio-group>
         </v-layout>
       </v-flex>
@@ -41,11 +40,7 @@ export default {
     fileName: String,
     value: String,
     audioType: String,
-    config: Object,
-    index: Number
-  },
-  methods: {
-
+    config: Object
   }
 }
 </script>
@@ -57,7 +52,6 @@ export default {
   text-align: center;
   padding: 10px;
   border-radius: 5em;
-  height: 130px;
   min-width: 300px;
 }
 
