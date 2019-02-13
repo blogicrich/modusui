@@ -1,39 +1,37 @@
 <template>
-  <v-flex class="audio-card">
+  <v-flex class="audio-card" :id="'audio-' + uniqid" transition="slide-x-transition">
     <v-card-text class="card-text">
-      <v-btn dark icon class="audio-button" @click.native="playing ? pause() : play()" :disabled="!loaded">
+      <v-btn dark icon class="audio-button" @click.native="playing ? stop() : play()" :disabled="!loaded">
         <v-icon v-if="!playing || paused">play_arrow</v-icon>
-        <v-icon v-else>pause</v-icon>
+        <v-icon v-else>stop</v-icon>
       </v-btn>
-      <v-btn dark icon class="audio-button" @click.native="stop()" :disabled="!loaded">
-        <v-icon>stop</v-icon>
-      </v-btn>
-      <v-menu v-model="menu" offset-y>
+
+      <v-menu v-model="menu" offset-y row>
         <v-btn slot="activator" dark icon class="audio-button" :disabled="!loaded">
           <v-icon v-if="volumeValue >= 50">volume_up</v-icon>
           <v-icon v-else-if="volumeValue < 50 && volumeValue !== 0">volume_down</v-icon>
           <v-icon v-else-if="volumeValue === 0">volume_off</v-icon>
         </v-btn>
         <v-card>
-          <v-list>
+          <v-list style="padding:15px 0 10px 0;">
             <v-list-tile>
               <v-slider v-model="volumeValue" thumb-label @input="volume()" :thumb-size="20"></v-slider>
             </v-list-tile>
           </v-list>
         </v-card>
       </v-menu>
+      <p style="display:inline;text-align:center;" class="text-white" dark icon>{{ timeLeft }}</p>
       <v-layout row>
         <v-flex offset-xs1 xs10>
-          <v-slider dark color="white" class="slider" @click.native="setPosition()" v-model="percentage" :disabled="!loaded"></v-slider>
+          <v-slider dark color="white" class="progressSlider" step="0.1" tick-size="0.1" always-dirty @click.native="setPosition()" v-model="percentage" :disabled="!loaded"></v-slider>
         </v-flex>
       </v-layout>
-      <div class="time text-white">{{ currentTime }} / {{ duration }}</div>
     </v-card-text>
     <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
   </v-flex>
 </template>
 <script>
-const formatTime = second => new Date(second * 1000).toISOString().substr(11, 8)
+const formatTime = second => new Date(second * 1000).toISOString().substr(14, 5)
 
 export default {
   name: 'BaseAudioPlayer',
@@ -42,10 +40,6 @@ export default {
       type: String,
       default: null
     },
-    autoPlay: {
-      type: Boolean,
-      default: false
-    },
     ended: {
       type: Function,
       default: () => { }
@@ -53,7 +47,7 @@ export default {
     canPlay: {
       type: Function,
       default: () => { }
-    },
+    }
   },
   computed: {
     duration: function () {
@@ -68,18 +62,27 @@ export default {
       playing: false,
       paused: false,
       percentage: 0,
-      currentTime: '00:00:00',
+      currentTime: '',
       audio: undefined,
-      totalDuration: 0,
+      totalDuration: '',
       menu: false,
-      volumeValue: 100
+      volumeValue: 100,
+      uniqid: null,
+      timeLeft: ''
     }
   },
-
+  watch: {
+    percentage: function () {
+      // document.getElementById('audio-' + this.uniqid).style.background = 'linear-gradient(to right, rgb(0, 146, 187) '+this.percentage+'%, #00A1CD '+this.percentage+'%)'
+    },
+    currentTime: function () {
+      this.timeLeft = this.audio ? formatTime(parseInt(this.totalDuration) - parseInt(this.audio.currentTime)) : ''
+    }
+  },
   methods: {
     // Set position on slider
     setPosition () {
-      this.audio.currentTime = parseInt(this.audio.duration / 100 * this.percentage)
+      this.audio.currentTime = this.audio.duration / 100 * this.percentage
     },
     // Stop playing audio file
     stop () {
@@ -100,11 +103,13 @@ export default {
       this.paused = !this.paused;
       (this.paused) ? this.audio.pause() : this.audio.play()
     },
-    // Mute the volume
+    
     volume () {
+      // Mute the volume
       if (this.volumeValue === 0) {
         this.isMuted = true
         this.audio.muted = this.isMuted
+        // Set it to selected value
       } else {
         this.isMuted = false
         this.audio.muted = this.isMuted
@@ -116,6 +121,7 @@ export default {
       if (this.audio.readyState >= 2) {
         this.totalDuration = parseInt(this.audio.duration)
         this.loaded = true
+        this.timeLeft = formatTime(parseInt(this.totalDuration) - parseInt(this.audio.currentTime))
         if (this.autoPlay) this.audio.play()
       } else {
         console.log('Failed to load audio file')
@@ -132,7 +138,7 @@ export default {
         this.audio.currentTime = 0
         if (this.firstPlay) this.firstPlay = false
       }
-      if (e.type === 'pause' && this.paused === false && this.playing === false) this.currentTime = '00:00:00'
+      if (e.type === 'pause' && this.paused === false && this.playing === false) this.currentTime = '00:00'
     },
     // Handle end of audio file
     handleEnded () {
@@ -152,6 +158,11 @@ export default {
     this.audio = this.$refs.player
     this.init()
     this.audio.volume = this.volumeValue / 100
+    console.log(this.audio)
+  },
+  created () {
+    // Set unique id for component
+    this.uniqid = Math.floor(Math.random() * 1000000)
   }
 }
 </script>
@@ -159,9 +170,10 @@ export default {
 <style lang="scss" scoped>
 @import "./public/scss/main.scss";
 .audio-card {
-  border-radius: 5em;
   background-color: $vuetify-primary;
+  border-radius: 5em;
 }
+
 .audio-button {
   padding: 0;
   margin: 5px;
@@ -187,7 +199,7 @@ export default {
   padding: 0;
 }
 
-.slider {
+.progressSlider {
   margin: 0;
   padding: 0;
   height: 40px;
