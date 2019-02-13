@@ -1,7 +1,6 @@
-<template lang="html">
+<!-- <template lang="html">
   <baseTab
-    :changedData= "changedData"
-    :startData= "startData"
+    :items="items"
     dialogTitle= "You are about to lose unsaved data."
     dialogText= "Do you wish to proceed?"
     cardEmailHeader= "Email Message Template"
@@ -22,36 +21,13 @@ export default {
   mixins: [crudOperations, getData, postData],
   data () {
     return {
-      // changedData: [
-      //   { name: 'Dehydrated', subject: 'Dehydrated', text: 'User is Dehydrated!' },
-      //   { name: 'Still Dehydrated', subject: 'Still Dehydrated', text: 'User is still Dehydrated!' },
-      //   { name: 'Rehydrated', subject: 'Rehydrated', text: 'User is Rehydrated' },
-      //   { name: 'Battery', subject: 'Battery', text: 'Ohnoo the battery' },
-      //   { name: 'Base Unit Offline', subject: 'Base unit offline', text: 'Base unit offline .... ' },
-      //   { name: 'No Drink', subject: 'No drink', text: 'No drink :(' }
-      // ],
-      startData: [],
-      changedData: [],
-      // startData: [
-      //   { name: 'Dehydrated', subject: 'Dehydrated', text: 'User is Dehydrated!' },
-      //   { name: 'Still Dehydrated', subject: 'Still Dehydrated', text: 'User is still Dehydrated!' },
-      //   { name: 'Rehydrated', subject: 'Rehydrated', text: 'User is Rehydrated' },
-      //   { name: 'Battery', subject: 'Battery', text: 'Ohnoo the battery' },
-      //   { name: 'Base Unit Offline', subject: 'Base unit offline', text: 'Base unit offline .... ' },
-      //   { name: 'No Drink', subject: 'No drink', text: 'No drink :(' }
-      // ],
+      items: [],
       readUrl: 'textmessageget'
     }
   },
-  methods: {
-    async getMessages () {
-      var items = await this.getItems(this.readUrl)
-      return items
-    }
-  },
   created () {
-    var items = this.getItems(this.readUrl)
-    this.startData = items
+    this.getData(this.readUrl)
+    console.log(this.items)
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
@@ -66,4 +42,4 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
-</style>
+</style> -->
