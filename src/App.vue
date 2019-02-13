@@ -24,7 +24,7 @@
     <v-fade-transition>
       <v-footer
         v-if="authenticated.state && $vuetify.breakpoint.smAndUp"
-        class="elevation-5 pa-4"
+        :class="(authenticated.level === 'CARER') ? 'hide' : 'elevation-5 pa-4' "
         :fixed="fixed"
         color="white"
         app
@@ -92,8 +92,10 @@ export default {
       localStorage.auth = JSON.stringify(this.authenticated)
       this.user = newStatus.level
       // console.log(JSON.parse(localStorage.auth))
-      if (newStatus.state) {
+      if (newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR' ) {
         this.$router.push('/landing')
+      } else if (newStatus.level === 'CARER') {
+        this.$router.push('/dashboard')
       }
     },
     logout () {
@@ -123,6 +125,9 @@ export default {
 
 .app-shell {
   background-color: $vuetify-secondary;
+}
+.hide {
+  visibility: hidden;
 }
 img {
   height: inherit;

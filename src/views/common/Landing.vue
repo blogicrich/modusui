@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md>
     <h1 class="pg-header">eDroplet Administration</h1>
-    <v-layout v-if="this.user == 'SYSTEM ADMINISTRATOR'" row wrap align-start justify-start>
+    <v-layout v-if="this.user === 'SYSTEM ADMINISTRATOR'" row wrap align-start justify-start>
       <v-flex sm6 lg4>
         <v-layout class="ma-2" row wrap align-start justify-center style="background-color:#003c4d;border-radius:10px;">
           <v-icon
@@ -191,9 +191,12 @@ export default {
   },
   data () {
     return {
-      user: JSON.parse(localStorage.auth).level,
+      user: '',
       redirecting: false
     }
+  },
+  mounted () {
+    this.user = JSON.parse(localStorage.auth).level
   }
 }
 </script>

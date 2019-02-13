@@ -11,8 +11,23 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: () => import(/* webpackChunkName: "about" */ './views/common/Login.vue')
       // redirect: { name: 'Login' }
+    },
+    {
+      path: '/landing',
+      name: 'Landing',
+      component: () => import(/* webpackChunkName: "about" */ './views/common/Landing.vue')
+    },
+    {
+      path: '/intervaloptions',
+      name: 'IntervalOptions',
+      component: () => import(/* webpackChunkName: "about" */ './views/common/IntervalOptions.vue')
+    },
+    {
+      path: '/voicemessages',
+      name: 'VoiceMessages',
+      component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
     },
     // Carer routes
     {
