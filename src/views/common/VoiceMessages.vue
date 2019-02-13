@@ -20,7 +20,7 @@
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key) in msgReminderConfig" :key="'msgRem' + config.fileName"
+            v-for="(config, key, index) in msgReminderConfig" :key="'msgRem' + config.fileName"
             :radioConfig="msgReminderIntervalSettings"
             :groupHeader="msgReminderGroupHeader"
             :groupDescription="msgReminderRadioDescription"
@@ -29,12 +29,9 @@
             :audioFile="config.source"
             :audioType="config.audioType"
             :fileName="config.fileName"
+            :config="config"
           />
-          <v-divider
-            class="ma-2"
-            color="#f2f4f4"
-            >
-          </v-divider>
+
         </v-card>
         <v-card class="pa-2 my-3">
           <h2 class="pg-subheader text-primary ma-2">{{ msgInstructGroupHeader }}</h2>
@@ -53,12 +50,8 @@
             :audioFile="config.source"
             :audioType="config.audioType"
             :fileName="config.fileName"
+            :config="config"
           />
-          <v-divider
-            class="ma-2"
-            color="#f2f4f4"
-            >
-          </v-divider>
         </v-card>
         <v-card class="pa-2 my-2">
           <h2 class="pg-subheader text-primary ma-2">{{ msgPraiseGroupHeader }}</h2>
@@ -77,12 +70,8 @@
             :audioFile="config.source"
             :audioType="config.audioType"
             :fileName="config.fileName"
+            :config="config"
           />
-          <v-divider
-            class="ma-2"
-            color="#f2f4f4"
-            >
-          </v-divider>
         </v-card>
       </v-flex>
     </v-layout>
@@ -139,9 +128,9 @@ export default {
       msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgReminderRadioHeader: 'Time interval in minutes:',
       msgReminderConfig: [
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ],
       // Messages instructions
       msgInstructIntervalSettings: [
@@ -154,9 +143,9 @@ export default {
       msgInstructRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgInstructRadioHeader: 'Please select an option from the following:',
       msgInstructConfig: [
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ],
       // Messages praise
       msgPraiseIntervalSettings: [
@@ -169,9 +158,9 @@ export default {
       msgPraiseRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgPraiseRadioHeader: 'Please select an option from the following:',
       msgPraiseConfig: [
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
-        { source: '../../../public/audio/mp3/mpfile.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
+        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ]
     }
   },
