@@ -1,4 +1,4 @@
-<template lang="html">
+<!-- <template lang="html">
   <baseTab
     :items= "items"
     dialogTitle= "You are about to lose unsaved data."
@@ -43,4 +43,4 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
-</style>
+</style> -->

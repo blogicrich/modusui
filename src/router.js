@@ -14,20 +14,41 @@ export default new Router({
       component: Login
       // redirect: { name: 'Login' }
     },
+    // Carer routes
     {
-      path: '/landing',
-      name: 'Landing',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/Landing.vue')
+      path: '/additionaldrinks',
+      name: 'AdditionalDrinks',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/AdditionalDrinks.vue')
     },
     {
-      path: '/intervaloptions',
-      name: 'IntervalOptions',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/IntervalOptions.vue')
+      path: '/alerts',
+      name: 'Alerts',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Alerts.vue')
     },
     {
-      path: '/voicemessages',
-      name: 'VoiceMessages',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
+      path: '/away',
+      name: 'Away',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Away.vue')
+    },
+    {
+      path: '/userconditions',
+      name: 'UserConditions',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/UserConditions.vue')
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Dashboard.vue')
+    },
+    {
+      path: '/reports',
+      name: 'Reports',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Reports.vue')
+    },
+    {
+      path: '/settingsreports',
+      name: 'SettingsReports',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/SettingsReports.vue')
     },
     // Cliadmin routes
     {
@@ -35,11 +56,6 @@ export default new Router({
       name: 'CarerSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
-    // {
-    //   path: '/carersettings',
-    //   name: 'CarerSettings',
-    //   component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerSettings.vue')
-    // },
     {
       path: '/conditions',
       name: 'Conditions',

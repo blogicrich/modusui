@@ -55,7 +55,7 @@ export const crudOperations = {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
       var response = await this.getData(this.readUrl)
-      // console.log("Response: ", response)
+      console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
         this.items = []
