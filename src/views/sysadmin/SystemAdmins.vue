@@ -121,7 +121,7 @@ export default {
       ]
     }
   },
-  created () {
+  mounted () {
     this.getItems(this.readUrl)
   }
 }
