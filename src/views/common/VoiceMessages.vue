@@ -1,17 +1,16 @@
 <template lang="html">
   <v-container>
-    <selectComponent
-      :users="users"
-      btnTitle="Select Users"
-      selectAll="Select all"
-      searchName="Search user.."
-    ></selectComponent>
     <v-layout>
       <v-flex xs12>
         <v-layout row align-start justify-space-between>
           <h1 class="pg-header ma-2">Voice Messages</h1>
           <v-spacer></v-spacer>
-          <selectComponent class="mx-2"></selectComponent>
+          <selectComponent
+            :users="users"
+            :selectAll="selectAll"
+            :searchName="searchName"
+            :multiple="multiple"
+          ></selectComponent>
         </v-layout>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">{{ msgReminderGroupHeader}}</h2>
@@ -125,6 +124,9 @@ export default {
         { name: 'Naomi' },
         { name: 'Leeroy' }
       ],
+      multiple: true,
+      selectAll: 'Select all',
+      searchName: 'Search user..',
       uploadIcon: 'cloud_upload',
       // Messages reminders
       msgReminderIntervalSettings: [
