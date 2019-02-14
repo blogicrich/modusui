@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md>
     <h1 class="pg-header">eDroplet Administration</h1>
-    <v-layout v-if="this.user == 'SYSTEM ADMINISTRATOR'" row wrap align-start justify-start>
+    <v-layout v-if="this.user === 'SYSTEM ADMINISTRATOR'" row wrap align-start justify-start>
       <v-flex sm6 lg4>
         <v-layout class="ma-2" row wrap align-start justify-center style="background-color:#003c4d;border-radius:10px;">
           <v-icon
@@ -100,9 +100,7 @@
       </v-flex>
     </v-layout>
 
-    <v-layout v-if="this.user == 'CLIENT ADMINISTRATOR'" class="landing-cli-admin">
-      <h1 class="pg-header">Main Menu</h1>
-      <v-layout row wrap>
+    <v-layout v-if="this.user == 'CLIENT ADMINISTRATOR'" row wrap align-start justify-start class="landing-cli-admin">
         <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
             <v-icon
@@ -128,7 +126,7 @@
             colorIcon="#006480"
           />
         </v-flex>
-        <v-flex class="pa-2" sm6 lg6>
+        <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
             <v-icon
               class="ma-1"
@@ -160,7 +158,7 @@
             colorIcon="#006480"
           />
         </v-flex>
-        <v-flex class="pa-2" sm6 lg6>
+        <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
             <v-icon
               class="ma-1"
@@ -179,9 +177,8 @@
           />
         </v-flex>
       </v-layout>
-    </v-layout>
-  </v-container>
-</template>
+    </v-container>
+  </template>
 
 <script>
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
@@ -194,9 +191,12 @@ export default {
   },
   data () {
     return {
-      user: JSON.parse(localStorage.auth).level,
+      user: '',
       redirecting: false
     }
+  },
+  mounted () {
+    this.user = JSON.parse(localStorage.auth).level
   }
 }
 </script>

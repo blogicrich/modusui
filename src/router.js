@@ -11,7 +11,7 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: () => import(/* webpackChunkName: "about" */ './views/common/Login.vue')
       // redirect: { name: 'Login' }
     },
     {
@@ -29,17 +29,48 @@ export default new Router({
       name: 'VoiceMessages',
       component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
     },
+    // Carer routes
+    {
+      path: '/additionaldrinks',
+      name: 'AdditionalDrinks',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/AdditionalDrinks.vue')
+    },
+    {
+      path: '/alerts',
+      name: 'Alerts',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Alerts.vue')
+    },
+    {
+      path: '/away',
+      name: 'Away',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Away.vue')
+    },
+    {
+      path: '/userconditions',
+      name: 'UserConditions',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/UserConditions.vue')
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Dashboard.vue')
+    },
+    {
+      path: '/reports',
+      name: 'Reports',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/Reports.vue')
+    },
+    {
+      path: '/settingsreports',
+      name: 'SettingsReports',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/SettingsReports.vue')
+    },
     // Cliadmin routes
     {
       path: '/carersettings',
       name: 'CarerSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
-    // {
-    //   path: '/carersettings',
-    //   name: 'CarerSettings',
-    //   component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerSettings.vue')
-    // },
     {
       path: '/conditions',
       name: 'Conditions',

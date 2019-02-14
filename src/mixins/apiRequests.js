@@ -13,11 +13,10 @@ export const getData = {
             // url: 'http://172.16.16.89:3000/' + url,
             headers: { 'Content-Type': 'application/json' }
           })
-          // console.log('getData: ', axGet.data)
+          console.log('getData: ', axGet.data)
           return axGet.data
         } catch (err) {
-          // console.log("GET Status", err.response.status)
-          return err.response.status
+          return err.axget.status
         }
       }
       return response()
