@@ -11,6 +11,7 @@
         <img alt="" src="./assets/ed_logo.svg"><img>
         <v-spacer></v-spacer>
         <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
+
           <span slot="badge" class="text-badge">{{ alerts }}</span>
           <v-icon
             medium
@@ -41,23 +42,26 @@
       >
         <v-layout row fill height align-space-between justify-space-between>
           <v-layout class="pt-2" row align-center justify-start>
-            <span style="align-center">Version: 0.1.0</span>
+            <span style="align-center">Version: ALPHA</span>
           </v-layout>
           <BaseAppNavBtn
             btnIcon="home"
             btnColor="primary"
             route="landing"
+            tip="Home"
           />
           <BaseAppNavBtn
             v-if="(authenticated.level === 'CLIENT ADMINISTRATOR')"
             btnIcon="dashboard"
             btnColor="primary"
             route="landing"
+            tip="Dashboard"
           />
           <BaseAppNavBtn
             btnIcon="exit_to_app"
             btnColor="primary"
             route="login"
+            tip="Logout"
           />
         </v-layout>
       </v-footer>
