@@ -10,6 +10,16 @@
         <v-toolbar-title v-text="title"></v-toolbar-title>
         <img alt="" src="./assets/ed_logo.svg"><img>
         <v-spacer></v-spacer>
+        <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
+          <span slot="badge" class="text-badge">{{ alerts }}</span>
+          <v-icon
+            medium
+            color="primary"
+            @click="$router.push('/login')"
+          >
+            notifications
+          </v-icon>
+        </v-badge>
         <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
         <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
       </v-toolbar>
@@ -39,17 +49,8 @@
             route="landing"
           />
           <BaseAppNavBtn
+            v-if="(authenticated.level === 'CLIENT ADMINISTRATOR')"
             btnIcon="dashboard"
-            btnColor="primary"
-            route="landing"
-          />
-          <BaseAppNavBtn
-            btnIcon="chrome_reader_mode"
-            btnColor="primary"
-            route="landing"
-          />
-          <BaseAppNavBtn
-            btnIcon="settings"
             btnColor="primary"
             route="landing"
           />
@@ -74,6 +75,7 @@ export default {
   },
   data () {
     return {
+      alerts: 0,
       authenticated: {
         state: false,
         level: null
