@@ -11,14 +11,13 @@
 
 <script>
 import BaseLogin from '@/components/base/BaseLoginComponent'
-import { getData, postData } from '@/mixins/apiRequests'
+import apiLib from '@/services/apiLib'
 
 export default {
   name: 'Login',
   components: {
     BaseLogin
   },
-  mixins: [getData, postData],
   data: function () {
     return {
       msg: '',
@@ -31,7 +30,7 @@ export default {
   methods: {
     async submitCredentials (item) {
       // this.isAuthenticating = true
-      var response = await this.postData('login', item)
+      var response = await apiLib.postData('login', item)
       for (var i = 0; i < response.length; i++) {
         if (response[i].description) {
           this.isActive = false

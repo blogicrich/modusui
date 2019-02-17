@@ -39,8 +39,6 @@
 <script>
 
 import baseTab from '@/components/base/BaseTabbedSelectorComponent.vue'
-import apiLib from '@/services/apiLib'
-import { getData, postData } from '@/mixins/apiRequests'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 
 export default {
@@ -48,7 +46,7 @@ export default {
   components: {
     baseTab
   },
-  mixins: [crudRoutines, getData, postData],
+  mixins: [crudRoutines],
   data () {
     return {
       items: [],

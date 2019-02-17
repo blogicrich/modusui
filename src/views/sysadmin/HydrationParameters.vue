@@ -56,11 +56,10 @@
 <script>
 
 import BaseToleranceSetter from '@/components/base/BaseToleranceSetterComponent.vue'
-import { getData, postData } from '@/mixins/apiRequests'
+import apiLib from '@/services/apiLib'
 
 export default {
   name: 'HydrationParameters',
-  mixins: [getData, postData],
   components: {
     BaseToleranceSetter
   },
@@ -78,15 +77,15 @@ export default {
   },
   methods: {
     async getValues () {
-      let data = await this.getData('hydrationtolerancesdisplay')
-      let dataClone = await this.getData('hydrationtolerancesdisplay')
+      let data = await apiLib.getData('hydrationtolerancesdisplay')
+      let dataClone = await apiLib.getData('hydrationtolerancesdisplay')
       this.tolerances = data
       this.clone = dataClone
       // console.log(data)
     },
     async save () {
       for (var i = 0; i < this.tolerances.length; i++) {
-        this.snackText = await this.postData(this.writeUrl, { level1: this.tolerances[i].level1, level2: this.tolerances[i].level2, level3: this.tolerances[i].level3, level4: this.tolerances[i].level4 })
+        this.snackText = await apiLib.postData(this.writeUrl, { level1: this.tolerances[i].level1, level2: this.tolerances[i].level2, level3: this.tolerances[i].level3, level4: this.tolerances[i].level4 })
         if (this.snackText === 'Hydration Tolerances Updated') {
           this.newDefaultValue = false
           this.snackColor = 'success'

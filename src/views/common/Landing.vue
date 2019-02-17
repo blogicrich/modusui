@@ -181,8 +181,10 @@
   </template>
 
 <script>
+
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
 import BaseLinkComponent from '@/components/base/BaseLinkComponent.vue'
+
 export default {
   name: 'Landing',
   components: {

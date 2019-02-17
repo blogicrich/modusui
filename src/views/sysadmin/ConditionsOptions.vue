@@ -41,13 +41,13 @@
 </template>
 
 <script>
-import { getData, postData } from '@/mixins/apiRequests'
+
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 
 export default {
   name: 'ContainerTypes',
-  mixins: [getData, postData, crudRoutines],
+  mixins: [crudRoutines],
   components: {
     BaseDataTable
   },
