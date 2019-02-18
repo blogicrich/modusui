@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="pt-1" row fill height align-start justify-start>
+  <v-layout class="pt-1" row fill height align-center justify-start>
     <v-tooltip top>
       <span>{{ tip }}</span>
       <v-btn
@@ -10,7 +10,7 @@
         :color="btnColor"
         @click="navigate"
       >
-        <v-icon color="primary" large>{{ btnIcon }}</v-icon>
+        <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
       </v-btn>
     </v-tooltip>
   </v-layout>
@@ -28,6 +28,7 @@ export default {
   props: {
     btnIcon: String,
     btnColor: String,
+    iconColor: String,
     tip: String,
     route: String
   },
