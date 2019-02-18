@@ -1,5 +1,5 @@
 <template lang="html">
-  <v-card width="400" flat>
+  <!-- <v-card width="400" flat> -->
     <v-layout>
       <v-layout>
         <h2 class="table-header">{{ userHeader }}</h2>
@@ -30,7 +30,7 @@
       </v-layout>
       <br/>
     </v-card>
-  </v-card>
+  <!-- </v-card> -->
 </template>
 
 <script>
