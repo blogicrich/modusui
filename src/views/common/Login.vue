@@ -28,19 +28,20 @@ export default {
     }
   },
   methods: {
-    async submitCredentials (item) {
+    submitCredentials (item) {
       // this.isAuthenticating = true
-      var response = await apiLib.postData('login', item)
-      for (var i = 0; i < response.length; i++) {
-        if (response[i].description) {
-          this.isActive = false
-          this.$emit('authenticated', { state: true, level: response[i].description })
-        } else {
-          this.$emit('authenticated', { state: false, level: null })
-          this.msg = response
-          this.isActive = true
+      var data = apiLib.postData('login', item).then(response => {
+        for (var i = 0; i < response.length; i++) {
+          if (response[i].description) {
+            this.isActive = false
+            this.$emit('authenticated', { state: true, level: response[i].description })
+          } else {
+            this.$emit('authenticated', { state: false, level: null })
+            this.msg = response
+            this.isActive = true
+          }
         }
-      }
+      })
       this.isAuthenticating = false
     }
   },
