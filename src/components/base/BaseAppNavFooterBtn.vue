@@ -1,7 +1,7 @@
 <template>
   <v-layout class="pt-1" row fill height align-start justify-start>
     <v-tooltip top>
-      <span>{{ route }}</span>
+      <span>{{ tip }}</span>
       <v-btn
         slot="activator"
         large
@@ -26,9 +26,10 @@ export default {
     }
   },
   props: {
-    route: String,
     btnIcon: String,
-    btnColor: String
+    btnColor: String,
+    tip: String,
+    route: String
   },
   methods: {
     navigate () {
