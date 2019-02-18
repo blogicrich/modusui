@@ -34,32 +34,21 @@
         clipped
         flat
       >
-        <v-list>
-          <v-list-tile
-            v-for="item in items"
-            :key="item.title"
-          >
-            <v-layout column fill-height align-center justify-space-around>
-              <v-list-tile-action>
-                <BaseAppNavBtn
-                  :btnIcon="item.btnIcon"
-                  :btnColor="item.btnColor"
-                  :iconColor="item.iconColor"
-                  :route="item.route"
-                  :tip="item.tip"
-                />
-              </v-list-tile-action>
-            </v-layout>
-
-
-            <v-list-tile-content>
-              <!-- <v-list-tile-title>{{ item.title }}</v-list-tile-title> -->
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
+        <v-layout column fill-height align-center justify-space-between>
+              <BaseAppNavBtn
+                my-3
+                right
+                v-for="item in items"
+                :key="item.title"
+                :btnIcon="item.btnIcon"
+                :btnColor="item.btnColor"
+                :iconColor="item.iconColor"
+                :route="item.route"
+                :tip="item.tip"
+              />
+        </v-layout>
     </v-navigation-drawer>
     </v-fade-transition>
-
     <v-container fluid>
       <v-content>
         <v-slide-y-transition mode="out-in">

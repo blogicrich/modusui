@@ -1,6 +1,6 @@
 <template>
   <v-layout class="pt-1" row fill height align-center justify-start>
-    <v-tooltip top>
+    <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
       <span>{{ tip }}</span>
       <v-btn
         slot="activator"
@@ -26,6 +26,10 @@ export default {
     }
   },
   props: {
+    bottom: Boolean,
+    left: Boolean,
+    right: Boolean,
+    top: Boolean,
     btnIcon: String,
     btnColor: String,
     iconColor: String,
