@@ -102,7 +102,7 @@
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
-import { getData, postData } from '@/mixins/apiRequests'
+import apiLib from '@/services/apiLib'
 
 export default {
   name: 'IntervalOptions',

@@ -79,9 +79,11 @@
 </template>
 
 <script>
-import { getData } from '@/mixins/apiRequests'
+
+import apiLib from '@/services/apiLib'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
+
 export default {
   name: 'VoiceMessageViewComponent',
   components: {

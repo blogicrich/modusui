@@ -1,12 +1,10 @@
 // Vuetify color vars
-//$vuetify-primary: #00A1CD;
 $vuetify-primary: rgba(#00A1CD, 1);
 $vuetify-secondary: rgba(#f2f4f4, 1);
 $vuetify-accent: rgba(#003C4D, 1);
-// potentials?????
-// success: #3acd00
-// warning: #cd9300
-// error: #cd2c00
+$vuetify-success: rgba(#3acd00, 1);
+$vuetify-warning: rgba(#cd9300, 1);
+$vuetify-warning: rgba(#cd2c00, 1);
 // Project branding colors that are not part of the Vuetify theme
 $table-row-hover: rgba(0, 161, 205, 0.1);
 $dark-blue-grey: rgba(#4d504f, 1);
@@ -50,6 +48,11 @@ $white: rgba(#ffffff, 1);
 
 //  Text common
 
+.text-badge {
+  color: $white;
+  font-size: 0.75em;
+  font-weight: bold;
+}
 .text-center {
   text-align:center;
 }

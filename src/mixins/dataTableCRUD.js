@@ -1,23 +1,19 @@
-export const crudOperations = {
+import apiLib from '../services/apiLib.js'
+
+export const crudRoutines = {
   methods: {
     async addItem (item) {
       var row = {}
       for (var i = 0; i < item.length; i++) {
         var that = this
         Object.keys(item[i]).forEach(function (key) {
-          if (key === 'sync') row[item[i].cellLabel] = item[i].sync
+          if (key === 'sync') row[item[i].attr] = item[i].sync
         })
-        // console.log(row);
+        console.log('data: ', row);
       }
-      await this.postData(this.createUrl, row)
-      this.getItems(this.readUrl)
+      await apiLib.postData(this.createUrl, row)
+      this.refreshItems('Item Added', 'success')
       this.resetItem()
-      this.showSnack('Item Added', 'success')
-    },
-    cancelEditItems (items) {
-      localStorage.editItemsCache = JSON.parse(items)
-
-      localStorage.editItemsCache = null
     },
     async deleteItem (items) {
       var index = 0
@@ -30,9 +26,8 @@ export const crudOperations = {
       this.getItems(this.readUrl)
       this.showSnack('Items Deleted', 'success')
     },
+
     async editItems (items) {
-      console.log('FIRING!!')
-      // localStorage.editItemsCache = JSON.stringify(items)
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
         var row = {}
@@ -48,13 +43,15 @@ export const crudOperations = {
       }
       this.showSnack('Items Edited', 'success')
       this.getItems(this.readUrl)
-      this.resetItem()
+      if (this.newItem) {
+        this.resetItem()
+      }
       // console.log(this.defaultItem)
     },
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      var response = await this.getData(this.readUrl)
+      var response = await apiLib.getData(this.readUrl)
       console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
@@ -79,8 +76,8 @@ export const crudOperations = {
         this.error = false
       }
     },
-    async refreshItems (items) {
-      this.showSnack(items.snackText, items.snackColor)
+    async refreshItems (text, color) {
+      this.showSnack(text, color)
       await this.getItems(this.readUrl)
     },
     showSnack (message, color) {
@@ -91,7 +88,7 @@ export const crudOperations = {
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {
         for (var i = 0; i < urls.length; i++) {
-          var menuItems = await this.getData(urls[i].url)
+          var menuItems = await apiLib.getData(urls[i].url)
           var values = []
           for (var j = 0; j < menuItems.length; j++) {
             // console.log('menuItem: ', menuItems[j][urls[i].key])
