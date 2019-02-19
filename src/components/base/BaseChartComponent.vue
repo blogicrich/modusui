@@ -19,13 +19,13 @@
 </template>
 
 <script>
-import lineChart from "@/components/sub/subLineChart";
-import barChart from "@/components/sub/subBarChart";
-import doughnutChart from "@/components/sub/subDoughnutChart";
-import { chartMixin } from "@/mixins/chartOptions";
+import lineChart from '@/components/sub/subLineChart'
+import barChart from '@/components/sub/subBarChart'
+import doughnutChart from '@/components/sub/subDoughnutChart'
+import { chartMixin } from '@/mixins/chartOptions'
 
 export default {
-  name: "chart-page",
+  name: 'chart-page',
   mixins: [chartMixin],
   props: {
     lineChartData: Object,
@@ -84,30 +84,28 @@ export default {
     barChart,
     doughnutChart
   },
-  data() {
+  data () {
     return {
       datacollection: null,
       optionsLine: null,
       optionsBar: null,
       optionsDoughnut: null
-    };
+    }
   },
-  mounted() {
-    setTimeout(() => {
-      switch (this.chartType) {
-        case "Line":
-          this.fillDataLine();
-          break;
-        case "Bar":
-          this.fillDataBar();
-          break;
-        case "Doughnut":
-          this.fillDataDoughnut();
-          break;
-      }
-    }, 400);
+  mounted () {
+    switch (this.chartType) {
+      case 'Line':
+        this.fillDataLine()
+        break
+      case 'Bar':
+        this.fillDataBar()
+        break
+      case 'Doughnut':
+        this.fillDataDoughnut()
+        break
+    }
   }
-};
+}
 </script>
 
 <style lang="css" scoped>
