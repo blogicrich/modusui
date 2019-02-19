@@ -34,18 +34,35 @@
         clipped
         flat
       >
-        <v-layout column fill-height align-center justify-space-between>
-              <BaseAppNavBtn
-                my-3
-                right
-                v-for="item in items"
-                :key="item.title"
-                :btnIcon="item.btnIcon"
-                :btnColor="item.btnColor"
-                :iconColor="item.iconColor"
-                :route="item.route"
-                :tip="item.tip"
-              />
+        <v-layout v-if="$vuetify.breakpoint.lgAndUp" column fill-height align-center justify-space-between>
+          <BaseAppNavBtn
+            my-3
+            right
+            v-for="item in items"
+            :key="item.title"
+            :btnIcon="item.btnIcon"
+            :btnColor="item.btnColor"
+            :iconColor="item.iconColor"
+            :route="item.route"
+            :tip="item.tip"
+          />
+        </v-layout>
+        <v-layout v-if="$vuetify.breakpoint.mdAndDown" column fill-height align-center justify-space-between>
+          <v-layout>
+            <BaseAppNavBtn
+              my-3
+              right
+              v-for="item in items"
+              :key="item.title"
+              :btnIcon="item.btnIcon"
+              :btnColor="item.btnColor"
+              :iconColor="item.iconColor"
+              :route="item.route"
+              :tip="item.tip"
+            />
+            <span>{{ item.title }}</span>
+          </v-layout>
+
         </v-layout>
     </v-navigation-drawer>
     </v-fade-transition>
@@ -149,6 +166,14 @@ export default {
           iconColor: 'white',
           route: 'reports',
           tip: 'Reports',
+        },
+        {
+          title: 'Logout',
+          btnIcon: 'exit_to_app',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'logout',
+          tip: 'Exit application',
         }
       ],
       clipped: true,
