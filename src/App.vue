@@ -1,29 +1,53 @@
 <template>
   <v-app>
+    <v-toolbar
+      v-if="authenticated.state"
+      color="white"
+      app
+      :clipped-left="clipped"
+    >
+    <v-toolbar-side-icon v-if="$vuetify.breakpoint.lgAndDown" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <img alt="" src="./assets/ed_logo.svg"><img>
+      <v-spacer></v-spacer>
+      <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
+        <span slot="badge" class="text-badge">{{ alerts }}</span>
+        <v-icon
+          medium
+          color="primary"
+          @click="$router.push('/login')"
+        >
+          notifications
+        </v-icon>
+      </v-badge>
+      <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
+      <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
+    </v-toolbar>
     <v-fade-transition>
-      <v-toolbar
-        v-if="authenticated.state"
-        color="white"
+      <v-navigation-drawer
+        v-model="activeDrawer"
+        v-if="authenticated.level === 'CARER'"
+        class="primary"
+        mini-variant
+        disable-route-watcher
         app
-        :clipped-left="clipped"
+        clipped
+        flat
       >
-        <v-toolbar-title v-text="title"></v-toolbar-title>
-        <img alt="" src="./assets/ed_logo.svg"><img>
-        <v-spacer></v-spacer>
-        <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
-
-          <span slot="badge" class="text-badge">{{ alerts }}</span>
-          <v-icon
-            medium
-            color="primary"
-            @click="$router.push('/login')"
-          >
-            notifications
-          </v-icon>
-        </v-badge>
-        <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
-        <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
-      </v-toolbar>
+        <v-layout column fill-height align-center justify-space-between>
+              <BaseAppNavBtn
+                my-3
+                right
+                v-for="item in items"
+                :key="item.title"
+                :btnIcon="item.btnIcon"
+                :btnColor="item.btnColor"
+                :iconColor="item.iconColor"
+                :route="item.route"
+                :tip="item.tip"
+              />
+        </v-layout>
+    </v-navigation-drawer>
     </v-fade-transition>
     <v-container fluid>
       <v-content>
@@ -34,7 +58,7 @@
     </v-container>
     <v-fade-transition>
       <v-footer
-        v-if="authenticated.state && $vuetify.breakpoint.smAndUp"
+        v-if="authenticated.state && authenticated.level !== 'CARER' && $vuetify.breakpoint.smAndUp"
         :class="(authenticated.level === 'CARER') ? 'hide' : 'elevation-5 pa-4' "
         :fixed="fixed"
         color="white"
@@ -79,13 +103,55 @@ export default {
   },
   data () {
     return {
+      activeDrawer: true,
       alerts: 0,
       authenticated: {
         state: false,
         level: null
       },
+      items: [
+        {
+          title: 'Dashboard',
+          btnIcon: 'dashboard',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'dashboard',
+          tip: 'Go to Dashboard',
+        },
+        {
+          title: 'Add Drinks',
+          btnIcon: 'local_drink',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'additionaldrinks',
+          tip: 'Add Drinks',
+        },
+        {
+          title: 'Alerts',
+          btnIcon: 'notification_important',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'alerts',
+          tip: 'View Alerts',
+        },
+        {
+          title: 'Away',
+          btnIcon: 'calendar_today',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'away',
+          tip: 'Record time away',
+        },
+        {
+          title: 'Reports',
+          btnIcon: 'report',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'reports',
+          tip: 'Reports',
+        }
+      ],
       clipped: true,
-      drawer: false,
       fixed: false,
       title: '',
       user: 'User'
