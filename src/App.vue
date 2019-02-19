@@ -34,32 +34,38 @@
         clipped
         flat
       >
-        <v-list>
-          <v-list-tile
+        <v-layout v-if="$vuetify.breakpoint.lgAndUp" column fill-height align-center justify-space-between>
+          <BaseAppNavBtn
+            my-3
+            right
             v-for="item in items"
             :key="item.title"
-          >
-            <v-layout column fill-height align-center justify-space-around>
-              <v-list-tile-action>
-                <BaseAppNavBtn
-                  :btnIcon="item.btnIcon"
-                  :btnColor="item.btnColor"
-                  :iconColor="item.iconColor"
-                  :route="item.route"
-                  :tip="item.tip"
-                />
-              </v-list-tile-action>
-            </v-layout>
+            :btnIcon="item.btnIcon"
+            :btnColor="item.btnColor"
+            :iconColor="item.iconColor"
+            :route="item.route"
+            :tip="item.tip"
+          />
+        </v-layout>
+        <v-layout v-if="$vuetify.breakpoint.mdAndDown" column fill-height align-center justify-space-between>
+          <v-layout>
+            <BaseAppNavBtn
+              my-3
+              right
+              v-for="item in items"
+              :key="item.title"
+              :btnIcon="item.btnIcon"
+              :btnColor="item.btnColor"
+              :iconColor="item.iconColor"
+              :route="item.route"
+              :tip="item.tip"
+            />
+            <span>{{ item.title }}</span>
+          </v-layout>
 
-
-            <v-list-tile-content>
-              <!-- <v-list-tile-title>{{ item.title }}</v-list-tile-title> -->
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
+        </v-layout>
     </v-navigation-drawer>
     </v-fade-transition>
-
     <v-container fluid>
       <v-content>
         <v-slide-y-transition mode="out-in">
@@ -160,6 +166,14 @@ export default {
           iconColor: 'white',
           route: 'reports',
           tip: 'Reports',
+        },
+        {
+          title: 'Logout',
+          btnIcon: 'exit_to_app',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'logout',
+          tip: 'Exit application',
         }
       ],
       clipped: true,

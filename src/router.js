@@ -29,6 +29,11 @@ export default new Router({
       name: 'VoiceMessages',
       component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
     },
+    {
+      path: '/passwordreset',
+      name: 'PasswordReset',
+      component: () => import(/* webpackChunkName: "about" */ './views/common/ForgotPassword.vue')
+    },
     // Carer routes
     {
       path: '/additionaldrinks',
