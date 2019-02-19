@@ -14,6 +14,7 @@ export default {
   // Get data
   getData (url, auth) {
     return axios.get(url).then(response => {
+      console.log(url)
       console.log(response)
       return response.data
     }).catch(err => console.log(err))
