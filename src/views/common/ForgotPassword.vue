@@ -6,12 +6,9 @@
       </v-layout>
       <v-form>
         <v-layout align-center justify-center column fill-height>
-          <h3>Please enter your email address below.</h3>
-          <h3>Click the button to request to reset your password.</h3>
-          <input id="email" type="text" v-model="input.email" :rules="emailRules" placeholder="Enter your Email address" name="email" required>
-          <router-link to="/login">
-            <button @click="forgotPassword">Reset Password</button>
-          </router-link>
+          <h3>Please enter your email address below and click the Reset Password button.</h3>
+          <v-input class="mt-3" id="email" v-model="input.email" label="Enter your Email address"/>
+          <v-btn flat v-on:click="forgotPassword">Reset Password</v-btn>
         </v-layout>
       </v-form>
     </v-flex>
@@ -29,7 +26,9 @@ export default {
   },
   methods: {
     forgotPassword() {
-      this.$emit({ email: this.input.email });
+      // this.$emit(this.input.email);
+      alert('Please check your email for your new password. You can change it after you\'ve logged in using this new password.')
+      console.log(this.input.email);
     }
   }
 };
@@ -39,32 +38,30 @@ export default {
 @import "./public/scss/main.scss";
 
 img {
-  width: 30vh;
+  width: 35vh;
 }
 h3 {
   margin-top: 5px;
 }
-input[type="text"] {
+v-input[id="email"] {
   width: 40vh;
   padding: 0.5vh;
   margin: 1vh;
-  border-radius: 0.5vh;
+  border-radius: 0.75vh;
   color: $dark-blue-grey;
   border-color: $vuetify-primary;
   border-style: solid;
   margin-top: 25px;
 }
-button {
+button.v-btn {
   color: $dark-blue-grey;
   background-color: inherit;
   border-color: $vuetify-primary;
   border-style: solid;
   border-radius: 1vh;
-  box-shadow: 0 0 0.5vh 0.5vh $vuetify-secondary;
-  padding: 1vh;
   cursor: pointer;
-  margin-left: 95%;
+  margin-left: 20.5%;
   margin-top: 10px;
-  width: 130px;
+  width: 140px;
 }
 </style>
