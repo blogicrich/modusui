@@ -1,5 +1,5 @@
 <template lang="html">
-  <!-- <v-card width="400" flat> -->
+  <v-layout column>
     <v-layout>
       <v-layout>
         <h2 class="table-header">{{ userHeader }}</h2>
@@ -9,36 +9,32 @@
         <input type="text" class="input-subhead-search" v-model="search" v-bind:placeholder="searchName"/>
       </v-layout>
     </v-layout>
-    <v-card v-for="item in filteredName" :value="item.name" :key="item.name" hover>
-      <v-layout row>
-        <v-icon large :color="primaryColor">person</v-icon>
-        <v-layout column>
-          <v-flex>
-            {{ item.name }}
-          </v-flex>
-          <v-flex>
-            <span :class='alertColors(item)+ "--text"'>{{ item.hydration }}</span>
-          </v-flex>
-          <v-flex>
-            Last Sync {{ item.sync }}
-          </v-flex>
-        </v-layout>
-        <v-icon medium :color="alertColors(item)">report_problem</v-icon>
-        <v-btn @click="" flat fab>
-          <v-icon medium :color="primaryColor">settings</v-icon>
-        </v-btn>
+    <v-layout v-for="item in filteredName" :value="item.name" :key="item.name">
+      <v-icon large :color="primaryColor">{{ usersIcon }}</v-icon>
+      <v-layout column>
+        <v-flex>
+          {{ item.name }}
+        </v-flex>
+        <v-flex>
+          <span :class="alertColor + '--text'">{{ item.hydration }}</span>
+        </v-flex>
+        <v-flex>
+          Last Sync {{ item.sync }}
+        </v-flex>
       </v-layout>
+      <v-icon medium :color="alertColor">{{ alertIcon }}</v-icon>
+      <v-btn @click="" flat fab>
+        <v-icon medium :color="primaryColor">{{ btnIcon }}</v-icon>
+      </v-btn>
       <br/>
-    </v-card>
-  <!-- </v-card> -->
+    </v-layout>
+  </v-layout>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      search: '',
-      alertColor: '',
       search: ''
     }
   },
@@ -47,20 +43,11 @@ export default {
     userHeader: String,
     users: Array,
     searchName: String,
-    searchName: String
-  },
-  methods: {
-    alertColors (item) {
-      if (item.alert === 'hydrated') {
-        return 'green'
-      }
-      else if (item.alert === 'little dehydrated'){
-        return 'orange'
-      }
-      else if (item.alert === 'dehydrated') {
-        return 'red'
-      }
-    }
+    searchName: String,
+    usersIcon: String,
+    alertIcon: String,
+    btnIcon: String,
+    alertColor: String
   },
   computed: {
     filteredName () {
