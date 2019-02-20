@@ -19,17 +19,17 @@
 </template>
 
 <script>
-  import lineChart from '@/components/sub/subLineChart'
-  import barChart from '@/components/sub/subBarChart'
-  import doughnutChart from '@/components/sub/subDoughnutChart'
-  import { chartMixin } from '@/mixins/chartOptions'
+import lineChart from '@/components/sub/subLineChart'
+import barChart from '@/components/sub/subBarChart'
+import doughnutChart from '@/components/sub/subDoughnutChart'
+import { chartMixin } from '@/mixins/chartOptions'
 
-  export default {
-    name: 'chart-page',
-    mixins: [chartMixin],
-    props: {
-      lineChartData: Object,
-      /*
+export default {
+  name: 'chart-page',
+  mixins: [chartMixin],
+  props: {
+    lineChartData: Object,
+    /*
         lineChartData: {
           labels: Array,
           labelLineOne: String,
@@ -47,8 +47,8 @@
           borderWidthLineThree: Number
         }
       */
-      barChartData: Object,
-      /*
+    barChartData: Object,
+    /*
         barChartData: {
           labels: Array,
           labelLineOne: String,
@@ -66,8 +66,8 @@
           borderWidthBarOne: Number
         }
       */
-      doughnutChartData: Object,
-      /*
+    doughnutChartData: Object,
+    /*
         doughnutChartData: {
           labels: Array,
           dataDoughnut: Array,
@@ -77,58 +77,35 @@
           cutoutPercentageDoughnut: Number
         }
       */
-      chartType: String
-    },
-    components: {
-      lineChart,
-      barChart,
-      doughnutChart
-    },
-    data () {
-      return {
-        datacollection: null,
-        optionsLine: {
-          responsive: true,
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
-        },
-        optionsBar: {
-          responsive: true,
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
-        },
-        optionsDoughnut: {
-          responsive: true,
-          cutoutPercentage: this.doughnutChartData.cutoutPercentageDoughnut
-        }
-      }
-    },
-    mounted () {
-      setTimeout(() => {
-        switch (this.chartType) {
-          case 'Line':
-            this.
-            break;
-          case 'Line':
-            this.
-            break;
-          case 'Line':
-            this.
-            break;
-        }
-      }, 400)
+    chartType: String
+  },
+  components: {
+    lineChart,
+    barChart,
+    doughnutChart
+  },
+  data () {
+    return {
+      datacollection: null,
+      optionsLine: null,
+      optionsBar: null,
+      optionsDoughnut: null
+    }
+  },
+  mounted () {
+    switch (this.chartType) {
+      case 'Line':
+        this.fillDataLine()
+        break
+      case 'Bar':
+        this.fillDataBar()
+        break
+      case 'Doughnut':
+        this.fillDataDoughnut()
+        break
     }
   }
+}
 </script>
 
 <style lang="css" scoped>
