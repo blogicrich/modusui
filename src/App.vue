@@ -45,6 +45,7 @@
             :iconColor="item.iconColor"
             :route="item.route"
             :tip="item.tip"
+            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -71,6 +72,7 @@
             :route="item.route"
             :tip="item.tip"
             :title="item.title"
+            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -203,6 +205,10 @@ export default {
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')
       }
+    },
+    check (item) {
+      console.log(item);
+      if (item.route === 'logout') logout()
     },
     logout () {
       this.authenticated = { state: false, level: null }

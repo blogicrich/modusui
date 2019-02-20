@@ -55,7 +55,8 @@ export default {
   },
   mounted () {
     console.log(this.$route.params)
-    console.log(process.env.NODE_ENV)
+    console.log(process.env.SECRET)
+    console.log(process.env.NODE_ENV_ROOT_API)
   }
 }
 </script>
