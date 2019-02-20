@@ -32,7 +32,7 @@ export default {
       // this.isAuthenticating = true
       var data = apiLib.postData('login', item).then(response => {
         // console.log('response: ', response)
-        if (response.length) {
+        if (Array.isArray(response)) {
           for (var i = 0; i < response.length; i++) {
             if (response[i].description) {
               this.isActive = false
@@ -46,17 +46,12 @@ export default {
           this.isActive = true
         }
       })
-      console.log(data);
+      console.log(data)
       this.isAuthenticating = false
     }
   },
   created () {
     this.$emit('authenticated', { state: false, level: null })
-  },
-  mounted () {
-    console.log(this.$route.params)
-    console.log(process.env.SECRET)
-    console.log(process.env.NODE_ENV_ROOT_API)
   }
 }
 </script>
