@@ -13,34 +13,44 @@
       <v-icon @click="addDate()" large>keyboard_arrow_right</v-icon>
     </v-layout>
     <v-layout row wrap>
-      <v-flex d-flex xs12 sm12 md8 lg8 xl8>
+      <v-flex d-flex xs12 sm12 md12 lg12 xl12>
         <v-layout row wrap>
-          <v-flex d-flex xs12 sm12 md12 lg12 xl12 @click="openDialog('Line')">
+            <v-flex d-flex xs12 sm12 md5 lg5 xl5 child-flex v-if="breakpoint">
+            <v-card dark>
+              <v-card-title class="headline">User select</v-card-title>
+              <!-- Insert component here -->
+            </v-card>
+          </v-flex>
+          <v-flex d-flex xs12 sm12 md7 lg7 xl7 @click="openDialog('Line')">
             <v-card dark>
               <charts class="chart" :chartType="'Line'" :lineChartData="lineChartData"/>
             </v-card>
           </v-flex>
+          <v-flex d-flex xs12 sm12 md5 lg5 xl5 child-flex v-if="!breakpoint">
+            <v-card dark>
+              <v-card-title class="headline">User select</v-card-title>
+              <!-- Insert component here -->
+            </v-card>
+          </v-flex>
           <v-flex d-flex xs12 sm12 md12 lg12 xl12>
             <v-layout row wrap>
-              <v-flex d-flex xs12 sm7 md7 lg7 xl7 @click="openDialog('Bar')">
+              <v-flex d-flex xs12 sm12 md7 lg7 xl7 @click="openDialog('Bar')">
                 <v-card dark>
                   <charts class="chart" :chartType="'Bar'" :barChartData="barChartData"/>
                 </v-card>
               </v-flex>
-              <v-flex d-flex xs12 sm5 md5 lg5 xl5 @click="openDialog('Doughnut')">
-                  <v-card dark>
-                    <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="doughnutChartData"/>
-                  </v-card>
+              <v-flex d-flex xs12 sm12 md5 lg5 xl5 @click="openDialog('Doughnut')">
+                <v-card dark>
+                  <charts
+                    class="chart"
+                    :chartType="'Doughnut'"
+                    :doughnutChartData="doughnutChartData"
+                  />
+                </v-card>
               </v-flex>
             </v-layout>
           </v-flex>
         </v-layout>
-      </v-flex>
-      <v-flex d-flex xs12 sm12 md4 lg4 xl4 child-flex>
-        <v-card dark>
-          <v-card-title class="headline">User select</v-card-title>
-          <!-- Insert component here -->
-        </v-card>
       </v-flex>
     </v-layout>
 
@@ -49,7 +59,7 @@
         <v-card dark>
           <charts class="chart" :chartType="'Line'" :lineChartData="lineChartData"/>
           <v-card-actions>
-            <v-btn color="green darken-1" flat="flat" @click="lineDialog = false">Close</v-btn>
+            <v-btn color="primary" flat="flat" @click="lineDialog = false">Close</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -59,7 +69,7 @@
       <v-card dark>
         <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="doughnutChartData"/>
         <v-card-actions>
-          <v-btn color="green darken-1" flat="flat" @click="doughnutDialog = false">Close</v-btn>
+          <v-btn color="primary" flat="flat" @click="doughnutDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -68,7 +78,7 @@
       <v-card dark>
         <charts class="chart" :chartType="'Bar'" :barChartData="barChartData"/>
         <v-card-actions>
-          <v-btn color="green darken-1" flat="flat" @click="barDialog = false">Close</v-btn>
+          <v-btn color="primary" flat="flat" @click="barDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -81,6 +91,18 @@ import charts from '@/components/base/BaseChartComponent'
 export default {
   components: {
     charts
+  },
+  computed: {
+    breakpoint: function () {
+      console.log(this.$vuetify.breakpoint.name)
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return true
+        case 'sm': return true
+        case 'md': return false
+        case 'lg': return false
+        case 'xl': return false
+      }
+    }
   },
   data () {
     return {
@@ -125,7 +147,11 @@ export default {
         labels: ['data1', 'data2', 'data3'],
         dataDoughnut: [30, 10, 60],
         borderColorDoughnut: 'rgba(255, 255, 255, 1)', // rgba
-        backgroundColorDoughnut: ['rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 0.7)', 'rgba(54, 162, 235, 1)'], // rgba
+        backgroundColorDoughnut: [
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(54, 162, 235, 1)'
+        ], // rgba
         borderWidthDoughnut: 1,
         cutoutPercentageDoughnut: 65
       }
@@ -146,30 +172,35 @@ export default {
       switch (charType) {
         case 'Line':
           this.lineDialog = true
-          let lineComp = this.$children[8].$children[0].$children[0].$children[0].$children[0].$children[0]
+          let lineComp = this.$children[8].$children[0].$children[0]
+            .$children[0].$children[0].$children[0]
           setTimeout(() => {
             lineComp.renderChart(lineComp.chartData, lineComp.options)
           }, 200)
           break
         case 'Bar':
           this.barDialog = true
-          let barComp = this.$children[10].$children[0].$children[0].$children[0].$children[0].$children[0]
+          let barComp = this.$children[10].$children[0].$children[0]
+            .$children[0].$children[0].$children[0]
           setTimeout(() => {
             barComp.renderChart(barComp.chartData, barComp.options)
           }, 200)
           break
         case 'Doughnut':
           this.doughnutDialog = true
-          let doughnutComp = this.$children[9].$children[0].$children[0].$children[0].$children[0].$children[0]
+          let doughnutComp = this.$children[9].$children[0].$children[0]
+            .$children[0].$children[0].$children[0]
           setTimeout(() => {
-            doughnutComp.renderChart(doughnutComp.chartData, doughnutComp.options)
+            doughnutComp.renderChart(
+              doughnutComp.chartData,
+              doughnutComp.options
+            )
           }, 200)
           break
       }
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
