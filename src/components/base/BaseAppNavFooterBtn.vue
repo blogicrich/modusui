@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="pt-1" row fill height align-center justify-start>
+  <v-layout class="pt-1" row fill height align-center justify-space-around>
     <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
       <span>{{ tip }}</span>
       <v-btn
@@ -13,6 +13,7 @@
         <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
       </v-btn>
     </v-tooltip>
+    <span class="text-white">{{ title }}</span>
   </v-layout>
 </template>
 
@@ -34,6 +35,7 @@ export default {
     btnColor: String,
     iconColor: String,
     tip: String,
+    title: String,
     route: String
   },
   methods: {
