@@ -111,6 +111,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
 
 export default {
