@@ -7,7 +7,19 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
+
+    // fallback
+
+    // {
+    //   path: '*',
+    //   redirect: { name: 'Login' }
+    // },
+
     // Common routes
+    {
+      path: '/',
+      redirect: { name: 'Login' }
+    },
     {
       path: '/login',
       name: 'Login',

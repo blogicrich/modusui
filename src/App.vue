@@ -6,7 +6,7 @@
       app
       :clipped-left="clipped"
     >
-    <v-toolbar-side-icon v-if="$vuetify.breakpoint.lgAndDown" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon>
+    <v-toolbar-side-icon v-if="$vuetify.breakpoint.md" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
@@ -183,7 +183,7 @@ export default {
           btnIcon: 'exit_to_app',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'logout',
+          route: '',
           tip: 'Exit application'
         }
       ],
