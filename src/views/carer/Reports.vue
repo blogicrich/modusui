@@ -43,15 +43,15 @@
             <v-list dense>
               <v-list-tile>
                 <v-list-tile-content>Hydration Target:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{dayReport.hydrationTarget}}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{dayReport.hydrationTarget}}L</v-list-tile-content>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-content>Actual Hydration:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{dayReport.hydrationTarget}}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{dayReport.hydrationActual}}L</v-list-tile-content>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-content>Percentage Hydration:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{dayReport.hydrationTarget}}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{dayReport.percentageHydration}}%</v-list-tile-content>
               </v-list-tile>
               <h4 class="mt-3">Carer's Comments:</h4>
               <v-list-tile v-for="(comment, index) in dayReport.carerComments" :key="index">
