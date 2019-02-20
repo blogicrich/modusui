@@ -26,7 +26,7 @@
     <v-fade-transition>
       <v-navigation-drawer
         v-model="activeDrawer"
-        v-if="authenticated.level === 'CARER'"
+        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.lgAndUp"
         class="primary"
         mini-variant
         disable-route-watcher
@@ -34,32 +34,46 @@
         clipped
         flat
       >
-        <v-list>
-          <v-list-tile
+        <v-layout column fill-height align-center justify-space-between>
+          <BaseAppNavBtn
+            my-3
+            right
             v-for="item in items"
             :key="item.title"
-          >
-            <v-layout column fill-height align-center justify-space-around>
-              <v-list-tile-action>
-                <BaseAppNavBtn
-                  :btnIcon="item.btnIcon"
-                  :btnColor="item.btnColor"
-                  :iconColor="item.iconColor"
-                  :route="item.route"
-                  :tip="item.tip"
-                />
-              </v-list-tile-action>
-            </v-layout>
-
-
-            <v-list-tile-content>
-              <!-- <v-list-tile-title>{{ item.title }}</v-list-tile-title> -->
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-    </v-navigation-drawer>
+            :btnIcon="item.btnIcon"
+            :btnColor="item.btnColor"
+            :iconColor="item.iconColor"
+            :route="item.route"
+            :tip="item.tip"
+          />
+        </v-layout>
+      </v-navigation-drawer>
+      <v-navigation-drawer
+        v-model="activeDrawer"
+        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.smAndUp"
+        class="primary"
+        mini-variant
+        disable-route-watcher
+        app
+        clipped
+        flat
+      >
+        <v-layout v-if="authenticated.level && $vuetify.breakpoint.mdAndDown" column fill-height align-center justify-space-between>
+          <BaseAppNavBtn
+            my-3
+            right
+            v-for="item in items"
+            :key="item.title"
+            :btnIcon="item.btnIcon"
+            :btnColor="item.btnColor"
+            :iconColor="item.iconColor"
+            :route="item.route"
+            :tip="item.tip"
+            :title="item.title"
+          />
+        </v-layout>
+      </v-navigation-drawer>
     </v-fade-transition>
-
     <v-container fluid>
       <v-content>
         <v-slide-y-transition mode="out-in">
@@ -127,7 +141,7 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'dashboard',
-          tip: 'Go to Dashboard',
+          tip: 'Go to Dashboard'
         },
         {
           title: 'Add Drinks',
@@ -135,7 +149,7 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'additionaldrinks',
-          tip: 'Add Drinks',
+          tip: 'Add Drinks'
         },
         {
           title: 'Alerts',
@@ -143,7 +157,7 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'alerts',
-          tip: 'View Alerts',
+          tip: 'View Alerts'
         },
         {
           title: 'Away',
@@ -151,7 +165,7 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'away',
-          tip: 'Record time away',
+          tip: 'Record time away'
         },
         {
           title: 'Reports',
@@ -159,7 +173,15 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'reports',
-          tip: 'Reports',
+          tip: 'Reports'
+        },
+        {
+          title: 'Logout',
+          btnIcon: 'exit_to_app',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'logout',
+          tip: 'Exit application'
         }
       ],
       clipped: true,
@@ -175,7 +197,7 @@ export default {
       localStorage.auth = JSON.stringify(this.authenticated)
       this.user = newStatus.level
       // console.log(JSON.parse(localStorage.auth))
-      if (newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR' ) {
+      if (newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR') {
         this.$router.push('/landing')
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')
@@ -184,6 +206,7 @@ export default {
     logout () {
       this.authenticated = { state: false, level: null }
       localStorage.auth = JSON.stringify(this.authenticated)
+      this.activeDrawer = false
       this.user = ''
       this.$router.push('/login')
     },
