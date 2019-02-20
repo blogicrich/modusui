@@ -64,19 +64,19 @@ export default {
       readUrl: 'textmessageget',
       defaultItem: [
         { alertMessagesId: 0, alertNo: 0, alertTypeDescription: 0, alertTypeId: '', communicationMethodId: '', communicationType: '', description: '', message: '', status: '', subject: '' }
-      ],
+      ]
     }
   },
   created () {
-    apiLib.getData(this.readUrl).then(data => {
+    this.getData(this.readUrl).then(data => {
       this.items = data
       console.log(data)
       console.log('Items: ', this.items)
     })
-    .catch(err => console.log(err))
-    .finally(() => {
+      .catch(err => console.log(err))
+      .finally(() => {
       // ROUTER TO STD PAGE IF ERR?
-    })
+      })
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
