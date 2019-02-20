@@ -9,20 +9,20 @@
         <input type="text" class="input-subhead-search" v-model="search" v-bind:placeholder="searchName"/>
       </v-layout>
     </v-layout>
-    <v-layout v-for="item in filteredName" :value="item.name" :key="item.name">
+    <v-layout v-for="(item, index) in filteredName" :value="item.name" :key="item.name">
       <v-icon large :color="primaryColor">{{ usersIcon }}</v-icon>
       <v-layout column>
         <v-flex>
           {{ item.name }}
         </v-flex>
         <v-flex>
-          <span :class="alertColor + '--text'">{{ item.hydration }}</span>
+          <span :class="alertColor[index] + '--text'">{{ item.hydration }}</span>
         </v-flex>
         <v-flex>
           Last Sync {{ item.sync }}
         </v-flex>
       </v-layout>
-      <v-icon medium :color="alertColor">{{ alertIcon }}</v-icon>
+      <v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon>
       <v-btn @click="" flat fab>
         <v-icon medium :color="primaryColor">{{ btnIcon }}</v-icon>
       </v-btn>
@@ -47,7 +47,7 @@ export default {
     usersIcon: String,
     alertIcon: String,
     btnIcon: String,
-    alertColor: String
+    alertColor: Array
   },
   computed: {
     filteredName () {
