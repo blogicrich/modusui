@@ -32,7 +32,7 @@ export default {
       // this.isAuthenticating = true
       var data = apiLib.postData('login', item).then(response => {
         // console.log('response: ', response)
-        if (response.length > 0) {
+        if (response.length) {
           for (var i = 0; i < response.length; i++) {
             if (response[i].description) {
               this.isActive = false
