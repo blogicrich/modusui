@@ -31,17 +31,22 @@ export default {
     submitCredentials (item) {
       // this.isAuthenticating = true
       var data = apiLib.postData('login', item).then(response => {
-        for (var i = 0; i < response.length; i++) {
-          if (response[i].description) {
-            this.isActive = false
-            this.$emit('authenticated', { state: true, level: response[i].description })
-          } else {
-            this.$emit('authenticated', { state: false, level: null })
-            this.msg = response
-            this.isActive = true
+        console.log('response: ', response)
+        if (response) {
+          for (var i = 0; i < response.length; i++) {
+            if (response[i].description) {
+              this.isActive = false
+              // this.msg = response
+              this.$emit('authenticated', { state: true, level: response[i].description })
+            } else {
+              this.$emit('authenticated', { state: false, level: null })
+              this.msg = response
+              this.isActive = true
+            }
           }
         }
       })
+      console.log(data);
       this.isAuthenticating = false
     }
   },
