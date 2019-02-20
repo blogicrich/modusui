@@ -50,15 +50,16 @@
       </v-navigation-drawer>
       <v-navigation-drawer
         v-model="activeDrawer"
-        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.smAndUp"
+        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.mdAndDown"
         class="primary"
-        mini-variant
         disable-route-watcher
+        mini-variant
+        mini-variant-width="160"
         app
         clipped
         flat
       >
-        <v-layout v-if="authenticated.level && $vuetify.breakpoint.mdAndDown" column fill-height align-center justify-space-between>
+        <v-layout v-if="authenticated.level && $vuetify.breakpoint.mdAndDown" column fill-height align-start justify-start>
           <BaseAppNavBtn
             my-3
             right
