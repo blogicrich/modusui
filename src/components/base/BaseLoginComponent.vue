@@ -42,7 +42,9 @@
                   <input  id="userId" v-bind:class="{ 'creds-input': isActive }" v-model="input.username" type="text" placeholder="userId" name="username">
                   <input id="password" v-bind:class="{ 'creds-input': isActive }" v-model.lazy="input.password" type="password" placeholder="password" name="password">
                   <v-layout class="mb-2" align-end>
-                    <a>Forgotten password?</a>
+                    <router-link to="/passwordreset">
+                      <a>Forgotten password?</a>
+                    </router-link>
                   </v-layout>
               </v-layout>
               </v-flex>

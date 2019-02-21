@@ -14,6 +14,7 @@ import BaseLogin from '@/components/base/BaseLoginComponent'
 import apiLib from '@/services/apiLib'
 
 export default {
+  /* eslint-disable */
   name: 'Login',
   components: {
     BaseLogin
