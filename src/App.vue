@@ -6,8 +6,8 @@
       app
       :clipped-left="clipped"
     >
-    <v-toolbar-side-icon v-if="$vuetify.breakpoint.md" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+    <!-- <v-toolbar-side-icon v-if="$vuetify.breakpoint.md" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon> -->
+      <!-- <v-toolbar-title v-text="title"></v-toolbar-title> -->
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
@@ -29,6 +29,7 @@
         v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.lgAndUp"
         class="primary"
         mini-variant
+        mini-variant-width="94"
         disable-route-watcher
         app
         clipped
@@ -154,14 +155,14 @@ export default {
           route: 'additionaldrinks',
           tip: 'Add Drinks'
         },
-        {
-          title: 'Alerts',
-          btnIcon: 'notification_important',
-          btnColor: 'white',
-          iconColor: 'white',
-          route: 'alerts',
-          tip: 'View Alerts'
-        },
+        // {
+        //   title: 'Alerts',
+        //   btnIcon: 'notification_important',
+        //   btnColor: 'white',
+        //   iconColor: 'white',
+        //   route: 'alerts',
+        //   tip: 'View Alerts'
+        // },
         {
           title: 'Away',
           btnIcon: 'calendar_today',
@@ -189,8 +190,8 @@ export default {
       ],
       clipped: true,
       fixed: false,
-      title: '',
-      user: 'User'
+      // title: '',
+      user: ''
     }
   },
   methods: {
@@ -243,6 +244,9 @@ export default {
   visibility: hidden;
 }
 img {
+  position:absolute;
+  top:2px;
+  left: 12px;
   height: inherit;
   padding: 5px;
 }
