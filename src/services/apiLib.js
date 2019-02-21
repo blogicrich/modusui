@@ -25,6 +25,7 @@ export default {
   postData (url, data, auth) {
     if (data) {
       return axios.post(url, data).then(response => {
+        console.log(url)
         console.log(response)
         return response.data
       }).catch(err => console.log(err))

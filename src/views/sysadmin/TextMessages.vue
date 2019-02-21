@@ -60,8 +60,8 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      updateUrl: 'textmessageupdate',
-      readUrl: 'textmessageget',
+      updateUrl: 'sysadmin/test-messages',
+      readUrl: 'sysadmin/test-messages',
       defaultItem: [
         { alertMessagesId: 0, alertNo: 0, alertTypeDescription: 0, alertTypeId: '', communicationMethodId: '', communicationType: '', description: '', message: '', status: '', subject: '' }
       ]

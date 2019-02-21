@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// eslint-disable-next-line
 import Login from './views/common/Login.vue'
 
 Vue.use(Router)

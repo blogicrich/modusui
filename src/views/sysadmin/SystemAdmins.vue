@@ -64,10 +64,10 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      delUrl: 'sysaddelete',
-      updateUrl: 'sysadupdate',
-      readUrl: 'sysadget',
-      createUrl: 'sysadcreate',
+      delUrl: 'sysadmin/sysadmin',
+      updateUrl: 'sysadmin/sysadmin',
+      readUrl: 'sysadmin/sysadmin',
+      createUrl: 'sysadmin/sysadmin',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'person',
@@ -99,8 +99,8 @@ export default {
         { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ],
       urls: [
-        { url: 'titleget', attr: 'titleId', key: 'titleId' },
-        { url: 'sysadget', attr: 'username', key: 'username' }
+        { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' },
+        { url: 'sysadmin/sysadmin', attr: 'username', key: 'username' }
       ]
     }
   },
