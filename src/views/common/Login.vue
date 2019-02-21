@@ -31,12 +31,10 @@ export default {
     submitCredentials (item) {
       // this.isAuthenticating = true
       var data = apiLib.postData('login', item).then(response => {
-        // console.log('response: ', response)
-        if (response.length > 0) {
+        if (Array.isArray(response)) {
           for (var i = 0; i < response.length; i++) {
             if (response[i].description) {
               this.isActive = false
-              // this.msg = response
               this.$emit('authenticated', { state: true, level: response[i].description })
             }
           }
@@ -46,16 +44,12 @@ export default {
           this.isActive = true
         }
       })
-      console.log(data);
+      console.log(data)
       this.isAuthenticating = false
     }
   },
   created () {
     this.$emit('authenticated', { state: false, level: null })
-  },
-  mounted () {
-    console.log(this.$route.params)
-    console.log(process.env.NODE_ENV)
   }
 }
 </script>

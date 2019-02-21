@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     navigate () {
+      this.$emit('nav-btn-clicked', {route: this.route})
       this.$router.push('/' + this.route)
     }
   }

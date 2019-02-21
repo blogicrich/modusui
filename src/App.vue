@@ -6,7 +6,7 @@
       app
       :clipped-left="clipped"
     >
-    <v-toolbar-side-icon v-if="$vuetify.breakpoint.lgAndDown" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon>
+    <v-toolbar-side-icon v-if="$vuetify.breakpoint.md" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
@@ -45,6 +45,7 @@
             :iconColor="item.iconColor"
             :route="item.route"
             :tip="item.tip"
+            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -71,6 +72,7 @@
             :route="item.route"
             :tip="item.tip"
             :title="item.title"
+            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -181,7 +183,7 @@ export default {
           btnIcon: 'exit_to_app',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'logout',
+          route: '',
           tip: 'Exit application'
         }
       ],
@@ -203,6 +205,10 @@ export default {
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')
       }
+    },
+    check (item) {
+      console.log(item);
+      if (item.route === 'logout') logout()
     },
     logout () {
       this.authenticated = { state: false, level: null }

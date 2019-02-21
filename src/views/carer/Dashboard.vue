@@ -16,10 +16,19 @@
       <v-flex d-flex xs12 sm12 md12 lg12 xl12>
         <v-layout row wrap>
             <v-flex d-flex xs12 sm12 md5 lg5 xl5 child-flex v-if="breakpoint">
-            <v-card dark>
-              <v-card-title class="headline">User select</v-card-title>
-              <!-- Insert component here -->
-            </v-card>
+            <v-card class="userSelect">
+  <baseDropletuser
+      
+      userHeader="eDroplet Users"
+      :users="users"
+      :searchName="searchName"
+      :primaryColor="primaryColor"
+      :usersIcon="usersIcon"
+      :alertIcon="alertIcon"
+      :btnIcon="btnIcon"
+      :alertColor="alertColors"
+    ></baseDropletuser>            
+    </v-card>
           </v-flex>
           <v-flex d-flex xs12 sm12 md7 lg7 xl7 @click="openDialog('Line')">
             <v-card dark>
@@ -27,10 +36,19 @@
             </v-card>
           </v-flex>
           <v-flex d-flex xs12 sm12 md5 lg5 xl5 child-flex v-if="!breakpoint">
-            <v-card dark>
-              <v-card-title class="headline">User select</v-card-title>
-              <!-- Insert component here -->
-            </v-card>
+            <v-card class="userSelect">
+  <baseDropletuser
+      
+      userHeader="eDroplet Users"
+      :users="users"
+      :searchName="searchName"
+      :primaryColor="primaryColor"
+      :usersIcon="usersIcon"
+      :alertIcon="alertIcon"
+      :btnIcon="btnIcon"
+      :alertColor="alertColors"
+    ></baseDropletuser>            
+    </v-card>
           </v-flex>
           <v-flex d-flex xs12 sm12 md12 lg12 xl12>
             <v-layout row wrap>
@@ -87,14 +105,15 @@
 
 <script>
 import charts from '@/components/base/BaseChartComponent'
+import baseDropletuser from '@/components/base/baseDropletuserComponent'
 
 export default {
   components: {
-    charts
+    charts,
+    baseDropletuser
   },
   computed: {
     breakpoint: function () {
-      console.log(this.$vuetify.breakpoint.name)
       switch (this.$vuetify.breakpoint.name) {
         case 'xs': return true
         case 'sm': return true
@@ -102,10 +121,41 @@ export default {
         case 'lg': return false
         case 'xl': return false
       }
+    },
+    alertColors () {
+        for (var i = 0; i < this.users.length; i++) {
+          if (this.users[i].alert === 'hydrated') {
+            this.alertColor.push('green')
+          }
+          else if (this.users[i].alert === 'dehydrated') {
+            this.alertColor.push('red')
+          }
+          else if (this.users[i].alert === 'little dehydrated') {
+            this.alertColor.push('orange')
+          }
+        }
+        return this.alertColor
     }
   },
   data () {
     return {
+      searchName: 'Search user..',
+      usersIcon: 'person',
+      alertIcon: 'report_problem',
+      btnIcon: 'settings',
+      alertColor: [],
+      users: [
+       { name: 'Elsa', hydration: '5.0L/6.0L', sync: '20m', alert: 'hydrated' },
+       { name: 'Tamara', hydration: '3.0L/6.0L', sync: '10m', alert: 'little dehydrated' },
+       { name: 'Daniek', hydration: '4.0L/6.0L', sync: '40m', alert: 'hydrated' },
+       { name: 'David', hydration: '2.0L/6.0L', sync: '30m', alert: 'dehydrated' },
+       { name: 'Jasper', hydration: '3.0L/6.0L', sync: '20m', alert: 'little dehydrated' },
+       { name: 'Sabrina', hydration: '3.0L/6.0L', sync: '24m', alert: 'little dehydrated' },
+       { name: 'Kevin', hydration: '5.0L/6.0L', sync: '23m', alert: 'hydrated' },
+       { name: 'Julian', hydration: '6.0L/6.0L', sync: '12m', alert: 'hydrated' },
+       { name: 'Patricia', hydration: '1.0L/6.0L', sync: '2m', alert: 'dehydrated' }
+      ],
+      primaryColor: 'primary',
       lineDialog: false,
       barDialog: false,
       doughnutDialog: false,
@@ -215,5 +265,11 @@ export default {
   display: inline;
   margin: 5px;
   max-height: 500px;
+}
+.userSelect {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
+  padding-left: 20px;
 }
 </style>
