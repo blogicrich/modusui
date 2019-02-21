@@ -1,7 +1,7 @@
 <template>
   <v-container id="forgotpassword">
     <v-flex>
-      <v-layout class="mt-2 mb-5" column align-center>
+      <v-layout class="mb-2" column align-center>
         <router-link to="/login">
           <img alt src="../../assets/ed_logo.svg">
         </router-link>

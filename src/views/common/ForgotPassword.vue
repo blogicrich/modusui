@@ -1,7 +1,7 @@
 <template>
-  <v-container id="forgotpassword">
+  <v-layout class="forgotpassword-container" row fill-height align-center justify-space-around>
     <base-reset-password></base-reset-password>
-  </v-container>
+  </v-layout>
 </template>
 
 <script>
@@ -18,6 +18,12 @@ export default {
 <style lang="scss">
 @import "./public/scss/main.scss";
 
+.forgotpassword-container {
+  height: 96vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  background-color: inherit;
+}
 img {
   width: 35vh;
 }
