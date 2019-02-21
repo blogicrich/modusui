@@ -77,8 +77,8 @@ export default {
   },
   methods: {
     async getValues () {
-      let data = await apiLib.getData('hydrationtolerancesdisplay')
-      let dataClone = await apiLib.getData('hydrationtolerancesdisplay')
+      let data = await apiLib.getData('sysadmin/hydration-params')
+      let dataClone = await apiLib.getData('sysadmin/hydration-params')
       this.tolerances = data
       this.clone = dataClone
       // console.log(data)
