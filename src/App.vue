@@ -6,8 +6,8 @@
       app
       :clipped-left="clipped"
     >
-    <v-toolbar-side-icon v-if="$vuetify.breakpoint.lgAndDown" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+    <!-- <v-toolbar-side-icon v-if="$vuetify.breakpoint.md" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon> -->
+      <!-- <v-toolbar-title v-text="title"></v-toolbar-title> -->
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
@@ -26,15 +26,16 @@
     <v-fade-transition>
       <v-navigation-drawer
         v-model="activeDrawer"
-        v-if="authenticated.level === 'CARER'"
+        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.lgAndUp"
         class="primary"
         mini-variant
+        mini-variant-width="94"
         disable-route-watcher
         app
         clipped
         flat
       >
-        <v-layout v-if="$vuetify.breakpoint.lgAndUp" column fill-height align-center justify-space-between>
+        <v-layout column fill-height align-center justify-space-between>
           <BaseAppNavBtn
             my-3
             right
@@ -45,26 +46,37 @@
             :iconColor="item.iconColor"
             :route="item.route"
             :tip="item.tip"
+            @navBtnClicked="check"
           />
         </v-layout>
-        <v-layout v-if="$vuetify.breakpoint.mdAndDown" column fill-height align-center justify-space-between>
-          <v-layout>
-            <BaseAppNavBtn
-              my-3
-              right
-              v-for="item in items"
-              :key="item.title"
-              :btnIcon="item.btnIcon"
-              :btnColor="item.btnColor"
-              :iconColor="item.iconColor"
-              :route="item.route"
-              :tip="item.tip"
-            />
-            <span>{{ item.title }}</span>
-          </v-layout>
-
+      </v-navigation-drawer>
+      <v-navigation-drawer
+        v-model="activeDrawer"
+        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.mdAndDown"
+        class="primary"
+        disable-route-watcher
+        mini-variant
+        mini-variant-width="160"
+        app
+        clipped
+        flat
+      >
+        <v-layout v-if="authenticated.level && $vuetify.breakpoint.mdAndDown" column fill-height align-start justify-start>
+          <BaseAppNavBtn
+            my-3
+            right
+            v-for="item in items"
+            :key="item.title"
+            :btnIcon="item.btnIcon"
+            :btnColor="item.btnColor"
+            :iconColor="item.iconColor"
+            :route="item.route"
+            :tip="item.tip"
+            :title="item.title"
+            @navBtnClicked="check"
+          />
         </v-layout>
-    </v-navigation-drawer>
+      </v-navigation-drawer>
     </v-fade-transition>
     <v-container fluid>
       <v-content>
@@ -111,6 +123,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
 
 export default {
@@ -133,7 +146,7 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'dashboard',
-          tip: 'Go to Dashboard',
+          tip: 'Go to Dashboard'
         },
         {
           title: 'Add Drinks',
@@ -141,23 +154,23 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'additionaldrinks',
-          tip: 'Add Drinks',
+          tip: 'Add Drinks'
         },
-        {
-          title: 'Alerts',
-          btnIcon: 'notification_important',
-          btnColor: 'white',
-          iconColor: 'white',
-          route: 'alerts',
-          tip: 'View Alerts',
-        },
+        // {
+        //   title: 'Alerts',
+        //   btnIcon: 'notification_important',
+        //   btnColor: 'white',
+        //   iconColor: 'white',
+        //   route: 'alerts',
+        //   tip: 'View Alerts'
+        // },
         {
           title: 'Away',
           btnIcon: 'calendar_today',
           btnColor: 'white',
           iconColor: 'white',
           route: 'away',
-          tip: 'Record time away',
+          tip: 'Record time away'
         },
         {
           title: 'Reports',
@@ -165,21 +178,21 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'reports',
-          tip: 'Reports',
+          tip: 'Reports'
         },
         {
           title: 'Logout',
           btnIcon: 'exit_to_app',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'logout',
-          tip: 'Exit application',
+          route: '',
+          tip: 'Exit application'
         }
       ],
       clipped: true,
       fixed: false,
-      title: '',
-      user: 'User'
+      // title: '',
+      user: ''
     }
   },
   methods: {
@@ -189,15 +202,20 @@ export default {
       localStorage.auth = JSON.stringify(this.authenticated)
       this.user = newStatus.level
       // console.log(JSON.parse(localStorage.auth))
-      if (newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR' ) {
+      if (newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR') {
         this.$router.push('/landing')
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')
       }
     },
+    check (item) {
+      console.log(item);
+      if (item.route === 'logout') logout()
+    },
     logout () {
       this.authenticated = { state: false, level: null }
       localStorage.auth = JSON.stringify(this.authenticated)
+      this.activeDrawer = false
       this.user = ''
       this.$router.push('/login')
     },
@@ -227,6 +245,9 @@ export default {
   visibility: hidden;
 }
 img {
+  position:absolute;
+  top:2px;
+  left: 12px;
   height: inherit;
   padding: 5px;
 }

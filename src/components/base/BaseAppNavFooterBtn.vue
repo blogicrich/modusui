@@ -1,19 +1,24 @@
 <template>
-  <v-layout class="pt-1" row fill height align-center justify-start>
-    <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
-      <span>{{ tip }}</span>
-      <v-btn
-        slot="activator"
-        large
-        flat
-        icon
-        :color="btnColor"
-        @click="navigate"
-      >
-        <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
-      </v-btn>
-    </v-tooltip>
+
+  <v-layout class="pt-1" row fill-height align-center justify-space-around>
+    <v-flex grow>
+      <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
+        <span>{{ tip }}</span>
+        <v-btn
+          slot="activator"
+          large
+          flat
+          icon
+          :color="btnColor"
+          @click="navigate"
+        >
+          <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
+        </v-btn>
+      </v-tooltip>
+      <span class="text-white">{{ title }}</span>
+    </v-flex>
   </v-layout>
+
 </template>
 
 <script>
@@ -34,10 +39,12 @@ export default {
     btnColor: String,
     iconColor: String,
     tip: String,
+    title: String,
     route: String
   },
   methods: {
     navigate () {
+      this.$emit('nav-btn-clicked', {route: this.route})
       this.$router.push('/' + this.route)
     }
   }

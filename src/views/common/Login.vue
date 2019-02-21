@@ -14,6 +14,7 @@ import BaseLogin from '@/components/base/BaseLoginComponent'
 import apiLib from '@/services/apiLib'
 
 export default {
+  /* eslint-disable */
   name: 'Login',
   components: {
     BaseLogin
@@ -31,30 +32,25 @@ export default {
     submitCredentials (item) {
       // this.isAuthenticating = true
       var data = apiLib.postData('login', item).then(response => {
-        console.log('response: ', response)
-        if (response) {
+        if (Array.isArray(response)) {
           for (var i = 0; i < response.length; i++) {
             if (response[i].description) {
               this.isActive = false
-              // this.msg = response
               this.$emit('authenticated', { state: true, level: response[i].description })
-            } else {
-              this.$emit('authenticated', { state: false, level: null })
-              this.msg = response
-              this.isActive = true
             }
           }
+        } else {
+          this.$emit('authenticated', { state: false, level: null })
+          this.msg = response
+          this.isActive = true
         }
       })
-      console.log(data);
+      console.log(data)
       this.isAuthenticating = false
     }
   },
   created () {
     this.$emit('authenticated', { state: false, level: null })
-  },
-  mounted () {
-    console.log(this.$route.params)
   }
 }
 </script>
