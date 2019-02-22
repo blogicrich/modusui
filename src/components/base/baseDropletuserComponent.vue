@@ -1,19 +1,23 @@
 <template lang="html">
-  <v-layout row>
-    <slot name="personIconSlot"></slot>
-    <v-layout column>
-      <v-flex>
-        <slot name="nameSlot"></slot>
-      </v-flex>
-      <v-flex>
-        <slot name="hydratationSlot"></slot>
-      </v-flex>
-      <v-flex>
-        <slot name="syncSlot"></slot>
-      </v-flex>
-    </v-layout>
-    <slot name="iconSlot"></slot>
-    <slot name="iconBtnSlot"></slot>
+  <v-layout fill-height align-center>
+    <v-flex shrink>
+      <v-layout align-center justify-center fill-height>
+        <slot name="leftSlot"></slot>
+      </v-layout>
+    </v-flex>
+    <v-flex grow>
+      <v-layout column fill-height justify-center align-start>
+        <slot name="middleFirstNameSlot"></slot>
+        <slot name="middleSecondNameSlot"></slot>
+        <slot name="middleThirdNameSlot"></slot>
+      </v-layout>
+    </v-flex>
+    <v-flex xs3 shrink>
+      <v-layout justify-space-around fill-height align-center>
+        <slot name="firstRightSlot"></slot>
+        <slot name="secondRightSlot"></slot>
+      </v-layout>
+    </v-flex>
   </v-layout>
 </template>
 

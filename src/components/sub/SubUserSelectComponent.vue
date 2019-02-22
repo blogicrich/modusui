@@ -1,29 +1,33 @@
 <template lang="html">
   <v-layout column>
-  <v-layout>
-    <v-layout>
-      <h2 class="table-header">{{ userHeader }}</h2>
-    </v-layout>
-    <v-layout justify-end>
-      <v-icon>search</v-icon>
-      <input type="text" class="input-subhead-search" v-model="search" v-bind:placeholder="searchName"/>
-    </v-layout>
-  </v-layout>
-  <v-layout v-for="(item, index) in filteredName" :value="item.name" :key="item.name">
-    <baseDropletuser
-      :primaryColor="primaryColor"
-      :userHeader="userHeader"
-      :searchName="searchName"
-      :usersIcon="usersIcon"
-    >
-      <v-icon slot="personIconSlot" large :color="primaryColor">{{ usersIcon }}</v-icon>
-      <span slot="nameSlot">{{ item.name }}</span>
-      <span slot="hydratationSlot" :class="alertColor[index] + '--text'">{{ item.hydration }}</span>
-      <span slot="syncSlot">{{ item.sync }}</span>
-      <v-icon medium slot="iconSlot" :color="alertColor[index]">{{ alertIcon }}</v-icon>
-      <v-btn flat fab slot="iconBtnSlot"><v-icon medium>{{ btnIcon }}</v-icon></v-btn>
-    </baseDropletuser>
-  </v-layout>
+    <v-container fill-height align-center justify-center>
+      <v-flex grow>
+        <v-layout fill-height align-center justify-start>
+          <h2 class="table-header">{{ userHeader }}</h2>
+        </v-layout>
+      </v-flex>
+      <v-flex shrink>
+        <v-layout fill-height align-center justify-end>
+          <v-icon>search</v-icon>
+          <input type="text" class="searchbar" v-model="search" v-bind:placeholder="searchName"/>
+        </v-layout>
+      </v-flex>
+    </v-container>
+    <v-container v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.name) }" class="userHoverSelect" :value="item.name" :key="item.name" @click="clickedPerson(item.name)">
+      <baseDropletuser
+        :primaryColor="primaryColor"
+        :userHeader="userHeader"
+        :searchName="searchName"
+        :usersIcon="usersIcon"
+      >
+        <v-icon slot="leftSlot" large :color="primaryColor">{{ usersIcon }}</v-icon>
+        <span slot="middleFirstNameSlot">{{ item.name }}</span>
+        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydration }}</span>
+        <span slot="middleThirdNameSlot">{{ item.sync }}</span>
+        <v-icon medium slot="firstRightSlot" :color="alertColor[index]">{{ alertIcon }}</v-icon>
+        <v-icon @click="userSettings" :color="primaryColor" slot="secondRightSlot" medium>{{ btnIcon }}</v-icon>
+      </baseDropletuser>
+    </v-container>
   </v-layout>
 </template>
 
@@ -36,7 +40,8 @@ export default {
   },
   data () {
     return {
-      search: ''
+      search: '',
+      clickedUser: ''
     }
   },
   props: {
@@ -57,10 +62,34 @@ export default {
         return Uppercase.match(searchUppercase)
       })
     }
+  },
+  methods: {
+    clickedPerson (item) {
+      this.clickedUser = item
+    },
+    userSettings () {
+      console.log('settings')
+    },
+    getClass (property) {
+      if (this.clickedUser === property) {
+        return true
+      }
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+  .userSelect {
+    background-color:$table-row-hover;
+    cursor: pointer;
+  }
+  .userHoverSelect:hover {
+    background-color:$table-row-hover;
+    cursor: pointer;
+  }
+  .searchbar {
+    border-bottom: 1px solid $vuetify-primary;
+  }
 </style>
