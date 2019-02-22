@@ -17,8 +17,7 @@
         <v-layout row wrap>
             <v-flex d-flex xs12 sm12 md5 lg5 xl5 child-flex v-if="breakpoint">
             <v-card class="userSelect">
-  <baseDropletuser
-      
+  <SubUserSelect
       userHeader="eDroplet Users"
       :users="users"
       :searchName="searchName"
@@ -27,7 +26,7 @@
       :alertIcon="alertIcon"
       :btnIcon="btnIcon"
       :alertColor="alertColors"
-    ></baseDropletuser>            
+    />
     </v-card>
           </v-flex>
           <v-flex d-flex xs12 sm12 md7 lg7 xl7 @click="openDialog('Line')">
@@ -37,8 +36,7 @@
           </v-flex>
           <v-flex d-flex xs12 sm12 md5 lg5 xl5 child-flex v-if="!breakpoint">
             <v-card class="userSelect">
-  <baseDropletuser
-      
+  <SubUserSelect
       userHeader="eDroplet Users"
       :users="users"
       :searchName="searchName"
@@ -47,7 +45,7 @@
       :alertIcon="alertIcon"
       :btnIcon="btnIcon"
       :alertColor="alertColors"
-    ></baseDropletuser>            
+    />
     </v-card>
           </v-flex>
           <v-flex d-flex xs12 sm12 md12 lg12 xl12>
@@ -105,12 +103,12 @@
 
 <script>
 import charts from '@/components/base/BaseChartComponent'
-import baseDropletuser from '@/components/base/baseDropletuserComponent'
+import SubUserSelect from '@/components/sub/SubUserSelectComponent'
 
 export default {
   components: {
     charts,
-    baseDropletuser
+    SubUserSelect
   },
   computed: {
     breakpoint: function () {
