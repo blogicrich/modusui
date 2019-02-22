@@ -1,19 +1,19 @@
 <template lang="html">
   <v-layout column>
     <v-container fill-height align-center justify-center>
-      <v-flex grow>
+      <v-flex xs5 grow>
         <v-layout fill-height align-center justify-start>
           <h2 class="table-header">{{ userHeader }}</h2>
         </v-layout>
       </v-flex>
-      <v-flex shrink>
-        <v-layout fill-height align-center justify-end>
+      <v-flex xs7 shrink>
+        <v-layout fill-height align-center justify-start>
           <v-icon>search</v-icon>
           <input type="text" class="searchbar" v-model="search" v-bind:placeholder="searchName"/>
         </v-layout>
       </v-flex>
     </v-container>
-    <v-container v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.name) }" class="userHoverSelect" :value="item.name" :key="item.name" @click="clickedPerson(item.name)">
+    <v-container v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.name) }" class="userHoverSelect" :value="item.name" :key="item.name" @click="clickedPerson(item)">
       <baseDropletuser
         :primaryColor="primaryColor"
         :userHeader="userHeader"
@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       search: '',
-      clickedUser: ''
+      clickedUser: []
     }
   },
   props: {
@@ -66,12 +66,14 @@ export default {
   methods: {
     clickedPerson (item) {
       this.clickedUser = item
+      console.log(item);
+      this.$emit('userSelected', item)
     },
     userSettings () {
       console.log('settings')
     },
     getClass (property) {
-      if (this.clickedUser === property) {
+      if (this.clickedUser.name === property) {
         return true
       }
     }
@@ -90,6 +92,7 @@ export default {
     cursor: pointer;
   }
   .searchbar {
+    width: -webkit-fill-available;
     border-bottom: 1px solid $vuetify-primary;
   }
 </style>
