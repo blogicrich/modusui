@@ -33,7 +33,7 @@
         </v-btn>
       </v-toolbar>
       <v-data-table
-      id="table"
+        id="table"
         :headers="headers"
         :items="items"
         :search="search"
@@ -191,7 +191,7 @@
               >
                 <v-icon>edit</v-icon>
               </v-btn>
-              </v-btn>
+              <v-btn>
                 @click="newDialog = true"
                 fab
                 dark

@@ -168,7 +168,7 @@ export default {
   },
   mounted () {
     this.val = apiLib.getData('sysadmin/voice-message')
-    console.log(this.val)
+    // console.log(this.val)
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')

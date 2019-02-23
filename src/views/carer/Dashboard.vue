@@ -124,11 +124,9 @@ export default {
       for (var i = 0; i < this.users.length; i++) {
         if (this.users[i].alert === 'hydrated') {
           this.alertColor.push('green')
-        }
-        else if (this.users[i].alert === 'dehydrated') {
+        } else if (this.users[i].alert === 'dehydrated') {
           this.alertColor.push('red')
-        }
-        else if (this.users[i].alert === 'little dehydrated') {
+        } else if (this.users[i].alert === 'little dehydrated') {
           this.alertColor.push('orange')
         }
       }

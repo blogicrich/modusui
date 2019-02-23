@@ -96,7 +96,7 @@ export default {
       if (this.playing) return
       this.paused = false
       // First play then set playing to true
-      this.audio.play().then( setPlaying => this.playing = true )
+      this.audio.play().then(setPlaying => this.playing = true)
     },
     // Pause if not already paused
     pause () {

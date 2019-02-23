@@ -12,9 +12,9 @@
         </v-layout>
       </v-container>
       </v-card>
-      <v-layout class="ma-2" v-for="tolerance, key in tolerances" :key="tolerance" column fill-height justify-space-around>
+      <v-layout class="ma-2" v-for="(tolerance, key) in tolerances" :key="key" column fill-height justify-space-around>
         <v-text-field
-          v-for="level in tolerance"
+          v-for="level in tolerance" :key="level"
           class="ma-2 mx-4"
           :label="key"
           suffix="%"
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     levelChanged () {
-      console.log(this.tolerances);
+      // console.log(this.tolerances)
     }
   }
 }

@@ -168,7 +168,7 @@ export default {
     showBtns () {
       // for (var z = 0; z < this.items.length; z++) {
       //   if (this.items[z].subject !== this.items[z].subject || this.items[z].text !== this.items[z].text) {
-          this.btns = true
+      this.btns = true
       //     return
       //   } else {
       //     this.btns = false
