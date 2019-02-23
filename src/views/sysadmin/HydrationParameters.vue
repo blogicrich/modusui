@@ -81,7 +81,7 @@ export default {
       let dataClone = await apiLib.getData('sysadmin/hydration-params')
       this.tolerances = data
       this.clone = dataClone
-      // console.log(data)
+      console.log(data)
     },
     async save () {
       for (var i = 0; i < this.tolerances.length; i++) {

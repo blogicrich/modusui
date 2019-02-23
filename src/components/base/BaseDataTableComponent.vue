@@ -22,7 +22,6 @@
             append-outer-icon="close"
           ></v-text-field>
         </v-flex>
-        </v-card-title>
         <v-spacer></v-spacer>
         <v-divider
           class="mx-2 mr-3"
@@ -193,7 +192,6 @@
                 <v-icon>edit</v-icon>
               </v-btn>
               </v-btn>
-              <v-btn
                 @click="newDialog = true"
                 fab
                 dark
@@ -627,8 +625,7 @@
                       <v-btn class="mx-3 mt-0" fab small :color="primaryColor" @click="increment(index)">
                         <v-icon large>arrow_right</v-icon>
                       </v-btn>
-                    </v-btn>
-                  </v-layout>
+                    </v-layout>
                     <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attribute => attribute.attr === key)">
                       <v-text-field
                         v-if="inputType(item, key, 'tb')"
@@ -773,7 +770,7 @@ export default {
       }
     },
     increment (index) {
-      console.log(this.selected)
+      // console.log(this.selected)
       if (this.selected[index] && this.selected[index + 1]) {
         this.editIndex = index + 1
       } else {

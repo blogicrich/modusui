@@ -68,7 +68,7 @@ export default {
     // Bools
     loading: Boolean,
     loaded: Boolean,
-    error: Boolean,
+    error: Boolean
   }
 }
 </script>

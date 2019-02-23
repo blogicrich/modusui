@@ -66,11 +66,11 @@ export default {
   methods: {
     clickedPerson (item) {
       this.clickedUser = item
-      console.log(item);
+      // console.log(item)
       this.$emit('userSelected', item)
     },
     userSettings () {
-      console.log('settings')
+      // console.log('settings')
     },
     getClass (property) {
       if (this.clickedUser.name === property) {

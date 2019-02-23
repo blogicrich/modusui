@@ -20,7 +20,7 @@
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgReminderConfig" :key="'msgRem' + config.fileName"
+            v-for="config in msgReminderConfig" :key="'msgRem' + config.fileName"
             :radioConfig="msgReminderIntervalSettings"
             :groupHeader="msgReminderGroupHeader"
             :groupDescription="msgReminderRadioDescription"
@@ -41,7 +41,7 @@
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgInstructConfig" :key="'msgIns' + '-' + config.fileName"
+            v-for="config in msgInstructConfig" :key="'msgIns' + '-' + config.fileName"
             :radioConfig="msgInstructIntervalSettings"
             :groupHeader="msgInstructGroupHeader"
             :groupDescription="msgInstructRadioDescription"
@@ -61,7 +61,7 @@
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="(config, key, index) in msgPraiseConfig" :key="'msgPr' + '-' + config.fileName"
+            v-for="config in msgPraiseConfig" :key="'msgPr' + '-' + config.fileName"
             :radioConfig="msgPraiseIntervalSettings"
             :groupHeader="msgPraiseGroupHeader"
             :groupDescription="msgPraiseRadioDescription"
@@ -90,9 +90,9 @@ export default {
     selectComponent,
     SubVoiceMsgAudioPlayer
   },
-  mixins: [getData],
   data () {
     return {
+      val: [],
       users: [
         { name: 'Elsa' },
         { name: 'Tamara' },
@@ -165,6 +165,10 @@ export default {
         { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
       ]
     }
+  },
+  mounted () {
+    this.val = apiLib.getData('sysadmin/voice-message')
+    console.log(this.val)
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')

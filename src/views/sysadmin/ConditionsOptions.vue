@@ -102,7 +102,7 @@ export default {
       this.defaultItem = [
         { deptPersonsId: 0, personsId: 0, conditionId: 0, description: ' ', status: ' ' }
       ]
-    },
+    }
   },
   created () {
     this.getItems(this.readUrl)

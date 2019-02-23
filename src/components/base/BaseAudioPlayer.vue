@@ -96,14 +96,13 @@ export default {
       if (this.playing) return
       this.paused = false
       // First play then set playing to true
-      this.audio.play().then(setPlaying => this.playing = true)
+      this.audio.play().then( setPlaying => this.playing = true )
     },
     // Pause if not already paused
     pause () {
       this.paused = !this.paused;
       (this.paused) ? this.audio.pause() : this.audio.play()
     },
-    
     volume () {
       // Mute the volume
       if (this.volumeValue === 0) {
@@ -124,7 +123,7 @@ export default {
         this.timeLeft = formatTime(parseInt(this.totalDuration) - parseInt(this.audio.currentTime))
         if (this.autoPlay) this.audio.play()
       } else {
-        console.log('Failed to load audio file')
+        // console.log('Failed to load audio file')
       }
     },
     // Handle slider position
@@ -158,7 +157,7 @@ export default {
     this.audio = this.$refs.player
     this.init()
     this.audio.volume = this.volumeValue / 100
-    console.log(this.audio)
+    // console.log(this.audio)
   },
   created () {
     // Set unique id for component

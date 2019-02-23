@@ -125,8 +125,7 @@ export default {
       currentItem: '0',
       dialog: false,
       btns: false,
-      activeHash: '',
-      // selected: []
+      activeHash: ''
     }
   },
   props: {
@@ -140,12 +139,12 @@ export default {
     error: Boolean,
     errorMsg: String,
     loadingMsg: String,
-    loadedMsg: String,
+    loadedMsg: String
   },
   methods: {
     saveChanges () {
       var item = Number(this.currentItem)
-      console.log(item)
+      // console.log(item)
       this.$emit('itemsEdited', this.items[item])
     },
     eraseChange () {
@@ -183,7 +182,7 @@ export default {
       // this.currentItem = this.activeHash
       // this.eraseChange()
       // this.dialog = false
-    },
+    }
     // mounted () {
     //   console.log(this.items);
     // }
