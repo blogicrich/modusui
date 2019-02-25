@@ -61,4 +61,46 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+  
+  // Everything that is commented out is custom
+  // Empty comments means I deleted it from the original
+  // Original is from the Login page, I only copied the things I needed
+
+  // .forgotpassword-container {
+  //   height: 96vh;
+  //   margin-top: 1vh;
+  //   margin-bottom: 1vh;
+  //   background-color: inherit;
+  // }
+  // Above is not custom ^
+  img {
+    width: 35vh;
+  }
+  h3 {
+    //margin-top: 5px;
+  }
+  div.v-input {
+    //width: 40vh;
+    padding: 0.5vh;
+    margin: 1vh;
+    border-radius: 0.5vh;
+    color: $dark-blue-grey;
+    border-color: $vuetify-primary;
+    border-style: solid;
+    //margin-top: -10px;
+  }
+  button.v-btn {
+    //
+    color: $dark-blue-grey;
+    background-color: inherit;
+    border-color: $vuetify-primary;
+    border-style: solid;
+    border-radius: 1vh;
+    //
+    //
+    cursor: pointer;
+    //margin-left: 257px;
+    //margin-top: 10px;
+    //width: 125px;
+  }
 </style>
