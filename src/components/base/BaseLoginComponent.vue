@@ -17,9 +17,9 @@
                   <v-progress-circular
                     class="ma-2"
                     :rotate="180"
-                    :size="30"
-                    :width="3"
-                    color="#F6AE2A"
+                    :size="spinnerSize"
+                    :width="spinnerWidth"
+                    :color="primaryColor"
                     indeterminate
                   >
                   </v-progress-circular>
@@ -27,7 +27,7 @@
                 </v-layout>
               </div>
               <v-fade-transition>
-                <div v-if="isActive" class="test" >
+                <div v-if="isActive" class="test">
                   <v-flex>
                     <v-layout align-center justify-center>
                       <v-icon class="ma-2" color="error">highlight_off</v-icon>
@@ -37,24 +37,26 @@
                   </v-flex>
                 </div>
               </v-fade-transition>
-              <v-flex>
-              <v-layout column align-center>
-                  <input  id="userId" v-bind:class="{ 'creds-input': isActive }" v-model="input.username" type="text" placeholder="userId" name="username">
-                  <input id="password" v-bind:class="{ 'creds-input': isActive }" v-model.lazy="input.password" type="password" placeholder="password" name="password">
-                  <v-layout class="mb-2" align-end>
-                    <router-link to="/passwordreset">
-                      <a>Forgotten password?</a>
-                    </router-link>
+              <v-layout v-if="!isAuthenticating">
+                <v-flex>
+                  <v-layout column align-center>
+                      <input  id="userId" v-bind:class="{ 'creds-input': isActive }" v-model="input.username" type="text" placeholder="userId" name="username">
+                      <input id="password" v-bind:class="{ 'creds-input': isActive }" v-model.lazy="input.password" type="password" placeholder="password" name="password">
+                      <v-layout class="mb-2" align-end>
+                        <router-link to="/passwordreset">
+                          <a>Forgotten password?</a>
+                        </router-link>
+                      </v-layout>
                   </v-layout>
-              </v-layout>
-              </v-flex>
-              <v-layout align-end justify-end column>
-                <button
-                  type="button"
-                  v-on:click="checkValues"
-                  >
-                  Submit
-                </button>
+                </v-flex>
+                <v-layout align-end justify-end column>
+                  <button
+                    type="button"
+                    v-on:click="checkValues"
+                    >
+                    Submit
+                  </button>
+                </v-layout>
               </v-layout>
             </v-form>
           </div>
@@ -84,8 +86,10 @@ export default {
   props: {
     msg: String,
     isActive: Boolean,
-    isAuthenticating: Boolean
-
+    isAuthenticating: Boolean,
+    primaryColor: String,
+    spinnerSize: String,
+    spinnerWidth: String
   },
   methods: {
     checkValues () {
