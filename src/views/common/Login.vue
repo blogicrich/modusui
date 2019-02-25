@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="login-container" row fill-height align-center justify-space-around>
+  <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
     <BaseLogin
       :msg="msg"
       :isAuthenticating="isAuthenticating"
@@ -57,11 +57,4 @@ export default {
 
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
-
-.login-container {
-  height: 96vh;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  background-color: inherit;
-}
 </style>

@@ -101,3 +101,48 @@ input[type=checkbox]:checked + label{
   color: $vuetify-primary !important;
   font-weight: bold;
 }
+
+// Login & PasswordReset
+
+.loginreset {
+  float: right;
+  color: $dark-blue-grey;
+  background-color: inherit;
+  border-color: $vuetify-primary;
+  border-style: solid;
+  border-radius: 1vh;
+  box-shadow: 0 0 0.5vh 0.5vh $vuetify-secondary;
+  padding: 1vh;
+  cursor: pointer;
+}
+
+.inputloginreset {
+  width:30vh;
+  padding: 0.5vh;
+  margin:1vh;
+  border-radius: 0.5vh;
+  color:$dark-blue-grey;
+  border-color: $vuetify-primary;
+  border-style: solid;
+}
+
+.creds-input {
+  width:30vh;
+  padding: 0.5vh;
+  margin:1vh;
+  border-radius: 0.5vh;
+  border-color: $vuetify-primary;
+  border-style: solid;
+  background-color: rgb(250, 245, 240);
+}
+
+.loginresetimg {
+  width: 35vh;
+}
+
+.loginreset-container {
+  height: 96vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  background-color: inherit;
+}
