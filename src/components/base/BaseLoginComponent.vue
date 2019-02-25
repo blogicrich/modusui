@@ -13,7 +13,7 @@
             </v-layout>
             <v-form>
               <div v-if="isAuthenticating">
-                <v-layout row align-center>
+                <v-layout row justify-center align-center>
                   <v-progress-circular
                     class="ma-2"
                     :rotate="180"
