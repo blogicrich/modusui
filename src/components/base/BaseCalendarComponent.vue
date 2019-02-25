@@ -39,7 +39,7 @@
 <script>
 export default {
   data: () => ({
-    title: "Consumption per day",
+    title: "Consumption",
     today: Date,
     type: "month",
     typeOptions: [
