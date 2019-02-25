@@ -1,33 +1,23 @@
 <template lang="html">
-  <v-layout column>
-    <v-layout>
-      <v-layout>
-        <h2 class="table-header">{{ userHeader }}</h2>
+  <v-layout fill-height align-center>
+    <v-flex shrink>
+      <v-layout align-center justify-center fill-height>
+        <slot name="leftSlot"></slot>
       </v-layout>
-      <v-layout justify-end>
-        <v-icon>search</v-icon>
-        <input type="text" class="input-subhead-search" v-model="search" v-bind:placeholder="searchName"/>
+    </v-flex>
+    <v-flex grow>
+      <v-layout column fill-height justify-center align-start>
+        <slot name="middleFirstNameSlot"></slot>
+        <slot name="middleSecondNameSlot"></slot>
+        <slot name="middleThirdNameSlot"></slot>
       </v-layout>
-    </v-layout>
-    <v-layout v-for="(item, index) in filteredName" :value="item.name" :key="item.name">
-      <v-icon large :color="primaryColor">{{ usersIcon }}</v-icon>
-      <v-layout column>
-        <v-flex>
-          {{ item.name }}
-        </v-flex>
-        <v-flex>
-          <span :class="alertColor[index] + '--text'">{{ item.hydration }}</span>
-        </v-flex>
-        <v-flex>
-          Last Sync {{ item.sync }}
-        </v-flex>
+    </v-flex>
+    <v-flex xs3 shrink>
+      <v-layout justify-space-around fill-height align-center>
+        <slot name="firstRightSlot"></slot>
+        <slot name="secondRightSlot"></slot>
       </v-layout>
-      <v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon>
-      <v-btn @click="" flat fab>
-        <v-icon medium :color="primaryColor">{{ btnIcon }}</v-icon>
-      </v-btn>
-      <br/>
-    </v-layout>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -35,27 +25,6 @@
 export default {
   data () {
     return {
-      search: ''
-    }
-  },
-  props: {
-    primaryColor: String,
-    userHeader: String,
-    users: Array,
-    searchName: String,
-    searchName: String,
-    usersIcon: String,
-    alertIcon: String,
-    btnIcon: String,
-    alertColor: Array
-  },
-  computed: {
-    filteredName () {
-      return this.users.filter((name) => {
-        const Uppercase = name.name.toUpperCase()
-        const searchUppercase = this.search.toUpperCase()
-        return Uppercase.match(searchUppercase)
-      })
     }
   }
 }

@@ -5,11 +5,11 @@ export const crudRoutines = {
     async addItem (item) {
       var row = {}
       for (var i = 0; i < item.length; i++) {
-        var that = this
+        // var that = this
         Object.keys(item[i]).forEach(function (key) {
           if (key === 'sync') row[item[i].attr] = item[i].sync
         })
-        console.log('data: ', row);
+        // console.log('data: ', row)
       }
       await apiLib.postData(this.createUrl, row)
       this.refreshItems('Item Added', 'success')
@@ -30,8 +30,6 @@ export const crudRoutines = {
     async editItems (items) {
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
-        var row = {}
-        var editedItems = []
         for (var j = 0; j < defaultItem.length; j++) {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
@@ -52,15 +50,13 @@ export const crudRoutines = {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
       var response = await apiLib.getData(this.readUrl)
-      console.log("Response: ", response)
-      // console.log("Respone Type", Array.isArray(response))
+      // console.log("Response: ", response)
       if (Array.isArray(response) === false) {
         this.items = []
         this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
         this.loading = false
         this.loaded = false
         this.error = true
-        this.errorColor
       } else if (response.length <= 0) {
         this.items = []
         this.loadedMsg = 'No current records to display - There are no entries for this table.'

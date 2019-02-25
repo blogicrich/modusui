@@ -60,8 +60,8 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      updateUrl: 'sysadmin/test-messages',
-      readUrl: 'sysadmin/test-messages',
+      updateUrl: 'sysadmin/text-messages',
+      readUrl: 'sysadmin/text-messages',
       defaultItem: [
         { alertMessagesId: 0, alertNo: 0, alertTypeDescription: 0, alertTypeId: '', communicationMethodId: '', communicationType: '', description: '', message: '', status: '', subject: '' }
       ]
@@ -70,8 +70,8 @@ export default {
   created () {
     this.getData(this.readUrl).then(data => {
       this.items = data
-      console.log(data)
-      console.log('Items: ', this.items)
+      // console.log(data)
+      // console.log('Items: ', this.items)
     })
       .catch(err => console.log(err))
       .finally(() => {

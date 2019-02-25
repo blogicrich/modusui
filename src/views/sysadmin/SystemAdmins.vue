@@ -66,7 +66,7 @@ export default {
       loadedMsg: ' ',
       delUrl: 'sysadmin/sysadmin',
       updateUrl: 'sysadmin/sysadmin',
-      readUrl: 'sysadmin/sysadmin',
+      readUrl: 'sysadget',
       createUrl: 'sysadmin/sysadmin',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
@@ -82,8 +82,8 @@ export default {
         { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
         { text: 'Given Name', value: 'givenName', cellType: 'tb', hidden: false, editable: true },
         { text: 'Family Name', value: 'familyName', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: false, editable: true },
-        { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
+        { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: true, editable: true },
+        { text: 'User Name', value: 'username', cellType: 'tb', hidden: true, editable: true }
       ],
       newItem: [
         { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
