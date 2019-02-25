@@ -1,16 +1,15 @@
 <template>
   <v-card>
-    <v-container>
-    <div v-for="(table, index) in tables" :key="index">
-      <v-divider v-if="index > 0"></v-divider>
-      <BaseReportTable :table="table"></BaseReportTable>
+    <div v-for="(tab, index) in tabs" :key="index">
+      <v-divider v-if="index > 0" class="my-3"></v-divider>
+      <v-subheader v-if="tab.subheader">{{tab.subheader}}</v-subheader>
+      <BaseReportTable :type="tab.type" :table="tab.table"></BaseReportTable>
     </div>
-    </v-container>
   </v-card>
 </template>
 
 <script>
-import BaseReportTable from '@/components/base/BaseReportTableComponent.vue'
+import BaseReportTable from "@/components/base/BaseReportTableComponent.vue";
 
 export default {
   name: "BaseReportComponent",
@@ -18,14 +17,7 @@ export default {
     BaseReportTable
   },
   props: {
-    tables: Array,
-  },
-  methods: {
-    convertDateToString: date => {
-      return (
-        date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
-      );
-    }
+    tabs: Array
   }
 };
 </script>
