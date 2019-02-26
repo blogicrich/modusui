@@ -38,6 +38,7 @@
 
 <script>
 export default {
+  /* eslint-disable */
   data: () => ({
     title: "Consumption",
     today: Date,

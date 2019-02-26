@@ -3,9 +3,10 @@
 </template>
 
 <script>
-import BaseCalendarComponent from "../../components/base/BaseCalendarComponent.vue";
+import BaseCalendarComponent from '../../components/base/BaseCalendarComponent.vue'
 
 export default {
+  /* eslint-disable */
   components: {
     "base-calendar": BaseCalendarComponent
   },
