@@ -62,9 +62,6 @@ export default {
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
   
-  img {
-    width: 35vh;
-  }
   h3 {
     margin-top: 5px;
   }
