@@ -10,7 +10,7 @@
         lg3
         v-for="(row, index) in table.items"
         :key="index"
-      >{{table.headers[index]}}: {{table.items[index]}}</v-flex>
+      ><h4>{{table.headers[index]}}:</h4> <span class="ml-2">{{table.items[index]}}</span></v-flex>
     </v-layout>
   </v-container>
 
