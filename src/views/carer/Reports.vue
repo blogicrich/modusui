@@ -2,7 +2,7 @@
   <v-container grid-list-lg>
     <v-layout row fill-height justify-center wrap>
       <v-flex xs10 v-for="(report, index) in reports" :key="index">
-        <BaseReport :tabs="report.tabs"></BaseReport>
+        <BaseReport :tabs="report.tabs" :button="report.button"></BaseReport>
       </v-flex>
     </v-layout>
   </v-container>
@@ -25,8 +25,8 @@ export default {
               type: "header",
               table: {
                 headers: [
-                  "Name",
-                  "AKA",
+                  "Full Name",
+                  "Also known as",
                   "Current Standard Target",
                   "Dietary estimated hydration",
                   "Current Total Adjustments",
@@ -47,22 +47,21 @@ export default {
               type: "table",
               table: {
                 headers: [
-                  { text: "Description", value: "description", sortable: false },
-                  { text: "Adjustment (L)", value: "adjustment", sortable: false },
+                  {
+                    text: "Description",
+                    value: "description",
+                    sortable: false
+                  },
+                  {
+                    text: "Adjustment (L)",
+                    value: "adjustment",
+                    sortable: false
+                  }
                 ],
                 items: [
-                  [
-                    "Lorum Ipsum",
-                    "0.25"
-                  ],
-                  [
-                    "They drank",
-                    "0.37"
-                  ],
-                  [
-                    "quidquid latine dictum sit altum videtur",
-                    "0.32"
-                  ]
+                  ["Lorum Ipsum", "0.25"],
+                  ["They drank", "0.37"],
+                  ["Quidquid latine dictum sit, altum videtur.", "0.32"]
                 ]
               }
             },
@@ -73,10 +72,26 @@ export default {
                 align: "right",
                 headers: [
                   { text: "Date", value: "date", sortable: false },
-                  { text: "Hydration Target (L)", value: "hydrationTarget", sortable: false },
-                  { text: "Actual Hydration (L)", value: "hydrationActual", sortable: false },
-                  { text: "Hydration Percentage (%)", value: "hydrationPercentage", sortable: false },
-                  { text: "Carer's Comments", value: "carerComments", sortable: false}
+                  {
+                    text: "Hydration Target (L)",
+                    value: "hydrationTarget",
+                    sortable: false
+                  },
+                  {
+                    text: "Actual Hydration (L)",
+                    value: "hydrationActual",
+                    sortable: false
+                  },
+                  {
+                    text: "Hydration Percentage (%)",
+                    value: "hydrationPercentage",
+                    sortable: false
+                  },
+                  {
+                    text: "Carer's Comments",
+                    value: "carerComments",
+                    sortable: false
+                  }
                 ],
                 items: [
                   [
@@ -102,8 +117,14 @@ export default {
                   ]
                 ]
               }
-            },
-          ]
+            }
+          ],
+          button: {
+            appear: true,
+            color: "primary",
+            icon: "arrow_downward",
+            docName: "report-name.pdf"
+          }
         },
         {
           tabs: [
@@ -129,7 +150,13 @@ export default {
                 ]
               }
             }
-          ]
+          ],
+          button: {
+            appear: false,
+            color: "primary",
+            icon: "arrow_downward",
+            docName: "report-name.pdf"
+          }
         }
       ]
     };
