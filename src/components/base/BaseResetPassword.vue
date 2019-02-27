@@ -3,14 +3,14 @@
     <v-flex>
       <v-layout class="mb-2" column align-center>
         <router-link to="/login">
-          <img alt src="../../assets/ed_logo.svg">
+          <img class="loginresetimg" alt="" src="../../assets/ed_logo.svg">
         </router-link>
       </v-layout>
       <v-form>
         <v-layout align-center justify-center column fill-height>
           <h3>Please enter your email address below and click the 'Send E-mail' button.</h3>
-          <v-text-field class="mt-3" id="email" v-model="email" type="email" name="email" :rules="emailRules" label="Enter your e-mail address" single-line required/>
-          <v-btn flat v-on:click="forgotPassword">Send E-mail</v-btn>
+          <v-text-field class="mt-3 inputloginreset" id="email" v-model="email" type="email" name="email" :rules="emailRules" label="Enter your e-mail address" single-line required/>
+          <v-btn class="loginreset" flat v-on:click="forgotPassword">Send E-mail</v-btn>
         </v-layout>
       </v-form>
     </v-flex>
@@ -61,4 +61,18 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+  
+  h3 {
+    margin-top: 5px;
+  }
+  .inputloginreset {
+    width: 40vh;
+    margin-top: -10px;
+  }
+  .loginreset {
+    padding: 0;
+    margin-left: 257px;
+    margin-top: 10px;
+    width: 125px;
+  }
 </style>

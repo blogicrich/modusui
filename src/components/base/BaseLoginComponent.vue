@@ -6,6 +6,7 @@
           <div id="login-loaded" class="mp_login" v-on:keyup.enter="checkValues">
             <v-layout class="ma-2" column align-center>
               <img
+                class="loginresetimg"
                 alt=""
                 src='../../assets/ed_logo.svg'
                 >
@@ -40,8 +41,8 @@
               <v-layout v-if="!isAuthenticating">
                 <v-flex>
                   <v-layout column align-center>
-                      <input  id="userId" v-bind:class="{ 'creds-input': isActive }" v-model="input.username" type="text" placeholder="userId" name="username">
-                      <input id="password" v-bind:class="{ 'creds-input': isActive }" v-model.lazy="input.password" type="password" placeholder="password" name="password">
+                      <input class="inputloginreset" id="userId" v-bind:class="{ 'creds-input': isActive }" v-model="input.username" type="text" placeholder="userId" name="username">
+                      <input class="inputloginreset" id="password" v-bind:class="{ 'creds-input': isActive }" v-model.lazy="input.password" type="password" placeholder="password" name="password">
                       <v-layout class="mb-2" align-end>
                         <router-link to="/passwordreset">
                           <a>Forgotten password?</a>
@@ -105,40 +106,8 @@ export default {
 #login {
   background-color: inherit;
 }
-img {
-  width: 35vh;
-}
 h2 {
   color: $dark-blue-grey;
-}
-input[type=text], input[type=password] {
-  width:30vh;
-  padding: 0.5vh;
-  margin:1vh;
-  border-radius: 0.5vh;
-  color:$dark-blue-grey;
-  border-color: $vuetify-primary;
-  border-style: solid;
-}
-.creds-input {
-  width:30vh;
-  padding: 0.5vh;
-  margin:1vh;
-  border-radius: 0.5vh;
-  border-color: $vuetify-primary;
-  border-style: solid;
-  background-color: rgb(250, 245, 240);
-}
-button {
-  float: right;
-  color: $dark-blue-grey;
-  background-color: inherit;
-  border-color: $vuetify-primary;
-  border-style: solid;
-  border-radius: 1vh;
-  box-shadow: 0 0 0.5vh 0.5vh $vuetify-secondary;
-  padding: 1vh;
-  cursor: pointer;
 }
 button:hover {
   -webkit-transition-duration: 0.4s; /* Safari */
