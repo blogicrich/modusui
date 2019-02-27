@@ -9,111 +9,114 @@
 </template>
 
 <script>
-import BaseReport from "@/components/base/BaseReportComponent.vue";
+import BaseReport from '@/components/base/BaseReportComponent'
+import apiLib from '@/services/apiLib'
+let testData = apiLib.getData('sysadmin/sysadmin')
+console.log(testData)
 
 export default {
-  name: "reports",
+  name: 'reports',
   components: {
     BaseReport
   },
-  data: function() {
+  data: function () {
     return {
       reports: [
         {
           tabs: [
             {
-              type: "header",
+              type: 'header',
               table: {
                 headers: [
-                  "Full Name",
-                  "Also known as",
-                  "Current Standard Target",
-                  "Dietary estimated hydration",
-                  "Current Total Adjustments",
-                  "Hydration Adjustment"
+                  'Full Name',
+                  'Also known as',
+                  'Current Standard Target',
+                  'Dietary estimated hydration',
+                  'Current Total Adjustments',
+                  'Hydration Adjustment'
                 ],
                 items: [
-                  "Test Datson",
-                  "Notrelnam",
-                  "2.5",
-                  "1.26",
-                  "0.84",
-                  "0.4"
+                  'Test Datson',
+                  'Notrelnam',
+                  '2.5',
+                  '1.26',
+                  '0.84',
+                  '0.4'
                 ]
               }
             },
             {
-              subheader: "Conditions",
-              type: "table",
+              subheader: 'Conditions',
+              type: 'table',
               table: {
                 headers: [
                   {
-                    text: "Description",
-                    value: "description",
+                    text: 'Description',
+                    value: 'description',
                     sortable: false
                   },
                   {
-                    text: "Adjustment (L)",
-                    value: "adjustment",
+                    text: 'Adjustment (L)',
+                    value: 'adjustment',
                     sortable: false
                   }
                 ],
                 items: [
-                  ["Lorum Ipsum", "0.25"],
-                  ["They drank", "0.37"],
-                  ["Quidquid latine dictum sit, altum videtur.", "0.32"]
+                  ['Lorum Ipsum', '0.25'],
+                  ['They drank', '0.37'],
+                  ['Quidquid latine dictum sit, altum videtur.', '0.32']
                 ]
               }
             },
             {
-              subheader: "Day Reports",
-              type: "table",
+              subheader: 'Day Reports',
+              type: 'table',
               table: {
-                align: "right",
+                align: 'right',
                 headers: [
-                  { text: "Date", value: "date", sortable: false },
+                  { text: 'Date', value: 'date', sortable: false },
                   {
-                    text: "Hydration Target (L)",
-                    value: "hydrationTarget",
+                    text: 'Hydration Target (L)',
+                    value: 'hydrationTarget',
                     sortable: false
                   },
                   {
-                    text: "Actual Hydration (L)",
-                    value: "hydrationActual",
+                    text: 'Actual Hydration (L)',
+                    value: 'hydrationActual',
                     sortable: false
                   },
                   {
-                    text: "Hydration Percentage (%)",
-                    value: "hydrationPercentage",
+                    text: 'Hydration Percentage (%)',
+                    value: 'hydrationPercentage',
                     sortable: false
                   },
                   {
                     text: "Carer's Comments",
-                    value: "carerComments",
+                    value: 'carerComments',
                     sortable: false
                   }
                 ],
                 items: [
                   [
-                    "19th Dec 2018",
-                    "2.0",
-                    "2.3",
-                    "115%",
-                    "Mr. Datson drank various liquids."
+                    '19th Dec 2018',
+                    '2.0',
+                    '2.3',
+                    '115%',
+                    'Mr. Datson drank various liquids.'
                   ],
                   [
-                    "18th Dec 2018",
-                    "2.0",
-                    "2.1",
-                    "105%",
-                    "Mr. Datson succeeded in hydrating an ample amount."
+                    '18th Dec 2018',
+                    '2.0',
+                    '2.1',
+                    '105%',
+                    'Mr. Datson succeeded in hydrating an ample amount.'
                   ],
                   [
-                    "17th Dec 2018",
-                    "2.2",
-                    "2.0",
-                    "91%",
-                    "Mr. Datson did not drink enough today"
+                    '17th Dec 2018',
+                    '2.2',
+                    '2.0',
+                    '91%',
+                    'Mr. Datson did not drink enough today'
                   ]
                 ]
               }
@@ -121,46 +124,45 @@ export default {
           ],
           button: {
             appear: true,
-            color: "primary",
-            icon: "arrow_downward",
-            docName: "report-name.pdf"
+            color: 'primary',
+            icon: 'arrow_downward',
+            docName: 'report-name.pdf'
           }
         },
         {
           tabs: [
             {
-              type: "header",
+              type: 'header',
               table: {
                 headers: [
-                  "Name",
-                  "AKA",
-                  "Current Standard Target",
-                  "Dietary estimated hydration",
-                  "Current Total Adjustments",
-                  "Hydration Adjustment",
-                  "table"
+                  'Name',
+                  'AKA',
+                  'Current Standard Target',
+                  'Dietary estimated hydration',
+                  'Current Total Adjustments',
+                  'Hydration Adjustment',
+                  'table'
                 ],
                 items: [
-                  "Test Datson",
-                  "Notrelnam",
-                  "2.5",
-                  "1.26",
-                  "0.84",
-                  "0.4"
+                  'Test Datson',
+                  'Notrelnam',
+                  '2.5',
+                  '1.26',
+                  '0.84',
+                  '0.4'
                 ]
               }
             }
           ],
           button: {
             appear: false,
-            color: "primary",
-            icon: "arrow_downward",
-            docName: "report-name.pdf"
+            color: 'primary',
+            icon: 'arrow_downward',
+            docName: 'report-name.pdf'
           }
         }
       ]
-    };
+    }
   }
-};
+}
 </script>
-

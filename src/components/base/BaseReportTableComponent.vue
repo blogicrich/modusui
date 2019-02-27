@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "BaseReportTable",
+  name: 'BaseReportTable',
   props: {
     type: String,
     table: {
@@ -36,5 +36,5 @@ export default {
       items: Array
     }
   }
-};
+}
 </script>

@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import BaseReportTable from "@/components/base/BaseReportTableComponent.vue";
-import BaseReportPdfButton from "@/components/base/BaseReportPdfButtonComponent.vue";
+import BaseReportTable from '@/components/base/BaseReportTableComponent.vue'
+import BaseReportPdfButton from '@/components/base/BaseReportPdfButtonComponent.vue'
 
 export default {
-  name: "BaseReportComponent",
+  name: 'BaseReportComponent',
   components: {
     BaseReportTable,
     BaseReportPdfButton
@@ -40,5 +40,5 @@ export default {
       docName: String
     }
   }
-};
+}
 </script>
