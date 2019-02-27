@@ -5,6 +5,9 @@
       :isAuthenticating="isAuthenticating"
       :isActive="isActive"
       @authenticate="submitCredentials"
+      :primaryColor="primaryColor"
+      :spinnerSize="spinnerSize"
+      :spinnerWidth="spinnerWidth"
     />
   </v-layout>
 </template>
@@ -24,7 +27,10 @@ export default {
       msg: '',
       active: false,
       isAuthenticating: false,
-      isActive: false
+      isActive: false,
+      primaryColor: 'primary',
+      spinnerSize: '50',
+      spinnerWidth: '3'
       // src: './src/assets/ed_logo.svg'
     }
   },
