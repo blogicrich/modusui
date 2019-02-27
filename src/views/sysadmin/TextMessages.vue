@@ -79,7 +79,7 @@ export default {
       })
   },
   beforeRouteLeave (to, from, next) {
-    const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+    const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
     if (answer) {
       next()
     } else {
