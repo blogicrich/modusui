@@ -10,9 +10,9 @@
 
 <script>
 import BaseReport from '@/components/base/BaseReportComponent'
-import apiLib from '@/services/apiLib'
-let testData = apiLib.getData('sysadmin/sysadmin')
-console.log(testData)
+// import apiLib from '@/services/apiLib'
+// let testData = apiLib.getData('sysadmin/sysadmin')
+// console.log(testData)
 
 export default {
   name: 'reports',
@@ -27,21 +27,20 @@ export default {
             {
               type: 'header',
               table: {
-                headers: [
-                  'Full Name',
-                  'Also known as',
-                  'Current Standard Target',
-                  'Dietary estimated hydration',
-                  'Current Total Adjustments',
-                  'Hydration Adjustment'
-                ],
-                items: [
-                  'Test Datson',
-                  'Notrelnam',
-                  '2.5',
-                  '1.26',
-                  '0.84',
-                  '0.4'
+                rows: [
+                  {
+                    headers: ['Full Name', 'Also known as'],
+                    items: ['Test Datson', 'Notrelnam']
+                  },
+                  {
+                    headers: [
+                      'Current Standard Target (L)',
+                      'Dietary estimated hydration (L)',
+                      'Current Total Adjustments (L)',
+                      'Current Hydration Target (L)'
+                    ],
+                    items: ['2.5', '1.26', '0.84', '4.60']
+                  }
                 ]
               }
             },
@@ -134,22 +133,20 @@ export default {
             {
               type: 'header',
               table: {
-                headers: [
-                  'Name',
-                  'AKA',
-                  'Current Standard Target',
-                  'Dietary estimated hydration',
-                  'Current Total Adjustments',
-                  'Hydration Adjustment',
-                  'table'
-                ],
-                items: [
-                  'Test Datson',
-                  'Notrelnam',
-                  '2.5',
-                  '1.26',
-                  '0.84',
-                  '0.4'
+                rows: [
+                  {
+                    headers: ['Full Name', 'Also known as'],
+                    items: ['Test Datson', 'Notrelnam']
+                  },
+                  {
+                    headers: [
+                      'Current Standard Target (L)',
+                      'Dietary estimated hydration (L)',
+                      'Current Total Adjustments (L)',
+                      'Current Hydration Target (L)'
+                    ],
+                    items: ['2.5', '1.26', '0.84', '4.60']
+                  }
                 ]
               }
             }

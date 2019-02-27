@@ -26,7 +26,10 @@ export default {
         let tab = this.tabs[i]
         let headerTexts = []
         if (tab.type === 'header') {
-          pdfMixin.methods.renderHeader(doc, tab.table.headers, tab.table.items)
+          for (let i = 0; i < tab.table.rows.length; i++) {
+            let row = tab.table.rows[i]
+            pdfMixin.methods.renderHeader(doc, row.headers, row.items)
+          }
         } else if (tab.type === 'table') {
           for (let iter = 0; iter < tab.table.headers.length; iter++) {
             headerTexts.push(tab.table.headers[iter].text)
