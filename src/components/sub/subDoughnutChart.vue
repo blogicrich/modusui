@@ -7,7 +7,13 @@ export default {
   mixins: [reactiveProp],
   props: {
     chartData: Object,
-    options: Object
+    options: Object,
+    update: Boolean
+  },
+  watch: {
+    update: function () {
+      if (this.update) this.renderChart(this.chartData, this.options)
+    }
   },
   mounted () {
     this.renderChart(this.chartData, this.options)

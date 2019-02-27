@@ -4,16 +4,19 @@
       v-if="this.chartType == 'Line'"
       :chart-data="datacollection"
       :options="optionsLine"
+      :update="update"
     />
     <barChart
       v-else-if="this.chartType == 'Bar'"
       :chart-data="datacollection"
       :options="optionsBar"
+      :update="update"
     />
     <doughnutChart
       v-else-if="this.chartType == 'Doughnut'"
       :chart-data="datacollection"
       :options="optionsDoughnut"
+      :update="update"
     />
   </v-content>
 </template>
@@ -77,7 +80,8 @@ export default {
           cutoutPercentageDoughnut: Number
         }
       */
-    chartType: String
+    chartType: String,
+    update: Boolean
   },
   components: {
     lineChart,
