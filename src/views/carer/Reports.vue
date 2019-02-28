@@ -10,9 +10,9 @@
 
 <script>
 import BaseReport from '@/components/base/BaseReportComponent'
-// import apiLib from '@/services/apiLib'
-// let testData = apiLib.getData('sysadmin/sysadmin')
-// console.log(testData)
+import apiLib from '@/services/apiLib'
+let tabs = [apiLib.getData('sysadmin/sysadmin')];
+console.log(tabs)
 
 export default {
   name: 'reports',
