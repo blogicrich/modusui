@@ -38,7 +38,7 @@
                   </v-flex>
                 </div>
               </v-fade-transition>
-              <v-layout v-if="!isAuthenticating">
+              <v-layout v-if="!isAuthenticating" column>
                 <v-flex>
                   <v-layout column align-center>
                       <input class="inputloginreset" id="userId" v-bind:class="{ 'creds-input': isActive }" v-model="input.username" type="text" placeholder="userId" name="username">
@@ -52,6 +52,7 @@
                 </v-flex>
                 <v-layout align-end justify-end column>
                   <button
+                    class="loginreset"
                     type="button"
                     v-on:click="checkValues"
                     >
