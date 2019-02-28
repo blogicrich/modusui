@@ -10,7 +10,6 @@ export const chartMixin = {
             borderColor: this.lineChartData.borderColorLineOne,
             backgroundColor: this.lineChartData.backgroundColorLineOne,
             borderWidth: this.lineChartData.borderWidthLineOne,
-            lineTension: 0.3
           },
           {
             type: 'line',
@@ -33,6 +32,11 @@ export const chartMixin = {
       this.optionsLine = {
         maintainAspectRatio: false,
         responsive: true,
+        elements: {
+          line: {
+            tension: 0.3
+          }
+        },
         title: {
           display: true,
           text: 'Today\'s activity',
