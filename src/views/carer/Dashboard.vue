@@ -16,6 +16,7 @@ export default {
   },
   methods: {
     changeDate: function (newDate, childData) {
+      let SelectedUnixTime = Math.round((new Date(newDate)).getTime() / 1000)
       this.update = true
       let array = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
       for (let point = 0; point < childData.lineChartData.dataLineOne.length; point++) {
