@@ -18,23 +18,35 @@ export default {
     icon: String,
     docName: String
   },
+  mixins: [pdfMixin],
   methods: {
     renderPdf: function () {
-      let doc = pdfMixin.methods.renderDocument()
+      let doc = this.renderDocument()
 
       for (let i = 0; i < this.tabs.length; i++) {
         let tab = this.tabs[i]
-        let headerTexts = []
+
         if (tab.type === 'header') {
           for (let i = 0; i < tab.table.rows.length; i++) {
             let row = tab.table.rows[i]
-            pdfMixin.methods.renderHeader(doc, row.headers, row.items)
+            this.renderHeader(
+              doc,
+              row.headers,
+              Object.values(row.items)
+            )
           }
         } else if (tab.type === 'table') {
-          for (let iter = 0; iter < tab.table.headers.length; iter++) {
-            headerTexts.push(tab.table.headers[iter].text)
-          }
-          pdfMixin.methods.renderTable(doc, headerTexts, tab.table.items)
+          let headerTexts = []
+          for (let iter = 0; iter < tab.table.headers.length; iter++) { headerTexts.push(tab.table.headers[iter].text) }
+
+          let itemsTexts = []
+          for (let iter = 0; iter < tab.table.items.length; iter++) { itemsTexts.push(Object.values(tab.table.items[iter])) }
+
+          this.renderTable(
+            doc,
+            headerTexts,
+            itemsTexts
+          )
         }
       }
 

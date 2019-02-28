@@ -10,9 +10,6 @@
 
 <script>
 import BaseReport from '@/components/base/BaseReportComponent'
-import apiLib from '@/services/apiLib'
-let tabs = [apiLib.getData('sysadmin/sysadmin')];
-console.log(tabs)
 
 export default {
   name: 'reports',
@@ -30,7 +27,7 @@ export default {
                 rows: [
                   {
                     headers: ['Full Name', 'Also known as'],
-                    items: ['Test Datson', 'Notrelnam']
+                    items: { fullName: 'Test Datson', aka: 'Notrelnam' }
                   },
                   {
                     headers: [
@@ -39,7 +36,12 @@ export default {
                       'Current Total Adjustments (L)',
                       'Current Hydration Target (L)'
                     ],
-                    items: ['2.5', '1.26', '0.84', '4.60']
+                    items: {
+                      currentStandardTarget: '2.5',
+                      dietaryEstimatedTarget: '1.26',
+                      currentTotalAdjustments: '0.84',
+                      currentHydrationTarget: '4.60'
+                    }
                   }
                 ]
               }
@@ -61,9 +63,9 @@ export default {
                   }
                 ],
                 items: [
-                  ['Lorum Ipsum', '0.25'],
-                  ['They drank', '0.37'],
-                  ['Quidquid latine dictum sit, altum videtur.', '0.32']
+                  { description: 'Lorum Ipsum', adjustment: '0.25' },
+                  { description: 'They drank', adjustment: '0.37' },
+                  { description: 'Quidquid latine dictum sit, altum videtur.', adjustment: '0.32' }
                 ]
               }
             },
@@ -96,27 +98,27 @@ export default {
                   }
                 ],
                 items: [
-                  [
-                    '19th Dec 2018',
-                    '2.0',
-                    '2.3',
-                    '115%',
-                    'Mr. Datson drank various liquids.'
-                  ],
-                  [
-                    '18th Dec 2018',
-                    '2.0',
-                    '2.1',
-                    '105%',
-                    'Mr. Datson succeeded in hydrating an ample amount.'
-                  ],
-                  [
-                    '17th Dec 2018',
-                    '2.2',
-                    '2.0',
-                    '91%',
-                    'Mr. Datson did not drink enough today'
-                  ]
+                  {
+                    date: '19th Dec 2018',
+                    hydrationTarget: '2.0',
+                    hydrationActual: '2.3',
+                    hydrationPercentage: '115%',
+                    carerComments: 'Mr. Datson drank various liquids.'
+                  },
+                  {
+                    date: '18th Dec 2018',
+                    hydrationTarget: '2.0',
+                    hydrationActual: '2.1',
+                    hydrationPercentage: '105%',
+                    carerComments: 'Mr. Datson succeeded in hydrating an ample amount.'
+                  },
+                  {
+                    date: '17th Dec 2018',
+                    hydrationTarget: '2.2',
+                    hydrationActual: '2.0',
+                    hydrationPercentage: '91%',
+                    carerComments: 'Mr. Datson did not drink enough today'
+                  }
                 ]
               }
             }
