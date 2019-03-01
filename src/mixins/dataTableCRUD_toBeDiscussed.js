@@ -2,23 +2,15 @@ import apiLib from '../services/apiLib.js'
 
 export const crudRoutines = {
   methods: {
-    // call actions
-    letActionHappenGet () {
-      return this.$store.dispatch('fetchSystemAdminGet')
-    },
-    letActionHappenPost () {
-      return this.$store.dispatch('fetchSystemAdminPost')
-    },
-    letActionHappenDelete () {
-      return this.$store.dispatch('fetchSysAdminDelete')
-    },
-    letActionHappenPut () {
-      return this.$store.dispatch('fetchSysAdminPut')
+    // call action
+    letActionHappen () {
+      return this.$store.dispatch(this.activateFetch)
     },
     // end call actions
 
     // add item (done)
     async addItem (item) {
+      let vuexUrl = ''
       var row = {}
       for (var i = 0; i < item.length; i++) {
         Object.keys(item[i]).forEach(function (key) {
@@ -26,7 +18,8 @@ export const crudRoutines = {
         })
       }
       this.$store.state.systemAdmin.sysAdminpost = await row
-      await this.letActionHappenPost()
+      this.$store.state.systemAdmin.url = await vuexUrl
+      await this.letActionHappen()
       this.refreshItems('Item Added', 'success')
       this.resetItem()
     },
@@ -37,8 +30,9 @@ export const crudRoutines = {
       var index = 0
       for (var i = 0; i < items.length; i++) {
         index = this.items.indexOf(items[i])
-        this.$store.state.storeId = await items[i].personsId
-        await this.letActionHappenDelete()
+        this.$store.state.systemAdmin.storeId = await items[i].personsId
+        this.$store.state.systemAdmin.url = await this.vuexUrl
+        await this.letActionHappen()
         this.items.splice(index, 1)
       }
       this.getItems(this.readUrl)
@@ -54,9 +48,10 @@ export const crudRoutines = {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
           })
-          this.$store.state.storeId = await items[i].personsId
+          this.$store.state.systemAdmin.storeId = await items[i].personsId
           this.$store.state.systemAdmin.sysAdminput = await defaultItem
-          await this.letActionHappenPut()
+          this.$store.state.systemAdmin.url = await this.vuexUrl
+          await this.letActionHappen()
         }
       }
       this.showSnack('Items Edited', 'success')
@@ -71,7 +66,8 @@ export const crudRoutines = {
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      await this.letActionHappenGet()
+      this.$store.state.systemAdmin.url = await this.vuexUrl
+      await this.letActionHappen()
       var response = await this.$store.state.systemAdmin.sysAdminget
       // console.log('Response: ', response)
       if (Array.isArray(response) === false) {

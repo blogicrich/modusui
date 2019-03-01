@@ -6,7 +6,8 @@ export const moduleSystemAdminData = {
     sysAdminget: [],
     sysAdminpost: [],
     sysAdminput: [],
-    storeId: []
+    storeId: [],
+    url: []
   },
   mutations: {
     // set the data
@@ -17,8 +18,9 @@ export const moduleSystemAdminData = {
   actions: {
     // get all data
     fetchSystemAdminGet (context) {
+      // console.log('iii');
       // axios data
-      return apiLib.getData('sysadmin/sysadmin').then((response) => {
+      return apiLib.getData(this.getters.getterUrl).then((response) => {
         return apiLib.getData('sysAdmin/title').then((title) => {
           let array = []
           let counter = 0
@@ -38,14 +40,14 @@ export const moduleSystemAdminData = {
         })
     },
     fetchSystemAdminPost () {
-      return apiLib.postData('sysadmin/sysadmin', this.getters.getterDataPost)
+      return apiLib.postData(this.getters.getterUrl, this.getters.getterDataPost)
     },
     fetchSysAdminDelete () {
-      return apiLib.deleteData('sysadmin/sysadmin/' + this.getters.getterStoreId)
+      return apiLib.deleteData(this.getters.getterUrl + this.getters.getterStoreId)
     },
     fetchSysAdminPut () {
-      console.log(this.getters.getterStoreId)
-      return apiLib.updateData('sysadmin/sysadmin/' + this.getters.getterStoreId, this.getters.getterDataPut)
+      // console.log('sysadmin/sysadmin/' + this.getters.getterStoreId)
+      return apiLib.updateData(this.getters.getterUrl + this.getters.getterStoreId, this.getters.getterDataPut)
     }
   },
   getters: {
@@ -53,11 +55,14 @@ export const moduleSystemAdminData = {
     getterDataPost: state => {
       return state.sysAdminpost
     },
-    // getterStoreId: state => {
-    //   return state.storeId
-    // },
+    getterStoreId: state => {
+      return state.storeId
+    },
     getterDataPut: state => {
       return state.sysAdminput
+    },
+    getterUrl: state => {
+      return state.url
     }
   }
 }

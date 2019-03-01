@@ -53,6 +53,8 @@ export default {
   },
   data () {
     return {
+      vuexUrl: 'sysadmin/sysadmin',
+      activateFetch: 'fetchSystemAdminGet',
       items: [],
       snackColor: 'primary',
       snackText: '',
