@@ -66,7 +66,7 @@ export default {
       loadedMsg: ' ',
       delUrl: 'sysadmin/sysadmin',
       updateUrl: 'sysadmin/sysadmin',
-      readUrl: 'sysadget',
+      readUrl: 'sysadmin/sysadmin',
       createUrl: 'sysadmin/sysadmin',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
@@ -79,18 +79,14 @@ export default {
         { text: 'Mobile Number', align: 'left', sortable: false, value: 'mobileNo', cellType: 'tb', hidden: true, editable: true },
         { text: 'password', align: 'left', sortable: false, value: 'password', cellType: 'tb', hidden: true, editable: true },
         { text: 'Email', align: 'left', sortable: false, value: 'email', cellType: 'tb', hidden: true, editable: true },
-        { text: 'Title', align: 'left', sortable: false, value: 'titleShort', cellType: 'md', hidden: false, editable: true },
-        { text: 'TitleId', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: true, editable: true },
-        // { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
+        { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
         { text: 'Given Name', value: 'givenName', cellType: 'tb', hidden: false, editable: true },
         { text: 'Family Name', value: 'familyName', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: true, editable: true },
-        { text: 'User Name', value: 'username', cellType: 'tb', hidden: true, editable: true }
+        { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: false, editable: true },
+        { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { titleShort: ' ', cellType: 'md', attr: 'titleShort', cellLabel: 'Title', menuItems: [], validators: [] },
-        // { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'TitleId', menuItems: [], validators: [] },
-        // { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
@@ -111,9 +107,7 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        { titleShort: ' ', cellType: 'md', attr: 'titleShort', cellLabel: 'Title', menuItems: [], validators: [] },
-        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'TitleId', menuItems: [], validators: [] },
-        // { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },

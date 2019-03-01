@@ -1,19 +1,19 @@
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import JsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 export default {
   methods: {
-    renderDocument() {
-      return new jsPDF();
+    renderDocument () {
+      return new JsPDF()
     },
-    renderHeader: function(doc, headData, bodyData) {
+    renderHeader: function (doc, headData, bodyData) {
       doc.autoTable({
-        theme: "plain",
+        theme: 'plain',
         head: [headData],
-        body: [bodyData],
+        body: [bodyData]
       })
     },
-    renderTable: function(doc, tableHeaderData, tableData) {
+    renderTable: function (doc, tableHeaderData, tableData) {
       doc.autoTable({
         head: [tableHeaderData],
         body: tableData

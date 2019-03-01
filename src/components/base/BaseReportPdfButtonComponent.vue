@@ -7,36 +7,51 @@
 </template>
 
 <script>
-import pdfMixin from "@/mixins/pdfMixin.js";
+import pdfMixin from '@/mixins/pdfMixin.js'
 
 export default {
-  name: "BaseReportPdfButton",
-  data: function() {},
+  name: 'BaseReportPdfButton',
+  data: function () {},
   props: {
     tabs: Array,
     color: String,
     icon: String,
     docName: String
   },
+  mixins: [pdfMixin],
   methods: {
-    renderPdf: function() {
-      let doc = pdfMixin.methods.renderDocument();
+    renderPdf: function () {
+      let doc = this.renderDocument()
 
       for (let i = 0; i < this.tabs.length; i++) {
-        let tab = this.tabs[i];
-        let headerTexts = [];
-        if (tab.type === "header") {
-          pdfMixin.methods.renderHeader(doc, tab.table.headers, tab.table.items);
-        } else if (tab.type === "table") {
-          for (let iter = 0; iter < tab.table.headers.length; iter++) {
-            headerTexts.push(tab.table.headers[iter].text);
+        let tab = this.tabs[i]
+
+        if (tab.type === 'header') {
+          for (let i = 0; i < tab.table.rows.length; i++) {
+            let row = tab.table.rows[i]
+            this.renderHeader(
+              doc,
+              row.headers,
+              Object.values(row.items)
+            )
           }
-          pdfMixin.methods.renderTable(doc, headerTexts, tab.table.items);
+        } else if (tab.type === 'table') {
+          let headerTexts = []
+          for (let iter = 0; iter < tab.table.headers.length; iter++) { headerTexts.push(tab.table.headers[iter].text) }
+
+          let itemsTexts = []
+          for (let iter = 0; iter < tab.table.items.length; iter++) { itemsTexts.push(Object.values(tab.table.items[iter])) }
+
+          this.renderTable(
+            doc,
+            headerTexts,
+            itemsTexts
+          )
         }
       }
 
-      doc.save(this.docName ? this.docName : "report.pdf");
+      doc.save(this.docName ? this.docName : 'report.pdf')
     }
   }
-};
+}
 </script>

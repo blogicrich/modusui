@@ -1,17 +1,7 @@
 <template>
   <v-container v-if="type === `header`">
-    <v-layout row wrap>
-      <v-flex
-        offset-xs1
-        offset-sm0
-        xs10
-        sm6
-        md4
-        lg3
-        v-for="(row, index) in table.items"
-        :key="index"
-      ><h4>{{table.headers[index]}}:</h4> <span class="ml-2">{{table.items[index]}}</span></v-flex>
-    </v-layout>
+    <BaseReportHeaderRow v-for="(row, index) in table.rows" :key="index" :row="row">
+    </BaseReportHeaderRow>
   </v-container>
 
   <v-data-table v-else-if="type === `table`" :headers="table.headers" :items="table.items">
@@ -26,15 +16,21 @@
 </template>
 
 <script>
+import BaseReportHeaderRow from '@/components/base/BaseReportHeaderRowComponent'
+
 export default {
-  name: "BaseReportTable",
+  name: 'BaseReportTable',
+  components: {
+    BaseReportHeaderRow
+  },
   props: {
     type: String,
     table: {
       align: String,
+      rows: Array,
       headers: Array,
       items: Array
     }
   }
-};
+}
 </script>
