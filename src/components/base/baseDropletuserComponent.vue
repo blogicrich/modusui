@@ -12,10 +12,11 @@
         <slot name="middleThirdNameSlot"></slot>
       </v-layout>
     </v-flex>
-    <v-flex xs3 shrink>
+    <v-flex shrink>
       <v-layout justify-space-around fill-height align-center>
         <slot name="firstRightSlot"></slot>
         <slot name="secondRightSlot"></slot>
+        <slot name="thirdRightSlot"></slot>
       </v-layout>
     </v-flex>
   </v-layout>

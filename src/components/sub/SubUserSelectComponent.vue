@@ -24,10 +24,57 @@
         <span slot="middleFirstNameSlot">{{ item.name }}</span>
         <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydration }}</span>
         <span slot="middleThirdNameSlot">{{ item.sync }}</span>
-        <v-icon medium slot="firstRightSlot" :color="alertColor[index]">{{ alertIcon }}</v-icon>
-        <v-icon @click="userSettings" :color="primaryColor" slot="secondRightSlot" medium>{{ btnIcon }}</v-icon>
+        <v-btn flat fab slot="firstRightSlot" to="/alerts"><v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon></v-btn>
+        <v-btn flat fab slot="secondRightSlot" @click="addMessage(item)"><v-icon :color="primaryColor">add_comment</v-icon></v-btn>
+        <v-btn flat fab slot="thirdRightSlot" @click="userSettings(item)"><v-icon :color="primaryColor" medium>{{ btnIcon }}</v-icon></v-btn>
       </baseDropletuser>
     </v-container>
+    <v-dialog
+      v-model="dialogToggle"
+      min-width="500"
+      persistent>
+      <v-card>
+        <v-layout v-if="dialogComment" column>
+          <v-layout>
+            <v-card-title><h2>{{ titleAddComment }}</h2></v-card-title>
+          </v-layout>
+          <v-container>
+            <v-text-field label="Enter Comment Text"></v-text-field>
+          </v-container>
+          <v-layout justify-space-around>
+            <v-card-actions>
+              <v-btn :color="primaryColor" flat @click="closeDialog">Delete</v-btn>
+              <v-btn :color="primaryColor" flat @click="closeDialog">Save</v-btn>
+              <v-btn :color="primaryColor" flat @click="closeDialog">Cancel</v-btn>
+            </v-card-actions>
+          </v-layout>
+        </v-layout>
+        <v-layout v-if="dialogSettings" column>
+          <v-layout>
+          <v-card-title><h2>{{ titleSettings }}</h2></v-card-title>
+          </v-layout>
+          <v-container>
+            <v-data-table
+              :headers="headers"
+              :items="dropletDetail"
+              class="elevation-1"
+            >
+              <template>
+                <th v-for="header in headers">{{ header.text }}</th>
+              </template>
+              <template v-slot:items="props">
+                <td v-for="item in props.item">{{ item }}</td>
+              </template>
+            </v-data-table>
+          </v-container>
+          <v-layout justify-center>
+            <v-card-actions>
+              <v-btn :color="primaryColor" flat @click="closeDialog">Close</v-btn>
+            </v-card-actions>
+          </v-layout>
+        </v-layout>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -41,7 +88,17 @@ export default {
   data () {
     return {
       search: '',
-      clickedUser: []
+      clickedUser: [],
+      dialogToggle: false,
+      dialogSettings: false,
+      dialogComment: false,
+      headers: [
+        { text: 'Legend', align: 'left', sortable: false, value: 'legend', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Mac Adress', align: 'left', sortable: false, value: 'MacAdress', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Friendly Name', align: 'left', sortable: false, value: 'friendlyName', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Status', align: 'left', sortable: false, value: 'status', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Last Communicated', align: 'left', sortable: false, value: 'LastCommunicated', cellType: 'tb', hidden: false, editable: true }
+      ]
     }
   },
   props: {
@@ -52,7 +109,10 @@ export default {
     alertIcon: String,
     usersIcon: String,
     searchName: String,
-    alertColor: Array
+    alertColor: Array,
+    titleAddComment: String,
+    titleSettings: String,
+    dropletDetail: Array
   },
   computed: {
     filteredName () {
@@ -66,11 +126,25 @@ export default {
   methods: {
     clickedPerson (item) {
       this.clickedUser = item
-      // console.log(item)
+      this.$emit('userSelected', item)
+      console.log()
+    },
+    userSettings (item) {
+      console.log('sett')
+      this.$emit('userSelected', item)
+      this.dialogToggle = true
+      this.dialogSettings = true
+    },
+    addMessage (item) {
+      this.dialogToggle = true
+      this.dialogComment = true
       this.$emit('userSelected', item)
     },
-    userSettings () {
-      // console.log('settings')
+    closeDialog () {
+      this.dialogToggle = false
+      this.dialogComment = false
+      this.dialogSettings = false
+      this.$emit('dataUser', this.clickedUser)
     },
     getClass (property) {
       if (this.clickedUser.name === property) {
