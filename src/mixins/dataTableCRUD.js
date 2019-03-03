@@ -1,4 +1,4 @@
-import apiLib from '../services/apiLib.js'
+import apiLib from '@/services/apiLib'
 
 export const crudRoutines = {
   methods: {
@@ -48,6 +48,7 @@ export const crudRoutines = {
 
     // update item
     async editItems (items) {
+      console.log("BDTC: ", items)
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
         for (var j = 0; j < defaultItem.length; j++) {
@@ -111,14 +112,22 @@ export const crudRoutines = {
           var menuItems = await apiLib.getData(urls[i].url)
           var values = []
           for (var j = 0; j < menuItems.length; j++) {
-            // console.log('menuItem: ', menuItems[j][urls[i].key])
-            values.push(menuItems[j][urls[i].key])
+            console.log('menuItem: ', menuItems[j][urls[i].attr])
+            values.push(menuItems[j])//[urls[i].attr])
           }
           for (var k = 0; k < this.newItem.length; k++) {
             if (this.newItem[k].attr === urls[i].attr) { this.newItem[k].menuItems = values }
           }
         }
       }
+    },
+    menuValue (valueKey, row) {
+      console.log("1: ", row);
+      return [1,2,3]
+    },
+    menuText (textKey, row) {
+      console.log("2: ", row);
+      return ['one', 'two', 'three']
     }
   }
 }
