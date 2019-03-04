@@ -7,9 +7,7 @@ let authObj = function () {
     return ''
   }
 }
-// let baseUrl = function() {
 
-// }
 var axAuth = axios.create({
   baseURL: 'http://127.0.0.1:3000/',
   timeout: 1000,
@@ -21,6 +19,23 @@ var axUnauth = axios.create({
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' }
 })
+
+// let url = function() {
+//   console.log(process.env.VUE_APP_NODE_ENV)
+//   let val = ''
+//   switch (process.env.VUE_APP_NODE_ENV) {
+//     case 'development':
+//       axAuth.setBaseURL('http://127.0.0.1:3000/')
+//       break
+//     case 'production':
+//       axAuth.setBaseURL('https://edroplet.ndevr.co.uk:3000/')
+//       axUnauth.setBaseURL('https://edroplet.ndevr.co.uk:3000/')
+//     default:
+//       val = 'http://127.0.0.1:3000/'
+//       break
+//   }
+//   return val
+// }
 
 export default {
   // Delete (DELETE) data
