@@ -7,22 +7,19 @@ let authObj = function () {
     return ''
   }
 }
+// let baseUrl = function() {
+
+// }
 var axAuth = axios.create({
   baseURL: 'http://127.0.0.1:3000/',
   timeout: 1000,
-  headers: { 'Content-Type' : 'application/json' },
-  auth: {
-    token: authObj.token,
-  }
+  headers: { 'Authorization': 'Bearer ' + authObj.token }
 })
 
 var axUnauth = axios.create({
   baseURL: 'http://127.0.0.1:3000/',
   timeout: 1000,
-  headers: { 'Content-Type' : 'application/json' },
-  // auth: {
-  //   token: JSON.parse(sessionStorage.getItem('auth')).token
-  // }
+  headers: { 'Content-Type': 'application/json' }
 })
 
 export default {
@@ -77,9 +74,9 @@ export default {
   updateData (url, data) {
     if (data) {
       return axAuth.put(url, data).then(response => {
-        console.log("URL", url)
-        console.log("DATA", data)
-        console.log("RESPONSE", response)
+        console.log('URL', url)
+        console.log('DATA', data)
+        console.log('RESPONSE', response)
         return response.data
       }).catch(err => console.log(err))
         .finally(() => {
