@@ -10,7 +10,7 @@
       <!-- <v-toolbar-title v-text="title"></v-toolbar-title> -->
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
-      <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
+      <v-badge v-if="(authenticated.level !== 'CARER')" left overlap color="error">
         <span slot="badge" class="text-badge">{{ alerts }}</span>
         <v-icon
           medium
@@ -26,7 +26,7 @@
     <v-fade-transition>
       <v-navigation-drawer
         v-model="activeDrawer"
-        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.lgAndUp"
+        v-if="(authenticated.level === 'CARER' || authenticated.level === 'CLIENT ADMINISTRATOR / CARER') && authenticated.state && $vuetify.breakpoint.lgAndUp"
         class="primary"
         mini-variant
         mini-variant-width="94"
@@ -52,7 +52,7 @@
       </v-navigation-drawer>
       <v-navigation-drawer
         v-model="activeDrawer"
-        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.mdAndDown"
+        v-if="(authenticated.level === 'CARER' || authenticated.level === 'CLIENT ADMINISTRATOR / CARER') && authenticated.state && $vuetify.breakpoint.smAndUp"
         class="primary"
         disable-route-watcher
         mini-variant
@@ -87,7 +87,7 @@
     </v-container>
     <v-fade-transition>
       <v-footer
-        v-if="authenticated.state && authenticated.level !== 'CARER' && $vuetify.breakpoint.smAndUp"
+        v-if="(authenticated.level === 'SYSTEM ADMINISTRATOR' || authenticated.level === 'CLIENT ADMINISTRATOR') && authenticated.state && $vuetify.breakpoint.smAndUp"
         :class="(authenticated.level === 'CARER') ? 'hide' : 'elevation-5 pa-4' "
         :fixed="fixed"
         color="white"
@@ -104,10 +104,10 @@
             tip="Home"
           />
           <BaseAppNavBtn
-            v-if="(authenticated.level === 'CLIENT ADMINISTRATOR')"
+            v-if="(authenticated.level === 'CLIENT ADMINISTRATOR / CARER')"
             btnIcon="dashboard"
             btnColor="primary"
-            route="landing"
+            route="dashboard"
             tip="Dashboard"
           />
           <BaseAppNavBtn
@@ -157,6 +157,14 @@ export default {
           route: 'additionaldrinks',
           tip: 'Add Drinks'
         },
+        {
+          title: 'Administration',
+          btnIcon: 'settings',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'landing',
+          tip: 'Administration'
+        },
         // {
         //   title: 'Alerts',
         //   btnIcon: 'notification_important',
@@ -204,7 +212,7 @@ export default {
       localStorage.auth = JSON.stringify(this.authenticated)
       this.user = newStatus.level
       // console.log(JSON.parse(localStorage.auth))
-      if ((newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR') && newStatus.token) {
+      if ((newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR / CARER') && newStatus.token) {
         this.$router.push('/landing')
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')
