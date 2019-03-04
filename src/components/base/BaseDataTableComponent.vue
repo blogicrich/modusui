@@ -309,11 +309,11 @@
                         item-text="shortDescription"
                       >{{ item[key].value }}
                       </v-select>
-                        <template v-slot:default="menuItems">
+                        <template slot="item" slot-scope="items">
                           // HTML that describe how select should render selected items
                           {{ menuItemsshortDescription }} 
                         </template>
-                        <template slot="item" slot-scope="menuItems">
+                        <template slot="item" slot-scope="items">
                           // HTML that describe how select should render items when the select is open
                           {{ titleId }} 
                         </template>

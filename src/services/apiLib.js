@@ -10,13 +10,13 @@ let authObj = function () {
 
 var axAuth = axios.create({
   baseURL: 'http://127.0.0.1:3000/',
-  timeout: 1000,
+  timeout: 10000,
   headers: { 'Authorization': 'Bearer ' + authObj.token }
 })
 
 var axUnauth = axios.create({
   baseURL: 'http://127.0.0.1:3000/',
-  timeout: 1000,
+  timeout: 10000,
   headers: { 'Content-Type': 'application/json' }
 })
 
