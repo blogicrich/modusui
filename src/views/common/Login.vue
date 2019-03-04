@@ -37,12 +37,12 @@ export default {
   methods: {
     submitCredentials (item) {
       // this.isAuthenticating = true
-      var data = apiLib.postData('login', item).then(response => {
+      var data = apiLib.postAuth('login', item).then(response => {
         if (Array.isArray(response)) {
           for (var i = 0; i < response.length; i++) {
             if (response[i].description) {
               this.isActive = false
-              this.$emit('authenticated', { state: true, level: response[i].description })
+              this.$emit('authenticated', { state: true, level: response[i].description, token: response[i].token })
             }
           }
         } else {

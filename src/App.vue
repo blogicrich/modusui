@@ -137,7 +137,8 @@ export default {
       alerts: 0,
       authenticated: {
         state: false,
-        level: null
+        level: null,
+        token: ''
       },
       items: [
         {
@@ -199,10 +200,11 @@ export default {
     setAuthenticated (newStatus) {
       this.authenticated.state = newStatus.state
       this.authenticated.level = newStatus.level
+      this.authenticated.token = newStatus.token
       localStorage.auth = JSON.stringify(this.authenticated)
       this.user = newStatus.level
       // console.log(JSON.parse(localStorage.auth))
-      if (newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR') {
+      if ((newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR') && newStatus.token) {
         this.$router.push('/landing')
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')

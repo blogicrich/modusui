@@ -8,8 +8,8 @@ import store from './store'
 import './registerServiceWorker'
 
 // axios.defaults.baseURL = 'http://127.0.0.1:3000/'
-axios.defaults.baseURL = 'https://edroplet.ndevr.co.uk:3000/'
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+// axios.defaults.baseURL = 'https://edroplet.ndevr.co.uk:3000/'
+// axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false
 

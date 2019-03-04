@@ -25,7 +25,7 @@ export const moduleSystemAdminData = {
           for (let i = 0; i < response.length; i++) {
             let titles = response[i].titleId - 1
             let userTitle = title[titles]
-            array.push({ 'personsId': response[i].personsId, 'titleId': response[i].titleId, 'titleShort': userTitle.shortDescription, 'titleLong': userTitle.longDescription, 'salution': response[i].salution, 'givenName': response[i].givenName, 'familyName': response[i].familyName, 'status': response[i].status })
+            array.push({ 'personsId': response[i].personsId, 'titleId': response[i].titleId, 'shortDescription': userTitle.shortDescription, 'titleLong': userTitle.longDescription, 'salution': response[i].salution, 'givenName': response[i].givenName, 'familyName': response[i].familyName, 'status': response[i].status })
             if (counter === (response.length - 1)) {
               context.commit('SET_SYSTEMADMINGET', array)
             } else {
