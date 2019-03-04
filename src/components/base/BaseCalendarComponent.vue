@@ -5,19 +5,6 @@
     <v-flex xs12 class="mb-3">
       <v-sheet height="650">
         <v-calendar ref="calendar" v-model="today" :type="type" color="primary">
-          <v-layout slot="day" slot-scope="{ present, past, date }" fill-height>
-            <template v-if="past && tracked[date]">
-              <v-sheet
-                v-for="(percent, i) in tracked[date]"
-                :key="i"
-                :color="colors[i]"
-                :width="`${percent}%`"
-              >
-                <p class="calendarTitle">{{ category[i] }}</p>
-                <p class="drinkAmount">{{ hydrationLevel[i] /* .aggregatedHydration */ }} <!-- / {{ hydrationLevel.hydrationTarget }} --></p>
-              </v-sheet>
-            </template>
-          </v-layout>
         </v-calendar>
       </v-sheet>
     </v-flex>
@@ -70,18 +57,39 @@ export default {
       "2019-02-14": [0, 0, 100],
       "2019-02-17": [0, 0, 100],
       "2019-02-18": [0, 0, 100],
-      "2019-02-27": [0, 0, 100],
+      "2019-02-27": [0, 0, 100]
     },
-    colors: ["#4CAF50", "#FF9800", "#F44336"],
     // colors: custom function/class determines what color will be used depending on the category,
     category: ["Hydrated", "Little Dehydrated", "Dehydrated"],
     // category: apiLib.getData('/carer/condition/:userId', description, auth),
-    hydrationLevel: ["5.0/6.0L", "3.0/6.0L", "1.0/6.0L",],
+    hydrationLevel: ["5.0/6.0L", "3.0/6.0L", "1.0/6.0L"]
     // hydrationLevel: apiLib.getData('/carer/reports-snapshot/:userId', aggregatedHydration, hydrationTarget, auth),
-  })
+  }),
+  props: {
+    dayReports: Array,
+    colorStatusPairs: Array
+  },
+  methods: {
+    getColorStatusPair: function(status) {
+      for (let i = 0; i < this.category.length; i++)
+        for (let j = 0; j < this.colorStatusPairs.length; j++)
+          if (this.category[i] === this.colorStatusPairs[j])
+            return this.colorStatusPairs[j];
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped>
+ <style lang="scss" scoped>
 @import "./public/scss/main.scss";
+
+.calendarTitle {
+  margin-left: 7.5px;
+  margin-top: 5px;
+}
+.drinkAmount {
+  text-align: end;
+  margin-top: 38px;
+  margin-right: 7.5px;
+}
 </style>

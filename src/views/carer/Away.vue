@@ -1,9 +1,10 @@
 <template>
-  <base-calendar></base-calendar>
+  <base-calendar :dayReports="dayReports" :colorStatusPairs="colorStatusPairs"></base-calendar>
 </template>
 
 <script>
-import BaseCalendarComponent from '../../components/base/BaseCalendarComponent.vue'
+// "#4CAF50", "", "#F44336"
+import BaseCalendarComponent from "../../components/base/BaseCalendarComponent.vue";
 
 export default {
   /* eslint-disable */
@@ -11,21 +12,18 @@ export default {
     "base-calendar": BaseCalendarComponent
   },
   data: () => ({
-    
+    dayReports: [
+      {
+        date: "2019-02-28",
+        condition: "Hydrated",
+        hydrationLevel: "9L/6L"
+      }
+    ],
+    colorStatusPairs: [
+      { color: "green", status: "Hydrated" },
+      { color: "orange", status: "Little Dehydrated" },
+      { color: "red", status: "Dehydrated" }
+    ]
   })
 };
 </script>
-
-<style lang="scss">
-@import "./public/scss/main.scss";
-
-.calendarTitle {
-  margin-left: 7.5px;
-  margin-top: 5px;
-}
-.drinkAmount {
-  text-align: end;
-  margin-top: 38px;
-  margin-right: 7.5px;
-}
-</style>
