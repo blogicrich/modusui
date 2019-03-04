@@ -4,61 +4,34 @@
 
     <v-flex xs12 class="mb-3">
       <v-sheet height="650">
-        <v-calendar ref="calendar" v-model="today" :type="type" color="primary">
+        <v-calendar :value="today" color="primary">
+          <template v-slot:day="{ date }">
+            <calendarEvent v-for="(event, index) in eventsMap[date]" :key="index" :title="event.category" :color="'green'" :menuText="event.hydrationLevel">
+              
+            </calendarEvent>
+          </template>
         </v-calendar>
       </v-sheet>
-    </v-flex>
-
-    <v-flex sm4 xs12 class="text-sm-left text-xs-center">
-      <v-btn @click="$refs.calendar.prev()">
-        <v-icon dark left>keyboard_arrow_left</v-icon>Prev
-      </v-btn>
-    </v-flex>
-    <v-flex sm4 xs12 class="text-xs-center">
-      <v-select v-model="type" :items="typeOptions" label="Type"></v-select>
-    </v-flex>
-    <v-flex sm4 xs12 class="text-sm-right text-xs-center">
-      <v-btn @click="$refs.calendar.next()">Next
-        <v-icon right dark>keyboard_arrow_right</v-icon>
-      </v-btn>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 // import apiLib from "C:/Users/tom/Documents/Dev/eDroplet/ui/src/services/apiLib.js";
+import calendarEvent from '@/components/base/BaseCalendarEventComponent'
 
 export default {
-  /* eslint-disable */
+  components: {calendarEvent},
   data: () => ({
     title: "Consumption per day",
     today: Date(),
-    type: "month",
-    typeOptions: [
-      { text: "Day", value: "day" },
-      { text: "Week", value: "week" },
-      { text: "Month", value: "month" }
+    events: [
+      {
+        category: 'Hydrated',
+        hydrationLevel: '9L/6L',
+        date: '2019-03-01',
+      }
     ],
-    tracked: {
-      // import data per person per day from Database
-      "2019-02-04": [100],
-      "2019-02-09": [100],
-      "2019-02-12": [100],
-      "2019-02-20": [100],
-      "2019-02-28": [100],
-      "2019-02-03": [0, 100],
-      "2019-02-07": [0, 100],
-      "2019-02-13": [0, 100],
-      "2019-02-16": [0, 100],
-      "2019-02-25": [0, 100],
-      "2019-02-22": [0, 100],
-      "2019-02-02": [0, 0, 100],
-      "2019-02-06": [0, 0, 100],
-      "2019-02-14": [0, 0, 100],
-      "2019-02-17": [0, 0, 100],
-      "2019-02-18": [0, 0, 100],
-      "2019-02-27": [0, 0, 100]
-    },
     // colors: custom function/class determines what color will be used depending on the category,
     category: ["Hydrated", "Little Dehydrated", "Dehydrated"],
     // category: apiLib.getData('/carer/condition/:userId', description, auth),
@@ -68,6 +41,13 @@ export default {
   props: {
     dayReports: Array,
     colorStatusPairs: Array
+  },
+  computed: {
+    eventsMap () {
+      const map = {};
+      this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e));
+      return map;
+    }
   },
   methods: {
     getColorStatusPair: function(status) {
