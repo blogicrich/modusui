@@ -9,7 +9,13 @@
 </template>
 
 <script>
+import reportStore from '@/store/StoreGetRaport'
 import BaseReport from '@/components/base/BaseReportComponent'
+console.log(
+  reportStore.fetchGetReportsCondition() +
+    reportStore.fetchGetReportsSnapshot() +
+    reportStore.fetchGetReportComments()
+)
 
 export default {
   name: 'reports',
@@ -65,7 +71,10 @@ export default {
                 items: [
                   { description: 'Lorum Ipsum', adjustment: '0.25' },
                   { description: 'They drank', adjustment: '0.37' },
-                  { description: 'Quidquid latine dictum sit, altum videtur.', adjustment: '0.32' }
+                  {
+                    description: 'Quidquid latine dictum sit, altum videtur.',
+                    adjustment: '0.32'
+                  }
                 ]
               }
             },
@@ -110,7 +119,8 @@ export default {
                     hydrationTarget: '2.0',
                     hydrationActual: '2.1',
                     hydrationPercentage: '105%',
-                    carerComments: 'Mr. Datson succeeded in hydrating an ample amount.'
+                    carerComments:
+                      'Mr. Datson succeeded in hydrating an ample amount.'
                   },
                   {
                     date: '17th Dec 2018',
@@ -161,6 +171,50 @@ export default {
           }
         }
       ]
+    }
+  },
+  methods: {
+    getReports: function () {
+      let reports = []
+      let reportConditions = reportStore.fetchGetReportsCondition()
+      for (let ri = 0; ri < reportConditions.length; ri++) {
+        let report = {
+          tabs: [
+            {
+              type: 'header',
+              table: {
+                rows: [
+                  {
+                    headers: ['Full Name', 'Also Known As'],
+                    items: ['¬Full Name', '¬Also Known As']
+                  },
+                  {
+                    headers: [
+                      'Current Standard Target (L)',
+                      'Dietary estimated hydration (L)',
+                      'Current Total Adjustments (L)',
+                      'Current Hydration Target (L)'
+                    ],
+                    items: [
+                      '¬Current Standard Target (L)',
+                      '¬Dietary estimated hydration (L)',
+                      '¬Current Total Adjustments (L)',
+                      '¬Current Hydration Target (L)'
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          button: {
+            appear: true,
+            color: 'primary',
+            icon: 'arrow_downward',
+            docName: 'report-' + 'name' + '.pdf'
+          }
+        }
+        reports.push(report)
+      }
     }
   }
 }
