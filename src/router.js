@@ -11,10 +11,10 @@ export default new Router({
 
     // fallback
 
-    // {
-    //   path: '*',
-    //   redirect: { name: 'Login' }
-    // },
+    {
+      path: '*',
+      redirect: '/'
+    },
 
     // Common routes
     {
