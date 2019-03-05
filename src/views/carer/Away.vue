@@ -8,7 +8,7 @@
 <script>
 import reportStore from '@/store/StoreGetRaport'
 import BaseCalendarComponent from '@/components/base/BaseCalendarComponent.vue'
-console.log(reportStore.fetchReport())
+console.log(reportStore.fetchGetReportsSnapshot())
 
 export default {
   components: {
@@ -74,6 +74,29 @@ export default {
       { color: 'orange', status: 'Little Dehydrated' },
       { color: 'red', status: 'Dehydrated' }
     ]
-  })
+  }),
+  methods: {
+    getDayReports: function () {
+      let dayReports = []
+      let apiData = reportStore.fetchGetReportsSnapshot()
+      for (let i = 0; i < apiData.length; i++) {
+        let dayReport = apiData[i]
+        let category = 'hydrated'
+        let hydrationLevel =
+          dayReport.volumeConsumedViaEDroplet +
+          dayReport.volumeConsumedViaOther +
+          '/' +
+          dayReport.hydrationTarget
+        let date = dayReport.dateTime
+
+        dayReports.push({
+          category: category,
+          hydrationLevel: hydrationLevel,
+          date: date
+        })
+      }
+      return dayReports
+    }
+  }
 }
 </script>
