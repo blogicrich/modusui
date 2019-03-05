@@ -99,8 +99,7 @@
         />
       </v-flex>
     </v-layout>
-
-    <v-layout v-if="this.user == 'CLIENT ADMINISTRATOR' || this.user == 'CLIENT ADMINISTRATOR / CARER'" row wrap align-start justify-start class="landing-cli-admin">
+    <v-layout v-if="this.user === 'CLIENT ADMINISTRATOR' || this.user === 'CLIENT ADMINISTRATOR / CARER'" row wrap align-start justify-start class="landing-cli-admin">
         <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
             <v-icon

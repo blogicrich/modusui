@@ -37,6 +37,16 @@
       >
         <v-layout column fill-height align-center justify-space-between>
           <BaseAppNavBtn
+            v-if="authenticated.level !== 'CARER'"
+            my-3
+            right
+            btnIcon="settings"
+            btnColor="white"
+            iconColor="white"
+            route="landing"
+            tip="Administration"
+          />
+          <BaseAppNavBtn
             my-3
             right
             v-for="item in items"
@@ -46,7 +56,6 @@
             :iconColor="item.iconColor"
             :route="item.route"
             :tip="item.tip"
-            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -63,6 +72,16 @@
       >
         <v-layout v-if="authenticated.level && $vuetify.breakpoint.mdAndDown" column fill-height align-start justify-start>
           <BaseAppNavBtn
+            v-if="authenticated.level !== 'CARER'"
+            my-3
+            right
+            btnIcon="settings"
+            btnColor="white"
+            iconColor="white"
+            route="landing"
+            tip="Administration"
+          />
+          <BaseAppNavBtn
             my-3
             right
             v-for="item in items"
@@ -73,7 +92,6 @@
             :route="item.route"
             :tip="item.tip"
             :title="item.title"
-            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -153,6 +171,14 @@ export default {
           tip: 'Go to Dashboard'
         },
         {
+          title: 'Alerts',
+          btnIcon: 'notification_important',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'alerts',
+          tip: 'View Alerts'
+        },
+        {
           title: 'Add Drinks',
           btnIcon: 'local_drink',
           btnColor: 'white',
@@ -160,22 +186,6 @@ export default {
           route: 'additionaldrinks',
           tip: 'Add Drinks'
         },
-        {
-          title: 'Administration',
-          btnIcon: 'settings',
-          btnColor: 'white',
-          iconColor: 'white',
-          route: 'landing',
-          tip: 'Administration'
-        },
-        // {
-        //   title: 'Alerts',
-        //   btnIcon: 'notification_important',
-        //   btnColor: 'white',
-        //   iconColor: 'white',
-        //   route: 'alerts',
-        //   tip: 'View Alerts'
-        // },
         {
           title: 'Away',
           btnIcon: 'calendar_today',
@@ -220,10 +230,6 @@ export default {
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')
       }
-    },
-    check (item) {
-      console.log(item);
-      if (item.route === 'logout') logout()
     },
     logout () {
       this.authenticated = null
