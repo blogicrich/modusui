@@ -25,7 +25,7 @@
         <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydration }}</span>
         <span slot="middleThirdNameSlot">{{ item.sync }}</span>
         <v-btn flat fab slot="firstRightSlot" to="/alerts"><v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon></v-btn>
-        <v-btn flat fab slot="secondRightSlot" @click="addMessage(item)"><v-icon :color="primaryColor">add_comment</v-icon></v-btn>
+        <v-btn flat fab slot="secondRightSlot" @click="addMessage(item)"><v-icon :color="primaryColor">{{ commentIcon }}</v-icon></v-btn>
         <v-btn flat fab slot="thirdRightSlot" @click="userSettings(item)"><v-icon :color="primaryColor" medium>{{ btnIcon }}</v-icon></v-btn>
       </baseDropletuser>
     </v-container>
@@ -112,7 +112,8 @@ export default {
     alertColor: Array,
     titleAddComment: String,
     titleSettings: String,
-    dropletDetail: Array
+    dropletDetail: Array,
+    // commentIcon: String
   },
   computed: {
     filteredName () {
