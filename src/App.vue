@@ -10,7 +10,7 @@
       <!-- <v-toolbar-title v-text="title"></v-toolbar-title> -->
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
-      <v-badge v-if="(authenticated.level !== 'CARER')" left overlap color="error">
+      <!-- <v-badge v-if="(authenticated.level !== 'CARER')" left overlap color="error">
         <span slot="badge" class="text-badge">{{ alerts }}</span>
         <v-icon
           medium
@@ -19,7 +19,7 @@
         >
           notifications
         </v-icon>
-      </v-badge>
+      </v-badge> -->
       <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
       <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
     </v-toolbar>
