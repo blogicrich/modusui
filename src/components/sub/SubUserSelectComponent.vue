@@ -13,7 +13,7 @@
         </v-layout>
       </v-flex>
     </v-container>
-    <v-container v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.name) }" class="userHoverSelect" :value="item.name" :key="item.name" @click="clickedPerson(item)">
+    <v-container v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.userId) }" class="userHoverSelect" :value="item.userId" :key="item.userId" @click="clickedPerson(item)">
       <baseDropletuser
         :primaryColor="primaryColor"
         :userHeader="userHeader"
@@ -21,17 +21,17 @@
         :usersIcon="usersIcon"
       >
         <v-icon slot="leftSlot" large :color="primaryColor">{{ usersIcon }}</v-icon>
-        <span slot="middleFirstNameSlot">{{ item.name }}</span>
-        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydration }}</span>
-        <span slot="middleThirdNameSlot">{{ item.sync }}</span>
+        <span slot="middleFirstNameSlot">{{ item.givenName }} {{ item.familyName }}</span>
+        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydrationValue }}/{{ item.calculatedTargetConsumption }}</span>
+        <span slot="middleThirdNameSlot">{{ item.lastComm }}</span>
         <v-btn flat fab slot="firstRightSlot" to="/alerts"><v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon></v-btn>
-        <v-btn flat fab slot="secondRightSlot" @click="addMessage(item)"><v-icon :color="primaryColor">{{ commentIcon }}</v-icon></v-btn>
+        <v-btn flat fab slot="secondRightSlot" @click="addComment(item)"><v-icon :color="primaryColor">{{ commentIcon }}</v-icon></v-btn>
         <v-btn flat fab slot="thirdRightSlot" @click="userSettings(item)"><v-icon :color="primaryColor" medium>{{ btnIcon }}</v-icon></v-btn>
       </baseDropletuser>
     </v-container>
     <v-dialog
       v-model="dialogToggle"
-      min-width="500"
+      :width="dialogWidth"
       persistent>
       <v-card>
         <v-layout v-if="dialogComment" column>
@@ -39,13 +39,13 @@
             <v-card-title><h2>{{ titleAddComment }}</h2></v-card-title>
           </v-layout>
           <v-container>
-            <v-text-field label="Enter Comment Text"></v-text-field>
+            <v-text-field :counter="maxCharac" :rules="commentRules" label="Enter Comment Text" v-model="commentText"></v-text-field>
           </v-container>
           <v-layout justify-space-around>
             <v-card-actions>
-              <v-btn :color="primaryColor" flat @click="closeDialog">Delete</v-btn>
-              <v-btn :color="primaryColor" flat @click="closeDialog">Save</v-btn>
-              <v-btn :color="primaryColor" flat @click="closeDialog">Cancel</v-btn>
+              <v-btn :color="primaryColor" flat @click="clearComment">Clear</v-btn>
+              <v-btn :color="primaryColor" flat @click="saveComment">Save</v-btn>
+              <v-btn :color="primaryColor" flat @click="cancelComment">Cancel</v-btn>
             </v-card-actions>
           </v-layout>
         </v-layout>
@@ -69,7 +69,7 @@
           </v-container>
           <v-layout justify-center>
             <v-card-actions>
-              <v-btn :color="primaryColor" flat @click="closeDialog">Close</v-btn>
+              <v-btn :color="primaryColor" flat @click="closeSetting">Close</v-btn>
             </v-card-actions>
           </v-layout>
         </v-layout>
@@ -92,6 +92,12 @@ export default {
       dialogToggle: false,
       dialogSettings: false,
       dialogComment: false,
+      dialogWidth: '',
+      commentText: '',
+      commentSavedText: '',
+      commentRules: [
+        v => v.length <= this.maxCharac || 'Name must be less than ' + this.maxCharac + ' characters'
+      ],
       headers: [
         { text: 'Legend', align: 'left', sortable: false, value: 'legend', cellType: 'tb', hidden: true, editable: true },
         { text: 'Mac Adress', align: 'left', sortable: false, value: 'MacAdress', cellType: 'tb', hidden: true, editable: true },
@@ -113,14 +119,17 @@ export default {
     titleAddComment: String,
     titleSettings: String,
     dropletDetail: Array,
-    // commentIcon: String
+    commentIcon: String,
+    maxCharac: String
   },
   computed: {
     filteredName () {
-      return this.users.filter((name) => {
-        const Uppercase = name.name.toUpperCase()
+      return this.users.filter((users) => {
+        const upperCaseGiv = users.givenName.toUpperCase()
+        const upperCaseFam = users.familyName.toUpperCase()
+        const upperCase = upperCaseGiv + ' ' + upperCaseFam
         const searchUppercase = this.search.toUpperCase()
-        return Uppercase.match(searchUppercase)
+        return upperCase.match(searchUppercase)
       })
     }
   },
@@ -128,27 +137,41 @@ export default {
     clickedPerson (item) {
       this.clickedUser = item
       this.$emit('userSelected', item)
-      console.log()
     },
     userSettings (item) {
-      console.log('sett')
       this.$emit('userSelected', item)
+      this.dialogWidth = 'auto'
       this.dialogToggle = true
       this.dialogSettings = true
     },
-    addMessage (item) {
+    closeSetting () {
+      this.dialogToggle = false
+      this.dialogSettings = false
+    },
+    addComment (item) {
+      this.dialogWidth = '500'
       this.dialogToggle = true
       this.dialogComment = true
       this.$emit('userSelected', item)
     },
-    closeDialog () {
+    saveComment () {
+      if (this.commentText.length < this.maxCharac) {
+        this.commentSavedText = this.commentText
+        this.dialogToggle = false
+        this.dialogComment = false
+        this.$emit('commentText', this.commentSavedText)
+      }
+    },
+    clearComment () {
+      this.commentText = ''
+    },
+    cancelComment () {
+      this.commentText = this.commentSavedText
       this.dialogToggle = false
       this.dialogComment = false
-      this.dialogSettings = false
-      this.$emit('dataUser', this.clickedUser)
     },
     getClass (property) {
-      if (this.clickedUser.name === property) {
+      if (this.clickedUser.userId === property) {
         return true
       }
     }
