@@ -1,46 +1,40 @@
 import axios from 'axios'
 
-let authObj = function () {
-  if (sessionStorage.auth.token) {
-    return JSON.parse(sessionStorage.getItem('auth'))
-  } else {
-    return ''
+var url = function() {
+  console.log(process.env.NODE_ENV)
+  let val = ''
+  switch (process.env.NODE_ENV) {
+    case 'development':
+      val = 'http://127.0.0.1:3000/'
+      return val
+      break
+    case 'production':
+      val = 'https://edroplet.ndevr.co.uk:3000/'
+      return val
+    default:
+      val = 'http://127.0.0.1:3000/'
+      break
   }
+  console.log(val)
+  return val
 }
 
-var axAuth = axios.create({
-  baseURL: 'http://127.0.0.1:3000/',
-  timeout: 10000,
-  headers: { 'Authorization': 'Bearer ' + authObj.token }
-})
-
 var axUnauth = axios.create({
-  baseURL: 'http://127.0.0.1:3000/',
+  baseURL: url(),
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' }
 })
 
-// let url = function() {
-//   console.log(process.env.VUE_APP_NODE_ENV)
-//   let val = ''
-//   switch (process.env.VUE_APP_NODE_ENV) {
-//     case 'development':
-//       axAuth.setBaseURL('http://127.0.0.1:3000/')
-//       break
-//     case 'production':
-//       axAuth.setBaseURL('https://edroplet.ndevr.co.uk:3000/')
-//       axUnauth.setBaseURL('https://edroplet.ndevr.co.uk:3000/')
-//     default:
-//       val = 'http://127.0.0.1:3000/'
-//       break
-//   }
-//   return val
-// }
+var axAuth = axios.create({
+  baseURL: url(),
+  timeout: 10000,
+  headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token }
+})
 
 export default {
   // Delete (DELETE) data
   deleteData (url, data) {
-    return axAuth.delete(url, data).then(response => {
+    return axAuth.delete(data).then(response => {
       // console.log(url)
       console.log(response.data)
       return response.data
@@ -54,6 +48,7 @@ export default {
     return axAuth.get(url).then(response => {
       // console.log(url)
       console.log(response)
+      console.log(axAuth.headers)
       return response.data
     }).catch(err => console.log(err))
       .finally(() => {

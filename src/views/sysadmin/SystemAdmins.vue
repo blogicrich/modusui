@@ -45,7 +45,6 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 
-
 export default {
   name: 'SystemAdmins',
   mixins: [crudRoutines],
@@ -67,54 +66,48 @@ export default {
       loadedMsg: ' ',
       delUrl: 'sysadmin/sysadmin',
       updateUrl: 'sysadmin/sysadmin',
-      readUrl: 'this.$store.state.systemAdmin.systemAdminGet',
+      readUrl: 'sysadmin/sysadmin',
       createUrl: 'sysadmin/sysadmin',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'person',
       iconAdd: 'person_add',
       headers: [
-        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
+        { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
+        { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'Mobile Number', align: 'left', sortable: false, value: 'mobileNo', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'password', align: 'left', sortable: false, value: 'password', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'Email', align: 'left', sortable: false, value: 'email', cellType: 'tb', hidden: true, editable: true },
-        { text: 'Title', align: 'left', sortable: false, value: 'shortDescription', cellType: 'md', hidden: false, editable: true },
-        { text: 'TitleId', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: true, editable: true },
-        // { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
+        { text: 'Mobile Number', align: 'left', sortable: false, value: 'mobileNo', cellType: 'tb', hidden: true, editable: true },
+        { text: 'password', align: 'left', sortable: false, value: 'password', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Email', align: 'left', sortable: false, value: 'email', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
         { text: 'Given Name', value: 'givenName', cellType: 'tb', hidden: false, editable: true },
         { text: 'Family Name', value: 'familyName', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'User Name', value: 'username', cellType: 'tb', hidden: true, editable: true }
+        { text: 'Company', value: 'corporateIdentification', cellType: 'tb', hidden: false, editable: true },
+        { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { titleShort: ' ', cellType: 'md', attr: 'shortDescription', returnVal: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
-        // { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'TitleId', menuItems: [], validators: [] },
-        // { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
-        // { mobileNo: ' ', cellType: 'tb', attr: 'mobileNo', cellLabel: 'Mobile Number', menuItems: [], validators: [] },
-        // { email: ' ', cellType: 'tb', attr: 'email', cellLabel: 'Email', menuItems: [], validators: [] },
-        // { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
+        { mobileNo: ' ', cellType: 'tb', attr: 'mobileNo', cellLabel: 'Mobile Number', menuItems: [], validators: [] },
+        { email: ' ', cellType: 'tb', attr: 'email', cellLabel: 'Email', menuItems: [], validators: [] },
+        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '' }
+        { deptPersonsId: 0, personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', mobileNo: '', email: '', password: '' }
       ],
       urls: [
-        { url: 'sysadmin/title', attr: 'shortDescription', key: 'titleId' },
-        // { url: 'sysadmin/sysadmin', attr: 'username', key: 'username' }
+        { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' },
+        { url: 'sysadmin/sysadmin', attr: 'username', key: 'username' }
       ]
     }
   },
   methods: {
     resetItem () {
       this.newItem = [
-        { titleShort: ' ', cellType: 'md', attr: 'titleShort', cellLabel: 'Title', menuItems: [], validators: [] },
-        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'TitleId', menuItems: [], validators: [] },
-        // { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
@@ -130,7 +123,6 @@ export default {
   },
   mounted () {
     this.getItems(this.readUrl)
-    console.log(this.items)
   }
 }
 </script>
