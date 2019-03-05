@@ -16,7 +16,7 @@
       <v-layout justify-space-around fill-height align-center>
         <slot name="firstRightSlot"></slot>
         <slot name="secondRightSlot"></slot>
-        <slot name="thirdRightSlot"></slot>
+        <slot name="thirdRightSlot"> </slot>
       </v-layout>
     </v-flex>
   </v-layout>
