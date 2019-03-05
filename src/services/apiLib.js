@@ -48,7 +48,6 @@ export default {
     return axAuth.get(url).then(response => {
       // console.log(url)
       console.log(response)
-      console.log(axAuth.headers)
       return response.data
     }).catch(err => console.log(err))
       .finally(() => {
