@@ -191,14 +191,14 @@
               >
                 <v-icon>edit</v-icon>
               </v-btn>
-              <v-btn>
+              <v-btn
                 @click="newDialog = true"
                 fab
                 dark
                 medium
                 color="success"
               >
-              <v-icon>add</v-icon>
+                <v-icon>add</v-icon>
               </v-btn>
               <v-btn
                 v-if="selected.length > 0"
@@ -305,8 +305,18 @@
                         :color="primaryColor"
                         outline
                         required
+                        item-value="titleId"
+                        item-text="shortDescription"
                       >{{ item[key].value }}
                       </v-select>
+                        <template slot="item" slot-scope="items">
+                          // HTML that describe how select should render selected items
+                          {{ menuItemsshortDescription }} 
+                        </template>
+                        <template slot="item" slot-scope="items">
+                          // HTML that describe how select should render items when the select is open
+                          {{ titleId }} 
+                        </template>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -669,6 +679,7 @@
 </template>
 
 <script>
+
 import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
@@ -777,6 +788,7 @@ export default {
         return this.selected.length
       }
     },
+    // Render logic for text box or dropdown
     inputType (item, key, type) {
       for (var i = 0; i < this.newItem.length; i++) {
         if (this.newItem[i].attr === key) {
@@ -809,6 +821,7 @@ export default {
     },
     saveChanges () {
       this.$emit('itemsEdited', this.selected)
+      console.log(this.selected)
       this.close()
       this.selected = []
     }
