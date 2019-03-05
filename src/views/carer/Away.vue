@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import reportStore from '@/store/StoreGetRaport'
+import {moduleReports} from '@/store/StoreReports'
 import BaseCalendarComponent from '@/components/base/BaseCalendarComponent.vue'
-console.log(reportStore.fetchGetReportsSnapshot())
+console.log(moduleReports.actions.fetchGetReportsSnapshot())
 
 export default {
   components: {
@@ -78,7 +78,7 @@ export default {
   methods: {
     getDayReports: function () {
       let dayReports = []
-      let apiData = reportStore.fetchGetReportsSnapshot()
+      let apiData = moduleReports.fetchGetReportsSnapshot()
       for (let i = 0; i < apiData.length; i++) {
         let dayReport = apiData[i]
         let category = 'hydrated'
