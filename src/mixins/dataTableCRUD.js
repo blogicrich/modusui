@@ -5,22 +5,24 @@ export const crudRoutines = {
     async addItem (item) {
       var row = {}
       for (var i = 0; i < item.length; i++) {
-        var that = this
         Object.keys(item[i]).forEach(function (key) {
+          // console.log(item[i].sync)
           if (key === 'sync') row[item[i].attr] = item[i].sync
         })
-        console.log('data: ', row);
       }
+      // console.log('data: ', row)
       await apiLib.postData(this.createUrl, row)
       this.refreshItems('Item Added', 'success')
       this.resetItem()
     },
     async deleteItem (items) {
-      var index = 0
       for (var i = 0; i < items.length; i++) {
-        index = this.items.indexOf(items[i])
-        // console.log(items[i][this.idKey], items[i], this.idKey)
-        await this.postData(this.delUrl, { personsId: items[i][this.idKey] })
+        let index = this.items.indexOf(items[i])
+        let id = Number(items[i][this.crudIdKey])
+        // console.log(items[i], this.crudIdKey, this.delUrl, id)
+        // console.log('IDDDDDDDDD: ', id)
+        // console.log(this.delUrl, + '/' + items[i][this.crudIdKey])
+        await apiLib.deleteData(this.delUrl + '/' + id)
         this.items.splice(index, 1)
       }
       this.getItems(this.readUrl)
@@ -35,24 +37,23 @@ export const crudRoutines = {
         for (var j = 0; j < defaultItem.length; j++) {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
-            // console.log("Looping Inner: ", key, defaultItem[j][key], items[i][key])
+            // console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
           })
-          await this.postData(this.updateUrl, defaultItem[j])
-          // console.log(this.defaultItem[j])
+          console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
+          await apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
         }
+        this.showSnack('Items Edited', 'success')
+        this.getItems(this.readUrl)
       }
-      this.showSnack('Items Edited', 'success')
-      this.getItems(this.readUrl)
       if (this.newItem) {
         this.resetItem()
       }
-      // console.log(this.defaultItem)
     },
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
       var response = await apiLib.getData(this.readUrl)
-      console.log("Response: ", response)
+      // console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
         this.items = []
@@ -68,7 +69,7 @@ export const crudRoutines = {
         this.loaded = true
         this.error = false
       } else {
-        // console.log("Items: ", this.items)
+        console.log("Items: ", this.items)
         this.items = response
         if (this.urls) this.setMenuItems(this.urls)
         this.loading = false
@@ -91,8 +92,10 @@ export const crudRoutines = {
           var menuItems = await apiLib.getData(urls[i].url)
           var values = []
           for (var j = 0; j < menuItems.length; j++) {
-            // console.log('menuItem: ', menuItems[j][urls[i].key])
-            values.push(menuItems[j][urls[i].key])
+            let val = menuItems[j]
+            // console.log('menuItem: ', val)
+            // values.push(menuItems[j][urls[i].key])
+            values.push(val)
           }
           for (var k = 0; k < this.newItem.length; k++) {
             if (this.newItem[k].attr === urls[i].attr) { this.newItem[k].menuItems = values }

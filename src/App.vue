@@ -102,6 +102,7 @@
             btnColor="primary"
             route="landing"
             tip="Home"
+            top
           />
           <BaseAppNavBtn
             v-if="(authenticated.level === 'CLIENT ADMINISTRATOR / CARER')"
@@ -109,12 +110,14 @@
             btnColor="primary"
             route="dashboard"
             tip="Dashboard"
+            top
           />
           <BaseAppNavBtn
             btnIcon="exit_to_app"
             btnColor="primary"
             route="login"
             tip="Logout"
+            top
           />
         </v-layout>
       </v-footer>
@@ -223,8 +226,8 @@ export default {
       if (item.route === 'logout') logout()
     },
     logout () {
-      this.authenticated = { state: false, level: null }
-      localStorage.auth = JSON.stringify(this.authenticated)
+      this.authenticated = null
+      localStorage.removeItem('auth')
       this.activeDrawer = false
       this.user = ''
       this.$router.push('/login')
@@ -242,6 +245,7 @@ export default {
     if (!this.authenticated.state) {
       this.$router.replace('/login')
     }
+    console.log(this.authenticated)
   }
 }
 </script>

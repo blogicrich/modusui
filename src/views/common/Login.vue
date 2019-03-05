@@ -55,7 +55,8 @@ export default {
       this.isAuthenticating = false
     }
   },
-  created () {
+  mounted () {
+    localStorage.removeItem('auth')
     this.$emit('authenticated', { state: false, level: null })
   }
 }

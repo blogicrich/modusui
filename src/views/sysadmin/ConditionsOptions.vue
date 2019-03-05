@@ -54,6 +54,7 @@ export default {
   data () {
     return {
       items: [],
+      crudIdKey: 'conditionId',
       snackColor: '',
       snackText: '',
       snack: false,
@@ -73,9 +74,9 @@ export default {
       icon: 'local_pharmacy',
       iconAdd: 'add',
       headers: [
-        { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
-        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
+        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
+        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
+        // { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'conditionId', align: 'left', sortable: true, value: 'conditionId', cellType: 'tb', hidden: true, editable: true },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
         { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true }
@@ -85,7 +86,7 @@ export default {
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { deptPersonsId: 0, personsId: 0, conditionId: 0, description: ' ', status: ' ' }
+        { conditionId: 0, description: ' ', status: ' ' }
       ]
       // urls: [
       //   { url: 'titleget', attr: 'titleId', key: 'titleId' },
@@ -100,7 +101,7 @@ export default {
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { deptPersonsId: 0, personsId: 0, conditionId: 0, description: ' ', status: ' ' }
+        { conditionId: 0, description: ' ', status: ' ' }
       ]
     }
   },
