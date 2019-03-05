@@ -39,7 +39,7 @@
             <v-card-title><h2>{{ titleAddComment }}</h2></v-card-title>
           </v-layout>
           <v-container>
-            <v-text-field :counter="maxCharac" :rules="commentRules" label="Enter Comment Text" v-model="commentText"></v-text-field>
+            <v-textarea auto-grow :counter="maxCharac" :rules="commentRules" label="Enter Comment Text" v-model="commentText"></v-textarea>
           </v-container>
           <v-layout justify-space-around>
             <v-card-actions>
