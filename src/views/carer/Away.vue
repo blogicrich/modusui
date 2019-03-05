@@ -6,8 +6,9 @@
 </template>
 
 <script>
-// import apiLib from 'C:/Users/tom/Documents/Dev/eDroplet/ui/src/services/apiLib.js';
-import BaseCalendarComponent from '../../components/base/BaseCalendarComponent.vue'
+import reportStore from '@/store/StoreGetRaport'
+import BaseCalendarComponent from '@/components/base/BaseCalendarComponent.vue'
+console.log(reportStore.fetchReport())
 
 export default {
   components: {
