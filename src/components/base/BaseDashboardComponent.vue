@@ -136,7 +136,16 @@ export default {
       return this.alertColor
     }
   },
+  mounted () {
+    this.getAditionalDrinkers()
+  },
   methods: {
+    async getAditionalDrinkers () {
+      await this.$store.dispatch('fetchGetBases')
+      let readData = await this.$store.state.bases.base
+      console.log(readData);
+    },
+
     addDate: function () {
       let dateNow = new Date(this.date)
       this.date = dateNow.setDate(new Date(dateNow.getDate() + 1))
