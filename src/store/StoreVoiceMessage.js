@@ -25,7 +25,7 @@ export const moduleCLIAdminVoiceMessage = {
       })
     },
     fetchCLIAdminVoiceMessagePut () {
-      return apiLib.deleteData('cliadmin/voicemessage/' + this.getters.getterUserId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/voicemessage/' + this.getters.getterUserId, this.getterDataPut)
     }
   },
   getters: {

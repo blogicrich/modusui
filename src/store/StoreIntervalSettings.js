@@ -25,7 +25,7 @@ export const moduleIntervalSettings = {
       })
     },
     fetchIntervalSettingsPut () {
-      return apiLib.deleteData('cliadmin/interval-management/' + this.getters.getterUserId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/interval-management/' + this.getters.getterUserId, this.getterDataPut)
     }
   },
   getters: {

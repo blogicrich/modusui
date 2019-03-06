@@ -25,7 +25,7 @@ export const moduleEDropletMan = {
       })
     },
     fetchEDropmanPut () {
-      return apiLib.deleteData('cliadmin/edropman/' + this.getters.getterAccountHolderId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/edropman/' + this.getters.getterAccountHolderId, this.getterDataPut)
     }
   },
   getters: {

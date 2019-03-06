@@ -33,7 +33,7 @@ export const moduleCLIAdminConditions = {
       return apiLib.deleteData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId)
     },
     fetchCLIAdminConditionsPut () {
-      return apiLib.deleteData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId, this.getterDataPut)
     }
   },
   getters: {

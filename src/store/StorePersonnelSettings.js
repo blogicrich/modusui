@@ -25,7 +25,7 @@ export const modulePersonnelSettings = {
       })
     },
     fetchPersonnelSettingsPut () {
-      return apiLib.deleteData('cliadmin/personnelsettings/' + this.getters.getterCarerId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/personnelsettings/' + this.getters.getterCarerId, this.getterDataPut)
     }
   },
   getters: {
