@@ -1,14 +1,14 @@
 <template>
   <v-container>
     <h1>Consumption per day</h1>
-    <base-calendar :events="dayReports" :colorStatusPairs="colorStatusPairs"></base-calendar>
+    <base-calendar :events="getDayReports()" :colorStatusPairs="colorStatusPairs"></base-calendar>
   </v-container>
 </template>
 
 <script>
-import {moduleReports} from '@/store/StoreReports'
-import BaseCalendarComponent from '@/components/base/BaseCalendarComponent.vue'
-console.log(moduleReports.actions.fetchGetReportsSnapshot())
+import store from '@/store'
+import BaseCalendarComponent from '@/components/base/BaseCalendarComponent'
+console.log(store.state.report.reportsSnapshot)
 
 export default {
   components: {
@@ -78,10 +78,10 @@ export default {
   methods: {
     getDayReports: function () {
       let dayReports = []
-      let apiData = moduleReports.fetchGetReportsSnapshot()
+      let apiData = store.state.report.reportsSnapshot
       for (let i = 0; i < apiData.length; i++) {
         let dayReport = apiData[i]
-        let category = 'hydrated'
+        let category = 'Hydrated'
         let hydrationLevel =
           dayReport.volumeConsumedViaEDroplet +
           dayReport.volumeConsumedViaOther +
@@ -96,6 +96,9 @@ export default {
         })
       }
       return dayReports
+    },
+    getDescription: function (hydrationActualID) {
+      
     }
   }
 }
