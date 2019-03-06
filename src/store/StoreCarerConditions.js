@@ -7,7 +7,7 @@ export const moduleConditions = {
   },
   mutations: {
     // set the data
-    SET_CONDITION (state, data) {
+    SET_CONDITIONS (state, data) {
       state.condition = data
     }
   },
@@ -16,9 +16,9 @@ export const moduleConditions = {
     fetchGetConditions (context) {
       return apiLib.getData('carer/conditions/' + this.getters.getterStoreId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_CONDITION', null)
+          context.commit('SET_CONDITIONS', null)
         } else {
-          context.commit('SET_CONDITION', response.data)
+          context.commit('SET_CONDITIONS', response.data)
         }
       })
     }
