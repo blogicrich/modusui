@@ -18,53 +18,53 @@ export default {
     dayReports: [
       {
         // hydrationLevel: apiLib.getData('/carer/reports-snapshot/:userId', aggregatedHyration, hydrationTarget, dateTime),
-        category: 'Hydrated',
+        status: 'Hydrated',
         hydrationLevel: '9L/6L',
         date: '2019-03-01'
       },
       {
-        category: 'Little Dehydrated',
+        status: 'Little Dehydrated',
         hydrationLevel: '5L/6L',
         date: '2019-03-01'
       },
       {
-        category: 'Dehydrated',
+        status: 'Dehydrated',
         hydrationLevel: '3L/6L',
         date: '2019-03-01'
       },
       {
-        category: 'Unpaired Category',
+        status: 'Unpaired status',
         hydrationLevel: '?L/6L',
         date: '2019-03-01'
       },
       {
-        category: 'hYdRAteD',
+        status: 'hYdRAteD',
         hydrationLevel:
           'You can place as many as you want on one day. (Not that this app would want to.)',
         date: '2019-03-01'
       },
       {
-        category: 'Hydrated',
+        status: 'Hydrated',
         hydrationLevel: '9L/6L',
         date: '2019-03-02'
       },
       {
-        category: 'Dehydrated',
+        status: 'Dehydrated',
         hydrationLevel: '0L/6L',
         date: '2019-03-03'
       },
       {
-        category: 'Little Dehydrated',
+        status: 'Little Dehydrated',
         hydrationLevel: '5L/6L',
         date: '2019-03-04'
       },
       {
-        category: 'What a strange string this is.',
+        status: 'What a strange string this is.',
         hydrationLevel: '9L/6L',
         date: '2019-03-05'
       },
       {
-        category: 'Alexa, how do I escape the primary colour?',
+        status: 'Alexa, how do I escape the primary colour?',
         hydrationLevel: "Yeah, I wouldn't make the titles too long. :U",
         date: '2019-03-06'
       }
@@ -81,7 +81,7 @@ export default {
       let apiData = store.state.report.reportsSnapshot
       for (let i = 0; i < apiData.length; i++) {
         let dayReport = apiData[i]
-        let category = 'Hydrated'
+        let status = this.getDescription(dayReport.hydrationActualDayId)
         let hydrationLevel =
           dayReport.volumeConsumedViaEDroplet +
           dayReport.volumeConsumedViaOther +
@@ -90,14 +90,14 @@ export default {
         let date = dayReport.dateTime
 
         dayReports.push({
-          category: category,
+          status: status,
           hydrationLevel: hydrationLevel,
           date: date
         })
       }
       return dayReports
     },
-    getDescription: function (hydrationActualID) {
+    getDescription: function (hydrationActualDayId) {
       
     }
   }
