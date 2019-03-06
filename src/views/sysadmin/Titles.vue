@@ -65,12 +65,12 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      delUrl: 'systemadmin/title',
-      updateUrl: 'systemadmin/title',
+      delUrl: 'sysadmin/title',
+      updateUrl: 'sysadmin/title',
       readUrl: 'sysadmin/title',
       createUrl: 'sysadmin/title',
       itemKey: 'titleId',
-      idKey: 'titleId',
+      crudIdKey: 'titleId',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'perm_identity',
@@ -81,7 +81,7 @@ export default {
         { text: 'Description', align: 'left', sortable: false, value: 'longDescription', cellType: 'tb', hidden: false }
       ],
       newItem: [
-        // { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
+        // { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[] },
         { shortDescription: '', cellType: 'tb', attr: 'shortDescription', cellLabel: 'Abbreviation', menuItems: [], validators: [] },
         { LongDescription: '', cellType: 'tb', attr: 'longDescription', cellLabel: 'Description', menuItems: [], validators: [] }
       ],
