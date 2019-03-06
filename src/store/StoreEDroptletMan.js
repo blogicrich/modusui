@@ -1,34 +1,32 @@
 import apiLib from '../services/apiLib.js'
 
-export const moduleEDropletMan = {
+export const moduleEDropMan = {
   state: {
     edropmanPut: [],
-    edropman: []
+    edropmanGet: []
   },
   mutations: {
     // set the data
     SET_EDROPMAN (state, data) {
-      state.conditions = data
+      state.edropmanGet = data
     }
   },
   actions: {
     // get all data
-    fetchEDropman (context) {
+    fetchEDropmanGet (context) {
       apiLib.getData('cliadmin/edropman/' + this.getters.getterAccountHolderId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_EDROPMAN', null)
         } else {
           context.commit('SET_EDROPMAN', response.data)
         }
-      }).catch((error) => {
-        console.log(error)
       })
     },
     fetchEDropmanPut () {
-      return apiLib.updateData('cliadmin/edropman/' + this.getters.getterAccountHolderId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/edropman/' + this.getters.getterAccountHolderId, this.getterEDropManPut)
     }
   },
   getters: {
-    getterDataPut: state => state.edropmanPut
+    getterEDropManPut: state => state.edropmanPut
   }
 }

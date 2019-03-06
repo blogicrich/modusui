@@ -14,7 +14,7 @@ export const moduleHydrationParameters = {
   },
   actions: {
     // get all data
-    fetchGetHydrationParameters (context) {
+    fetchHydrationParametersGet (context) {
       return apiLib.getData('sysadmin/hydration-params').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_HYDRATIONPARAMETERS', null)
@@ -23,7 +23,7 @@ export const moduleHydrationParameters = {
         }
       })
     },
-    fetchPutHydrationParameters () {
+    fetchHydrationParametersPut () {
       return apiLib.updateData('sysadmin/hydration-params/' + this.getters.getterStoreId, this.getters.getterHydrationParametersPut)
     }
   },

@@ -2,42 +2,39 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleCLIAdminConditions = {
   state: {
-    conditionsGet: [],
-    conditionsPost: [],
-    conditionsPut: [],
-    conditions: []
+    CLIAdminConditionsGet: [],
+    CLIAdminConditionsPost: [],
+    CLIAdminConditionsPut: []
   },
   mutations: {
     // set the data
-    SET_CONDITIONS (state, data) {
-      state.conditions = data
+    SET_CLIADMINCONDITIONS (state, data) {
+      state.CLIAdminConditionsGet = data
     }
   },
   actions: {
     // get all data
-    fetchCLIAdminConditions (context) {
+    fetchCLIAdminConditionsGet (context) {
       apiLib.getData('cliadmin/conditions/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_CONDITIONS', null)
+          context.commit('SET_CLIADMINCONDITIONS', null)
         } else {
-          context.commit('SET_CONDITIONS', response.data)
+          context.commit('SET_CLIADMINCONDITIONS', response.data)
         }
-      }).catch((error) => {
-        console.log('error: ', error)
       })
     },
     fetchCLIAdminConditionsPost () {
-      return apiLib.postData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId, this.getters.getterDataPost)
+      return apiLib.postData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId, this.getters.getterCLIAdminConditionsPost)
     },
     fetchCLIAdminConditionsDelete () {
       return apiLib.deleteData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId)
     },
     fetchCLIAdminConditionsPut () {
-      return apiLib.updateData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/conditions/' + this.getters.getterUserId + '/' + this.getters.getterConditionId, this.getterCLIAdminConditionsPut)
     }
   },
   getters: {
-    getterDataPost: state => state.conditionsPost,
-    getterDataPut: state => state.conditionsPut
+    getterCLIAdminConditionsPost: state => state.CLIAdminConditionsPost,
+    getterCLIAdminConditionsPut: state => state.CLIAdminConditionsPut
   }
 }

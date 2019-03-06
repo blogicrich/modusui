@@ -3,32 +3,30 @@ import apiLib from '../services/apiLib.js'
 export const modulePersonnelSettings = {
   state: {
     personnelSettingsPut: [],
-    personnelSettings: []
+    personnelSettingsGet: []
   },
   mutations: {
     // set the data
     SET_PERSONNELSETTINGS (state, data) {
-      state.conditions = data
+      state.personnelSettingsGet = data
     }
   },
   actions: {
     // get all data
-    fetchPersonnelSettings (context) {
+    fetchPersonnelSettingsGet (context) {
       apiLib.getData('cliadmin/personnelsettings/' + this.getters.getterCarerId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_PERSONNELSETTINGS', null)
         } else {
           context.commit('SET_PERSONNELSETTINGS', response.data)
         }
-      }).catch((error) => {
-        console.log(error)
       })
     },
     fetchPersonnelSettingsPut () {
-      return apiLib.updateData('cliadmin/personnelsettings/' + this.getters.getterCarerId, this.getterDataPut)
+      return apiLib.updateData('cliadmin/personnelsettings/' + this.getters.getterCarerId, this.getters.getterPersonnelSettingsPut)
     }
   },
   getters: {
-    getterDataPut: state => state.personnelSettingsPut
+    getterPersonnelSettingsPut: state => state.personnelSettingsPut
   }
 }

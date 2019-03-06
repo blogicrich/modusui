@@ -37,21 +37,21 @@ export const moduleSystemAdminData = {
         })
     },
     fetchSystemAdminPost () {
-      return apiLib.postData('sysadmin/sysadmin', this.getters.getterDataPost)
+      return apiLib.postData('sysadmin/sysadmin', this.getters.getterSysAdminPost)
     },
     fetchSysAdminDelete () {
       return apiLib.deleteData('sysadmin/sysadmin/' + this.getters.getterStoreId)
     },
     fetchSysAdminPut () {
-      return apiLib.updateData('sysadmin/sysadmin/' + this.getters.getterStoreId, this.getters.getterDataPut)
+      return apiLib.updateData('sysadmin/sysadmin/' + this.getters.getterStoreId, this.getters.getterSysAdminPut)
     }
   },
   getters: {
     // get specific data
-    getterDataPost: state => {
+    getterSysAdminPost: state => {
       return state.sysAdminpost
     },
-    getterDataPut: state => {
+    getterSysAdminPut: state => {
       return state.sysAdminput
     }
   }

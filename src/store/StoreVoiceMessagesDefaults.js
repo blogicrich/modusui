@@ -8,22 +8,22 @@ export const moduleVoiceMessagesDefaults = {
   },
   mutations: {
     // set the data
-    SET_VOICEMESSAGESDEFAULDS (state, data) {
+    SET_VOICEMESSAGESDEFAULTS (state, data) {
       state.voiceMessagesDefaultsGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetVoiceMessagesDefaults (context) {
+    fetchVoiceMessagesDefaultsGet (context) {
       return apiLib.getData('sysadmin/voice-message').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_VOICEMESSAGESDEFAULDS', null)
+          context.commit('SET_VOICEMESSAGESDEFAULTS', null)
         } else {
-          context.commit('SET_VOICEMESSAGESDEFAULDS', response)
+          context.commit('SET_VOICEMESSAGESDEFAULTS', response)
         }
       })
     },
-    fetchPutVoiceMessagesDefaults () {
+    fetchVoiceMessagesDefaultsPut () {
       return apiLib.updateData('sysadmin/voice-message/' + this.getters.getterStoreId, this.getters.getterVoiceMessagesDefaultsPut)
     }
   },
