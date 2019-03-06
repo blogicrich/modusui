@@ -2,6 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardComment = {
   state: {
+    dashboardCommentPost: [],
     dashboardComment: []
   },
   mutations: {
@@ -22,6 +23,15 @@ export const moduleDashboardComment = {
       }).catch((error) => {
         console.log('error: ', error)
       })
+    },
+    fetchSysAdminPost () {
+      return apiLib.postData('carer/dashboard-comment/' + this.getters.getterUserId + '/' + this.getters.getterDate, this.getterDataPost)
+    },
+    fetchSysAdminDelete () {
+      return apiLib.deleteData('carer/dashboard-comment/' + this.getters.getterDayReportId)
     }
+  },
+  getters: {
+    getterDataPost: state => state.dashboardCommentPost
   }
 }

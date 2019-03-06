@@ -22,8 +22,5 @@ export const moduleConditions = {
         }
       })
     }
-  },
-  getters: {
-    // get specific data
   }
 }
