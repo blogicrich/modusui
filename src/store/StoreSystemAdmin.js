@@ -5,8 +5,7 @@ export const moduleSystemAdminData = {
     // store the data
     sysAdminget: [],
     sysAdminpost: [],
-    sysAdminput: [],
-    storeId: []
+    sysAdminput: []
   },
   mutations: {
     // set the data
@@ -44,7 +43,6 @@ export const moduleSystemAdminData = {
       return apiLib.deleteData('sysadmin/sysadmin/' + this.getters.getterStoreId)
     },
     fetchSysAdminPut () {
-      console.log(this.getters.getterStoreId)
       return apiLib.updateData('sysadmin/sysadmin/' + this.getters.getterStoreId, this.getters.getterDataPut)
     }
   },
@@ -53,9 +51,6 @@ export const moduleSystemAdminData = {
     getterDataPost: state => {
       return state.sysAdminpost
     },
-    // getterStoreId: state => {
-    //   return state.storeId
-    // },
     getterDataPut: state => {
       return state.sysAdminput
     }
