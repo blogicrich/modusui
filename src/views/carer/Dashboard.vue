@@ -11,12 +11,25 @@ export default {
   },
   data () {
     return {
-      update: false
+      update: false,
+      dashboardDay: null,
+      dashboardHour: null,
+      dashboardUsers: null,
+      dashboardComment: null
     }
   },
   methods: {
+    dispatchAPIData () {
+      this.$store.state.userId = 2
+      this.$store.dispatch('fetchDashboardDay').then((response) => this.dashboardDay = response)
+      this.$store.dispatch('fetchDashboardHour').then((response) => this.dashboardHour = response)
+      this.$store.dispatch('fetchDashboardComment').then((response) => this.dashboardComment = response)
+      this.$store.dispatch('fetchDashboardUsers').then((response) => this.dashboardUsers = response)
+      console.log(this.dashboardUsers)
+    },
     changeDate: function (newDate, childData) {
       let SelectedUnixTime = Math.round((new Date(newDate)).getTime() / 1000)
+      this.$store.state.date = SelectedUnixTime
       this.update = true
       let array = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
       for (let point = 0; point < childData.lineChartData.dataLineOne.length; point++) {
@@ -32,8 +45,13 @@ export default {
       }
       setTimeout(() => {
         this.update = false
+        this.dispatchAPIData()
+        console.log(this.apiData)
       }, 100)
     }
+  },
+  mounted () {
+    this.dispatchAPIData()
   }
 }
 </script>

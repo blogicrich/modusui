@@ -3,6 +3,14 @@ import Vuex from 'vuex'
 
 // system admins
 import { moduleSystemAdminData } from '@/store/StoreSystemAdmin'
+import { moduleConditionsOptions } from '@/store/StoreConditionsOptions'
+import { moduleContainerTypes } from '@/store/StoreContainerTypes' // get no data
+import { moduleTitles } from '@/store/StoreTitles'
+import { moduleGenderOptions } from '@/store/StoreGenderOptions'
+import { moduleTextEmailMessages } from '@/store/StoreTextEmailMessages'
+import { moduleHydrationParameters } from '@/store/StoreHydrationParameters'
+import { moduleVoiceMessagesDefaults } from '@/store/StoreVoiceMessagesDefaults' // get no data
+import { moduleIntervalOptions } from '@/store/StoreIntervalOptions'
 
 // client admins
 import { moduleCLIAdminVoiceMessage } from '@/store/StoreVoiceMessage'
@@ -19,6 +27,12 @@ import { moduleAlerts } from '@/store/StoreAlerts'
 import { moduleReports } from '@/store/StoreReports'
 import { moduleBases } from '@/store/StoreBases'
 
+// Dashboard
+import { moduleDashboardDay } from '@/store/StoreDashboardDay'
+import { moduleDashboardHour } from '@/store/StoreDashboardHour'
+import { moduleDashboardUsers } from '@/store/StoreDashboardUsers'
+import { moduleDashboardComment } from '@/store/StoreDashboardComment'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -28,7 +42,8 @@ export default new Vuex.Store({
     carerId: 1,
     accountHolderId: 1,
     deviceMessageTypeId: 1,
-    messageNo: 1
+    messageNo: 1,
+    date: 1551867413
   },
   getters: {
     getterStoreId: state => state.storeId,
@@ -36,10 +51,19 @@ export default new Vuex.Store({
     getterCarerId: state => state.carerId,
     getterAccountHolderId: state => state.accountHolderId,
     getterDeviceMessageTypeId: state => state.deviceMessageTypeId,
-    getterMessageNo: state => state.messageNo
+    getterMessageNo: state => state.messageNo,
+    getterDate: state => state.date
   },
   modules: {
     // system admins
+    containerTypes: moduleContainerTypes,
+    titels: moduleTitles,
+    genderOptions: moduleGenderOptions,
+    conditionOptions: moduleConditionsOptions,
+    textEmailMessages: moduleTextEmailMessages,
+    hydrationOptions: moduleHydrationParameters,
+    voiceMessages: moduleVoiceMessagesDefaults,
+    intervalOptions: moduleIntervalOptions,
     systemAdmin: moduleSystemAdminData,
 
     // client admins
@@ -55,7 +79,13 @@ export default new Vuex.Store({
     away: moduleAway,
     alerts: moduleAlerts,
     report: moduleReports,
-    bases: moduleBases
+    bases: moduleBases,
+
+    // Dashboard
+    dashboardDay: moduleDashboardDay,
+    dashboardHour: moduleDashboardHour,
+    dashboardUsers: moduleDashboardUsers,
+    DashboardComment: moduleDashboardComment
   }
 })
 
@@ -66,6 +96,7 @@ export default new Vuex.Store({
 // }
 // methods: {
 //   dispatchAPIData () {
+//     this.$store.state.~ID~ = ~GetterName~
 //     this.$store.dispatch('fetch~storeName~').then((response) => this.apiData = response)
 //   }
 // }
