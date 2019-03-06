@@ -10,7 +10,7 @@
       <!-- <v-toolbar-title v-text="title"></v-toolbar-title> -->
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
-      <v-badge v-if="(authenticated.level === 'CARER')" left overlap color="error">
+      <!-- <v-badge v-if="(authenticated.level !== 'CARER')" left overlap color="error">
         <span slot="badge" class="text-badge">{{ alerts }}</span>
         <v-icon
           medium
@@ -19,14 +19,14 @@
         >
           notifications
         </v-icon>
-      </v-badge>
+      </v-badge> -->
       <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
       <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
     </v-toolbar>
     <v-fade-transition>
       <v-navigation-drawer
         v-model="activeDrawer"
-        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.lgAndUp"
+        v-if="(authenticated.level === 'CARER' || authenticated.level === 'CLIENT ADMINISTRATOR / CARER') && authenticated.state && $vuetify.breakpoint.lgAndUp"
         class="primary"
         mini-variant
         mini-variant-width="94"
@@ -37,6 +37,16 @@
       >
         <v-layout column fill-height align-center justify-space-between>
           <BaseAppNavBtn
+            v-if="authenticated.level !== 'CARER'"
+            my-3
+            right
+            btnIcon="settings"
+            btnColor="white"
+            iconColor="white"
+            route="landing"
+            tip="Administration"
+          />
+          <BaseAppNavBtn
             my-3
             right
             v-for="item in items"
@@ -46,13 +56,12 @@
             :iconColor="item.iconColor"
             :route="item.route"
             :tip="item.tip"
-            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
       <v-navigation-drawer
         v-model="activeDrawer"
-        v-if="authenticated.level === 'CARER' && authenticated.state && $vuetify.breakpoint.mdAndDown"
+        v-if="(authenticated.level === 'CARER' || authenticated.level === 'CLIENT ADMINISTRATOR / CARER') && authenticated.state && $vuetify.breakpoint.smAndUp"
         class="primary"
         disable-route-watcher
         mini-variant
@@ -62,6 +71,16 @@
         flat
       >
         <v-layout v-if="authenticated.level && $vuetify.breakpoint.mdAndDown" column fill-height align-start justify-start>
+          <BaseAppNavBtn
+            v-if="authenticated.level !== 'CARER'"
+            my-3
+            right
+            btnIcon="settings"
+            btnColor="white"
+            iconColor="white"
+            route="landing"
+            tip="Administration"
+          />
           <BaseAppNavBtn
             my-3
             right
@@ -73,7 +92,6 @@
             :route="item.route"
             :tip="item.tip"
             :title="item.title"
-            @navBtnClicked="check"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -87,7 +105,7 @@
     </v-container>
     <v-fade-transition>
       <v-footer
-        v-if="authenticated.state && authenticated.level !== 'CARER' && $vuetify.breakpoint.smAndUp"
+        v-if="(authenticated.level === 'SYSTEM ADMINISTRATOR' || authenticated.level === 'CLIENT ADMINISTRATOR') && authenticated.state && $vuetify.breakpoint.smAndUp"
         :class="(authenticated.level === 'CARER') ? 'hide' : 'elevation-5 pa-4' "
         :fixed="fixed"
         color="white"
@@ -102,19 +120,22 @@
             btnColor="primary"
             route="landing"
             tip="Home"
+            top
           />
           <BaseAppNavBtn
-            v-if="(authenticated.level === 'CLIENT ADMINISTRATOR')"
+            v-if="(authenticated.level === 'CLIENT ADMINISTRATOR / CARER')"
             btnIcon="dashboard"
             btnColor="primary"
-            route="landing"
+            route="dashboard"
             tip="Dashboard"
+            top
           />
           <BaseAppNavBtn
             btnIcon="exit_to_app"
             btnColor="primary"
             route="login"
             tip="Logout"
+            top
           />
         </v-layout>
       </v-footer>
@@ -150,6 +171,14 @@ export default {
           tip: 'Go to Dashboard'
         },
         {
+          title: 'Alerts',
+          btnIcon: 'notification_important',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'alerts',
+          tip: 'View Alerts'
+        },
+        {
           title: 'Add Drinks',
           btnIcon: 'local_drink',
           btnColor: 'white',
@@ -157,14 +186,6 @@ export default {
           route: 'additionaldrinks',
           tip: 'Add Drinks'
         },
-        // {
-        //   title: 'Alerts',
-        //   btnIcon: 'notification_important',
-        //   btnColor: 'white',
-        //   iconColor: 'white',
-        //   route: 'alerts',
-        //   tip: 'View Alerts'
-        // },
         {
           title: 'Away',
           btnIcon: 'calendar_today',
@@ -204,19 +225,15 @@ export default {
       localStorage.auth = JSON.stringify(this.authenticated)
       this.user = newStatus.level
       // console.log(JSON.parse(localStorage.auth))
-      if ((newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR') && newStatus.token) {
+      if ((newStatus.level === 'SYSTEM ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR' || newStatus.level === 'CLIENT ADMINISTRATOR / CARER') && newStatus.token) {
         this.$router.push('/landing')
       } else if (newStatus.level === 'CARER') {
         this.$router.push('/dashboard')
       }
     },
-    check (item) {
-      console.log(item);
-      if (item.route === 'logout') logout()
-    },
     logout () {
-      this.authenticated = { state: false, level: null }
-      localStorage.auth = JSON.stringify(this.authenticated)
+      this.authenticated = null
+      localStorage.removeItem('auth')
       this.activeDrawer = false
       this.user = ''
       this.$router.push('/login')
@@ -234,6 +251,7 @@ export default {
     if (!this.authenticated.state) {
       this.$router.replace('/login')
     }
+    console.log(this.authenticated)
   }
 }
 </script>

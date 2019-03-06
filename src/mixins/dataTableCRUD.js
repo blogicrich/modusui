@@ -1,86 +1,67 @@
-import apiLib from '@/services/apiLib'
+import apiLib from '../services/apiLib.js'
 
 export const crudRoutines = {
   methods: {
-    // call actions
-    letActionHappenGet () {
-      return this.$store.dispatch('fetchSystemAdminGet')
-    },
-    letActionHappenPost () {
-      return this.$store.dispatch('fetchSystemAdminPost')
-    },
-    letActionHappenDelete () {
-      return this.$store.dispatch('fetchSysAdminDelete')
-    },
-    letActionHappenPut () {
-      return this.$store.dispatch('fetchSysAdminPut')
-    },
-    // end call actions
-
-    // add item (done)
     async addItem (item) {
       var row = {}
       for (var i = 0; i < item.length; i++) {
         Object.keys(item[i]).forEach(function (key) {
+          // console.log(item[i].sync)
           if (key === 'sync') row[item[i].attr] = item[i].sync
         })
       }
-      this.$store.state.systemAdmin.sysAdminpost = await row
-      await this.letActionHappenPost()
+      // console.log('data: ', row)
+      await apiLib.postData(this.createUrl, row)
       this.refreshItems('Item Added', 'success')
       this.resetItem()
     },
-    // end add item
-
-    // delete item
     async deleteItem (items) {
-      var index = 0
       for (var i = 0; i < items.length; i++) {
-        index = this.items.indexOf(items[i])
-        this.$store.state.storeId = await items[i].personsId
-        await this.letActionHappenDelete()
+        let index = this.items.indexOf(items[i])
+        let id = Number(items[i][this.crudIdKey])
+        // console.log(items[i], this.crudIdKey, this.delUrl, id)
+        // console.log('IDDDDDDDDD: ', id)
+        // console.log(this.delUrl, + '/' + items[i][this.crudIdKey])
+        await apiLib.deleteData(this.delUrl + '/' + id)
         this.items.splice(index, 1)
       }
       this.getItems(this.readUrl)
       this.showSnack('Items Deleted', 'success')
     },
-    // end delete item
 
-    // update item
     async editItems (items) {
-      console.log("BDTC: ", items)
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
+        var row = {}
+        var editedItems = []
         for (var j = 0; j < defaultItem.length; j++) {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
+            // console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
           })
-          this.$store.state.storeId = await items[i].personsId
-          this.$store.state.systemAdmin.sysAdminput = await defaultItem
-          await this.letActionHappenPut()
+          console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
+          await apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
         }
+        this.showSnack('Items Edited', 'success')
+        this.getItems(this.readUrl)
       }
-      this.showSnack('Items Edited', 'success')
-      this.getItems(this.readUrl)
       if (this.newItem) {
         this.resetItem()
       }
     },
-    // end update item
-
-    // get item (done)
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      await this.letActionHappenGet()
-      var response = await this.$store.state.systemAdmin.sysAdminget
-      // console.log('Response: ', response)
+      var response = await apiLib.getData(this.readUrl)
+      // console.log("Response: ", response)
+      // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
         this.items = []
         this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
         this.loading = false
         this.loaded = false
         this.error = true
+        this.errorColor
       } else if (response.length <= 0) {
         this.items = []
         this.loadedMsg = 'No current records to display - There are no entries for this table.'
@@ -88,6 +69,7 @@ export const crudRoutines = {
         this.loaded = true
         this.error = false
       } else {
+        console.log("Items: ", this.items)
         this.items = response
         if (this.urls) this.setMenuItems(this.urls)
         this.loading = false
@@ -95,8 +77,6 @@ export const crudRoutines = {
         this.error = false
       }
     },
-    // end get item
-
     async refreshItems (text, color) {
       this.showSnack(text, color)
       await this.getItems(this.readUrl)
@@ -112,22 +92,16 @@ export const crudRoutines = {
           var menuItems = await apiLib.getData(urls[i].url)
           var values = []
           for (var j = 0; j < menuItems.length; j++) {
-            console.log('menuItem: ', menuItems[j][urls[i].attr])
-            values.push(menuItems[j])//[urls[i].attr])
+            let val = menuItems[j]
+            // console.log('menuItem: ', val)
+            // values.push(menuItems[j][urls[i].key])
+            values.push(val)
           }
           for (var k = 0; k < this.newItem.length; k++) {
             if (this.newItem[k].attr === urls[i].attr) { this.newItem[k].menuItems = values }
           }
         }
       }
-    },
-    menuValue (valueKey, row) {
-      console.log("1: ", row);
-      return [1,2,3]
-    },
-    menuText (textKey, row) {
-      console.log("2: ", row);
-      return ['one', 'two', 'three']
     }
   }
 }

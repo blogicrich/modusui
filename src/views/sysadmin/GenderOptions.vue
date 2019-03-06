@@ -54,6 +54,7 @@ export default {
   data () {
     return {
       items: [],
+      crudIdKey: 'genderId',
       snackColor: '',
       snackText: '',
       snack: false,
@@ -73,9 +74,9 @@ export default {
       icon: 'wc',
       iconAdd: 'add',
       headers: [
-        { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
-        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
+        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
+        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
+        // { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'genderId', align: 'left', sortable: true, value: 'genderId', cellType: 'tb', hidden: true, editable: true },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
         { text: 'Target Consumption', align: 'left', sortable: true, value: 'targetConsumption', cellType: 'tb', hidden: false, editable: true }
@@ -85,22 +86,18 @@ export default {
         { volume: ' ', cellType: 'tb', attr: 'targetConsumption', cellLabel: 'Target Consumption', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { deptPersonsId: 0, personsId: 0, genderId: 0, description: ' ', targetConsumption: 0 }
+        { genderId: 0, description: ' ', targetConsumption: 0 }
       ]
-      // urls: [
-      //   { url: 'titleget', attr: 'titleId', key: 'titleId' },
-      //   { url: 'sysadget', attr: 'username', key: 'username' }
-      // ]
     }
   },
   methods: {
     resetItem () {
       this.newItem = [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
+        { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Target Consumption', align: 'left', sortable: true, value: 'targetConsumption', cellType: 'tb', hidden: false, editable: true }
       ]
       this.defaultItem = [
-        { deptPersonsId: 0, personsId: 0, description: ' ', volume: 0 }
+        { genderId: 0, description: ' ', targetConsumption: 0 }
       ]
     },
     notify (items) {

@@ -262,6 +262,8 @@
                         :color="primaryColor"
                         outline
                         required
+                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
+                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
                       ></v-select>
                     </v-flex>
                   </v-layout>
@@ -305,18 +307,10 @@
                         :color="primaryColor"
                         outline
                         required
-                        item-value="titleId"
-                        item-text="shortDescription"
+                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
+                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
                       >{{ item[key].value }}
                       </v-select>
-                        <template v-slot:default="menuItems">
-                          // HTML that describe how select should render selected items
-                          {{ menuItemsshortDescription }} 
-                        </template>
-                        <template slot="item" slot-scope="menuItems">
-                          // HTML that describe how select should render items when the select is open
-                          {{ titleId }} 
-                        </template>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -604,6 +598,8 @@
                         :color="primaryColor"
                         outline
                         required
+                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
+                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
                       ></v-select>
                     </v-flex>
                   </v-layout>
@@ -657,6 +653,8 @@
                         :color="primaryColor"
                         outline
                         required
+                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
+                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
                         >
                       </v-select>
                     </v-flex>
@@ -729,12 +727,13 @@ export default {
     newItem: Array,
     editItem: Object,
     itemKey: String,
+    crudIdKey: String,
     searchLabel: String,
     msgDel: String,
     titleDel: String,
     recordIcon: String,
     addRecordIcon: String,
-    addBtnTitle: String
+    addBtnTitle: String,
   },
   computed: {
     pages () {
