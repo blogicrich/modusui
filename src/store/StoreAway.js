@@ -3,6 +3,7 @@ import apiLib from '../services/apiLib.js'
 export const moduleAway = {
   state: {
     // store the data
+    awayPut: [],
     away: []
   },
   mutations: {
@@ -21,9 +22,12 @@ export const moduleAway = {
           context.commit('SET_AWAY', response.data)
         }
       })
+    },
+    fetchSysAdminPut () {
+      return apiLib.updateData('carer/away/' + this.getters.getterUserId, this.getters.getterDataPut)
     }
   },
   getters: {
-    // get specific data
+    getterDataPut: state => state.awayPut
   }
 }
