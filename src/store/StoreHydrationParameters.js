@@ -3,12 +3,13 @@ import apiLib from '../services/apiLib.js'
 export const moduleHydrationParameters = {
   state: {
     // store the data
-    hydrationParameters: []
+    hydrationParametersGet: [],
+    hydrationParametersput: []
   },
   mutations: {
     // set the data
     SET_HYDRATIONPARAMETERS (state, data) {
-      state.hydrationParameters = data
+      state.hydrationParametersGet = data
     }
   },
   actions: {
@@ -21,9 +22,15 @@ export const moduleHydrationParameters = {
           context.commit('SET_HYDRATIONPARAMETERS', response)
         }
       })
+    },
+    fetchPutHydrationParameters () {
+      return apiLib.updateData('sysadmin/hydration-params/' + this.getters.getterStoreId, this.getters.getterHydrationParametersPut)
     }
   },
   getters: {
     // get specific data
+    getterHydrationParametersPut: state => {
+      return state.hydrationParametersput
+    }
   }
 }

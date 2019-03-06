@@ -3,12 +3,13 @@ import apiLib from '../services/apiLib.js'
 export const moduleVoiceMessagesDefaults = {
   state: {
     // store the data
-    voiceMessagesDefaults: []
+    voiceMessagesDefaultsGet: [],
+    voiceMessagesDefaultsPut: []
   },
   mutations: {
     // set the data
     SET_VOICEMESSAGESDEFAULDS (state, data) {
-      state.voiceMessagesDefualts = data
+      state.voiceMessagesDefaultsGet = data
     }
   },
   actions: {
@@ -21,9 +22,15 @@ export const moduleVoiceMessagesDefaults = {
           context.commit('SET_VOICEMESSAGESDEFAULDS', response)
         }
       })
+    },
+    fetchPutVoiceMessagesDefaults () {
+      return apiLib.updateData('sysadmin/voice-message/' + this.getters.getterStoreId, this.getters.getterVoiceMessagesDefaultsPut)
     }
   },
   getters: {
     // get specific data
+    getterVoiceMessagesDefaultsPut: state => {
+      return state.voiceMessagesDefaultsPut
+    }
   }
 }

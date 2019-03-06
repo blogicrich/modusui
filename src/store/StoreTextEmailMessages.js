@@ -3,12 +3,13 @@ import apiLib from '../services/apiLib.js'
 export const moduleTextEmailMessages = {
   state: {
     // store the data
-    textEmailMessages: []
+    textEmailMessagesGet: [],
+    textEmailMessagesPut: []
   },
   mutations: {
     // set the data
     SET_TEXTEMAILMESSAGES (state, data) {
-      state.textEmailMessages = data
+      state.textEmailMessagesGet = data
     }
   },
   actions: {
@@ -21,9 +22,15 @@ export const moduleTextEmailMessages = {
           context.commit('SET_TEXTEMAILMESSAGES', response)
         }
       })
+    },
+    fetchPutTextEmailMessages () {
+      return apiLib.updateData('sysadmin/text-messages/' + this.getters.getterStoreId, this.getters.getterTextEmailMessagesPut)
     }
   },
   getters: {
     // get specific data
+    getterTextEmailMessagesPut: state => {
+      return state.textEmailMessagesPut
+    }
   }
 }

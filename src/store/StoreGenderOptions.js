@@ -3,12 +3,14 @@ import apiLib from '../services/apiLib.js'
 export const moduleGenderOptions = {
   state: {
     // store the data
-    genderOptions: []
+    genderOptionsGet: [],
+    genderOptionsPost: [],
+    genderOptionsPut: []
   },
   mutations: {
     // set the data
     SET_gender (state, data) {
-      state.genderOptions = data
+      state.genderOptionsGet = data
     }
   },
   actions: {
@@ -21,9 +23,24 @@ export const moduleGenderOptions = {
           context.commit('SET_gender', response)
         }
       })
+    },
+    fetchPostGenderOptions () {
+      return apiLib.postData('sysadmin/gender-options', this.getters.getterGenderOptionsPost)
+    },
+    fetchDeleteGenderOptions () {
+      return apiLib.deleteData('sysadmin/gender-options/' + this.getters.getterStoreId)
+    },
+    fetchPutGenderOptions () {
+      return apiLib.updateData('sysadmin/gender-options/' + this.getters.getterStoreId, this.getters.getterGenderOptionsPut)
     }
   },
   getters: {
     // get specific data
+    getterGenderOptionsPost: state => {
+      return state.titlePost
+    },
+    getterGenderOptionsPut: state => {
+      return state.titlePost
+    }
   }
 }

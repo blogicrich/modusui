@@ -2,6 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleIntervalSettings = {
   state: {
+    intervalSettingsPut: [],
     intervalSettings: []
   },
   mutations: {
@@ -22,6 +23,12 @@ export const moduleIntervalSettings = {
       }).catch((error) => {
         console.log(error)
       })
+    },
+    fetchIntervalSettingsPut () {
+      return apiLib.updateData('cliadmin/interval-management/' + this.getters.getterUserId, this.getterDataPut)
     }
+  },
+  getters: {
+    getterDataPut: state => state.intervalSettingsPut
   }
 }
