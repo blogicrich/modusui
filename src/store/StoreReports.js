@@ -3,26 +3,26 @@ import apiLib from '../services/apiLib.js'
 export const moduleReports = {
   state: {
     // store the data
-    reportsConditions: [],
-    reportsSnapshot: [],
-    reportComments: []
+    reportsConditionsGet: [],
+    reportsSnapshotGet: [],
+    reportCommentsGet: []
   },
   mutations: {
     // set the data
     SET_REPORTSCONDITIONS (state, data) {
-      state.reportsConditions = data
+      state.reportsConditionsGet = data
     },
     SET_REPORTSSNAPSHOT (state, data) {
-      state.reportsSnapshot = data
+      state.reportsSnapshotGet = data
     },
     SET_REPORTSCOMMENTS (state, data) {
-      state.reportComments = data
+      state.reportCommentsGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetReportsConditions (context) {
-      return apiLib.getData('carer/condition/' + this.getters.getterStoreId).then((response) => {
+    fetchReportsConditionsGet (context) {
+      return apiLib.getData('carer/condition/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_REPORTSCONDITIONS', null)
         } else {
@@ -30,8 +30,8 @@ export const moduleReports = {
         }
       })
     },
-    fetchGetReportsSnapshot (context) {
-      return apiLib.getData('carer/reports-snapshot/' + this.getters.getterStoreId).then((response) => {
+    fetchReportsSnapshotGet (context) {
+      return apiLib.getData('carer/reports-snapshot/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_REPORTSSNAPSHOT', null)
         } else {
@@ -39,8 +39,8 @@ export const moduleReports = {
         }
       })
     },
-    fetchGetReportComments (context) {
-      return apiLib.getData('carer/reports-day-comments/' + this.getters.getterStoreId).then((response) => {
+    fetchReportCommentsGet (context) {
+      return apiLib.getData('carer/reports-day-comments/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_REPORTSCOMMENTS', null)
         } else {
@@ -48,8 +48,5 @@ export const moduleReports = {
         }
       })
     }
-  },
-  getters: {
-    // get specific data
   }
 }

@@ -14,7 +14,7 @@ export const moduleTextEmailMessages = {
   },
   actions: {
     // get all data
-    fetchGetTextEmailMessages (context) {
+    fetchTextEmailMessagesGet (context) {
       return apiLib.getData('sysadmin/text-messages').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_TEXTEMAILMESSAGES', null)
@@ -23,7 +23,7 @@ export const moduleTextEmailMessages = {
         }
       })
     },
-    fetchPutTextEmailMessages () {
+    fetchTextEmailMessagesPut () {
       return apiLib.updateData('sysadmin/text-messages/' + this.getters.getterStoreId, this.getters.getterTextEmailMessagesPut)
     }
   },

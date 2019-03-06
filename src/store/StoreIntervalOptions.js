@@ -14,7 +14,7 @@ export const moduleIntervalOptions = {
   },
   actions: {
     // get all data
-    fetchGetIntervalOptions (context) {
+    fetchIntervalOptionsGet (context) {
       return apiLib.getData('sysadmin/interval-options').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_INTERVALOPTIONS', null)
@@ -23,7 +23,7 @@ export const moduleIntervalOptions = {
         }
       })
     },
-    fetchPutIntervalOptions () {
+    fetchIntervalOptionsPut () {
       return apiLib.updateData('sysadmin/interval-options/' + this.getters.getterStoreId, this.getters.getterIntervalOptionsPut)
     }
   },

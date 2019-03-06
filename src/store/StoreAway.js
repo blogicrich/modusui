@@ -4,18 +4,18 @@ export const moduleAway = {
   state: {
     // store the data
     awayPut: [],
-    away: []
+    awayGet: []
   },
   mutations: {
     // set the data
     SET_AWAY (state, data) {
-      state.condition = data
+      state.awayGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetAway (context) {
-      return apiLib.getData('carer/away/' + this.getters.getterStoreId).then((response) => {
+    fetchAwayGet (context) {
+      return apiLib.getData('carer/away/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_AWAY', null)
         } else {
@@ -23,11 +23,11 @@ export const moduleAway = {
         }
       })
     },
-    fetchSysAdminPut () {
-      return apiLib.updateData('carer/away/' + this.getters.getterUserId, this.getters.getterDataPut)
+    fetchAwayPut () {
+      return apiLib.updateData('carer/away/' + this.getters.getterUserId, this.getters.getterAwayPut)
     }
   },
   getters: {
-    getterDataPut: state => state.awayPut
+    getterAwayPut: state => state.awayPut
   }
 }

@@ -3,27 +3,24 @@ import apiLib from '../services/apiLib.js'
 export const moduleAlerts = {
   state: {
     // store the data
-    alert: []
+    alertsGet: []
   },
   mutations: {
     // set the data
-    SET_ALERT (state, data) {
-      state.alert = data
+    SET_ALERTS (state, data) {
+      state.alertsGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetAlert (context) {
-      return apiLib.getData('carer/alert/' + this.getters.getterStoreId).then((response) => {
+    fetchAlertGet (context) {
+      return apiLib.getData('carer/alert/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_ALERT', null)
+          context.commit('SET_ALERTS', null)
         } else {
-          context.commit('SET_ALERT', response.data)
+          context.commit('SET_ALERTS', response.data)
         }
       })
     }
-  },
-  getters: {
-    // get specific data
   }
 }

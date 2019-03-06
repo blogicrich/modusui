@@ -9,28 +9,28 @@ export const moduleGenderOptions = {
   },
   mutations: {
     // set the data
-    SET_gender (state, data) {
+    SET_GENDEROPTIONS (state, data) {
       state.genderOptionsGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetGenderOptions (context) {
+    fetchGenderOptionsGet (context) {
       return apiLib.getData('sysadmin/gender-options').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_gender', null)
+          context.commit('SET_GENDEROPTIONS', null)
         } else {
-          context.commit('SET_gender', response)
+          context.commit('SET_GENDEROPTIONS', response)
         }
       })
     },
-    fetchPostGenderOptions () {
+    fetchGenderOptionsPost () {
       return apiLib.postData('sysadmin/gender-options', this.getters.getterGenderOptionsPost)
     },
-    fetchDeleteGenderOptions () {
+    fetchGenderOptionsDelete () {
       return apiLib.deleteData('sysadmin/gender-options/' + this.getters.getterStoreId)
     },
-    fetchPutGenderOptions () {
+    fetchGenderOptionsPut () {
       return apiLib.updateData('sysadmin/gender-options/' + this.getters.getterStoreId, this.getters.getterGenderOptionsPut)
     }
   },

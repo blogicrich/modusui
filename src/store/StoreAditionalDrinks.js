@@ -1,42 +1,42 @@
 import apiLib from '../services/apiLib.js'
 
-export const moduleAditionalDrinks = {
+export const moduleAdditionalDrinks = {
   state: {
     // store the data
-    getDrinksPost: [],
-    getDrinksPut: [],
-    getDrinks: []
+    AdditionalDrinksPost: [],
+    AdditionalDrinksPut: [],
+    AdditionalDrinksGet: []
   },
   mutations: {
     // set the data
-    SET_GETDRINKS (state, data) {
-      state.getDrinks = data
+    SET_ADDITIONALDRINKS (state, data) {
+      state.AdditionalDrinksGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetDrinks (context) {
-      return apiLib.getData('carer/adddrinks/' + this.getters.getterStoreId).then((response) => {
+    fetchAdditionalDrinksGet (context) {
+      return apiLib.getData('carer/adddrinks/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_GETDRINKS', null)
+          context.commit('SET_ADDITIONALDRINKS', null)
         } else {
-          context.commit('SET_GETDRINKS', response.data)
+          context.commit('SET_ADDITIONALDRINKS', response.data)
         }
       })
     },
-    fetchDrinksPost () {
-      return apiLib.postData('carer/adddrinks/' + this.getters.getterUserId, this.getters.getterDataPost)
+    fetchAdditionalDrinksPostPost () {
+      return apiLib.postData('carer/adddrinks/' + this.getters.getterUserId, this.getters.getterAdditionalDrinksPost)
     },
-    fetchDrinksDelete () {
+    fetchAdditionalDrinksPostDelete () {
       return apiLib.deleteData('carer/adddrinks/' + this.getters.getterUserId)
     },
-    fetchDrinksPut () {
-      return apiLib.updateData('carer/adddrinks/' + this.getters.getterUserId, this.getters.getterDataPut)
+    fetchAdditionalDrinksPostPut () {
+      return apiLib.updateData('carer/adddrinks/' + this.getters.getterUserId, this.getters.getterAdditionalDrinksPut)
     }
   },
   getters: {
-    getterDataPost: state => state.getDrinksPost,
-    getterDataPut: state => state.getDrinksPost
+    getterAdditionalDrinksPost: state => state.AdditionalDrinksPost,
+    getterAdditionalDrinksPut: state => state.AdditionalDrinksPut
 
   }
 }

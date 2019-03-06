@@ -9,37 +9,37 @@ export const moduleContainerTypes = {
   },
   mutations: {
     // set the data
-    SET_container (state, data) {
+    SET_CONTAINERTYPES (state, data) {
       state.containerTypesGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetContainer (context) {
+    fetchContainerTypesGet (context) {
       return apiLib.getData('sysadmin/container-type').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_container', null)
+          context.commit('SET_CONTAINERTYPES', null)
         } else {
-          context.commit('SET_container', response)
+          context.commit('SET_CONTAINERTYPES', response)
         }
       })
     },
-    fetchPostContainer () {
-      return apiLib.postData('sysadmin/container-type', this.getters.getterContainerPost)
+    fetchContainerTypesPost () {
+      return apiLib.postData('sysadmin/container-type', this.getters.getterContainerTypesPost)
     },
-    fetchDeleteContainer () {
+    fetchContainerTypesDelete () {
       return apiLib.deleteData('sysadmin/container-type/' + this.getters.getterStoreId)
     },
-    fetchPutContainer () {
-      return apiLib.updateData('sysadmin/container-type/' + this.getters.getterStoreId, this.getters.getterContainerPut)
+    fetchContainerTypesPut () {
+      return apiLib.updateData('sysadmin/container-type/' + this.getters.getterStoreId, this.getters.getterContainerTypesPut)
     }
   },
   getters: {
     // get specific data
-    getterContainerPost: state => {
+    getterContainerTypesPost: state => {
       return state.containerTypesPost
     },
-    getterContainerPut: state => {
+    getterContainerTypesPut: state => {
       return state.containerTypesPut
     }
   }

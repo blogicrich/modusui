@@ -3,44 +3,44 @@ import apiLib from '../services/apiLib.js'
 export const moduleConditionsOptions = {
   state: {
     // store the data
-    conditionOptionsGet: [],
-    conditionOptionsPost: [],
-    conditionOptionsPut: []
+    conditionsOptionsGet: [],
+    conditionsOptionsPost: [],
+    conditionsOptionsPut: []
   },
   mutations: {
     // set the data
-    SET_CONDITIONOPTIONS (state, data) {
-      state.conditionOptionsGet = data
+    SET_CONDITIONSOPTIONS (state, data) {
+      state.conditionsOptionsGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetconditionOptions (context) {
+    fetchconditionOptionsGet (context) {
       return apiLib.getData('sysadmin/condition-options').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_CONDITIONOPTIONS', null)
+          context.commit('SET_CONDITIONSOPTIONS', null)
         } else {
-          context.commit('SET_CONDITIONOPTIONS', response)
+          context.commit('SET_CONDITIONSOPTIONS', response)
         }
       })
     },
-    fetchPostconditionOptions () {
-      return apiLib.postData('sysadmin/condition-options', this.getters.getterconditionOptionsPost)
+    fetchconditionOptionsPost () {
+      return apiLib.postData('sysadmin/condition-options', this.getters.getterconditionsOptionsPost)
     },
-    fetchDeleteconditionOptions () {
+    fetchconditionOptionsDelete () {
       return apiLib.deleteData('sysadmin/condition-options/' + this.getters.getterStoreId)
     },
-    fetchPutconditionOptions () {
-      return apiLib.updateData('sysadmin/condition-options/' + this.getters.getterStoreId, this.getters.getterconditionOptionsPut)
+    fetchconditionOptionsPut () {
+      return apiLib.updateData('sysadmin/condition-options/' + this.getters.getterStoreId, this.getters.getterconditionsOptionsPut)
     }
   },
   getters: {
     // get specific data
-    getterconditionOptionsPost: state => {
-      return state.conditionOptionsPost
+    getterconditionsOptionsPost: state => {
+      return state.conditionsOptionsPost
     },
-    getterconditionOptionsPut: state => {
-      return state.conditionOptionsPut
+    getterconditionsOptionsPut: state => {
+      return state.conditionsOptionsPut
     }
 
   }
