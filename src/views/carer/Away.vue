@@ -15,64 +15,12 @@ export default {
     'base-calendar': BaseCalendarComponent
   },
   data: () => ({
-    dayReports: [
-      {
-        // hydrationLevel: apiLib.getData('/carer/reports-snapshot/:userId', aggregatedHyration, hydrationTarget, dateTime),
-        status: 'Hydrated',
-        hydrationLevel: '9L/6L',
-        date: '2019-03-01'
-      },
-      {
-        status: 'Little Dehydrated',
-        hydrationLevel: '5L/6L',
-        date: '2019-03-01'
-      },
-      {
-        status: 'Dehydrated',
-        hydrationLevel: '3L/6L',
-        date: '2019-03-01'
-      },
-      {
-        status: 'Unpaired status',
-        hydrationLevel: '?L/6L',
-        date: '2019-03-01'
-      },
-      {
-        status: 'hYdRAteD',
-        hydrationLevel:
-          'You can place as many as you want on one day. (Not that this app would want to.)',
-        date: '2019-03-01'
-      },
-      {
-        status: 'Hydrated',
-        hydrationLevel: '9L/6L',
-        date: '2019-03-02'
-      },
-      {
-        status: 'Dehydrated',
-        hydrationLevel: '0L/6L',
-        date: '2019-03-03'
-      },
-      {
-        status: 'Little Dehydrated',
-        hydrationLevel: '5L/6L',
-        date: '2019-03-04'
-      },
-      {
-        status: 'What a strange string this is.',
-        hydrationLevel: '9L/6L',
-        date: '2019-03-05'
-      },
-      {
-        status: 'Alexa, how do I escape the primary colour?',
-        hydrationLevel: "Yeah, I wouldn't make the titles too long. :U",
-        date: '2019-03-06'
-      }
-    ],
     colorStatusPairs: [
       { color: 'green', status: 'Hydrated' },
-      { color: 'orange', status: 'Little Dehydrated' },
-      { color: 'red', status: 'Dehydrated' }
+      { color: 'amber', status: 'Little Dehydrated' },
+      { color: 'red', status: 'Dehydrated' },
+      { color: 'amber', status: 'Little Overhydrated'},
+      { color: 'red', status: 'Overhydrated'}
     ]
   }),
   methods: {
@@ -81,7 +29,7 @@ export default {
       let apiData = store.state.report.reportsSnapshot
       for (let i = 0; i < apiData.length; i++) {
         let dayReport = apiData[i]
-        let status = this.getDescription(dayReport.hydrationActualDayId)
+        let status = this.getDescription(dayReport.aggregatedHyration)
         let hydrationLevel =
           dayReport.volumeConsumedViaEDroplet +
           dayReport.volumeConsumedViaOther +
@@ -97,8 +45,18 @@ export default {
       }
       return dayReports
     },
-    getDescription: function (hydrationActualDayId) {
-      
+    getDescription: function (aggregatedHydration) {
+      if(aggregatedHydration <= 60) {
+        return 'Dehydrated'
+      } else if (aggregatedHydration <= 90) {
+        return 'Little Dehydrated'
+      } else if (aggregatedHydration >= 120) {
+        return 'little Overhydrated'
+      } else if (aggregatedHydration >= 150) {
+        return 'Overhydrated'
+      } else {
+        return 'Hydrated'
+      }
     }
   }
 }
