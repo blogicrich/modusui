@@ -37,13 +37,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    storeId: [567483233902359045789347589034793057930567390573569030],
+    storeId: 1,
     userId: 1,
     carerId: 1,
     accountHolderId: 1,
     deviceMessageTypeId: 1,
     messageNo: 1,
-    date: 1551867413
+    date: 1551867413,
+    conditionId: 1,
+    dayReportId: 1
   },
   getters: {
     getterStoreId: state => state.storeId,
@@ -52,7 +54,9 @@ export default new Vuex.Store({
     getterAccountHolderId: state => state.accountHolderId,
     getterDeviceMessageTypeId: state => state.deviceMessageTypeId,
     getterMessageNo: state => state.messageNo,
-    getterDate: state => state.date
+    getterDate: state => state.date,
+    getterConditionId: state => state.conditionId,
+    getterDayReportId: state => state.dayReportId
   },
   modules: {
     // system admins
@@ -97,7 +101,7 @@ export default new Vuex.Store({
 // methods: {
 //   dispatchAPIData () {
 //     this.$store.state.~ID~ = ~GetterName~
-//     this.$store.dispatch('fetch~storeName~').then((response) => this.apiData = response)
+//     this.$store.dispatch('fetch~storeName~~method~').then((response) => this.apiData = response)
 //   }
 // }
 // mounted () {

@@ -2,6 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const modulePersonnelSettings = {
   state: {
+    personnelSettingsPut: [],
     personnelSettings: []
   },
   mutations: {
@@ -22,6 +23,12 @@ export const modulePersonnelSettings = {
       }).catch((error) => {
         console.log(error)
       })
+    },
+    fetchPersonnelSettingsPut () {
+      return apiLib.deleteData('cliadmin/personnelsettings/' + this.getters.getterCarerId, this.getterDataPut)
     }
+  },
+  getters: {
+    getterDataPut: state => state.personnelSettingsPut
   }
 }
