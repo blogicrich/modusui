@@ -54,6 +54,7 @@ export default {
   data () {
     return {
       items: [],
+      crudIdKey: 'containerTypeId',
       snackColor: '',
       snackText: '',
       snack: false,
@@ -73,9 +74,9 @@ export default {
       icon: 'local_drink',
       iconAdd: 'add',
       headers: [
-        { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
-        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
+        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
+        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
+        // { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'containerTypeId', align: 'left', sortable: true, value: 'containerTypeId', cellType: 'tb', hidden: true, editable: true },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
         { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }
@@ -85,12 +86,8 @@ export default {
         { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { deptPersonsId: 0, personsId: 0, containerTypeId: 0, description: ' ', volume: 0 }
+        { containerTypeId: 0, description: ' ', volume: 0 }
       ]
-      // urls: [
-      //   { url: 'titleget', attr: 'titleId', key: 'titleId' },
-      //   { url: 'sysadget', attr: 'username', key: 'username' }
-      // ]
     }
   },
   methods: {
@@ -100,7 +97,7 @@ export default {
         { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { deptPersonsId: 0, personsId: 0, containerTypeId: 0, description: ' ', volume: 0 }
+        { containerTypeId: 0, description: ' ', volume: 0 }
       ]
     },
     notify (items) {
