@@ -2,6 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleCLIAdminVoiceMessage = {
   state: {
+    voicemessagePut: [],
     voicemessage: []
   },
   mutations: {
@@ -22,6 +23,12 @@ export const moduleCLIAdminVoiceMessage = {
       }).catch((error) => {
         console.log(error)
       })
+    },
+    fetchCLIAdminVoiceMessagePut () {
+      return apiLib.updateData('cliadmin/voicemessage/' + this.getters.getterUserId, this.getterDataPut)
     }
+  },
+  getters: {
+    getterDataPut: state => state.voicemessagePut
   }
 }
