@@ -1,4 +1,5 @@
 import apiLib from '../services/apiLib.js'
+import { EventBus } from '@/mixins/eventBus.js'
 
 export const crudRoutines = {
   methods: {
@@ -11,38 +12,54 @@ export const crudRoutines = {
         })
       }
       // console.log('data: ', row)
-      await apiLib.postData(this.createUrl, row)
-      this.refreshItems('Item Added', 'success')
+      await apiLib.postData(this.createUrl, row).then(response => {
+        EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+      })
+      .catch(err => {
+        EventBus.$emit('snack-msg', { text: err, time: 6000, color: 'error', state: true } )
+      })
       this.resetItem()
     },
     async deleteItem (items) {
       for (var i = 0; i < items.length; i++) {
         let index = this.items.indexOf(items[i])
-        let id = Number(items[i][this.crudIdKey])
+        let id = (items[i][this.crudIdKey])
         // console.log(items[i], this.crudIdKey, this.delUrl, id)
-        // console.log('IDDDDDDDDD: ', id)
+        // console.log('id: ', id)
         // console.log(this.delUrl, + '/' + items[i][this.crudIdKey])
         await apiLib.deleteData(this.delUrl + '/' + id)
-        this.items.splice(index, 1)
+        .then(reponse => {
+          this.items.splice(index, 1)
+          EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+        })
+        .catch(err => {
+          EventBus.$emit('snack-msg', { text: err, time: 6000, color: 'error', state: true } )
+        })
+        
       }
       this.getItems(this.readUrl)
-      this.showSnack('Items Deleted', 'success')
     },
 
     async editItems (items) {
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
-        var row = {}
-        var editedItems = []
+        // var row = {}
+        // var editedItems = []
         for (var j = 0; j < defaultItem.length; j++) {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
-            // console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
+            console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
           })
           console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
-          await apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
+          apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
+          .then(response => {
+            EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+          })
+          .catch(err => {
+            EventBus.$emit('snack-msg', { text: err, time: 6000, color: 'error', state: true } )
+          })
+          .finally()
         }
-        this.showSnack('Items Edited', 'success')
         this.getItems(this.readUrl)
       }
       if (this.newItem) {
@@ -77,14 +94,9 @@ export const crudRoutines = {
         this.error = false
       }
     },
-    async refreshItems (text, color) {
-      this.showSnack(text, color)
+    async refreshItems () {
+      EventBus.$emit('snack-msg', { text: "Cancelled admin action", time: 6000, color: 'info', state: true } )
       await this.getItems(this.readUrl)
-    },
-    showSnack (message, color) {
-      this.snackColor = color
-      this.snackText = message
-      this.snack = true
     },
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {

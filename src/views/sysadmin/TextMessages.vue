@@ -39,6 +39,7 @@
 <script>
 
 import baseTab from '@/components/base/BaseTabbedSelectorComponent.vue'
+import apiLib from '@/services/apiLib.js'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 
 export default {
@@ -68,15 +69,15 @@ export default {
     }
   },
   created () {
-    this.getData(this.readUrl).then(data => {
-      this.items = data
-      // console.log(data)
-      // console.log('Items: ', this.items)
-    })
-      .catch(err => console.log(err))
-      .finally(() => {
-      // ROUTER TO STD PAGE IF ERR?
-      })
+    apiLib.getData(this.readUrl)
+    // this.getItems(this.readUrl).then(data => {
+    //   this.items = data
+    // })
+    //   .catch(err => console.log(err))
+    //   .finally(() => {
+    //     // console.log(data)
+    //     // console.log('Items: ', this.items)
+    //   })
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
