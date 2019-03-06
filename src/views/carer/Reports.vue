@@ -9,13 +9,12 @@
 </template>
 
 <script>
-import reportStore from '@/store/StoreGetRaport'
+import store from '@/store'
 import BaseReport from '@/components/base/BaseReportComponent'
-console.log(
-  reportStore.fetchGetReportsCondition() +
-    reportStore.fetchGetReportsSnapshot() +
-    reportStore.fetchGetReportComments()
-)
+// console.log(store.state.report)
+// console.log(store.state.report.reportComments)
+// console.log(store.state.report.reportsConditions)
+// console.log(store.state.report.reportsSnapshot)
 
 export default {
   name: 'reports',

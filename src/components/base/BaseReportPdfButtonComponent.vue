@@ -11,7 +11,6 @@ import pdfMixin from '@/mixins/pdfMixin.js'
 
 export default {
   name: 'BaseReportPdfButton',
-  data: function () {},
   props: {
     tabs: Array,
     color: String,
