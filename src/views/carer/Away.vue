@@ -8,7 +8,6 @@
 <script>
 import store from '@/store'
 import BaseCalendarComponent from '@/components/base/BaseCalendarComponent'
-console.log(store.state.report.reportsSnapshot)
 
 export default {
   components: {
