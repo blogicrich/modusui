@@ -11,10 +11,8 @@
 <script>
 import store from '@/store'
 import BaseReport from '@/components/base/BaseReportComponent'
-// console.log(store.state.report)
-// console.log(store.state.report.reportComments)
-// console.log(store.state.report.reportsConditions)
-// console.log(store.state.report.reportsSnapshot)
+
+console.log(store.state.dashboardUsers.dashboardUsersGet)
 
 export default {
   name: 'reports',
@@ -175,8 +173,15 @@ export default {
   methods: {
     getReports: function () {
       let reports = []
-      let reportConditions = reportStore.fetchGetReportsCondition()
-      for (let ri = 0; ri < reportConditions.length; ri++) {
+      let users = store.state.dashboardUsers.dashboardUsersGet
+      let apiReports = store.state.report
+      let reportsConditions = store.state.report.reportsConditions
+      let reportsSnapshots = store.state.report.reportsConditions
+      let reportsComments = store.state.report.reportComments
+      console.log(apiReports);
+
+      for (let ri = 0; ri < users.length; ri++) {
+        let user = users[useri]
         let report = {
           tabs: [
             {
@@ -185,7 +190,7 @@ export default {
                 rows: [
                   {
                     headers: ['Full Name', 'Also Known As'],
-                    items: ['¬Full Name', '¬Also Known As']
+                    items: [user.givenName + ' ' + user.familyName, '¬Also Known As']
                   },
                   {
                     headers: [
