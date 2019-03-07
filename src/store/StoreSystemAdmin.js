@@ -1,6 +1,6 @@
 import apiLib from '../services/apiLib.js'
 
-export const moduleSystemAdminData = {
+export const moduleSystemAdmin = {
   state: {
     // store the data
     sysAdminget: [],
