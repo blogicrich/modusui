@@ -51,6 +51,7 @@ export default {
     await setToken()
     return axi.delete(url).then(response => {
       // EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+      console.log("URL: ", url)
       console.log("response.data: ", response.data)
       console.log("response.status: ", response.status)
       console.log("response.statusText: ", response.statusText)
@@ -62,6 +63,7 @@ export default {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
+        console.log("URL: ", url)
         console.log("response.data: ", error.response.data)
         console.log("response.status: ", error.response.status)
         console.log("response.statusText: ", error.response.statusText)
@@ -93,6 +95,7 @@ export default {
     await setToken()
     return axi.get(url).then(response => {
       EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
+      console.log("URL: ", url)
       console.log("response.data: ", response.data)
       console.log("response.status: ", response.status)
       console.log("response.statusText: ", response.statusText)
@@ -104,6 +107,7 @@ export default {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
+        console.log("URL: ", url)
         console.log("response.data: ", error.response.data)
         console.log("response.status: ", error.response.status)
         console.log("response.statusText: ", error.response.statusText)
@@ -135,6 +139,8 @@ export default {
     await setToken()
     if (data) {
       return axi.post(url, data).then(response => {
+        console.log("URL: ", url)
+        console.log("payload: ", data)
         console.log("response.data: ", response.data)
         console.log("response.status: ", response.status)
         console.log("response.statusText: ", response.statusText)
@@ -145,6 +151,7 @@ export default {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
+          console.log("URL: ", url)
           console.log("response.data: ", error.response.data)
           console.log("response.status: ", error.response.status)
           console.log("response.statusText: ", error.response.statusText)
@@ -178,6 +185,8 @@ export default {
     await setToken()
     if (data) {
       return axi.post(url, data).then(response => {
+        console.log("URL: ", url)
+        console.log("payload: ", data)
         console.log("response.data: ", response.data)
         console.log("response.status: ", response.status)
         console.log("response.statusText: ", response.statusText)
@@ -189,6 +198,7 @@ export default {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
+          console.log("URL: ", url)
           console.log("response.data: ", error.response.data)
           console.log("response.status: ", error.response.status)
           console.log("response.statusText: ", error.response.statusText)
@@ -221,6 +231,8 @@ export default {
     await setToken()
     if (data) {
       return axi.put(url, data).then(response => {
+        console.log("URL: ", url)
+        console.log("payload: ", data)
         console.log("response.data: ", response.data)
         console.log("response.status: ", response.status)
         console.log("response.statusText: ", response.statusText)

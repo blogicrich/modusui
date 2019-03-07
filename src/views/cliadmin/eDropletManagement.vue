@@ -52,7 +52,7 @@ import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 
 export default {
-  name: 'Conditions',
+  name: 'EdropletManagement',
   mixins: [crudRoutines],
   components: {
     BaseDataTable,

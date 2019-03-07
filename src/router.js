@@ -96,7 +96,7 @@ export default new Router({
     },
     {
       path: '/edropletmanagement',
-      name: 'eDropletManagement',
+      name: 'EdropletManagement',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/EdropletManagement.vue')
     },
     {
