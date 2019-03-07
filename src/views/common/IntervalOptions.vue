@@ -111,7 +111,7 @@ export default {
     SubPageNavButton,
     selectComponent
   },
-  mixins: [getData, postData],
+  // mixins: [getData, postData],
   data () {
     return {
       multiple: false,
@@ -171,7 +171,7 @@ export default {
     async getValues () {
       for (var i = 0; i < this.intervalTypes.length; i++) {
         let url = this.readUrl + this.intervalTypes[i]
-        let arr = await this.getData(url)
+        let arr = await apiLib.getData(url)
         switch (this.intervalTypes[i]) {
           case '/bluelight':
             this.lightOptions = arr

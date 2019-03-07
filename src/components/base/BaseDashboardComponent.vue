@@ -284,7 +284,7 @@ export default {
         borderColorLineTwo: 'rgba(102, 141, 62, 1)', // rgba
         borderWidthLineTwo: 1,
         labelBarOne: 'bar1',
-        dataBarOne: [40, 70, 60, 10, 80, 100],
+        dataBarOne: [50, 30, 80, 40, 50, 100, 10],
         borderColorBarOne: 'rgba(54, 162, 235, 1)', // rgba
         backgroundColorBarOne: 'rgba(54, 162, 235, 0.2)', // rgba
         borderWidthBarOne: 1
