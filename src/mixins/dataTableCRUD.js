@@ -1,5 +1,4 @@
-import apiLib from '../services/apiLib.js'
-import { EventBus } from '@/mixins/eventBus.js'
+import apiLib from '@/services/apiLib.js'
 
 export const crudRoutines = {
   methods: {
@@ -13,10 +12,10 @@ export const crudRoutines = {
       }
       // console.log('data: ', row)
       await apiLib.postData(this.createUrl, row).then(response => {
-        EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+        // EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
       })
       .catch(error => {
-        EventBus.$emit('snack-msg', { text: error.response, time: 6000, color: 'error', state: true } )
+        // EventBus.$emit('snack-msg', { text: error.response, time: 6000, color: 'error', state: true } )
       })
       this.resetItem()
       this.getItems(this.readUrl)
@@ -32,13 +31,13 @@ export const crudRoutines = {
         .then(reponse => {
           this.items.splice(index, 1)
           if (response.status === 200) {
-            EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+            // EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
           } else {
-            EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'error', state: true } )
+            // EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'error', state: true } )
           }
         })
         .catch(error => {
-          EventBus.$emit('snack-msg', { text: error.response, time: 6000, color: 'error', state: true } )
+          // EventBus.$emit('snack-msg', { text: error.response, time: 6000, color: 'error', state: true } )
         })
         
       }
@@ -58,10 +57,10 @@ export const crudRoutines = {
           console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
           apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
           .then(response => {
-            EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+            // EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
           })
           .catch(error => {
-            EventBus.$emit('snack-msg', { text: error.response, time: 6000, color: 'error', state: true } )
+            // EventBus.$emit('snack-msg', { text: error.response, time: 6000, color: 'error', state: true } )
           })
           .finally()
         }
@@ -101,8 +100,9 @@ export const crudRoutines = {
     },
     async refreshItems () {
       // EventBus.$emit('snack-msg', { text: "Cancelled admin action", time: 6000, color: 'info', state: true } )
+      // this.resetItem()
       await this.getItems(this.readUrl)
-      this.resetItem()
+      await this.setMenuItems(this.urls)
     },
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {

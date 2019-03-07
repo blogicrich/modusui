@@ -97,7 +97,7 @@ export default new Router({
     {
       path: '/edropletmanagement',
       name: 'eDropletManagement',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/eDropletManagement.vue')
+      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/EdropletManagement.vue')
     },
     {
       path: '/careralertsettings',

@@ -760,7 +760,7 @@ export default {
       this.newDialog = false
       this.delDialog = false
       this.selected = []
-      this.$emit('itemsCancelled', { snackText: 'Items Cancelled', snackColor: 'error' })
+      this.$emit('itemsCancelled')//, { snackText: 'Items Cancelled', snackColor: 'error' })
     },
     decrement (index) {
       if (this.selected[index] && this.selected[index - 1]) {
@@ -827,7 +827,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.newItem.find(attribute => attribute).returnVal)
+    // console.log(this.newItem.find(attribute => attribute).returnVal)
   }
 }
 </script>

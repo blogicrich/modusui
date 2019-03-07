@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { EventBus } from '@/mixins/eventBus.js'
 
-var url = function() {
+let url = function() {
   let val = ''
   switch (process.env.NODE_ENV) {
     case 'development':
@@ -18,23 +19,15 @@ var url = function() {
   return val
 }
 
-var axUnauth = axios.create({
-  baseURL: url(),
-  timeout: 10000,
-  headers: { 'Content-Type': 'application/json' }
-})
-
-var axAuth = axios.create({
-  baseURL: url(),
-  timeout: 10000,
-})
-
-var setToken = function() {
+let setToken = function() {
   try {
     if (localStorage.getItem('auth') !== null) {
+      // axios.defaults.headers.common['Content-Type'] = 'application/json'
       axios.defaults.headers.common['authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token
     } else {
       delete axios.defaults.headers.common['authorization']
+      axios.defaults.headers.common['Content-Type'] = 'application/json'
+      // axios.defaults.headers.common['authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token
     }
   } catch (error) {
     console.log(error)
@@ -42,55 +35,135 @@ var setToken = function() {
   }
 }
 
-axAuth.interceptors.response.use(function (response) {
+let axi = axios.create({
+  baseURL: url(),
+  timeout: 10000
+})
+
+axi.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   return Promise.reject(error)
 })
 
 export default {
-  deleteData (url, data) {
-    console.log(url)
-    console.log('DELETE: ', data)
-    return axAuth.delete(url).then(response => {
+  async deleteData (url) {
+    await setToken()
+    return axi.delete(url).then(response => {
+      // EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+      console.log("response.data: ", response.data)
+      console.log("response.status: ", response.status)
+      console.log("response.statusText: ", response.statusText)
+      console.log('response.headers:', response.headers)
+      console.log('response.request:', response.request)
       return response.data
     })
-    .catch(err => { 
-      return err
+    .catch(error => { 
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log("response.data: ", error.response.data)
+        console.log("response.status: ", error.response.status)
+        console.log("response.statusText: ", error.response.statusText)
+        console.log('response.headers:', error.response.headers)
+        console.log('response.request:', error.response.request)
+        // EventBus.$emit('snack-msg', { text: response.error, time: 6000, color: 'error', state: true } )
+        return error.response.statusText + ' ' + error.response.status + '\n'
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        // EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true } )
+        console.log(error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        // EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true } )
+        console.log('error.message: ', error.message)
+      }
+      console.log(error.config)
     })
     .finally(() => {
       // ROUTER TO STD PAGE IF ERR?
     })
   },
+
   // Get data
-  getData (url, data) {
-    // console.log(url)
-    // console.log('GETAUTH: ', data)
-    setToken()
-    return axAuth.get(url).then(response => {
-      // console.log('GETAUTH: ', response.data)
+  
+  async getData (url) {
+    await setToken()
+    return axi.get(url).then(response => {
+      EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
+      console.log("response.data: ", response.data)
+      console.log("response.status: ", response.status)
+      console.log("response.statusText: ", response.statusText)
+      console.log('response.headers:', response.headers)
+      console.log('response.request:', response.request)
       return response.data
     })
-    .catch(err => { 
-      return err
+    .catch(error => { 
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log("response.data: ", error.response.data)
+        console.log("response.status: ", error.response.status)
+        console.log("response.statusText: ", error.response.statusText)
+        console.log('response.headers:', error.response.headers)
+        console.log('response.request:', error.response.request)
+        // EventBus.$emit('snack-msg', { text: response.error, time: 6000, color: 'error', state: true } )
+        return error.response.statusText + ' ' + error.response.status + '\n'
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        // EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true } )
+        console.log(error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        // EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true } )
+        console.log('error.message: ', error.message)
+      }
+      console.log(error.config)
     })
     .finally(() => {
       // ROUTER TO STD PAGE IF ERR?
     })
   },
+
   // Add (POST) new data
-  postData (url, data) {
-    setToken()
-    console.log(url)
-    console.log('POSTAUTH: ', data)
+  
+  async postData (url, data) {
+    await setToken()
     if (data) {
-      return axAuth.post(url, data).then(response => {
-        // console.log(url)
-        // console.log('GETAUTH: ',response)
-        return response.data
+      return axi.post(url, data).then(response => {
+        console.log("response.data: ", response.data)
+        console.log("response.status: ", response.status)
+        console.log("response.statusText: ", response.statusText)
+        console.log('response.headers:', response.headers)
+        console.log('response.request:', response.request)
       })
-      .catch(err => { 
-        return err
+      .catch(error => { 
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log("response.data: ", error.response.data)
+          console.log("response.status: ", error.response.status)
+          console.log("response.statusText: ", error.response.statusText)
+          console.log('response.headers:', error.response.headers)
+          console.log('response.request:', error.response.request)
+          // EventBus.$emit('snack-msg', { text: response.error, time: 6000, color: 'error', state: true } )
+          return error.response.statusText + ' ' + error.response.status + '\n'
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          // EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true } )
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          // EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true } )
+          console.log('error.message: ', error.message)
+        }
+        console.log(error.config)
       })
       .finally(() => {
         console.log('URL', url)
@@ -98,38 +171,86 @@ export default {
       })
     }
   },
-  postAuth (url, data) {
-    // console.log(url)
-    // console.log('POSTUNAUTH: ', data)
-    setToken()
+
+  // Post Auth
+
+  async postAuth (url, data) {
+    await setToken()
     if (data) {
-      // console.log(url)
-      // console.log('POSTAUTH: ', data)
-      return axUnauth.post(url, data).then(response => {
+      return axi.post(url, data).then(response => {
+        console.log("response.data: ", response.data)
+        console.log("response.status: ", response.status)
+        console.log("response.statusText: ", response.statusText)
+        console.log('response.headers:', response.headers)
+        console.log('response.request:', response.request)
         return response.data
       })
-      .catch(err => { 
-        return err
+      .catch(error => { 
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log("response.data: ", error.response.data)
+          console.log("response.status: ", error.response.status)
+          console.log("response.statusText: ", error.response.statusText)
+          console.log('response.headers:', error.response.headers)
+          console.log('response.request:', error.response.request)
+          // EventBus.$emit('snack-msg', { text: response.error, time: 6000, color: 'error', state: true } )
+          return error.response.statusText + ' ' + error.response.status + '\n'
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          // EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true } )
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          // EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true } )
+          console.log('error.message: ', error.message)
+        }
+        console.log(error.config)
       })
       .finally(() => {
         // ROUTER TO STD PAGE IF ERR?
       })
     }
   },
+
   // Update (PUT) data
-  updateData (url, data) {
-    console.log(url)
-    console.log('PUT: ', data)
-    setToken()
+
+  async updateData (url, data) {
+    await setToken()
     if (data) {
-      return axAuth.put(url, data).then(response => {
-        // console.log('URL', url)
-        // console.log('DATA', data)
-        // console.log('RESPONSE', response)
+      return axi.put(url, data).then(response => {
+        console.log("response.data: ", response.data)
+        console.log("response.status: ", response.status)
+        console.log("response.statusText: ", response.statusText)
+        console.log('response.headers:', response.headers)
+        console.log('response.request:', response.request)
         return response.data
       })
-      .catch(err => { 
-        return err
+      .catch(error => { 
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log("response.data: ", error.response.data)
+          console.log("response.status: ", error.response.status)
+          console.log("response.statusText: ", error.response.statusText)
+          console.log('response.headers:', error.response.headers)
+          console.log('response.request:', error.response.request)
+          // EventBus.$emit('snack-msg', { text: response.error, time: 6000, color: 'error', state: true } )
+          return error.response.statusText + ' ' + error.response.status + '\n'
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          // EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true } )
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          // EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true } )
+          console.log('error.message: ', error.message)
+        }
+        console.log(error.config)
       })
       .finally(() => {
         // ROUTER TO STD PAGE IF ERR?
