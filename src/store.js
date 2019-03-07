@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // system admins
-import { moduleSystemAdminData } from '@/store/StoreSystemAdmin'
+import { moduleSystemAdmin } from '@/store/StoreSystemAdmin'
 import { moduleConditionsOptions } from '@/store/StoreConditionsOptions'
 import { moduleContainerTypes } from '@/store/StoreContainerTypes' // get no data
 import { moduleTitles } from '@/store/StoreTitles'
@@ -15,12 +15,12 @@ import { moduleIntervalOptions } from '@/store/StoreIntervalOptions'
 // client admins
 import { moduleCLIAdminVoiceMessage } from '@/store/StoreVoiceMessage'
 import { moduleCLIAdminConditions } from '@/store/StoreCLIAdminConditions'
-import { moduleEDropletMan } from '@/store/StoreEDroptletMan'
+import { moduleEDropMan } from '@/store/StoreEDropMan'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
 import { modulePersonnelSettings } from '@/store/StorePersonnelSettings'
 
 // carer
-import { moduleAditionalDrinks } from '@/store/StoreAditionalDrinks'
+import { moduleAdditionalDrinks } from '@/store/StoreAdditionalDrinks'
 import { moduleConditions } from '@/store/StoreCarerConditions'
 import { moduleAway } from '@/store/StoreAway'
 import { moduleAlerts } from '@/store/StoreAlerts'
@@ -68,17 +68,17 @@ export default new Vuex.Store({
     hydrationOptions: moduleHydrationParameters,
     voiceMessages: moduleVoiceMessagesDefaults,
     intervalOptions: moduleIntervalOptions,
-    systemAdmin: moduleSystemAdminData,
+    systemAdmin: moduleSystemAdmin,
 
     // client admins
     conditions: moduleCLIAdminConditions,
     cliAdminVoiceMessage: moduleCLIAdminVoiceMessage,
-    eDropletMan: moduleEDropletMan,
+    eDropletMan: moduleEDropMan,
     intervalSettings: moduleIntervalSettings,
     personnelSettings: modulePersonnelSettings,
 
     // carer
-    additionalDrinks: moduleAditionalDrinks,
+    additionalDrinks: moduleAdditionalDrinks,
     condition: moduleConditions,
     away: moduleAway,
     alerts: moduleAlerts,
