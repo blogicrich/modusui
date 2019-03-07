@@ -9,12 +9,12 @@
             <slot name="firstRightSlot"></slot>
           </v-layout>
         </v-flex>
-        <v-flex xs5>
+        <v-flex grow>
           <v-layout fill-height align-center>
             <slot name="secondRightSlot"></slot>
           </v-layout>
         </v-flex>
-        <v-flex xs3>
+        <v-flex shrink>
           <slot name="thirdRightSlot"> </slot>
         </v-flex>
       </v-layout>
