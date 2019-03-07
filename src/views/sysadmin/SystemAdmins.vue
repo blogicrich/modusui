@@ -29,7 +29,7 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
-  <v-snackbar
+  <!-- <v-snackbar
     v-model="snack"
     bottom
     :timeout="timeout"
@@ -37,7 +37,7 @@
   >
     {{ snackText }}
     <v-btn flat @click="snack = false">Close</v-btn>
-  </v-snackbar>
+  </v-snackbar> -->
   </v-container>
 </template>
 
@@ -109,7 +109,7 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { corporateIdentifier: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
@@ -119,7 +119,7 @@ export default {
         { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentifier: '', username: '' }
+        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentifier: '', username: '' } //, deptPersonsId: 0, mobileNo: '', email: '', password: '' }
       ]
     }
   },

@@ -262,8 +262,8 @@
                         :color="primaryColor"
                         outline
                         required
-                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
-                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
+                        item-value="shortDescription"
+                        item-text="titleId"
                       ></v-select>
                     </v-flex>
                   </v-layout>
@@ -309,7 +309,7 @@
                         required
                         :item-value="newItem.find(attribute => attribute.returnVal === key)"
                         :item-text="newItem.find(attribute => attribute.displayVal === key)"
-                      >{{ item[key].value }}
+                      >
                       </v-select>
                     </v-flex>
                   </v-layout>

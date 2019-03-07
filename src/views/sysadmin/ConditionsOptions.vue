@@ -54,7 +54,7 @@ export default {
   data () {
     return {
       items: [],
-      crudIdKey: 'conditionId',
+      crudIdKey: 'conditionsId',
       snackColor: '',
       snackText: '',
       snack: false,
@@ -77,7 +77,7 @@ export default {
         // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
         // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
         // { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
-        { text: 'conditionId', align: 'left', sortable: true, value: 'conditionId', cellType: 'tb', hidden: true, editable: true },
+        { text: 'conditionsId', align: 'left', sortable: true, value: 'conditionId', cellType: 'tb', hidden: true, editable: false },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
         { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true }
       ],
@@ -86,7 +86,7 @@ export default {
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { conditionId: 0, description: ' ', status: ' ' }
+        { conditionsId: 0, description: ' ', status: ' ' }
       ]
       // urls: [
       //   { url: 'titleget', attr: 'titleId', key: 'titleId' },
@@ -101,7 +101,7 @@ export default {
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { conditionId: 0, description: ' ', status: ' ' }
+        { conditionsId: 0, description: ' ', status: ' ' }
       ]
     }
   },

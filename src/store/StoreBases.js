@@ -3,27 +3,24 @@ import apiLib from '../services/apiLib.js'
 export const moduleBases = {
   state: {
     // store the data
-    base: []
+    basesGet: []
   },
   mutations: {
     // set the data
-    SET_BASE (state, data) {
-      state.base = data
+    SET_BASES (state, data) {
+      state.basesGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetBases (context) {
-      return apiLib.getData('carer/bases/' + this.getters.getterStoreId).then((response) => {
+    fetchBasesGet (context) {
+      return apiLib.getData('carer/bases/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_BASE', null)
+          context.commit('SET_BASES', null)
         } else {
-          context.commit('SET_BASE', response.data)
+          context.commit('SET_BASES', response.data)
         }
       })
     }
-  },
-  getters: {
-    // get specific data
   }
 }

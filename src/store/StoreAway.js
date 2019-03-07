@@ -3,27 +3,31 @@ import apiLib from '../services/apiLib.js'
 export const moduleAway = {
   state: {
     // store the data
-    away: []
+    awayPut: [],
+    awayGet: []
   },
   mutations: {
     // set the data
     SET_AWAY (state, data) {
-      state.condition = data
+      state.awayGet = data
     }
   },
   actions: {
     // get all data
-    fetchGetAway (context) {
-      return apiLib.getData('carer/away/' + this.getters.getterStoreId).then((response) => {
+    fetchAwayGet (context) {
+      return apiLib.getData('carer/away/' + this.getters.getterUserId).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_AWAY', null)
         } else {
           context.commit('SET_AWAY', response.data)
         }
       })
+    },
+    fetchAwayPut () {
+      return apiLib.updateData('carer/away/' + this.getters.getterUserId, this.getters.getterAwayPut)
     }
   },
   getters: {
-    // get specific data
+    getterAwayPut: state => state.awayPut
   }
 }

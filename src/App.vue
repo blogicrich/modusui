@@ -6,26 +6,13 @@
       app
       :clipped-left="clipped"
     >
-    <!-- <v-toolbar-side-icon v-if="$vuetify.breakpoint.md" @click.stop="activeDrawer = !activeDrawer"></v-toolbar-side-icon> -->
-      <!-- <v-toolbar-title v-text="title"></v-toolbar-title> -->
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
-      <!-- <v-badge v-if="(authenticated.level !== 'CARER')" left overlap color="error">
-        <span slot="badge" class="text-badge">{{ alerts }}</span>
-        <v-icon
-          medium
-          color="primary"
-          @click="$router.push('/login')"
-        >
-          notifications
-        </v-icon>
-      </v-badge> -->
       <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
       <span v-if="authenticated.state && $vuetify.breakpoint.smAndUp">Logged in as: {{ user }}</span>
     </v-toolbar>
     <v-fade-transition>
       <v-navigation-drawer
-        v-model="activeDrawer"
         v-if="(authenticated.level === 'CARER' || authenticated.level === 'CLIENT ADMINISTRATOR / CARER') && authenticated.state && $vuetify.breakpoint.lgAndUp"
         class="primary"
         mini-variant
@@ -60,7 +47,6 @@
         </v-layout>
       </v-navigation-drawer>
       <v-navigation-drawer
-        v-model="activeDrawer"
         v-if="(authenticated.level === 'CARER' || authenticated.level === 'CLIENT ADMINISTRATOR / CARER') && authenticated.state && $vuetify.breakpoint.smAndUp"
         class="primary"
         disable-route-watcher
@@ -140,21 +126,36 @@
         </v-layout>
       </v-footer>
     </v-fade-transition>
+    <BaseAppSnackbar
+      :snack="snackState"
+      :timeout="snackTimeout"
+      :snackColor="snackColor"
+      :snackText="snackText"
+    />
   </v-app>
 </template>
 
 <script>
 /* eslint-disable */
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
+import BaseAppSnackbar from '@/components/base/BaseAppSnackbar.vue'
+import { EventBus } from '@/mixins/eventBus.js'
+import { setTimeout } from 'timers'
+
 
 export default {
   name: 'App',
   components: {
-    BaseAppNavBtn
+    BaseAppNavBtn,
+    BaseAppSnackbar
   },
   data () {
     return {
-      activeDrawer: true,
+      // Snackbar
+      snackState: false,
+      snackText: '',
+      snackColor: '',
+      snackTimeout: 0,
       alerts: 0,
       authenticated: {
         state: false,
@@ -231,10 +232,19 @@ export default {
         this.$router.push('/dashboard')
       }
     },
+    showSnack (eventPayload) {
+      console.log("FIRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRED!!!!", eventPayload.text, eventPayload.color, eventPayload.state, eventPayload.time)
+      this.snackText = eventPayload.text 
+      this.snackColor = eventPayload.color
+      this.snackTimeout = eventPayload.time
+      this.snackState = eventPayload.state
+    },
+    clickHandler() {
+      console.log('SNACKMSG')
+    },
     logout () {
       this.authenticated = null
       localStorage.removeItem('auth')
-      this.activeDrawer = false
       this.user = ''
       this.$router.push('/login')
     },
@@ -247,11 +257,19 @@ export default {
       console.log('Auth changed: ', this.authenticated)
     }
   },
-  mounted () {
+  created () {
     if (!this.authenticated.state) {
       this.$router.replace('/login')
     }
     console.log(this.authenticated)
+  },
+  mounted () {
+    EventBus.$on('snack-msg', data => {
+      this.showSnack(data)
+    })//this.showSnack())
+  },
+  destroyed () {
+    EventBus.$off('snack-msg', this.showSnack())
   }
 }
 </script>
