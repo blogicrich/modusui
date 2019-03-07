@@ -94,11 +94,11 @@ export default new Router({
       name: 'Conditions',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/Conditions.vue')
     },
-    {
-      path: '/edropletmanagement',
-      name: 'EdropletManagement',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/EdropletManagement.vue')
-    },
+    // {
+    //   path: '/edropletmanagement',
+    //   name: 'EdropletManagement',
+    //   component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/EdropletManagement.vue')
+    // },
     {
       path: '/careralertsettings',
       name: 'CarerAlertSettings',
