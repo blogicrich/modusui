@@ -1,62 +1,66 @@
 <template>
   <v-container>
-    <h1>Consumption per day</h1>
-    <base-calendar :events="getDayReports()" :colorStatusPairs="colorStatusPairs"></base-calendar>
+    <h1>{{legend}}</h1>
+    <v-layout>
+      <v-card v-for="(awayPeriod, index) in awayPeriods" :key="index">
+        <v-container>
+          <h3>{{formatDateAsString(awayPeriod.startDate)}} - {{formatDateAsString(awayPeriod.endDate)}}</h3>
+          <v-checkbox
+            color="primary"
+            v-model="awayPeriod.drinksAccounted"
+            label="Drinks Accounted?"
+          ></v-checkbox>
+        </v-container>
+      </v-card>
+    </v-layout>
   </v-container>
+  <!-- <dataTable :headers="headers" :addBtnTitle="btnTitle" :primaryColor="primaryColor" items=""></dataTable> -->
 </template>
 
 <script>
-import store from '@/store'
-import BaseCalendarComponent from '@/components/base/BaseCalendarComponent'
+import store from "@/store";
+// import dataTable from '@/components/base/BaseDataTableComponent'
 
 export default {
   components: {
-    'base-calendar': BaseCalendarComponent
+    // dataTable
   },
   data: () => ({
-    colorStatusPairs: [
-      { color: 'green', status: 'Hydrated' },
-      { color: 'amber', status: 'Little Dehydrated' },
-      { color: 'red', status: 'Dehydrated' },
-      { color: 'amber', status: 'Little Overhydrated'},
-      { color: 'red', status: 'Overhydrated'}
+    legend: "Away Periods",
+    awayPeriods: [
+      {
+        startDate: new Date("March 8, 2019 09:30:00"),
+        endDate: new Date("March 10, 2019 16:30:00"),
+        drinksAccounted: true
+      },
+      {
+        startDate: new Date("March 6, 2019 11:15:00"),
+        endDate: new Date("March 12, 2019 19:00:00"),
+        drinksAccounted: false
+      },
+      {
+        startDate: new Date("February 26, 2001 12:00:00"),
+        endDate: new Date("December 9, 2002 12:00:00"),
+        drinksAccounted: false
+      },
     ]
+    // headers: [{ text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },],
+    // btnTitle: "Record Time Away",
+    // primaryColor: "primary"
   }),
   methods: {
-    getDayReports: function () {
-      let dayReports = []
-      let apiData = store.state.report.reportsSnapshot
-      for (let i = 0; i < apiData.length; i++) {
-        let dayReport = apiData[i]
-        let status = this.getDescription(dayReport.aggregatedHyration)
-        let hydrationLevel =
-          dayReport.volumeConsumedViaEDroplet +
-          dayReport.volumeConsumedViaOther +
-          '/' +
-          dayReport.hydrationTarget
-        let date = dayReport.dateTime
-
-        dayReports.push({
-          status: status,
-          hydrationLevel: hydrationLevel,
-          date: date
-        })
-      }
-      return dayReports
-    },
-    getDescription: function (aggregatedHydration) {
-      if(aggregatedHydration <= 60) {
-        return 'Dehydrated'
-      } else if (aggregatedHydration <= 90) {
-        return 'Little Dehydrated'
-      } else if (aggregatedHydration >= 120) {
-        return 'little Overhydrated'
-      } else if (aggregatedHydration >= 150) {
-        return 'Overhydrated'
-      } else {
-        return 'Hydrated'
-      }
+    formatDateAsString: function(date) {
+      const options = {
+        timeZone: "UTC",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      };
+      let dateString = date.toLocaleString("en-GB", options);
+      return dateString;
     }
   }
-}
+};
 </script>
