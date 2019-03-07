@@ -262,8 +262,9 @@
                         :color="primaryColor"
                         outline
                         required
-                        item-value="shortDescription"
-                        item-text="titleId"
+                        return-object
+                        :item-value="item.returnVal"
+                        :item-text="item.displayVal"
                       ></v-select>
                     </v-flex>
                   </v-layout>
@@ -307,9 +308,9 @@
                         :color="primaryColor"
                         outline
                         required
-                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
-                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
-                      >
+                        return-object
+                        :item-value="newItem.find(attribute => attribute).returnVal"
+                        :item-text="newItem.find(attribute => attribute).displayVal"                      >
                       </v-select>
                     </v-flex>
                   </v-layout>
@@ -598,8 +599,8 @@
                         :color="primaryColor"
                         outline
                         required
-                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
-                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
+                        :item-value="item[key].returnVal"
+                        :item-text="item[key].displayVal"
                       ></v-select>
                     </v-flex>
                   </v-layout>
@@ -653,8 +654,8 @@
                         :color="primaryColor"
                         outline
                         required
-                        :item-value="newItem.find(attribute => attribute.returnVal === key)"
-                        :item-text="newItem.find(attribute => attribute.displayVal === key)"
+                        :item-value="newItem.find(attribute => attribute).returnVal"
+                        :item-text="newItem.find(attribute => attribute).displayVal"    
                         >
                       </v-select>
                     </v-flex>
@@ -824,6 +825,9 @@ export default {
       this.close()
       this.selected = []
     }
+  },
+  mounted() {
+    console.log(this.newItem.find(attribute => attribute).returnVal)
   }
 }
 </script>

@@ -74,9 +74,6 @@ export default {
       icon: 'local_drink',
       iconAdd: 'add',
       headers: [
-        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'containerTypeId', align: 'left', sortable: true, value: 'containerTypeId', cellType: 'tb', hidden: true, editable: true },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
         { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }

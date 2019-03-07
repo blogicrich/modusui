@@ -29,15 +29,6 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
-  <!-- <v-snackbar
-    v-model="snack"
-    bottom
-    :timeout="timeout"
-    :color="snackColor"
-  >
-    {{ snackText }}
-    <v-btn flat @click="snack = false">Close</v-btn>
-  </v-snackbar> -->
   </v-container>
 </template>
 
@@ -75,34 +66,25 @@ export default {
       icon: 'person',
       iconAdd: 'person_add',
       headers: [
-        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
-        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'Mobile Number', align: 'left', sortable: false, value: 'mobileNo', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'password', align: 'left', sortable: false, value: 'password', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'Email', align: 'left', sortable: false, value: 'email', cellType: 'tb', hidden: true, editable: true },
+        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: false },
         { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
         { text: 'Given Name', value: 'givenName', cellType: 'tb', hidden: false, editable: true },
         { text: 'Family Name', value: 'familyName', cellType: 'tb', hidden: false, editable: true },
-        // { text: 'Company', value: 'corporateIdentifier', cellType: 'tb', hidden: false, editable: true },
-        // { text: 'User Name', value: 'username', cellType: 'tb', hidden: false, editable: true }
+        { text: 'Salutation', value: 'salutation', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Status', value: 'status', cellType: 'tb', hidden: false, editable: false }
       ],
       newItem: [
         { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
-        { corporateIdentifier: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
+        { corporateId: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
-        // { mobileNo: ' ', cellType: 'tb', attr: 'mobileNo', cellLabel: 'Mobile Number', menuItems: [], validators: [] },
-        // { email: ' ', cellType: 'tb', attr: 'email', cellLabel: 'Email', menuItems: [], validators: [] },
-        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentifier: '', username: '' } //, deptPersonsId: 0, mobileNo: '', email: '', password: '' }
+        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateId: '', username: '' }
       ],
       urls: [
         { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' },
-        // { url: 'sysadmin/sysadmin', attr: 'username', key: 'username' }
       ]
     }
   },
@@ -112,14 +94,11 @@ export default {
         { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
-        { corporateIdentifier: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
+        { corporateId: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
-        // { mobileNo: ' ', cellType: 'tb', attr: 'mobileNo', cellLabel: 'Mobile Number', menuItems: [], validators: [] },
-        // { email: ' ', cellType: 'tb', attr: 'email', cellLabel: 'Email', menuItems: [], validators: [] },
-        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateIdentifier: '', username: '' } //, deptPersonsId: 0, mobileNo: '', email: '', password: '' }
+        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateId: '', username: '' }
       ]
     }
   },

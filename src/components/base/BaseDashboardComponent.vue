@@ -311,7 +311,7 @@ export default {
 @import "./public/scss/main.scss";
 .v-card {
   color: black;
-  background-color: $vuetify-secondary;
+  background-color: $white;
   padding: 5px;
 }
 .chart {
