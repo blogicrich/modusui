@@ -42,29 +42,41 @@ var setToken = function() {
   }
 }
 
+axAuth.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  return Promise.reject(error)
+})
+
 export default {
   deleteData (url, data) {
     console.log(url)
     console.log('DELETE: ', data)
     return axAuth.delete(url).then(response => {
       return response.data
-    }).catch(err => console.log(err))
-      .finally(() => {
-        // ROUTER TO STD PAGE IF ERR?
-      })
+    })
+    .catch(err => { 
+      return err
+    })
+    .finally(() => {
+      // ROUTER TO STD PAGE IF ERR?
+    })
   },
   // Get data
   getData (url, data) {
-    console.log(url)
-    console.log('GETAUTH: ', data)
+    // console.log(url)
+    // console.log('GETAUTH: ', data)
     setToken()
     return axAuth.get(url).then(response => {
       // console.log('GETAUTH: ', response.data)
       return response.data
-    }).catch(err => console.log(err))
-      .finally(() => {
-        // ROUTER TO STD PAGE IF ERR?
-      })
+    })
+    .catch(err => { 
+      return err
+    })
+    .finally(() => {
+      // ROUTER TO STD PAGE IF ERR?
+    })
   },
   // Add (POST) new data
   postData (url, data) {
@@ -76,26 +88,32 @@ export default {
         // console.log(url)
         // console.log('GETAUTH: ',response)
         return response.data
-      }).catch(err => console.log(err))
-        .finally(() => {
-          console.log('URL', url)
-          // ROUTER TO STD PAGE IF ERR?
-        })
+      })
+      .catch(err => { 
+        return err
+      })
+      .finally(() => {
+        console.log('URL', url)
+        // ROUTER TO STD PAGE IF ERR?
+      })
     }
   },
   postAuth (url, data) {
-    console.log(url)
-    console.log('POSTUNAUTH: ', data)
+    // console.log(url)
+    // console.log('POSTUNAUTH: ', data)
     setToken()
     if (data) {
       // console.log(url)
       // console.log('POSTAUTH: ', data)
       return axUnauth.post(url, data).then(response => {
         return response.data
-      }).catch(err => console.log(err))
-        .finally(() => {
-          // ROUTER TO STD PAGE IF ERR?
-        })
+      })
+      .catch(err => { 
+        return err
+      })
+      .finally(() => {
+        // ROUTER TO STD PAGE IF ERR?
+      })
     }
   },
   // Update (PUT) data
@@ -109,10 +127,13 @@ export default {
         // console.log('DATA', data)
         // console.log('RESPONSE', response)
         return response.data
-      }).catch(err => console.log(err))
-        .finally(() => {
-          // ROUTER TO STD PAGE IF ERR?
-        })
+      })
+      .catch(err => { 
+        return err
+      })
+      .finally(() => {
+        // ROUTER TO STD PAGE IF ERR?
+      })
     }
   }
 }

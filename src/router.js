@@ -87,7 +87,7 @@ export default new Router({
     {
       path: '/personaldetails',
       name: 'PersonalDetails',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/Users.vue')
+      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/PersonalDetails.vue')
     },
     {
       path: '/conditions',
@@ -100,8 +100,8 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/eDropletManagement.vue')
     },
     {
-      path: '/personnelsettings',
-      name: 'Personnelsettings',
+      path: '/careralertsettings',
+      name: 'CarerAlertSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
     // Sysadmin routes

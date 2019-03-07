@@ -66,6 +66,7 @@
             iconColor="white"
             route="landing"
             tip="Administration"
+            title="Administration"
           />
           <BaseAppNavBtn
             my-3
@@ -131,6 +132,7 @@
       :timeout="snackTimeout"
       :snackColor="snackColor"
       :snackText="snackText"
+      @close-snackbar="snackState = false"
     />
   </v-app>
 </template>

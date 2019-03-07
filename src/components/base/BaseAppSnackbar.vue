@@ -9,7 +9,7 @@
         auto-height
     >
         {{ snackText }}
-        <v-btn flat @click="snack = false">Close</v-btn>
+        <v-btn flat @click="$emit('close-snackbar')">Close</v-btn>
     </v-snackbar>
   </v-container>
 </template>
