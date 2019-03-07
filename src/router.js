@@ -85,9 +85,9 @@ export default new Router({
     },
     // Cliadmin routes
     {
-      path: '/carersettings',
-      name: 'CarerSettings',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
+      path: '/personaldetails',
+      name: 'PersonalDetails',
+      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/Users.vue')
     },
     {
       path: '/conditions',
@@ -95,14 +95,14 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/Conditions.vue')
     },
     {
-      path: '/eDropletManagemet',
+      path: '/edropletmanagement',
       name: 'eDropletManagement',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/eDropletManagement.vue')
     },
     {
-      path: '/personneldetails',
-      name: 'PersonnelDetails',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/Users.vue')
+      path: '/personnelsettings',
+      name: 'Personnelsettings',
+      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
     // Sysadmin routes
     {
