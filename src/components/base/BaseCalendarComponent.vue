@@ -9,8 +9,8 @@
             <calendarEvent
               v-for="(event, index) in eventsMap[date]"
               :key="index"
-              :title="event.category"
-              :color="getColorByStatus(event.category)"
+              :title="event.status"
+              :color="getColorByStatus(event.status)"
               :menuText="event.hydrationLevel"
             ></calendarEvent>
           </template>

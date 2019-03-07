@@ -27,3 +27,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@media only screen and (max-width: 992px) {
+  .v-btn, .v-btn:not(.v-btn--outline).primary {
+    color: rgba(0, 0, 0, 0);
+  }
+}
+</style>
