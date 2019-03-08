@@ -23,7 +23,7 @@ import apiLib from '@/services/apiLib'
 import store from '@/store'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import dataTable from "@/components/base/BaseDataTableComponent";
-// const awayEndpoint = 'carer/away' + store.state.away.getters.getterUserId
+const awayEndpoint = 'carer/away/' + store.getters.getterUserId
 
 export default {
   mixins: [crudRoutines],
@@ -32,8 +32,8 @@ export default {
   },
   data: () => ({
     legend: "Away Periods",
-    updateUrl: 'carer/away/' + store.getters.getterUserId,
-    readUrl: 'carer/away/' + store.getters.getterUserId,
+    updateUrl: awayEndpoint,
+    readUrl: awayEndpoint,
     items: [],
     // awayPeriods: [
     //   {
