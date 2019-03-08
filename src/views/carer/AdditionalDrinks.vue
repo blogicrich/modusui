@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <additional-drinks></additional-drinks>
+    <BaseAdditionalDrink></BaseAdditionalDrink>
   </v-container>
 </template>
 
 <script>
 /* eslint-disable */
-import BaseAdditionalDrinkComponent from "../../components/base/BaseAdditionalDrinkComponent.vue";
+import BaseAdditionalDrink from "../../components/base/BaseAdditionalDrinkComponent.vue";
 
 export default {
   components: {
-    "additional-drinks": BaseAdditionalDrinkComponent
+    BaseAdditionalDrink
   }
 };
 </script>
