@@ -340,7 +340,7 @@
           </v-btn>
         </v-fade-transition> -->
         <v-fade-transition>
-          <v-btn v-if="selected.length > 0 && editPerms.update" class="std-btn" @click="editDialog = true" :color="primaryColor" large>edit record
+          <v-btn v-if="items.length > 0 && editPerms.edit" class="std-btn" @click="editDialog = true" :color="primaryColor" large>edit record
             <v-icon class="ml-2">edit</v-icon>
           </v-btn>
         </v-fade-transition>
