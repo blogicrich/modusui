@@ -47,7 +47,7 @@ export default {
     return {
       items: [],
       crudIdKey: 'containerTypeId',
-      editPerms: { create: false, update: true, delete: false },
+      editPerms: { create: true, update: true, delete: true },
       snackColor: '',
       snackText: '',
       snack: false,

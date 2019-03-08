@@ -20,6 +20,7 @@
     <BaseDataTable
       :headers="headers"
       :items="items"
+      :editPerms="editPerms"
       :newItem="newItem"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
@@ -89,6 +90,7 @@ export default {
       // BaseDataTable
       crudIdKey: 'identifier',
       items: [],
+      editPerms: { create: false, update: true, delete: false },
       snackColor: 'primary',
       snackText: '',
       snack: false,

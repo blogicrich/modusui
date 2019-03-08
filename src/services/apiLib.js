@@ -136,7 +136,7 @@ export default {
       if (error.response) {
         if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true } )
         if (log) logger(error.response, url)
-        return error.response.statusText + ' ' + error.response.status
+        return error.response.message + ' ' + error.response.status
       } else if (error.request) {
         console.log(error.request)
       } else {

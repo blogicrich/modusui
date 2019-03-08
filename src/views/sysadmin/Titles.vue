@@ -4,6 +4,7 @@
     <BaseDataTable
       :headers="headers"
       :items="items"
+      :editPerms="editPerms"
       :newItem="newItem"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
@@ -15,7 +16,7 @@
       :error="error"
       :errorMsg="errorMsg"
       :loadingMsg="loadingMsg"
-      :loadedMsg:="loadedMsg"
+      :loadedMsg="loadedMsg"
       item-key="titleId"
       searchLabel="Search Records..."
       tableTitle="Titles"
@@ -54,6 +55,7 @@ export default {
   data () {
     return {
       items: [],
+      editPerms: { create: true, update: true, delete: true },
       snackColor: 'primary',
       snackText: '',
       snack: false,

@@ -4,6 +4,7 @@
     <BaseDataTable
       :headers="headers"
       :items="items"
+      :editPerms="editPerms"
       :newItem="newItem"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
@@ -54,6 +55,7 @@ export default {
   data () {
     return {
       items: [],
+      editPerms: { create: true, update: true, delete: true },
       crudIdKey: 'genderId',
       snackColor: '',
       snackText: '',

@@ -81,7 +81,7 @@ export const crudRoutines = {
         this.loadedMsg = 'No current records to display - There are no entries for this table.'
         this.loaded = true
         this.error = false
-        console.log('FIRRRINGNNGNGNGNNGNGN: ', this.loadedMsg)
+        // console.log('FIRRRINGNNGNGNGNNGNGN: ', this.loadedMsg)
       } else {
         // console.log("Items: ", this.items)
         this.items = response
