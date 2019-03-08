@@ -28,15 +28,6 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
-  <v-snackbar
-    v-model="snack"
-    bottom
-    :timeout="timeout"
-    :color="snackColor"
-  >
-    {{ snackText }}
-    <v-btn flat @click="snack = false">Close</v-btn>
-  </v-snackbar>
   </v-container>
 </template>
 
@@ -101,7 +92,7 @@ export default {
       this.showSnack(items.snackText, items.snackColor)
     }
   },
-  created () {
+  mounted () {
     this.getItems(this.readUrl)
   }
 }
