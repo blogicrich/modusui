@@ -8,7 +8,7 @@
       <v-divider class="cardBorder"></v-divider>
     </v-layout>
   <v-layout row wrap>
-    <v-flex xs12 sm6 v-for="(item, index) in dataBox">
+    <v-flex xs12 sm6 v-for="(item, index) in dataBox" :key="index">
       <v-layout column class="pa-2 my-3">
         <v-card height="50">
           <v-layout fill-height align-center>
@@ -20,12 +20,12 @@
             <span slot="firstSlot">{{ item.cardText }}</span>
             <span slot="firstRightSlot">{{ radioText }}</span>
             <v-radio-group
-              v-model="data[index]"
+
               row
               class="mx-3 my-2"
               color="primary"
               slot="secondRightSlot">
-              <v-radio class="ma-2" color="primary" v-for="radio in radios" :value="radio" :label="radio"></v-radio>
+              <v-radio class="ma-2" color="primary" v-for="radio in radios" :key="radio" :value="radio" @change="test()" :label="radio"></v-radio>
             </v-radio-group>
           </baseComponent>
         </v-card>
@@ -51,8 +51,8 @@ export default {
     headerText: String
   },
   methods: {
-    radioChanged () {
-
+    test () {
+      // console.log(this.data[0][blueLight]);
       // $emit('radio-option-changed', item)
     },
     selectChanged (item) {

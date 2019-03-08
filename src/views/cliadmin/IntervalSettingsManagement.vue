@@ -20,7 +20,7 @@
       :data="data"
       :headerText="advancedOptions"
     >
-      <v-icon slot="btnSlot" @click="iconClicked">expand_more</v-icon>
+      <v-icon slot="btnSlot" large @click="iconClicked">expand_more</v-icon>
     </subAlertCard>
   </v-layout>
 </template>
@@ -36,7 +36,7 @@ export default {
   },
   data () {
     return {
-      multiple: true,
+      multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
       intervalOptions: 'eDroplet Reminder Interval Options',
