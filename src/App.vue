@@ -66,6 +66,7 @@
             iconColor="white"
             route="landing"
             tip="Administration"
+            title="Administration"
           />
           <BaseAppNavBtn
             my-3
@@ -126,19 +127,27 @@
         </v-layout>
       </v-footer>
     </v-fade-transition>
-    <BaseAppSnackbar
-      :snack="snackState"
+    <v-snackbar
+      v-model="snackState"
+      :color="snackColor"
       :timeout="snackTimeout"
-      :snackColor="snackColor"
-      :snackText="snackText"
-    />
+      bottom
+    >
+      {{ snackText }}
+      <v-btn
+        dark
+        flat
+        @click="snackState = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 /* eslint-disable */
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
-import BaseAppSnackbar from '@/components/base/BaseAppSnackbar.vue'
 import { EventBus } from '@/mixins/eventBus.js'
 import { setTimeout } from 'timers'
 
@@ -146,8 +155,7 @@ import { setTimeout } from 'timers'
 export default {
   name: 'App',
   components: {
-    BaseAppNavBtn,
-    BaseAppSnackbar
+    BaseAppNavBtn
   },
   data () {
     return {
@@ -233,7 +241,6 @@ export default {
       }
     },
     showSnack (eventPayload) {
-      console.log("FIRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRED!!!!", eventPayload.text, eventPayload.color, eventPayload.state, eventPayload.time)
       this.snackText = eventPayload.text 
       this.snackColor = eventPayload.color
       this.snackTimeout = eventPayload.time
@@ -266,7 +273,7 @@ export default {
   mounted () {
     EventBus.$on('snack-msg', data => {
       this.showSnack(data)
-    })//this.showSnack())
+    })
   },
   destroyed () {
     EventBus.$off('snack-msg', this.showSnack())
