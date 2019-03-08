@@ -5,6 +5,7 @@
       :headers="headers"
       :items="items"
       :newItem="newItem"
+      :editPerms="editPerms"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
@@ -28,15 +29,6 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
-  <v-snackbar
-    v-model="snack"
-    bottom
-    :timeout="timeout"
-    :color="snackColor"
-  >
-    {{ snackText }}
-    <v-btn flat @click="snack = false">Close</v-btn>
-  </v-snackbar>
   </v-container>
 </template>
 
@@ -55,6 +47,7 @@ export default {
     return {
       items: [],
       crudIdKey: 'containerTypeId',
+      editPerms: { create: false, update: true, delete: false },
       snackColor: '',
       snackText: '',
       snack: false,
@@ -74,15 +67,21 @@ export default {
       icon: 'local_drink',
       iconAdd: 'add',
       headers: [
-        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'containerTypeId', align: 'left', sortable: true, value: 'containerTypeId', cellType: 'tb', hidden: true, editable: true },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
         { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
+        { 
+          description: ' ', 
+          cellType: 'md', 
+          attr: 'description', 
+          cellLabel: 'Description', 
+          menuItems: [{'value' : 'true', 'type': 'false'}, {'value' : 'false', 'type': 'true'}], 
+          displayVal: 'value', 
+          returnVal: 'type', 
+          validators: [] 
+        },
         { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ],
       defaultItem: [
@@ -104,8 +103,9 @@ export default {
       this.showSnack(items.snackText, items.snackColor)
     }
   },
-  created () {
+  mounted () {
     this.getItems(this.readUrl)
+    console.log(this.loadedMsg)
   }
 }
 </script>

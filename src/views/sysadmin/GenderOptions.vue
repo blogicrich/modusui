@@ -74,9 +74,6 @@ export default {
       icon: 'wc',
       iconAdd: 'add',
       headers: [
-        // { text: 'portalPersonsId', align: 'left', sortable: false, value: 'portalPersonsId', cellType: 'tb', hidden: true, editable: false },
-        // { text: 'DeptPersonsId', align: 'left', sortable: false, value: 'deptPersonsId', cellType: 'tb', hidden: true, editable: true },
-        // { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: true },
         { text: 'genderId', align: 'left', sortable: true, value: 'genderId', cellType: 'tb', hidden: true, editable: true },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
         { text: 'Target Consumption', align: 'left', sortable: true, value: 'targetConsumption', cellType: 'tb', hidden: false, editable: true }

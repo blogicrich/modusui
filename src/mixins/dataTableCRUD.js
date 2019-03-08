@@ -1,5 +1,4 @@
-import apiLib from '../services/apiLib.js'
-import { EventBus } from '@/mixins/eventBus.js'
+import apiLib from '@/services/apiLib.js'
 
 export const crudRoutines = {
   methods: {
@@ -12,14 +11,15 @@ export const crudRoutines = {
         })
       }
       // console.log('data: ', row)
-      await apiLib.postData(this.createUrl, row).then(response => {
-        EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
+      await apiLib.postData(this.createUrl, row, true, true).then(response => {
+        return response
       })
-      .catch(err => {
-        EventBus.$emit('snack-msg', { text: err, time: 6000, color: 'error', state: true } )
+      .catch(error => {
       })
       this.resetItem()
+      this.getItems(this.readUrl)
     },
+
     async deleteItem (items) {
       for (var i = 0; i < items.length; i++) {
         let index = this.items.indexOf(items[i])
@@ -27,13 +27,11 @@ export const crudRoutines = {
         // console.log(items[i], this.crudIdKey, this.delUrl, id)
         // console.log('id: ', id)
         // console.log(this.delUrl, + '/' + items[i][this.crudIdKey])
-        await apiLib.deleteData(this.delUrl + '/' + id)
-        .then(reponse => {
+        await apiLib.deleteData(this.delUrl + '/' + id, true, true)
+        .then(response => {
           this.items.splice(index, 1)
-          EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
         })
-        .catch(err => {
-          EventBus.$emit('snack-msg', { text: err, time: 6000, color: 'error', state: true } )
+        .catch(error => {
         })
         
       }
@@ -43,65 +41,66 @@ export const crudRoutines = {
     async editItems (items) {
       for (var i = 0; i < items.length; i++) {
         var defaultItem = this.defaultItem
-        // var row = {}
-        // var editedItems = []
         for (var j = 0; j < defaultItem.length; j++) {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
-            console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
+            // console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
           })
           console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
-          apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
+          apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
           .then(response => {
-            EventBus.$emit('snack-msg', { text: response.message, time: 6000, color: 'success', state: true } )
           })
-          .catch(err => {
-            EventBus.$emit('snack-msg', { text: err, time: 6000, color: 'error', state: true } )
+          .catch(error => {
           })
           .finally()
         }
-        this.getItems(this.readUrl)
       }
       if (this.newItem) {
         this.resetItem()
       }
+      this.getItems(this.readUrl)
     },
+
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      var response = await apiLib.getData(this.readUrl)
+      var response = await apiLib.getData(this.readUrl, true, true)
       // console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
+        console.log('FIRRRINGNNGNGNGNNGNGN')
         this.items = []
         this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
         this.loading = false
         this.loaded = false
         this.error = true
         this.errorColor
-      } else if (response.length <= 0) {
+      } else if (response.length === 0) {
         this.items = []
-        this.loadedMsg = 'No current records to display - There are no entries for this table.'
         this.loading = false
+        this.loadedMsg = 'No current records to display - There are no entries for this table.'
         this.loaded = true
         this.error = false
+        console.log('FIRRRINGNNGNGNGNNGNGN: ', this.loadedMsg)
       } else {
-        console.log("Items: ", this.items)
+        // console.log("Items: ", this.items)
         this.items = response
-        if (this.urls) this.setMenuItems(this.urls)
+        if (this.urls !== undefined) await this.setMenuItems(this.urls)
         this.loading = false
         this.loaded = false
         this.error = false
       }
     },
+    
     async refreshItems () {
-      EventBus.$emit('snack-msg', { text: "Cancelled admin action", time: 6000, color: 'info', state: true } )
-      await this.getItems(this.readUrl)
+      this.resetItem()
+      // await this.getItems(this.readUrl)
+      // if (this.urls) await this.setMenuItems(this.urls)
     },
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {
         for (var i = 0; i < urls.length; i++) {
-          var menuItems = await apiLib.getData(urls[i].url)
+          var menuItems = await apiLib.getData(urls[i].url, true, true)
           var values = []
           for (var j = 0; j < menuItems.length; j++) {
             let val = menuItems[j]
