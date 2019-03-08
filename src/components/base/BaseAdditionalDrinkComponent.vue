@@ -75,16 +75,7 @@ export default {
         { text: "Name", value: "name" },
         { text: "Amount", value: "amount" }
       ],
-      drinks: [
-        // {
-        //   name: "Coffee",
-        //   amount: "1 Litre"
-        // },
-        // {
-        //   name: "Water",
-        //   amount: "2 Litres"
-        // }
-      ],
+      drinks: [],
       newItem: [
         {
           Name: "",
