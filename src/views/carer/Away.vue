@@ -1,54 +1,168 @@
 <template>
   <v-container>
-    <h1>{{legend}}</h1>
-    <v-layout>
-      <v-card v-for="(awayPeriod, index) in awayPeriods" :key="index">
-        <v-container>
-          <h3>{{formatDateAsString(awayPeriod.startDate)}} - {{formatDateAsString(awayPeriod.endDate)}}</h3>
-          <v-checkbox
-            color="primary"
-            v-model="awayPeriod.drinksAccounted"
-            label="Drinks Accounted?"
-          ></v-checkbox>
-        </v-container>
-      </v-card>
-    </v-layout>
+    <dataTable
+      :tableTitle="legend"
+      :headers="headers"
+      :addBtnTitle="btnTitle"
+      :primaryColor="primaryColor"
+      :items="items"
+      :newItem="newItem"
+      searchLabel="Search Records..."
+      recordIcon="calendar_today"
+      editDialogTitle="Edit Away Period(s)"
+      item-key="awayId"
+      :editPerms="editPerms"
+      @itemsEdited="editItems"
+    ></dataTable>
   </v-container>
-  <!-- <dataTable :headers="headers" :addBtnTitle="btnTitle" :primaryColor="primaryColor" items=""></dataTable> -->
 </template>
 
 <script>
-import store from "@/store";
-// import dataTable from '@/components/base/BaseDataTableComponent'
+
+import apiLib from '@/services/apiLib'
+import store from '@/store'
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import dataTable from "@/components/base/BaseDataTableComponent";
+// const awayEndpoint = 'carer/away' + store.state.away.getters.getterUserId
 
 export default {
+  mixins: [crudRoutines],
   components: {
-    // dataTable
+    dataTable
   },
   data: () => ({
     legend: "Away Periods",
-    awayPeriods: [
+    updateUrl: 'carer/away/' + store.getters.getterUserId,
+    readUrl: 'carer/away/' + store.getters.getterUserId,
+    items: [],
+    // awayPeriods: [
+    //   {
+    //     awayId: 0,
+    //     startDate: new Date("March 8, 2019 09:30:00"),
+    //     endDate: new Date("March 10, 2019 16:30:00"),
+    //     drinksAccounted: true
+    //   },
+    //   {
+    //     awayId: 1,
+    //     startDate: new Date("March 6, 2019 11:15:00"),
+    //     endDate: new Date("March 12, 2019 19:00:00"),
+    //     drinksAccounted: false
+    //   },
+    //   {
+    //     awayId: 2,
+    //     startDate: new Date("February 26, 2001 12:00:00"),
+    //     endDate: new Date("December 9, 2002 12:00:00"),
+    //     drinksAccounted: false
+    //   }
+    // ],
+    headers: [
       {
-        startDate: new Date("March 8, 2019 09:30:00"),
-        endDate: new Date("March 10, 2019 16:30:00"),
-        drinksAccounted: true
+        text: "awayId",
+        align: "left",
+        sortable: false,
+        value: "awayId",
+        cellType: "md",
+        hidden: true,
+        editable: false
       },
       {
-        startDate: new Date("March 6, 2019 11:15:00"),
-        endDate: new Date("March 12, 2019 19:00:00"),
-        drinksAccounted: false
+        text: "Drinks Accounted?",
+        align: "left",
+        sortable: false,
+        value: "drinksAccounted",
+        cellType: "md",
+        hidden: false,
+        editable: true
       },
       {
-        startDate: new Date("February 26, 2001 12:00:00"),
-        endDate: new Date("December 9, 2002 12:00:00"),
-        drinksAccounted: false
+        text: "Start Date",
+        align: "left",
+        sortable: true,
+        value: "startDate",
+        cellType: "tb",
+        hidden: false,
+        editable: false
       },
-    ]
-    // headers: [{ text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },],
-    // btnTitle: "Record Time Away",
-    // primaryColor: "primary"
+      {
+        text: "End Date",
+        align: "left",
+        sortable: true,
+        value: "endDate",
+        cellType: "tb",
+        hidden: false,
+        editable: false
+      }
+    ],
+    newItem: [
+      {
+        description: " ",
+        cellType: "tb",
+        attr: "drinksAccounted",
+        cellLabel: "Drinks Accounted?",
+        menuItems: [],
+        validators: []
+      },
+      {
+        volume: " ",
+        cellType: "tb",
+        attr: "volume",
+        cellLabel: "Volume",
+        menuItems: [],
+        validators: []
+      }
+    ],
+    defaultItem: [
+      {
+        drinksAccounted: false,
+        startDate: "26 Feb 2001, 12:00",
+        endDate: "9 Dec 2002, 12:00"
+      }
+    ],
+    editPerms: {
+      create: false, 
+      update: true, 
+      delete: false
+    },
+    btnTitle: "Record Time Away",
+    primaryColor: "primary"
   }),
+  // computed: {
+  //   items: function() {
+  //     let items = [];
+
+  //     for (let i = 0; i < this.awayPeriods.length; i++) {
+  //       let awayPeriod = this.awayPeriods[i];
+  //       let item = {
+  //         awayId: awayPeriod.awayId,
+  //         startDate: this.formatDateAsString(awayPeriod.startDate),
+  //         endDate: this.formatDateAsString(awayPeriod.endDate),
+  //         drinksAccounted: awayPeriod.drinksAccounted
+  //       };
+  //       items.push(item);
+  //     }
+  //     return items;
+  //   }
+  // },
   methods: {
+    resetItem() {
+      this.newItem = [
+        {
+          description: " ",
+          cellType: "tb",
+          attr: "drinksAccounted",
+          cellLabel: "Drinks Accounted?",
+          menuItems: [],
+          validators: []
+        }
+      ];
+      this.defaultItem = [
+        {
+          drinksAccounted: false,
+          startDate: "26 Feb 2001, 12:00",
+          endDate: "9 Dec 2002, 12:00"
+        }
+      ];
+    },
     formatDateAsString: function(date) {
       const options = {
         timeZone: "UTC",
@@ -61,6 +175,14 @@ export default {
       let dateString = date.toLocaleString("en-GB", options);
       return dateString;
     }
+  },
+  mounted () {
+    console.log('URL: ' + this.readUrl)
+    this.getItems(this.readUrl, true, true)
+    console.log(this.loadedMsg)
   }
 };
 </script>
+<style scoped lang="scss">
+@import "./public/scss/main.scss";
+</style>
