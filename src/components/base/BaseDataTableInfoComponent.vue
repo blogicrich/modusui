@@ -69,6 +69,9 @@ export default {
     loading: Boolean,
     loaded: Boolean,
     error: Boolean
+  },
+  mounted () {
+    console.log(this.loadedMsg)
   }
 }
 </script>

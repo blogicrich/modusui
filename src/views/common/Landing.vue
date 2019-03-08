@@ -101,7 +101,7 @@
         </v-flex>
       </v-layout>
       <v-layout v-if="this.user !== 'SYSTEM ADMINISTRATOR' && this.user !== 'CARER'" row wrap align-start justify-start class="landing-cli-admin">
-          <v-flex sm6 lg4>
+          <v-flex sm6 lg3>
             <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
               <v-icon
                 class="ma-1"
@@ -118,15 +118,9 @@
               icon="person"
               colorIcon="#006480"
             />
-            <BaseLinkComponent
-              routerTitle= "Conditions"
-              link="/conditions"
-              tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
-              icon="priority_high"
-              colorIcon="#006480"
-            />
+
           </v-flex>
-          <v-flex sm6 lg4>
+          <v-flex sm6 lg3>
             <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
               <v-icon
                 class="ma-1"
@@ -145,11 +139,36 @@
             />
             <BaseLinkComponent
               routerTitle= "Interval Settings Management"
-              link="/intervalsettings"
+              link="/intervalsettingsmanagement"
               tooltipText="Set the reminder and Communication intervals for your eDroplets"
               icon="notification_important"
               colorIcon="#006480"
             />
+            <BaseLinkComponent
+              routerTitle= "Conditions"
+              link="/conditions"
+              tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
+              icon="priority_high"
+              colorIcon="#006480"
+            />
+          </v-flex>
+          <v-flex sm6 lg3>
+            <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+              <v-icon
+                class="ma-1"
+                medium
+                color="white"
+                >supervisor_account
+              </v-icon>
+              <h2 class="ma-1 text-white">eDroplet Management</h2>
+            </v-layout>
+            <!-- <BaseLinkComponent
+              routerTitle= "Personnel Settings"
+              link="/personnelsettings"
+              tooltipText="Set the desired Alert notifications for designated Carers"
+              icon="notifications_active"
+              colorIcon="#006480"
+            /> -->
             <BaseLinkComponent
               routerTitle= "eDroplet Management"
               link="/edropletmanagement"
@@ -158,7 +177,7 @@
               colorIcon="#006480"
             />
           </v-flex>
-          <v-flex sm6 lg4>
+          <v-flex sm6 lg3>
             <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
               <v-icon
                 class="ma-1"
@@ -168,11 +187,18 @@
               </v-icon>
               <h2 class="ma-1 text-white">Carer Settings</h2>
             </v-layout>
-            <BaseLinkComponent
+            <!-- <BaseLinkComponent
               routerTitle= "Personnel Settings"
               link="/personnelsettings"
               tooltipText="Set the desired Alert notifications for designated Carers"
               icon="notifications_active"
+              colorIcon="#006480"
+            /> -->
+            <BaseLinkComponent
+              routerTitle= "Carer / Alert Settings"
+              link="/careralertsettings"
+              tooltipText="Manage alert settings"
+              icon="local_drink"
               colorIcon="#006480"
             />
           </v-flex>
@@ -185,7 +211,6 @@
 
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
 import BaseLinkComponent from '@/components/base/BaseLinkComponent.vue'
-import { log } from 'util';
 
 export default {
   name: 'Landing',
@@ -201,7 +226,6 @@ export default {
   },
   created () {
     this.user = JSON.parse(localStorage.auth).level
-    console.log(this.user)
   }
 }
 </script>

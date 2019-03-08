@@ -69,10 +69,10 @@ export default {
     }
   },
   created () {
-    apiLib.getData(this.readUrl)
-    // this.getItems(this.readUrl).then(data => {
-    //   this.items = data
-    // })
+    // apiLib.getData(this.readUrl)
+    this.getItems(this.readUrl).then(data => {
+      this.items = data
+    })
     //   .catch(err => console.log(err))
     //   .finally(() => {
     //     // console.log(data)

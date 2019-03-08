@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row fill-height align-center justify-end wrap>
     <v-icon large color="primary">build</v-icon>
-    <h1 class="pg-header">Conditions</h1>
+    <h1 class="pg-header">eDroplet Management</h1>
     <v-spacer></v-spacer>
     <BaseUserSelect
       v-if="userPerms"
@@ -20,6 +20,7 @@
     <BaseDataTable
       :headers="headers"
       :items="items"
+      :editPerms="editPerms"
       :newItem="newItem"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
@@ -33,16 +34,13 @@
       :loadingMsg="loadingMsg"
       :loadedMsg="loadedMsg"
       :crudIdKey="crudIdKey"
-      item-key="identifier"
+      item-key="accountId"
       searchLabel="Search Records..."
-      tableTitle="User Condition Records"
-      newDialogTitle="Add a New Condition Record"
-      editDialogTitle="Edit Condition Records"
+      tableTitle="eDroplet Records Records"
+      editDialogTitle="Edit eDroplet Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      @newItem="addItem"
       @itemsEdited="editItems"
-      @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
   </v-container>
@@ -55,7 +53,7 @@ import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 
 export default {
-  name: 'Conditions',
+  name: 'EdropletManagement',
   mixins: [crudRoutines],
   components: {
     BaseDataTable,
@@ -92,6 +90,7 @@ export default {
       // BaseDataTable
       crudIdKey: 'identifier',
       items: [],
+      editPerms: { create: false, update: true, delete: false },
       snackColor: 'primary',
       snackText: '',
       snack: false,
