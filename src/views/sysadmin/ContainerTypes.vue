@@ -5,6 +5,7 @@
       :headers="headers"
       :items="items"
       :newItem="newItem"
+      :editPerms="editPerms"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
@@ -46,6 +47,7 @@ export default {
     return {
       items: [],
       crudIdKey: 'containerTypeId',
+      editPerms: { create: false, update: true, delete: false },
       snackColor: '',
       snackText: '',
       snack: false,
@@ -70,7 +72,16 @@ export default {
         { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
+        { 
+          description: ' ', 
+          cellType: 'md', 
+          attr: 'description', 
+          cellLabel: 'Description', 
+          menuItems: [{'value' : 'true', 'type': 'false'}, {'value' : 'false', 'type': 'true'}], 
+          displayVal: 'value', 
+          returnVal: 'type', 
+          validators: [] 
+        },
         { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ],
       defaultItem: [
@@ -94,6 +105,7 @@ export default {
   },
   mounted () {
     this.getItems(this.readUrl)
+    console.log(this.loadedMsg)
   }
 }
 </script>

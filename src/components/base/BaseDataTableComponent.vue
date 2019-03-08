@@ -24,11 +24,12 @@
         </v-flex>
         <v-spacer></v-spacer>
         <v-divider
+          v-if="editPerms.create"
           class="mx-2 mr-3"
           inset
           vertical
         ></v-divider>
-        <v-btn @click="newDialog = true" :color="primaryColor">{{ addBtnTitle }}
+        <v-btn v-if="editPerms.create" @click="newDialog = true" :color="primaryColor">{{ addBtnTitle }}
           <v-icon class="ml-2">{{ addRecordIcon }}</v-icon>
         </v-btn>
       </v-toolbar>
@@ -160,6 +161,7 @@
             </v-pagination>
   <!-- Table: Footer Speed dial -->
             <v-speed-dial
+              v-if="$vuetify.breakpoint.mdAndDown"
               v-model="fab"
               class="table-fab ma-0"
               absolute
@@ -182,7 +184,7 @@
                 <v-icon>close</v-icon>
               </v-btn>
               <v-btn
-                v-if="selected.length > 0"
+                v-if="selected.length > 0 && editPerms.update"
                 @click="editDialog = true"
                 fab
                 dark
@@ -192,6 +194,7 @@
                 <v-icon>edit</v-icon>
               </v-btn>
               <v-btn
+                v-if="editPerms.create"
                 @click="newDialog = true"
                 fab
                 dark
@@ -201,7 +204,7 @@
                 <v-icon>add</v-icon>
               </v-btn>
               <v-btn
-                v-if="selected.length > 0"
+                v-if="selected.length > 0 && editPerms.create"
                 @click="delDialog = true"
                 fab
                 dark
@@ -337,12 +340,17 @@
           </v-btn>
         </v-fade-transition> -->
         <v-fade-transition>
-          <v-btn v-if="selected.length > 0" class="std-btn" @click="editDialog = true" :color="primaryColor" large>edit record
+          <v-btn v-if="selected.length > 0 && editPerms.update" class="std-btn" @click="editDialog = true" :color="primaryColor" large>edit record
             <v-icon class="ml-2">edit</v-icon>
           </v-btn>
         </v-fade-transition>
         <v-fade-transition>
-          <v-btn v-if="selected.length > 0" class="std-btn" @click="delDialog = true" :color="primaryColor" large>delete
+          <v-btn v-if="selected.length > 0 && editPerms.delete" class="std-btn" @click="delDialog = true" :color="primaryColor" large>delete
+            <v-icon class="ml-2">delete</v-icon>
+          </v-btn>
+        </v-fade-transition>
+        <v-fade-transition>
+          <v-btn v-if="items.length > 0" class="std-btn" @click="searchDisplay" :color="primaryColor" large>search
             <v-icon class="ml-2">delete</v-icon>
           </v-btn>
         </v-fade-transition>
@@ -735,6 +743,8 @@ export default {
     recordIcon: String,
     addRecordIcon: String,
     addBtnTitle: String,
+    editPerms: Object
+
   },
   computed: {
     pages () {
@@ -828,6 +838,7 @@ export default {
   },
   mounted() {
     // console.log(this.newItem.find(attribute => attribute).returnVal)
+    console.log(this.loadedMsg)
   }
 }
 </script>

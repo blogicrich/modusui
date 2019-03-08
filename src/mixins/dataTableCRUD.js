@@ -68,18 +68,20 @@ export const crudRoutines = {
       // console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
+        console.log('FIRRRINGNNGNGNGNNGNGN')
         this.items = []
         this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
         this.loading = false
         this.loaded = false
         this.error = true
         this.errorColor
-      } else if (response.length <= 0) {
+      } else if (response.length === 0) {
         this.items = []
-        this.loadedMsg = 'No current records to display - There are no entries for this table.'
         this.loading = false
+        this.loadedMsg = 'No current records to display - There are no entries for this table.'
         this.loaded = true
         this.error = false
+        console.log('FIRRRINGNNGNGNGNNGNGN: ', this.loadedMsg)
       } else {
         // console.log("Items: ", this.items)
         this.items = response
