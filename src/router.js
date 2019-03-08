@@ -104,6 +104,11 @@ export default new Router({
       name: 'CarerAlertSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
+    {
+      path: '/intervalsettingsmanagement',
+      name: 'IntervalSettingsManagement',
+      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/IntervalSettingsManagement.vue')
+    },
     // Sysadmin routes
     {
       path: '/conditionsoptions',

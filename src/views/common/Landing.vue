@@ -139,7 +139,7 @@
             />
             <BaseLinkComponent
               routerTitle= "Interval Settings Management"
-              link="/intervalsettings"
+              link="/intervalsettingsmanagement"
               tooltipText="Set the reminder and Communication intervals for your eDroplets"
               icon="notification_important"
               colorIcon="#006480"
