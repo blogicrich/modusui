@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     iconClicked () {
-      console.log('eafeafaf');
+      console.log('collapse');
     }
   }
 }

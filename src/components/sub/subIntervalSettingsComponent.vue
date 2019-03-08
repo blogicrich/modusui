@@ -20,12 +20,11 @@
             <span slot="firstSlot">{{ item.cardText }}</span>
             <span slot="firstRightSlot">{{ radioText }}</span>
             <v-radio-group
-
               row
               class="mx-3 my-2"
               color="primary"
               slot="secondRightSlot">
-              <v-radio class="ma-2" color="primary" v-for="radio in radios" :key="radio" :value="radio" @change="test()" :label="radio"></v-radio>
+              <v-radio class="ma-2" color="primary" v-for="radio in radios" :key="radio" :value="radio" :label="radio"></v-radio>
             </v-radio-group>
           </baseComponent>
         </v-card>
@@ -49,16 +48,6 @@ export default {
     radios: Array,
     data: Array,
     headerText: String
-  },
-  methods: {
-    test () {
-      // console.log(this.data[0][blueLight]);
-      // $emit('radio-option-changed', item)
-    },
-    selectChanged (item) {
-      console.log(item)
-      // $emit('select-changed', item)
-    }
   }
 }
 </script>
