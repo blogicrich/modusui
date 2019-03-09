@@ -1,62 +1,188 @@
 <template>
   <v-container>
-    <h1>Consumption per day</h1>
-    <base-calendar :events="getDayReports()" :colorStatusPairs="colorStatusPairs"></base-calendar>
+    <dataTable
+      :tableTitle="legend"
+      :headers="headers"
+      :addBtnTitle="btnTitle"
+      :primaryColor="primaryColor"
+      :items="items"
+      :newItem="newItem"
+      searchLabel="Search Records..."
+      recordIcon="calendar_today"
+      editDialogTitle="Edit Away Period(s)"
+      item-key="awayId"
+      :editPerms="editPerms"
+      @itemsEdited="editItems"
+    ></dataTable>
   </v-container>
 </template>
 
 <script>
+
+import apiLib from '@/services/apiLib'
 import store from '@/store'
-import BaseCalendarComponent from '@/components/base/BaseCalendarComponent'
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import dataTable from "@/components/base/BaseDataTableComponent";
+const awayEndpoint = 'carer/away/' + store.getters.getterUserId
 
 export default {
+  mixins: [crudRoutines],
   components: {
-    'base-calendar': BaseCalendarComponent
+    dataTable
   },
   data: () => ({
-    colorStatusPairs: [
-      { color: 'green', status: 'Hydrated' },
-      { color: 'amber', status: 'Little Dehydrated' },
-      { color: 'red', status: 'Dehydrated' },
-      { color: 'amber', status: 'Little Overhydrated'},
-      { color: 'red', status: 'Overhydrated'}
-    ]
-  }),
-  methods: {
-    getDayReports: function () {
-      let dayReports = []
-      let apiData = store.state.report.reportsSnapshot
-      for (let i = 0; i < apiData.length; i++) {
-        let dayReport = apiData[i]
-        let status = this.getDescription(dayReport.aggregatedHyration)
-        let hydrationLevel =
-          dayReport.volumeConsumedViaEDroplet +
-          dayReport.volumeConsumedViaOther +
-          '/' +
-          dayReport.hydrationTarget
-        let date = dayReport.dateTime
-
-        dayReports.push({
-          status: status,
-          hydrationLevel: hydrationLevel,
-          date: date
-        })
+    legend: "Away Periods",
+    updateUrl: awayEndpoint,
+    readUrl: awayEndpoint,
+    items: [],
+    // awayPeriods: [
+    //   {
+    //     awayId: 0,
+    //     startDate: new Date("March 8, 2019 09:30:00"),
+    //     endDate: new Date("March 10, 2019 16:30:00"),
+    //     drinksAccounted: true
+    //   },
+    //   {
+    //     awayId: 1,
+    //     startDate: new Date("March 6, 2019 11:15:00"),
+    //     endDate: new Date("March 12, 2019 19:00:00"),
+    //     drinksAccounted: false
+    //   },
+    //   {
+    //     awayId: 2,
+    //     startDate: new Date("February 26, 2001 12:00:00"),
+    //     endDate: new Date("December 9, 2002 12:00:00"),
+    //     drinksAccounted: false
+    //   }
+    // ],
+    headers: [
+      {
+        text: "awayId",
+        align: "left",
+        sortable: false,
+        value: "awayId",
+        cellType: "md",
+        hidden: true,
+        editable: false
+      },
+      {
+        text: "Drinks Accounted?",
+        align: "left",
+        sortable: false,
+        value: "drinksAccounted",
+        cellType: "md",
+        hidden: false,
+        editable: true
+      },
+      {
+        text: "Start Date",
+        align: "left",
+        sortable: true,
+        value: "startDate",
+        cellType: "tb",
+        hidden: false,
+        editable: false
+      },
+      {
+        text: "End Date",
+        align: "left",
+        sortable: true,
+        value: "endDate",
+        cellType: "tb",
+        hidden: false,
+        editable: false
       }
-      return dayReports
+    ],
+    newItem: [
+      {
+        description: " ",
+        cellType: "tb",
+        attr: "drinksAccounted",
+        cellLabel: "Drinks Accounted?",
+        menuItems: [],
+        validators: []
+      },
+      {
+        volume: " ",
+        cellType: "tb",
+        attr: "volume",
+        cellLabel: "Volume",
+        menuItems: [],
+        validators: []
+      }
+    ],
+    defaultItem: [
+      {
+        drinksAccounted: false,
+        startDate: "26 Feb 2001, 12:00",
+        endDate: "9 Dec 2002, 12:00"
+      }
+    ],
+    editPerms: {
+      create: false, 
+      update: true, 
+      delete: false
     },
-    getDescription: function (aggregatedHydration) {
-      if(aggregatedHydration <= 60) {
-        return 'Dehydrated'
-      } else if (aggregatedHydration <= 90) {
-        return 'Little Dehydrated'
-      } else if (aggregatedHydration >= 120) {
-        return 'little Overhydrated'
-      } else if (aggregatedHydration >= 150) {
-        return 'Overhydrated'
-      } else {
-        return 'Hydrated'
-      }
+    btnTitle: "Record Time Away",
+    primaryColor: "primary"
+  }),
+  // computed: {
+  //   items: function() {
+  //     let items = [];
+
+  //     for (let i = 0; i < this.awayPeriods.length; i++) {
+  //       let awayPeriod = this.awayPeriods[i];
+  //       let item = {
+  //         awayId: awayPeriod.awayId,
+  //         startDate: this.formatDateAsString(awayPeriod.startDate),
+  //         endDate: this.formatDateAsString(awayPeriod.endDate),
+  //         drinksAccounted: awayPeriod.drinksAccounted
+  //       };
+  //       items.push(item);
+  //     }
+  //     return items;
+  //   }
+  // },
+  methods: {
+    resetItem() {
+      this.newItem = [
+        {
+          description: " ",
+          cellType: "tb",
+          attr: "drinksAccounted",
+          cellLabel: "Drinks Accounted?",
+          menuItems: [],
+          validators: []
+        }
+      ];
+      this.defaultItem = [
+        {
+          drinksAccounted: false,
+          startDate: "26 Feb 2001, 12:00",
+          endDate: "9 Dec 2002, 12:00"
+        }
+      ];
+    },
+    formatDateAsString: function(date) {
+      const options = {
+        timeZone: "UTC",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      };
+      let dateString = date.toLocaleString("en-GB", options);
+      return dateString;
     }
+  },
+  mounted () {
+    console.log('URL: ' + this.readUrl)
+    this.getItems(this.readUrl, true, true)
+    console.log(this.loadedMsg)
   }
-}
+};
 </script>
+<style scoped lang="scss">
+@import "./public/scss/main.scss";
+</style>
