@@ -49,10 +49,6 @@ export default {
       crudIdKey: 'personsId',
       items: [],
       editPerms: { create: true, update: true, delete: true },
-      snackColor: 'primary',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
       loading: true,
       loaded: false,
       error: false,
@@ -81,9 +77,10 @@ export default {
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { corporateId: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
+        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] },
       ],
       defaultItem: [
-        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateId: '', username: '' }
+        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateId: '', username: '', password: '' }
       ],
       urls: [
         { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' },
