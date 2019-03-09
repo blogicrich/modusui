@@ -22,7 +22,7 @@
       >
         <v-icon slot="leftSlot" large :color="primaryColor">{{ usersIcon }}</v-icon>
         <span slot="middleFirstNameSlot">{{ item.givenName }} {{ item.familyName }}</span>
-        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydrationValue }}/{{ item.calculatedTargetConsumption }}</span>
+        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydrationValue }} / {{ item.calculatedTargetConsumption }}</span>
         <span slot="middleThirdNameSlot">{{ item.lastComm }}</span>
         <v-btn flat fab slot="firstRightSlot" to="/alerts"><v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon></v-btn>
         <v-btn flat fab slot="secondRightSlot" @click="addComment(item)"><v-icon :color="primaryColor">{{ commentIcon }}</v-icon></v-btn>
@@ -124,11 +124,11 @@ export default {
   },
   computed: {
     filteredName () {
-      return this.users.filter((users) => {
-        const upperCaseGiv = users.givenName.toUpperCase()
-        const upperCaseFam = users.familyName.toUpperCase()
+      return this.users.filter((user) => {
+        const upperCaseGiv = user.givenName.toLowerCase()
+        const upperCaseFam = user.familyName.toLowerCase()
         const upperCase = upperCaseGiv + ' ' + upperCaseFam
-        const searchUppercase = this.search.toUpperCase()
+        const searchUppercase = this.search.toLowerCase()
         return upperCase.match(searchUppercase)
       })
     }

@@ -1,69 +1,88 @@
 <template>
   <div>
-      <v-layout row align-center justify-center prepend-icon="event">
-        <v-icon large>event</v-icon>
-        <v-icon @click="subDate()" large>keyboard_arrow_left</v-icon>
-        <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
-          <v-text-field slot="activator" v-model="date" readonly></v-text-field>
-          <v-date-picker color="primary" v-model="date" no-title scrollable>
-            <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-            <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
-          </v-date-picker>
-        </v-menu>
+    <v-layout row align-center justify-center prepend-icon="event">
+      <v-icon large>event</v-icon>
+      <v-icon @click="subDate()" large>keyboard_arrow_left</v-icon>
+      <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
+        <v-text-field slot="activator" v-model="date" readonly></v-text-field>
+        <v-date-picker color="primary" v-model="date" no-title scrollable>
+          <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+          <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
+        </v-date-picker>
+      </v-menu>
       <v-icon @click="addDate()" large>keyboard_arrow_right</v-icon>
     </v-layout>
     <v-container fluid grid-list-md d-flex>
-    <v-layout fill-height wrap>
-      <v-flex d-flex xs12 sm12 md5 lg5 xl5 v-if="breakpoint">
-        <v-card class="userSelect">
-          <baseDropletuser
-            @userSelected="$emit('onchangedate', '', $data)"
-            userHeader="eDroplet Users"
-            :users="users"
-            :searchName="searchName"
-            :primaryColor="primaryColor"
-            :usersIcon="usersIcon"
-            :alertIcon="alertIcon"
-            :btnIcon="btnIcon"
-            :alertColor="alertColors"
-          ></baseDropletuser>
-        </v-card>
-      </v-flex>
-      <v-flex d-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
-        <v-card dark>
-          <charts class="chart" :update="update" :chartType="'Line'" :lineChartData="lineChartData"/>
-        </v-card>
-      </v-flex>
-      <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
-        <v-card class="userSelect">
-          <baseDropletuser
-            @userSelected="$emit('onchangedate', '', $data)"
-            userHeader="eDroplet Users"
-            :users="users"
-            :searchName="searchName"
-            :primaryColor="primaryColor"
-            :usersIcon="usersIcon"
-            :alertIcon="alertIcon"
-            :btnIcon="btnIcon"
-            :alertColor="alertColors"
-          ></baseDropletuser>
-        </v-card>
-      </v-flex>
-      <v-flex d-flex xs12 sm12 md12 lg12 xl12>
-        <v-layout row wrap>
-          <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
-            <v-card dark>
-              <charts class="chart" :update="update" :chartType="'Bar'" :barChartData="barChartData"/>
-            </v-card>
-          </v-flex>
-          <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
-            <v-card dark>
-              <charts class="chart" :update="update" :chartType="'Doughnut'" :doughnutChartData="doughnutChartData"/>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-flex>
-    </v-layout>
+      <v-layout fill-height wrap>
+        <v-flex d-flex xs12 sm12 md5 lg5 xl5 v-if="breakpoint">
+          <v-card class="userSelect">
+            <baseDropletuser
+              @userSelected="$emit('onchangedate', '', $data)"
+              userHeader="eDroplet Users"
+              :users="dashboardUsers"
+              :searchName="searchName"
+              :primaryColor="primaryColor"
+              :usersIcon="usersIcon"
+              :alertIcon="alertIcon"
+              :btnIcon="btnIcon"
+              :alertColor="alertColors"
+              :commentIcon="commentIcon"
+              :maxCharac="'50'"
+            ></baseDropletuser>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
+          <v-card dark>
+            <charts
+              class="chart"
+              :update="update"
+              :chartType="'Line'"
+              :lineChartData="lineChartData"
+            />
+          </v-card>
+        </v-flex>
+        <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
+          <v-card class="userSelect">
+            <baseDropletuser
+              @userSelected="$emit('onchangedate', '', $data)"
+              userHeader="eDroplet Users"
+              :users="dashboardUsers"
+              :searchName="searchName"
+              :primaryColor="primaryColor"
+              :usersIcon="usersIcon"
+              :alertIcon="alertIcon"
+              :btnIcon="btnIcon"
+              :alertColor="alertColors"
+              :commentIcon="commentIcon"
+              :maxCharac="'50'"
+            ></baseDropletuser>
+          </v-card>
+        </v-flex>
+        <v-flex d-flex xs12 sm12 md12 lg12 xl12>
+          <v-layout row wrap>
+            <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
+              <v-card dark>
+                <charts
+                  class="chart"
+                  :update="update"
+                  :chartType="'Bar'"
+                  :barChartData="barChartData"
+                />
+              </v-card>
+            </v-flex>
+            <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
+              <v-card dark>
+                <charts
+                  class="chart"
+                  :update="update"
+                  :chartType="'Doughnut'"
+                  :doughnutChartData="doughnutChartData"
+                />
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
     </v-container>
 
     <v-dialog v-model="lineDialog">
@@ -98,213 +117,154 @@
 </template>
 
 <script>
-import charts from '@/components/base/BaseChartComponent'
-import baseDropletuser from '@/components/sub/SubUserSelectComponent'
+import charts from "@/components/base/BaseChartComponent";
+import baseDropletuser from "@/components/sub/SubUserSelectComponent";
 
 export default {
   components: {
     charts,
     baseDropletuser
   },
-  props: ['update'],
+  props: {
+    update: Boolean,
+    dashboardUsers: Array,
+    dashboardComment: Array,
+    dashboardHour: Array,
+    dashboardDay: Array
+  },
   watch: {
-    date () {
-      this.$emit('onchangedate', this.date, this.$data)
+    date() {
+      this.$emit("onchangedate", this.date, this.$data);
     }
   },
   computed: {
-    breakpoint () {
+    breakpoint() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return true
-        case 'sm':
-          return true
+        case "xs":
+          return true;
+        case "sm":
+          return true;
         default:
-          return false
+          return false;
       }
     },
-    alertColors () {
-      for (var i = 0; i < this.users.length; i++) {
-        if (this.users[i].alert === 'hydrated') {
-          this.alertColor.push('green')
-        } else if (this.users[i].alert === 'dehydrated') {
-          this.alertColor.push('red')
-        } else if (this.users[i].alert === 'little dehydrated') {
-          this.alertColor.push('orange')
+    alertColors() {
+      for (var i = 0; i < this.dashboardUsers.length; i++) {
+        if (this.dashboardUsers[i].alertType === "hydrated") {
+          this.alertColor.push("green");
+        } else if (this.dashboardUsers[i].alertType === "dehydrated") {
+          this.alertColor.push("red");
+        } else if (this.dashboardUsers[i].alertType === "little dehydrated") {
+          this.alertColor.push("orange");
         }
       }
-      return this.alertColor
+      return this.alertColor;
     }
   },
-  mounted () {
-    this.getAditionalDrinkers()
-  },
   methods: {
-    async getAditionalDrinkers () {
-      await this.$store.dispatch('fetchGetBases')
-      let readData = await this.$store.state.bases.base
-      console.log(readData);
+    addDate: function() {
+      let dateNow = new Date(this.date);
+      this.date = dateNow.setDate(new Date(dateNow.getDate() + 1));
+      this.date = dateNow.toISOString().substr(0, 10);
     },
-
-    addDate: function () {
-      let dateNow = new Date(this.date)
-      this.date = dateNow.setDate(new Date(dateNow.getDate() + 1))
-      this.date = dateNow.toISOString().substr(0, 10)
+    subDate: function() {
+      let dateNow = new Date(this.date);
+      this.date = dateNow.setDate(new Date(dateNow.getDate() - 1));
+      this.date = dateNow.toISOString().substr(0, 10);
     },
-    subDate: function () {
-      let dateNow = new Date(this.date)
-      this.date = dateNow.setDate(new Date(dateNow.getDate() - 1))
-      this.date = dateNow.toISOString().substr(0, 10)
-    },
-    openDialog: function (charType) {
+    openDialog: function(charType) {
       switch (charType) {
-        case 'Line':
-          this.lineDialog = true
+        case "Line":
+          this.lineDialog = true;
           let lineComp = this.$children[8].$children[0].$children[0]
-            .$children[0].$children[0].$children[0]
+            .$children[0].$children[0].$children[0];
           setTimeout(() => {
-            lineComp.renderChart(lineComp.chartData, lineComp.options)
-          }, 200)
-          break
-        case 'Bar':
-          this.barDialog = true
+            lineComp.renderChart(lineComp.chartData, lineComp.options);
+          }, 200);
+          break;
+        case "Bar":
+          this.barDialog = true;
           let barComp = this.$children[10].$children[0].$children[0]
-            .$children[0].$children[0].$children[0]
+            .$children[0].$children[0].$children[0];
           setTimeout(() => {
-            barComp.renderChart(barComp.chartData, barComp.options)
-          }, 200)
-          break
-        case 'Doughnut':
-          this.doughnutDialog = true
+            barComp.renderChart(barComp.chartData, barComp.options);
+          }, 200);
+          break;
+        case "Doughnut":
+          this.doughnutDialog = true;
           let doughnutComp = this.$children[9].$children[0].$children[0]
-            .$children[0].$children[0].$children[0]
+            .$children[0].$children[0].$children[0];
           setTimeout(() => {
             doughnutComp.renderChart(
               doughnutComp.chartData,
               doughnutComp.options
-            )
-          }, 200)
-          break
+            );
+          }, 200);
+          break;
       }
     }
   },
-  data () {
+  data() {
     return {
-      searchName: 'Search user..',
-      usersIcon: 'person',
-      alertIcon: 'report_problem',
-      btnIcon: 'settings',
-      alertColor: [],
-      users: [
-        {
-          name: 'Elsa',
-          hydration: '5.0L/6.0L',
-          sync: '20m',
-          alert: 'hydrated'
-        },
-        {
-          name: 'Tamara',
-          hydration: '3.0L/6.0L',
-          sync: '10m',
-          alert: 'little dehydrated'
-        },
-        {
-          name: 'Daniek',
-          hydration: '4.0L/6.0L',
-          sync: '40m',
-          alert: 'hydrated'
-        },
-        {
-          name: 'David',
-          hydration: '2.0L/6.0L',
-          sync: '30m',
-          alert: 'dehydrated'
-        },
-        {
-          name: 'Jasper',
-          hydration: '3.0L/6.0L',
-          sync: '20m',
-          alert: 'little dehydrated'
-        },
-        {
-          name: 'Sabrina',
-          hydration: '3.0L/6.0L',
-          sync: '24m',
-          alert: 'little dehydrated'
-        },
-        {
-          name: 'Kevin',
-          hydration: '5.0L/6.0L',
-          sync: '23m',
-          alert: 'hydrated'
-        },
-        {
-          name: 'Julian',
-          hydration: '6.0L/6.0L',
-          sync: '12m',
-          alert: 'hydrated'
-        },
-        {
-          name: 'Patricia',
-          hydration: '1.0L/6.0L',
-          sync: '2m',
-          alert: 'dehydrated'
-        }
-      ],
-      primaryColor: 'primary',
+      searchName: "Search user..",
+      usersIcon: "person",
+      alertIcon: "report_problem",
+      commentIcon: "comment",
+      btnIcon: "settings",
+      primaryColor: "primary",
       lineDialog: false,
       barDialog: false,
       doughnutDialog: false,
+      alertColor: [],
       menu: false,
       date: new Date().toISOString().substr(0, 10),
       lineChartData: {
-        labels: ['0:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'],
-        labelLineOne: 'Liter',
+        labels: ["0:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00"],
+        labelLineOne: "Liter",
         dataLineOne: [50, 30, 80, 40, 50, 100, 10],
-        borderColorLineOne: 'rgba(54, 162, 235, 1)', // rgba
-        backgroundColorLineOne: 'rgba(54, 162, 235, 0.2)', // rgba
+        borderColorLineOne: "rgba(54, 162, 235, 1)", // rgba
+        backgroundColorLineOne: "rgba(54, 162, 235, 0.2)", // rgba
         borderWidthLineOne: 2,
-        labelLineTwo: 'data1',
+        labelLineTwo: "data1",
         dataLineTwo: [60, 60, 60, 60, 60, 60, 60],
-        borderColorLineTwo: 'rgba(102, 141, 62, 1)', // rgba
+        borderColorLineTwo: "rgba(102, 141, 62, 1)", // rgba
         borderWidthLineTwo: 1,
-        labelLineThree: 'data2',
+        labelLineThree: "data2",
         dataLineThree: [50, 50, 50, 50, 50, 50, 50],
-        borderColorLineThree: 'rgba(255, 159, 64, 1)', // rgba
+        borderColorLineThree: "rgba(255, 159, 64, 1)", // rgba
         borderWidthLineThree: 1
       },
       barChartData: {
         labels: [4, 5, 6, 7, 8, 9],
-        labelLineOne: 'data1',
+        labelLineOne: "data1",
         dataLineOne: [50, 50, 50, 50, 50, 50],
-        borderColorLineOne: 'rgba(255, 159, 64, 1)', // rgba
+        borderColorLineOne: "rgba(255, 159, 64, 1)", // rgba
         borderWidthLineOne: 1,
-        labelLineTwo: 'data2',
+        labelLineTwo: "data2",
         dataLineTwo: [60, 60, 60, 60, 60, 60],
-        borderColorLineTwo: 'rgba(102, 141, 62, 1)', // rgba
+        borderColorLineTwo: "rgba(102, 141, 62, 1)", // rgba
         borderWidthLineTwo: 1,
-        labelBarOne: 'bar1',
+        labelBarOne: "bar1",
         dataBarOne: [50, 30, 80, 40, 50, 100, 10],
-        borderColorBarOne: 'rgba(54, 162, 235, 1)', // rgba
-        backgroundColorBarOne: 'rgba(54, 162, 235, 0.2)', // rgba
+        borderColorBarOne: "rgba(54, 162, 235, 1)", // rgba
+        backgroundColorBarOne: "rgba(54, 162, 235, 0.2)", // rgba
         borderWidthBarOne: 1
       },
       doughnutChartData: {
-        labels: ['data1', 'data2', 'data3'],
+        labels: ["data1", "data2", "data3"],
         dataDoughnut: [33.33, 33.33, 33.33],
-        borderColorDoughnut: 'rgba(255, 255, 255, 1)', // rgba
+        borderColorDoughnut: "rgba(255, 255, 255, 1)", // rgba
         backgroundColorDoughnut: [
-          'rgba(54, 162, 235, 0.5)',
-          'rgba(54, 162, 235, 0.7)',
-          'rgba(54, 162, 235, 1)'
+          "rgba(54, 162, 235, 0.5)",
+          "rgba(54, 162, 235, 0.7)",
+          "rgba(54, 162, 235, 1)"
         ], // rgba
         borderWidthDoughnut: 1,
         cutoutPercentageDoughnut: 65
       }
-    }
+    };
   }
-}
-
+};
 </script>
 
 <style lang="scss" scoped>
@@ -320,7 +280,6 @@ export default {
 .userSelect {
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 458px;
 }
 .v-container {
   padding-top: 0;

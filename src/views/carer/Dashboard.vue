@@ -1,5 +1,12 @@
 <template>
-<dashboard-component :update="update" @onchangedate="changeDate(...arguments)"/>
+<dashboard-component
+  :update="update"
+  :dashboardUsers="dashboardUsers"
+  :dashboardComment="dashboardComment"
+  :dashboardDay="dashboardDay"
+  :dashboardHour="dashboardHour"
+  @onchangedate="changeDate(...arguments)"
+/>
 </template>
 
 <script>
@@ -12,21 +19,13 @@ export default {
   data () {
     return {
       update: false,
-      dashboardDay: null,
-      dashboardHour: null,
-      dashboardUsers: null,
-      dashboardComment: null
+      dashboardDay: [],
+      dashboardHour: [],
+      dashboardUsers: [],
+      dashboardComment: []
     }
   },
   methods: {
-    dispatchAPIData () {
-      this.$store.state.userId = 2
-      this.$store.dispatch('fetchDashboardDay').then((response) => this.dashboardDay = response)
-      this.$store.dispatch('fetchDashboardHour').then((response) => this.dashboardHour = response)
-      this.$store.dispatch('fetchDashboardComment').then((response) => this.dashboardComment = response)
-      this.$store.dispatch('fetchDashboardUsers').then((response) => this.dashboardUsers = response)
-      console.log(this.dashboardUsers)
-    },
     changeDate: function (newDate, childData) {
       let SelectedUnixTime = Math.round((new Date(newDate)).getTime() / 1000)
       this.$store.state.date = SelectedUnixTime
@@ -45,13 +44,55 @@ export default {
       }
       setTimeout(() => {
         this.update = false
-        this.dispatchAPIData()
-        console.log(this.apiData)
       }, 100)
-    }
+    },
+    async setUsers () {
+      await this.$store.dispatch('fetchDashboardUsersGet')
+      if (this.$store.state.dashboardUsers.dashboardUsersGet) {
+        let store = this.$store.state.dashboardUsers.dashboardUsersGet
+        for (let index = 0; index < store.length; index++) {
+          const element = store[index]
+          this.dashboardUsers.push(element)
+        }
+      }
+    },
+    async setComment () {
+      await this.$store.dispatch('fetchDashboardCommentGet')
+      if (this.$store.state.dashboardComment.dashboardCommentGet) {
+        let commentStore = this.$store.state.dashboardComment.dashboardCommentGet
+        for (let index = 0; index < commentStore.length; index++) {
+          const element = commentStore[index]
+          this.dashboardComment.push(element)
+        }
+      }
+    },
+    async setHour () {
+      await this.$store.dispatch('fetchDashboardHourGet')
+      if (this.$store.state.dashboardHour.dashboardHourGet) {
+        let hourStore = this.$store.state.dashboardHour.dashboardHourGet
+        for (let index = 0; index < hourStore.length; index++) {
+          const element = hourStore[index]
+          this.dashboardHour.push(element)
+        }
+      }
+    },
+    async setDay () {
+      await this.$store.dispatch('fetchDashboardDayGet')
+      if (this.$store.state.dashboardDay.dashboardDayGet) {
+        let dayStore = this.$store.state.dashboardDay.dashboardDayGet
+        for (let index = 0; index < dayStore.length; index++) {
+          const element = dayStore[index]
+          this.dashboardDay.push(element)
+        }
+      }
+    },
   },
-  mounted () {
-    this.dispatchAPIData()
+  async mounted () {
+    this.$store.state.carerId = 12
+    this.setUsers()
+    this.setComment()  
+    this.setDay()
+    this.setHour()
   }
 }
 </script>
