@@ -13,8 +13,8 @@ export const moduleDashboardComment = {
   },
   actions: {
     // get all data
-    fetchDashboardCommentGet (context) {
-      apiLib.getData('carer/dashboard-comment/' + this.getters.getterUserId + '/' + this.getters.getterDate).then((response) => {
+    async fetchDashboardCommentGet (context) {
+      await apiLib.getData('carer/dashboard-comment/' + this.getters.getterUserId + '/' + this.getters.getterDate).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_DASHBOARDCOMMENT', null)
         } else {
