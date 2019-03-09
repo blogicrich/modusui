@@ -340,7 +340,7 @@
           </v-btn>
         </v-fade-transition> -->
         <v-fade-transition>
-          <v-btn v-if="items.length > 0 && editPerms.edit" class="std-btn" @click="editDialog = true" :color="primaryColor" large>edit record
+          <v-btn v-if="selected.length > 0 && editPerms.update" class="std-btn" @click="editDialog = true" :color="primaryColor" large>edit record
             <v-icon class="ml-2">edit</v-icon>
           </v-btn>
         </v-fade-transition>
@@ -822,6 +822,7 @@ export default {
       return this.searchBarHidden
     },
     toggleAll () {
+      console.log(this.selected)
       if (this.selected.length) this.selected = []
       else this.selected = this.items.slice()
     },
@@ -838,7 +839,7 @@ export default {
   },
   mounted() {
     // console.log(this.newItem.find(attribute => attribute).returnVal)
-    console.log(this.loadedMsg)
+    // console.log(this.loadedMsg)
   }
 }
 </script>

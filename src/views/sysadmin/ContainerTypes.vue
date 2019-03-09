@@ -48,10 +48,6 @@ export default {
       items: [],
       crudIdKey: 'containerTypeId',
       editPerms: { create: true, update: true, delete: true },
-      snackColor: '',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
       loading: true,
       loaded: false,
       error: false,
@@ -72,16 +68,7 @@ export default {
         { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { 
-          description: ' ', 
-          cellType: 'md', 
-          attr: 'description', 
-          cellLabel: 'Description', 
-          menuItems: [{'value' : 'true', 'type': 'false'}, {'value' : 'false', 'type': 'true'}], 
-          displayVal: 'value', 
-          returnVal: 'type', 
-          validators: [] 
-        },
+        { description: ' ', cellType: 'tb',  attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
         { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ],
       defaultItem: [
@@ -98,14 +85,10 @@ export default {
       this.defaultItem = [
         { containerTypeId: 0, description: ' ', volume: 0 }
       ]
-    },
-    notify (items) {
-      this.showSnack(items.snackText, items.snackColor)
     }
   },
   mounted () {
     this.getItems(this.readUrl)
-    console.log(this.loadedMsg)
   }
 }
 </script>

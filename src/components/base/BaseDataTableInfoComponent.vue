@@ -58,7 +58,7 @@
 <script>
 
 export default {
-  name: 'BaseGermDataTableComponent',
+  name: 'BaseDataTableInfoComponent',
   props: {
     // Messages
     loadingMsg: String,
@@ -71,7 +71,7 @@ export default {
     error: Boolean
   },
   mounted () {
-    console.log(this.loadedMsg)
+    // console.log(this.loadedMsg)
   }
 }
 </script>

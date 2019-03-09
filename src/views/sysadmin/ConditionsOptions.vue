@@ -10,7 +10,7 @@
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
       :addRecordIcon="iconAdd"
-      addBtnTitle="New Container Type"
+      addBtnTitle="New Condition"
       :loading="loading"
       :loaded="loaded"
       :error="error"

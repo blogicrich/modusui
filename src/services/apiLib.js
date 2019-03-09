@@ -185,7 +185,7 @@ export default {
     await setToken()
     if (data) {
       return axi.post(url, data).then(response => {
-        if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
+        // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
         if (log) logger(response, url)
         return response.data
       })

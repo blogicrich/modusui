@@ -4,10 +4,10 @@
       :msg="msg"
       :isAuthenticating="isAuthenticating"
       :isActive="isActive"
-      @authenticate="submitCredentials"
       :primaryColor="primaryColor"
       :spinnerSize="spinnerSize"
       :spinnerWidth="spinnerWidth"
+      @authenticate="submitCredentials"
     />
   </v-layout>
 </template>
@@ -36,28 +36,32 @@ export default {
   },
   methods: {
     submitCredentials (item) {
-      // this.isAuthenticating = true
-      var data = apiLib.postAuth('login', item).then(response => {
-        if (Array.isArray(response)) {
-          for (var i = 0; i < response.length; i++) {
-            if (response[i].description) {
-              this.isActive = false
-              this.$emit('authenticated', { state: true, level: response[i].description, token: response[i].token })
-            }
+      this.isAuthenticating = true
+      let data = apiLib.postAuth('login', item, true).then(response => {
+        if (response) {
+          if (response.roles) {
+            this.isActive = false
+            this.$emit('authenticated', { 
+              state: true, 
+              level: response.roles, 
+              token: response.token, 
+              deptPersonsId: response.deptPersonsId, 
+              portalAuthorisedId: response.portalAuthorisedId 
+              })
           }
         } else {
-          this.$emit('authenticated', { state: false, level: null })
-          this.msg = response
+          this.$emit('authenticated', { state: false, level: [], token: null, deptPersonsId: null, portalAuthorisedId: null })
+          this.msg = response.message
           this.isActive = true
         }
       })
-      console.log(data)
       this.isAuthenticating = false
+      return data
     }
   },
   mounted () {
-    localStorage.removeItem('auth')
-    this.$emit('authenticated', { state: false, level: null })
+    this.$emit('authenticated', { state: false, level: [], token: null, deptPersonsId: null, portalAuthorisedId: null })
+
   }
 }
 </script>
