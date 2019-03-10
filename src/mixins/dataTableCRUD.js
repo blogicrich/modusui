@@ -49,10 +49,13 @@ export const crudRoutines = {
           console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
           apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
           .then(response => {
+
           })
           .catch(error => {
           })
-          .finally()
+          .finally(
+
+          )
         }
       }
       if (this.newItem) {
@@ -68,7 +71,6 @@ export const crudRoutines = {
       // console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
-        console.log('FIRRRINGNNGNGNGNNGNGN')
         this.items = []
         this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
         this.loading = false
@@ -97,6 +99,7 @@ export const crudRoutines = {
       // await this.getItems(this.readUrl)
       // if (this.urls) await this.setMenuItems(this.urls)
     },
+
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {
         for (var i = 0; i < urls.length; i++) {

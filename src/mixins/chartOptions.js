@@ -9,7 +9,7 @@ export const chartMixin = {
             data: this.lineChartData.dataLineOne,
             borderColor: this.lineChartData.borderColorLineOne,
             backgroundColor: this.lineChartData.backgroundColorLineOne,
-            borderWidth: this.lineChartData.borderWidthLineOne,
+            borderWidth: this.lineChartData.borderWidthLineOne
           },
           {
             type: 'line',
