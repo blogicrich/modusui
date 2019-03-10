@@ -9,104 +9,105 @@
 </template>
 
 <script>
-import store from "@/store";
-import BaseReport from "@/components/base/BaseReportComponent";
+import store from '@/store'
+import BaseReport from '@/components/base/BaseReportComponent'
 
 export default {
-  name: "reports",
+  name: 'reports',
   components: {
     BaseReport
   },
-  data: function() {
+  data: function () {
     return {
       dashboardUsers: store.state.dashboardUsers.dashboardUsersGet,
       reportsConditions: store.state.report.reportsConditions,
       reportsSnapshots: store.state.report.reportsSnapshots,
       conditionsHeaders: [
         {
-          text: "Description",
+          text: 'Description',
           value: 'description',
           sortable: false
         },
         {
-          text: "Adjustment (L)",
-          value: "adjustment",
+          text: 'Adjustment (L)',
+          value: 'adjustment',
           sortable: false
         }
       ],
       dayReportHeaders: [
-        { 
-          text: "Date", 
-          value: "date", 
-          sortable: false 
-        },
         {
-          text: "Hydration Target (L)",
-          value: "hydrationTarget",
+          text: 'Date',
+          value: 'date',
           sortable: false
         },
         {
-          text: "Actual Hydration (L)",
-          value: "hydrationActual",
+          text: 'Hydration Target (L)',
+          value: 'hydrationTarget',
           sortable: false
         },
         {
-          text: "Hydration Percentage (%)",
-          value: "hydrationPercentage",
+          text: 'Actual Hydration (L)',
+          value: 'hydrationActual',
+          sortable: false
+        },
+        {
+          text: 'Hydration Percentage (%)',
+          value: 'hydrationPercentage',
           sortable: false
         },
         {
           text: "Carer's Comments",
-          value: "carerComments",
+          value: 'carerComments',
           sortable: false
         }
-]
-    };
+      ]
+    }
   },
-  mounted() {
-    store.dispatch("fetchDashboardUsersGet");
-    store.dispatch("fetchReportsConditionsGet");
-    store.dispatch("fetchReportsSnapshotGet");
+  mounted () {
+    store.dispatch('fetchDashboardUsersGet')
+    store.dispatch('fetchReportsConditionsGet')
+    store.dispatch('fetchReportsSnapshotGet')
     // store.dispatch("fetchReportCommentsGet");
   },
   computed: {
-    reports: function() {
-      let reports = [];
-      let users = this.dashboardUsers;
+    reports: function () {
+      let reports = []
+      let users = this.dashboardUsers
+      let conditions = this.reportsConditions
+      let snapshots = this.reportsSnapshots
+      console.log('user: ' + users)
       for (let i = 0; i < users.length; i++) {
-        const user = users[i];
+        const user = users[i]
         let report = {
           tabs: [
             {
-              type: "header",
+              type: 'header',
               table: {
                 rows: [
                   {
-                    headers: ["Full Name", "Also Known As"],
+                    headers: ['Full Name', 'Also Known As'],
                     items: [
-                      user.givenName + " " + user.familyName,
+                      user.givenName + ' ' + user.familyName,
                       user.salutation
                     ]
                   },
                   {
                     headers: [
-                      "Current Standard Target (L)",
-                      "Dietary estimated hydration (L)",
-                      "Current Total Adjustments (L)",
-                      "Current Hydration Target (L)"
+                      'Current Standard Target (L)',
+                      'Dietary estimated hydration (L)',
+                      'Current Total Adjustments (L)',
+                      'Current Hydration Target (L)'
                     ],
                     items: [
-                      "¬Current Standard Target (L)",
-                      "¬Dietary estimated hydration (L)",
-                      "¬Current Total Adjustments (L)",
-                      "¬Current Hydration Target (L)"
+                      user.calculatedTargetConsumption,
+                      user.hydrationValue
                     ]
                   }
                 ]
               }
             },
             {
-              subheader: "Conditions",
+              subheader: 'Conditions',
               type: 'table',
               table: {
                 align: 'right',
@@ -115,7 +116,7 @@ export default {
               }
             },
             {
-              subheader: "Day Reports",
+              subheader: 'Day Reports',
               type: 'table',
               table: {
                 align: 'right',
@@ -126,39 +127,45 @@ export default {
           ],
           button: {
             appear: true,
-            color: "primary",
-            icon: "arrow_downward",
-            docName: "report-" + user.givenName + ".pdf"
+            color: 'primary',
+            icon: 'arrow_downward',
+            docName: 'report-' + user.givenName + '.pdf'
           }
-        };
+        }
 
-        //Add the conditions from the API to the table items
-        let conditions = this.reportsConditions
+        // Add the conditions from the API to the table items
+        let currentTotalAdjustments = 0
         for (let it = 0; it < conditions.length; it++) {
           const condition = conditions[it]
           let conditionRow = {
             description: condition.description,
             adjustment: condition.adjustment
           }
+          currentTotalAdjustments += condition.adjustment
           report.tabs[1].items.push(conditionRow)
         }
+        tabs[0].table.rows[1].items.push(currentTotalAdjustments)
+        tabs[0].table.rows[1].items.push(
+          tabs[0].table.rows[1].items[0] +
+            tabs[0].table.rows[1].items[1] +
+            tabs[0].table.rows[1].items[2]
+        )
 
-        //Put the snapshot and comment data from the API together and add them to the table items
-        let snapshots = this.reportsSnapshots
-        let comments = this.reportsComments
+        // Put the snapshot and comment data from the API together and add them to the table items
         for (let it = 0; it < snapshots.length; it++) {
           const snapshot = snapshots[it]
           let dayReportRow = {
             date: this.convertDateTimeToString(snapshot.dateTime),
             hydrationTarget: snapshot.hydrationTarget,
-            hydrationActual: (snapshot.hydrationTarget * snapshot.aggregatedHydration) / 100,
+            hydrationActual:
+              (snapshot.hydrationTarget * snapshot.aggregatedHydration) / 100,
             hydrationPercentage: snapshot.aggregatedHydration
           }
           report.tabs[2].items.push(dayReportRow)
         }
-        reports.push(report);
+        reports.push(report)
       }
-      return reports;
+      return reports
     }
   },
   methods: {
@@ -173,5 +180,5 @@ export default {
       return dateTime.toLocaleDateString('en-UK', options)
     }
   }
-};
+}
 </script>
