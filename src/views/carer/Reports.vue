@@ -9,217 +9,169 @@
 </template>
 
 <script>
-import store from '@/store'
-import BaseReport from '@/components/base/BaseReportComponent'
-
-console.log(store.state.dashboardUsers.dashboardUsersGet)
+import store from "@/store";
+import BaseReport from "@/components/base/BaseReportComponent";
 
 export default {
-  name: 'reports',
+  name: "reports",
   components: {
     BaseReport
   },
-  data: function () {
+  data: function() {
     return {
-      reports: [
+      dashboardUsers: store.state.dashboardUsers.dashboardUsersGet,
+      reportsConditions: store.state.report.reportsConditions,
+      reportsSnapshots: store.state.report.reportsSnapshots,
+      conditionsHeaders: [
         {
-          tabs: [
-            {
-              type: 'header',
-              table: {
-                rows: [
-                  {
-                    headers: ['Full Name', 'Also known as'],
-                    items: { fullName: 'Test Datson', aka: 'Notrelnam' }
-                  },
-                  {
-                    headers: [
-                      'Current Standard Target (L)',
-                      'Dietary estimated hydration (L)',
-                      'Current Total Adjustments (L)',
-                      'Current Hydration Target (L)'
-                    ],
-                    items: {
-                      currentStandardTarget: '2.5',
-                      dietaryEstimatedTarget: '1.26',
-                      currentTotalAdjustments: '0.84',
-                      currentHydrationTarget: '4.60'
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              subheader: 'Conditions',
-              type: 'table',
-              table: {
-                headers: [
-                  {
-                    text: 'Description',
-                    value: 'description',
-                    sortable: false
-                  },
-                  {
-                    text: 'Adjustment (L)',
-                    value: 'adjustment',
-                    sortable: false
-                  }
-                ],
-                items: [
-                  { description: 'Lorum Ipsum', adjustment: '0.25' },
-                  { description: 'They drank', adjustment: '0.37' },
-                  {
-                    description: 'Quidquid latine dictum sit, altum videtur.',
-                    adjustment: '0.32'
-                  }
-                ]
-              }
-            },
-            {
-              subheader: 'Day Reports',
-              type: 'table',
-              table: {
-                align: 'right',
-                headers: [
-                  { text: 'Date', value: 'date', sortable: false },
-                  {
-                    text: 'Hydration Target (L)',
-                    value: 'hydrationTarget',
-                    sortable: false
-                  },
-                  {
-                    text: 'Actual Hydration (L)',
-                    value: 'hydrationActual',
-                    sortable: false
-                  },
-                  {
-                    text: 'Hydration Percentage (%)',
-                    value: 'hydrationPercentage',
-                    sortable: false
-                  },
-                  {
-                    text: "Carer's Comments",
-                    value: 'carerComments',
-                    sortable: false
-                  }
-                ],
-                items: [
-                  {
-                    date: '19th Dec 2018',
-                    hydrationTarget: '2.0',
-                    hydrationActual: '2.3',
-                    hydrationPercentage: '115%',
-                    carerComments: 'Mr. Datson drank various liquids.'
-                  },
-                  {
-                    date: '18th Dec 2018',
-                    hydrationTarget: '2.0',
-                    hydrationActual: '2.1',
-                    hydrationPercentage: '105%',
-                    carerComments:
-                      'Mr. Datson succeeded in hydrating an ample amount.'
-                  },
-                  {
-                    date: '17th Dec 2018',
-                    hydrationTarget: '2.2',
-                    hydrationActual: '2.0',
-                    hydrationPercentage: '91%',
-                    carerComments: 'Mr. Datson did not drink enough today'
-                  }
-                ]
-              }
-            }
-          ],
-          button: {
-            appear: true,
-            color: 'primary',
-            icon: 'arrow_downward',
-            docName: 'report-name.pdf'
-          }
+          text: "Description",
+          value: 'description',
+          sortable: false
         },
         {
-          tabs: [
-            {
-              type: 'header',
-              table: {
-                rows: [
-                  {
-                    headers: ['Full Name', 'Also known as'],
-                    items: ['Test Datson', 'Notrelnam']
-                  },
-                  {
-                    headers: [
-                      'Current Standard Target (L)',
-                      'Dietary estimated hydration (L)',
-                      'Current Total Adjustments (L)',
-                      'Current Hydration Target (L)'
-                    ],
-                    items: ['2.5', '1.26', '0.84', '4.60']
-                  }
-                ]
-              }
-            }
-          ],
-          button: {
-            appear: false,
-            color: 'primary',
-            icon: 'arrow_downward',
-            docName: 'report-name.pdf'
-          }
+          text: "Adjustment (L)",
+          value: "adjustment",
+          sortable: false
         }
-      ]
-    }
+      ],
+      dayReportHeaders: [
+        { 
+          text: "Date", 
+          value: "date", 
+          sortable: false 
+        },
+        {
+          text: "Hydration Target (L)",
+          value: "hydrationTarget",
+          sortable: false
+        },
+        {
+          text: "Actual Hydration (L)",
+          value: "hydrationActual",
+          sortable: false
+        },
+        {
+          text: "Hydration Percentage (%)",
+          value: "hydrationPercentage",
+          sortable: false
+        },
+        {
+          text: "Carer's Comments",
+          value: "carerComments",
+          sortable: false
+        }
+]
+    };
   },
-  methods: {
-    getReports: function () {
-      let reports = []
-      let users = store.state.dashboardUsers.dashboardUsersGet
-      let apiReports = store.state.report
-      let reportsConditions = store.state.report.reportsConditions
-      let reportsSnapshots = store.state.report.reportsConditions
-      let reportsComments = store.state.report.reportComments
-      console.log(apiReports);
-
-      for (let ri = 0; ri < users.length; ri++) {
-        let user = users[useri]
+  mounted() {
+    store.dispatch("fetchDashboardUsersGet");
+    store.dispatch("fetchReportsConditionsGet");
+    store.dispatch("fetchReportsSnapshotGet");
+    // store.dispatch("fetchReportCommentsGet");
+  },
+  computed: {
+    reports: function() {
+      let reports = [];
+      let users = this.dashboardUsers;
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
         let report = {
           tabs: [
             {
-              type: 'header',
+              type: "header",
               table: {
                 rows: [
                   {
-                    headers: ['Full Name', 'Also Known As'],
-                    items: [user.givenName + ' ' + user.familyName, '¬Also Known As']
+                    headers: ["Full Name", "Also Known As"],
+                    items: [
+                      user.givenName + " " + user.familyName,
+                      user.salutation
+                    ]
                   },
                   {
                     headers: [
-                      'Current Standard Target (L)',
-                      'Dietary estimated hydration (L)',
-                      'Current Total Adjustments (L)',
-                      'Current Hydration Target (L)'
+                      "Current Standard Target (L)",
+                      "Dietary estimated hydration (L)",
+                      "Current Total Adjustments (L)",
+                      "Current Hydration Target (L)"
                     ],
                     items: [
-                      '¬Current Standard Target (L)',
-                      '¬Dietary estimated hydration (L)',
-                      '¬Current Total Adjustments (L)',
-                      '¬Current Hydration Target (L)'
+                      "¬Current Standard Target (L)",
+                      "¬Dietary estimated hydration (L)",
+                      "¬Current Total Adjustments (L)",
+                      "¬Current Hydration Target (L)"
                     ]
                   }
                 ]
               }
+            },
+            {
+              subheader: "Conditions",
+              type: 'table',
+              table: {
+                align: 'right',
+                headers: this.conditionsHeaders,
+                items: []
+              }
+            },
+            {
+              subheader: "Day Reports",
+              type: 'table',
+              table: {
+                align: 'right',
+                headers: this.dayReportHeaders,
+                items: []
+              }
             }
           ],
           button: {
             appear: true,
-            color: 'primary',
-            icon: 'arrow_downward',
-            docName: 'report-' + 'name' + '.pdf'
+            color: "primary",
+            icon: "arrow_downward",
+            docName: "report-" + user.givenName + ".pdf"
           }
+        };
+
+        //Add the conditions from the API to the table items
+        let conditions = this.reportsConditions
+        for (let it = 0; it < conditions.length; it++) {
+          const condition = conditions[it]
+          let conditionRow = {
+            description: condition.description,
+            adjustment: condition.adjustment
+          }
+          report.tabs[1].items.push(conditionRow)
         }
-        reports.push(report)
+
+        //Put the snapshot and comment data from the API together and add them to the table items
+        let snapshots = this.reportsSnapshots
+        let comments = this.reportsComments
+        for (let it = 0; it < snapshots.length; it++) {
+          const snapshot = snapshots[it]
+          let dayReportRow = {
+            date: this.convertDateTimeToString(snapshot.dateTime),
+            hydrationTarget: snapshot.hydrationTarget,
+            hydrationActual: (snapshot.hydrationTarget * snapshot.aggregatedHydration) / 100,
+            hydrationPercentage: snapshot.aggregatedHydration
+          }
+          report.tabs[2].items.push(dayReportRow)
+        }
+        reports.push(report);
       }
+      return reports;
+    }
+  },
+  methods: {
+    convertDateTimeToString: function (dateTime) {
+      const options = {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+      return dateTime.toLocaleDateString('en-UK', options)
     }
   }
-}
+};
 </script>
