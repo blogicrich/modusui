@@ -9,7 +9,7 @@
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
-      <span v-if="authenticated.state">{{ user }}</span>
+      <span v-if="authenticated.state">{{ userLevel }}</span>
     </v-toolbar>
     <transition-group name="navBtns">
       <v-navigation-drawer
@@ -227,12 +227,11 @@ export default {
     setAuthenticated (newStatus) {
       localStorage.auth = JSON.stringify(newStatus)
       this.authenticated = newStatus
-      console.log(this.authenticated)
       if (this.authenticated.level) {
         this.user = this.authenticated.level
-        if ((this.user[0] === 'SYSTEM ADMINISTRATOR' || this.user[0]  === 'CLIENT ADMINISTRATOR') && newStatus.token) { // REWRITE FOR WHOLE ARRAY
+        if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR') || this.user.find(level => level === 'CLIENT ADMINISTRATOR') && newStatus.token) {
           this.$router.push('/landing')
-        } else if (this.user[0] === 'CARER' && newStatus.token) {
+        } else if (this.user.find(level => level === 'CARER')) {
           this.$router.push('/dashboard')
         }
       }
@@ -244,14 +243,23 @@ export default {
       this.snackState = eventPayload.state
     },
     logout () {
-      // this.authenticated = null
       localStorage.removeItem('auth')
-      // this.user = null
       this.$router.push('/login')
     },
     home () {
       this.$router.push('/landing')
     },
+  },
+  computed: {
+    userLevel () {
+      const greeting = 'LOGGED IN AS: '
+      let concatUser = ''
+      for (let i = 0; i < this.user.length; i++) {
+        const element = String(this.user[i])
+        concatUser = concatUser + element
+      }
+      return greeting + concatUser
+    }
   },
   watch: {
     authenticated: function () {
@@ -269,6 +277,7 @@ export default {
   },
   destroyed () {
     EventBus.$off('snack-msg')
+    userLevel = null
   }
 }
 </script>
