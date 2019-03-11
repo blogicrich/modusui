@@ -22,7 +22,7 @@ export const moduleReports = {
   actions: {
     // get all data
     fetchReportsConditionsGet (context) {
-      return apiLib.getData('carer/condition/' + this.getters.getterUserId).then((response) => {
+      return apiLib.getData('carer/condition/' + this.getters.getterUserId + '/' + this.getters.getterDate).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_REPORTSCONDITIONS', null)
         } else {
