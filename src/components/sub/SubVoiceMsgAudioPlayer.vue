@@ -10,7 +10,7 @@
       </v-flex>
       <v-flex xl5 md3 lg5 sm12 xs12>
         <v-layout row align-center justify-center style="margin: 5px auto;">
-          <BaseAudioPlayer class="vuetify-audio" :file="config.source"></BaseAudioPlayer>
+          <BaseAudioPlayer class="vuetify-audio" :file="audioFile"></BaseAudioPlayer>
         </v-layout>
       </v-flex>
       <v-flex xl4 md4 lg4 sm12 xs12>
@@ -40,7 +40,7 @@ export default {
     fileName: String,
     value: String,
     audioType: String,
-    config: Object
+    audioFile: String
   }
 }
 </script>

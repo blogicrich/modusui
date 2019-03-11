@@ -12,74 +12,63 @@
             :multiple="multiple"
           ></selectComponent>
         </v-layout>
-        <v-card class="pa-2 my-3">
-          <h2 class="ma-2 pg-subheader text-primary">{{ msgReminderGroupHeader}}</h2>
-          <v-divider
-            class="ma-2"
-            color="#00a1cd"
-            >
+        <v-card class="pa-2 my-3" v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId"
+>
+          <h2 class="ma-2 pg-subheader text-primary">Message Type: {{ config.voiceMessagedescription }}</h2>
+          <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="config in msgReminderConfig" :key="'msgRem' + config.fileName"
             :radioConfig="msgReminderIntervalSettings"
             :groupHeader="msgReminderGroupHeader"
             :groupDescription="msgReminderRadioDescription"
             :radioHeader="msgReminderRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="config.source"
-            :audioType="config.audioType"
-            :fileName="config.fileName"
-            :config="config"
+            :audioFile="config.audioFile"
+            :fileName="config.voiceMessagedescription"
           />
-
         </v-card>
-        <v-card class="pa-2 my-3">
-          <h2 class="pg-subheader text-primary ma-2">{{ msgInstructGroupHeader }}</h2>
+        <!-- <v-card class="pa-2 my-3">
+          <h2 class="pg-subheader text-primary ma-2">Message Type: {{ msgInstructGroupHeader }}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="config in msgInstructConfig" :key="'msgIns' + '-' + config.fileName"
-            :radioConfig="msgInstructIntervalSettings"
-            :groupHeader="msgInstructGroupHeader"
-            :groupDescription="msgInstructRadioDescription"
-            :radioHeader="msgInstructRadioHeader"
+            v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId"
+            :radioConfig="msgReminderIntervalSettings"
+            :groupHeader="msgReminderGroupHeader"
+            :groupDescription="msgReminderRadioDescription"
+            :radioHeader="msgReminderRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="config.source"
-            :audioType="config.audioType"
-            :fileName="config.fileName"
-            :config="config"
+            :audioFile="config.audioFile"
+            :fileName="config.voiceMessagedescription"
           />
         </v-card>
         <v-card class="pa-2 my-2">
-          <h2 class="pg-subheader text-primary ma-2">{{ msgPraiseGroupHeader }}</h2>
+          <h2 class="pg-subheader text-primary ma-2">Message Type: {{ msgPraiseGroupHeader }}</h2>
           <v-divider
             class="ma-2"
             color="#00a1cd"
             >
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="config in msgPraiseConfig" :key="'msgPr' + '-' + config.fileName"
-            :radioConfig="msgPraiseIntervalSettings"
-            :groupHeader="msgPraiseGroupHeader"
-            :groupDescription="msgPraiseRadioDescription"
-            :radioHeader="msgPraiseRadioHeader"
+            v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId"
+            :radioConfig="msgReminderIntervalSettings"
+            :groupHeader="msgReminderGroupHeader"
+            :groupDescription="msgReminderRadioDescription"
+            :radioHeader="msgReminderRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="config.source"
-            :audioType="config.audioType"
-            :fileName="config.fileName"
-            :config="config"
+            :audioFile="config.audioFile"
+            :fileName="config.voiceMessagedescription"
           />
-        </v-card>
+        </v-card> -->
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-
 import apiLib from '@/services/apiLib'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
@@ -90,9 +79,8 @@ export default {
     selectComponent,
     SubVoiceMsgAudioPlayer
   },
-  data () {
+  data() {
     return {
-      val: [],
       users: [
         { name: 'Elsa' },
         { name: 'Tamara' },
@@ -115,7 +103,7 @@ export default {
         { name: 'Naomi' },
         { name: 'Leeroy' }
       ],
-      multiple: true,
+      multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
       uploadIcon: 'cloud_upload',
@@ -126,52 +114,105 @@ export default {
         { label: '60', value: 60 },
         { label: 'Never', value: 'Never' }
       ],
-      msgReminderGroupHeader: 'Message Type: Reminders',
-      msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
+      msgReminderGroupHeader: 'Reminders',
+      msgReminderRadioDescription:
+        'Time betweeen drink reminders - (Blue light flashing)',
       msgReminderRadioHeader: 'Time interval in minutes:',
       msgReminderConfig: [
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
+        {
+          source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+          fileName: 'msg_003'
+        }
       ],
-      // Messages instructions
-      msgInstructIntervalSettings: [
-        { label: '20', value: 20 },
-        { label: '40', value: 40 },
-        { label: '60', value: 60 },
-        { label: 'Never', value: 'Never' }
-      ],
-      msgInstructGroupHeader: 'Message Type: Instructions',
-      msgInstructRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
-      msgInstructRadioHeader: 'Please select an option from the following:',
-      msgInstructConfig: [
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
-      ],
-      // Messages praise
-      msgPraiseIntervalSettings: [
-        { label: '20', value: 20 },
-        { label: '40', value: 40 },
-        { label: '60', value: 60 },
-        { label: 'Never', value: 'Never' }
-      ],
-      msgPraiseGroupHeader: 'Message Type: Praise',
-      msgPraiseRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
-      msgPraiseRadioHeader: 'Please select an option from the following:',
-      msgPraiseConfig: [
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_001' },
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_002' },
-        { source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3', audioType: 'audio/mpeg', audioRef: 'audio', fileName: 'msg_003' }
-      ]
+      // // Messages instructions
+      //   msgInstructIntervalSettings: [
+      //     { label: '20', value: 20 },
+      //     { label: '40', value: 40 },
+      //     { label: '60', value: 60 },
+      //     { label: 'Never', value: 'Never' }
+      //   ],
+      //   msgInstructGroupHeader: 'Instructions',
+      //   msgInstructRadioDescription:
+      //     'Time between drink reminders - (Blue light flashing)',
+      //   msgInstructRadioHeader: 'Please select an option from the following:',
+      //   msgInstructConfig: [
+      //     {
+      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+      //       audioType: 'audio/mpeg',
+      //       audioRef: 'audio',
+      //       fileName: 'msg_001'
+      //     },
+      //     {
+      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+      //       audioType: 'audio/mpeg',
+      //       audioRef: 'audio',
+      //       fileName: 'msg_002'
+      //     },
+      //     {
+      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+      //       audioType: 'audio/mpeg',
+      //       audioRef: 'audio',
+      //       fileName: 'msg_003'
+      //     }
+      //   ],
+      // // Messages praise
+      //   msgPraiseIntervalSettings: [
+      //     { label: '20', value: 20 },
+      //     { label: '40', value: 40 },
+      //     { label: '60', value: 60 },
+      //     { label: 'Never', value: 'Never' }
+      //   ],
+      //   msgPraiseGroupHeader: 'Praise',
+      //   msgPraiseRadioDescription:
+      //     'Time betweeen drink reminders - (Blue light flashing)',
+      //   msgPraiseRadioHeader: 'Please select an option from the following:',
+      //   msgPraiseConfig: [
+      //     {
+      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+      //       audioType: 'audio/mpeg',
+      //       audioRef: 'audio',
+      //       fileName: 'msg_001'
+      //     },
+      //     {
+      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+      //       audioType: 'audio/mpeg',
+      //       audioRef: 'audio',
+      //       fileName: 'msg_002'
+      //     },
+      //     {
+      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+      //       audioType: 'audio/mpeg',
+      //       audioRef: 'audio',
+      //       fileName: 'msg_003'
+      //     }
+      //   ],
+      apiData: []
     }
   },
   mounted () {
-    this.val = apiLib.getData('sysadmin/voice-message')
-    // console.log(this.val)
+    this.getvoiceMessage()
+  },
+  methods: {
+    async getvoiceMessage () {
+      await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
+      if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
+        let voiceMessageDefaultStore = this.$store.state.voiceMessages
+          .voiceMessagesDefaultsGet
+        for (let index = 0; index < voiceMessageDefaultStore.length; index++) {
+          const element = voiceMessageDefaultStore[index]
+          for (let j = 0; j < element.length; j++) {
+            const el = element[j]
+            this.apiData.push(el)
+          }
+        }
+      }
+      console.log(this.apiData, 'apiData')
+    }
   },
   beforeRouteLeave (to, from, next) {
-    const answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+    const answer = window.confirm(
+      'Do you really want to leave? You will loose all unsaved changes!'
+    )
     if (answer) {
       next()
     } else {
@@ -182,5 +223,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
+@import "./public/scss/main.scss";
 </style>
