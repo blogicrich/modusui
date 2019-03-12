@@ -42,7 +42,7 @@
 
 <script>
 import { crudRoutines } from "@/mixins/dataTableCRUD.js";
-import { apiLib } from "@/services/apiLib.js";
+import apiLib from "@/services/apiLib.js";
 import BaseDataTable from "@/components/base/BaseDataTableComponent.vue";
 
 export default {
