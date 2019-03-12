@@ -67,7 +67,7 @@ export default {
     store.dispatch('fetchDashboardUsersGet')
     store.dispatch('fetchReportsConditionsGet')
     store.dispatch('fetchReportsSnapshotGet')
-    // store.dispatch("fetchReportCommentsGet");
+    this.reportsSnapshots = this.$store.state.report.reportsSnapshotGet
   },
   computed: {
     reports: function () {
@@ -75,7 +75,6 @@ export default {
       let users = this.dashboardUsers
       let conditions = this.reportsConditions
       let snapshots = this.reportsSnapshots
-      console.log('user: ' + users)
       for (let i = 0; i < users.length; i++) {
         const user = users[i]
         let report = {
@@ -135,33 +134,37 @@ export default {
 
         // Add the conditions from the API to the table items
         let currentTotalAdjustments = 0
-        for (let it = 0; it < conditions.length; it++) {
-          const condition = conditions[it]
-          let conditionRow = {
-            description: condition.description,
-            adjustment: condition.adjustment
+        if (conditions) {
+          for (let it = 0; it < conditions.length; it++) {
+            const condition = conditions[it]
+            let conditionRow = {
+              description: condition.description,
+              adjustment: condition.adjustment
+            }
+            currentTotalAdjustments += condition.adjustment
+            report.tabs[1].items.push(conditionRow)
           }
-          currentTotalAdjustments += condition.adjustment
-          report.tabs[1].items.push(conditionRow)
         }
-        tabs[0].table.rows[1].items.push(currentTotalAdjustments)
-        tabs[0].table.rows[1].items.push(
-          tabs[0].table.rows[1].items[0] +
-            tabs[0].table.rows[1].items[1] +
-            tabs[0].table.rows[1].items[2]
+        report.tabs[0].table.rows[1].items.push(currentTotalAdjustments)
+        report.tabs[0].table.rows[1].items.push(
+          report.tabs[0].table.rows[1].items[0] +
+            report.tabs[0].table.rows[1].items[1] +
+            report.tabs[0].table.rows[1].items[2]
         )
 
         // Put the snapshot and comment data from the API together and add them to the table items
-        for (let it = 0; it < snapshots.length; it++) {
-          const snapshot = snapshots[it]
-          let dayReportRow = {
-            date: this.convertDateTimeToString(snapshot.dateTime),
-            hydrationTarget: snapshot.hydrationTarget,
-            hydrationActual:
-              (snapshot.hydrationTarget * snapshot.aggregatedHydration) / 100,
-            hydrationPercentage: snapshot.aggregatedHydration
+        if (snapshots) {
+          for (let it = 0; it < snapshots.length; it++) {
+            const snapshot = snapshots[it]
+            let dayReportRow = {
+              date: this.convertDateTimeToString(snapshot.dateTime),
+              hydrationTarget: snapshot.hydrationTarget,
+              hydrationActual:
+                (snapshot.hydrationTarget * snapshot.aggregatedHydration) / 100,
+              hydrationPercentage: snapshot.aggregatedHydration
+            }
+            report.tabs[2].items.push(dayReportRow)
           }
-          report.tabs[2].items.push(dayReportRow)
         }
         reports.push(report)
       }
