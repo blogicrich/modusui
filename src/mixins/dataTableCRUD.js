@@ -96,7 +96,7 @@ export const crudRoutines = {
     
     async refreshItems () {
       this.resetItem()
-      // await this.getItems(this.readUrl)
+      await this.getItems(this.readUrl)
       // if (this.urls) await this.setMenuItems(this.urls)
     },
 

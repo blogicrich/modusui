@@ -12,18 +12,18 @@
         </v-layout>
       </v-container>
       </v-card>
-      <v-layout class="ma-2" v-for="(tolerance, key) in tolerances" :key="key" column fill-height justify-space-around>
+      <v-layout class="ma-2" v-for="(tolerance, index) in tolerances" :key="index" column fill-height justify-space-around>
         <v-text-field
-          v-for="level in tolerance" :key="level"
+          v-for="(level, key) in tolerance" :key="key"
           class="ma-2 mx-4"
           :label="key"
           suffix="%"
-          placeholder="....."
+          :placeholder="key"
           prepend-icon="local_drink"
           required
           type="number"
-          v-model="tolerance[key]"
-          @change="$emit('tolerance-changed', {level:key, value:tolerance[key]} )"
+          v-model="tolerances[index][key]"
+          @change="$emit('tolerance-changed', {level:level, value:tolerance[level]} )"
           box
           >{{ level }}
         </v-text-field>
@@ -48,6 +48,9 @@ export default {
     levelChanged () {
       // console.log(this.tolerances)
     }
+  },
+  mounted () {
+    console.log("fjhdkshfkdjfhkjdsahkj: ", this.tolerances)
   }
 }
 </script>
@@ -57,6 +60,6 @@ export default {
   .bg {
     width: 60%;
     border-radius: 12px;
-    background-image: linear-gradient(red, yellow, green, $vuetify-primary);
+    background-image: linear-gradient(red, green, $vuetify-primary, green, red,);
   }
 </style>

@@ -311,7 +311,6 @@
                         :color="primaryColor"
                         outline
                         required
-                        return-object
                         :item-value="newItem.find(attribute => attribute).returnVal"
                         :item-text="newItem.find(attribute => attribute).displayVal"                      >
                       </v-select>
@@ -822,8 +821,10 @@ export default {
       return this.searchBarHidden
     },
     toggleAll () {
-      console.log(this.selected)
-      if (this.selected.length) this.selected = []
+      // console.log(this.selected)
+      if (this.selected.length) {
+        this.selected = []
+      }
       else this.selected = this.items.slice()
     },
     save () {

@@ -17,8 +17,7 @@
       :errorMsg="errorMsg"
       :loadingMsg="loadingMsg"
       :loadedMsg="loadedMsg"
-      :crudIdKey="crudIdKey"
-      item-key="personsId"
+      item-key="username"
       searchLabel="Search Records..."
       tableTitle="System Administrator Records"
       newDialogTitle="Add a New Administrator Record"
@@ -37,6 +36,7 @@
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import { log } from 'util';
 
 export default {
   name: 'SystemAdmins',
@@ -46,7 +46,7 @@ export default {
   },
   data () {
     return {
-      crudIdKey: 'personsId',
+      crudIdKey: 'portalAuthorisedId',
       items: [],
       editPerms: { create: true, update: true, delete: true },
       loading: true,
@@ -64,23 +64,26 @@ export default {
       icon: 'person',
       iconAdd: 'person_add',
       headers: [
-        { text: 'PersonsId', align: 'left', sortable: false, value: 'personsId', cellType: 'tb', hidden: true, editable: false },
-        { text: 'Title', align: 'left', sortable: false, value: 'titleId', cellType: 'md', hidden: false, editable: true },
-        { text: 'Given Name', value: 'givenName', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Family Name', value: 'familyName', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Salutation', value: 'salutation', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', value: 'status', cellType: 'tb', hidden: false, editable: false }
+        { text: 'PortalId', value: 'portalAuthorisedId', align: 'left', sortable: false, cellType: 'tb', hidden: true, editable: false },
+        { text: 'Title', value: 'titleId', align: 'left', sortable: false, cellType: 'md', hidden: true, editable: true },
+        { text: 'Description', value: 'shortDescription', align: 'left', sortable: false, cellType: 'tb', hidden: false, editable: true },
+        { text: 'Given Name', value: 'givenName', align: 'left', sortable: false, cellType: 'tb', hidden: false, editable: true },
+        { text: 'Family Name', value: 'familyName', align: 'left', sortable: false, cellType: 'tb', hidden: false, editable: true },
+        { text: 'Salutation', value: 'salutation', align: 'left', sortable: false, cellType: 'tb', hidden: false, editable: true },
+        { text: 'Username', value: 'username', align: 'left', sortable: false, cellType: 'tb', hidden: true, editable: true },
+        { text: 'Corporate ID', value: 'corporateIdentification', cellType: 'tb', hidden: true, editable: true },
       ],
       newItem: [
         { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
-        { corporateId: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
+        { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
+        { salutation: ' ', cellType: 'tb', attr: 'salutation', cellLabel: 'Salutation', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
         { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] },
       ],
       defaultItem: [
-        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateId: '', username: '', password: '' }
+        { titleId: 0, portalAuthorisedId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', password: '' }
       ],
       urls: [
         { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' },
@@ -93,16 +96,31 @@ export default {
         { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: [], validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
-        { corporateId: 0, cellType: 'tb', attr: 'corporateIdentifier', cellLabel: 'Company', menuItems: [], validators: [] },
+        { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
+        { salutation: ' ', cellType: 'tb', attr: 'salutation', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
+        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] },
       ]
       this.defaultItem = [
-        { personsId: 0, titleId: 0, givenName: '', familyName: '', corporateId: '', username: '' }
+        { titleId: 0, portalAuthorisedId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', password: '' }
       ]
-    }
+    },
+    async setData () {
+      await this.getItems('sysadmin/sysadmin')
+      // console.log('jkfvjgklfdslgjfljgfjdsklgjfdslgklfdsjgjfldjglfdsgfdsgfdsgfdsgfds')
+      for (let i = 0; i < this.items.length; i++) {
+        for (let item in this.items[i]) {
+          if (item === null) {
+            Object.defineProperty(this.items[i], 'salutation', {
+              value: ' '
+            })
+          }
+        }
+      }
+    },
   },
   mounted () {
-    this.getItems(this.readUrl)
+    this.setData()
   }
 }
 </script>

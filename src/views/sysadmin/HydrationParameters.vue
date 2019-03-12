@@ -13,7 +13,7 @@
           <BaseToleranceSetter
             class="baseToleranceSetter"
             :tolerances="tolerances"
-            v-on:tolerance-changed="toleranceChanged"
+            @tolerance-changed="toleranceChanged"
           />
       </v-layout>
       <v-layout column>
@@ -24,7 +24,7 @@
         <BaseToleranceSetter
           class="baseToleranceSetter"
           :tolerances="tolerances"
-          v-on:tolerance-changed="toleranceChanged"
+          @tolerance-changed="toleranceChanged"
         />
       </v-layout>
     </v-layout>
@@ -41,15 +41,6 @@
       </v-btn>
     </v-fade-transition>
     </v-layout>
-    <v-snackbar
-      v-model="snack"
-      bottom
-      :timeout="timeout"
-      :color="snackColor"
-    >
-      {{ snackText }}
-      <v-btn flat @click="snack = false">Close</v-btn>
-    </v-snackbar>
   </v-layout>
 </template>
 
@@ -72,7 +63,7 @@ export default {
       snackText: '',
       snack: false,
       timeout: 6000,
-      writeUrl: 'hydrationtolerancessave'
+      writeUrl: 'sysadmin/hydration-params'
     }
   },
   methods: {
@@ -81,19 +72,17 @@ export default {
       let dataClone = await apiLib.getData('sysadmin/hydration-params')
       this.tolerances = data
       this.clone = dataClone
-      // console.log(data)
+      // console.log(this.tolerances)
+      // console.log(this.clone)
     },
     async save () {
       for (var i = 0; i < this.tolerances.length; i++) {
-        this.snackText = await apiLib.postData(this.writeUrl, { level1: this.tolerances[i].level1, level2: this.tolerances[i].level2, level3: this.tolerances[i].level3, level4: this.tolerances[i].level4 })
-        if (this.snackText === 'Hydration Tolerances Updated') {
-          this.newDefaultValue = false
-          this.snackColor = 'success'
-          this.snack = true
-        } else {
-          this.snackColor = 'error'
-          this.snack = true
-        }
+        await apiLib.updateData(this.writeUrl, { 
+          dehydratedRedAmberBound: this.tolerances[i].dehydratedRedAmberBound, 
+          dehydratedAmberGreenBound: this.tolerances[i].dehydratedAmberGreenBound, 
+          overHydratedAmberRedBound: this.tolerances[i].overHydratedAmberRedBound, 
+          overHydratedGreenAmberBound: this.tolerances[i].overHydratedGreenAmberBound 
+        }, false, true)
       }
       await this.getValues()
     },
@@ -109,7 +98,6 @@ export default {
   },
   mounted () {
     this.getValues()
-    // console.log(data)
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {

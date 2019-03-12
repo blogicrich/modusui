@@ -10,6 +10,7 @@
       :selectAll="selectAll"
       :searchName="searchName"
       :multiple="multiple"
+      @get-selected-user="getSelectedUser"
     />
     </v-layout>
     <v-divider
@@ -66,25 +67,15 @@ export default {
       selectAll: 'Select all',
       searchName: 'Search user..',
       users: [
-        { name: 'Elsa' },
-        { name: 'Tamara' },
-        { name: 'Daniek' },
-        { name: 'Mitchell' },
-        { name: 'Jasper' },
-        { name: 'Bram' },
-        { name: 'Kevin' },
-        { name: 'Julian' },
-        { name: 'Patricia' },
-        { name: 'Marcel' },
-        { name: 'Fred' },
-        { name: 'Joke' },
-        { name: 'Kaily' },
-        { name: 'Michelle' },
-        { name: 'Lisa' },
-        { name: 'Cheyenne' },
-        { name: 'Shalina' },
-        { name: 'Naomi' },
-        { name: 'Leeroy' }
+        { userId: '21', name: 'TEST ID 001' },
+        { userId: '22', name: 'Tamara' },
+        { userId: '23', name: 'Daniek' },
+        { userId: '24', name: 'Mitchell' },
+        { userId: '25', name: 'Jasper' },
+        { userId: '26', name: 'Bram' },
+        { userId: '27', name: 'Kevin' },
+        { userId: '28', name: 'Julian' },
+        { userId: '29', name: 'Patricia' }
       ],
       userPerms: true,
       // BaseDataTable
@@ -142,10 +133,16 @@ export default {
       this.defaultItem = [
         { identifier: 0, comments: ' ', startdate: 0, enddate: 0, status: ' '}
       ]
+    },
+    getSelectedUser (user) {
+      // this.user = user.userId
+      let vals = apiLib.getData('cliadmin/')
+      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
+      // this.getItems(this.readUrl)
     }
   },
   mounted () {
-    this.getItems(this.readUrl)
+  
   }
 }
 </script>

@@ -93,10 +93,11 @@ export default {
         return newValue
       }
     }
-  // beforeMount () {
-  //   // this.newValue = this.defaultValue
-  //   // console.log('mounted val:', this.newValue);
-  // }
+  },
+  beforeMount () {
+    console.log(this.radioConfig)
+    // this.newValue = this.defaultValue
+    // console.log('mounted val:', this.newValue);
   }
 }
 </script>

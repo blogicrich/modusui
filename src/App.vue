@@ -111,7 +111,7 @@
             top
           />
           <BaseAppNavBtn
-            v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')"
+            v-if="user.find(level => level === 'CARER')"
             btnIcon="dashboard"
             btnColor="primary"
             route="dashboard"
@@ -177,14 +177,14 @@ export default {
           route: 'dashboard',
           tip: 'Go to Dashboard'
         },
-        {
-          title: 'Alerts',
-          btnIcon: 'notification_important',
-          btnColor: 'white',
-          iconColor: 'white',
-          route: 'alerts',
-          tip: 'View Alerts'
-        },
+        // {
+        //   title: 'Alerts',
+        //   btnIcon: 'notification_important',
+        //   btnColor: 'white',
+        //   iconColor: 'white',
+        //   route: 'alerts',
+        //   tip: 'View Alerts'
+        // },
         {
           title: 'Add Drinks',
           btnIcon: 'local_drink',

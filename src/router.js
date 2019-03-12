@@ -17,6 +17,7 @@ export default new Router({
     },
 
     // Common routes
+
     {
       path: '/',
       redirect: { name: 'Login' }
@@ -38,16 +39,18 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/common/IntervalOptions.vue')
     },
     {
-      path: '/voicemessages',
-      name: 'VoiceMessages',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
-    },
-    {
       path: '/passwordreset',
       name: 'PasswordReset',
       component: () => import(/* webpackChunkName: "about" */ './views/common/ForgotPassword.vue')
     },
+    {
+      path: '/voicemessages',
+      name: 'VoiceMessages',
+      component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
+    },
+
     // Carer routes
+
     {
       path: '/additionaldrinks',
       name: 'AdditionalDrinks',
@@ -83,7 +86,9 @@ export default new Router({
       name: 'SettingsReports',
       component: () => import(/* webpackChunkName: "about" */ './views/carer/SettingsReports.vue')
     },
+
     // Cliadmin routes
+
     {
       path: '/personaldetails',
       name: 'PersonalDetails',
@@ -104,12 +109,9 @@ export default new Router({
       name: 'CarerAlertSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
-    {
-      path: '/intervalsettingsmanagement',
-      name: 'IntervalSettingsManagement',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/IntervalSettingsManagement.vue')
-    },
+
     // Sysadmin routes
+
     {
       path: '/conditionsoptions',
       name: 'ConditionsOptions',
@@ -149,6 +151,6 @@ export default new Router({
       path: '/titles',
       name: 'Titles',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
-    }
+    },
   ]
 })

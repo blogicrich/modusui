@@ -11,6 +11,7 @@
       recordIcon="calendar_today"
       editDialogTitle="Edit Away Period(s)"
       item-key="awayId"
+      :readUrl ="readUrl"
       :editPerms="editPerms"
       @itemsEdited="editItems"
     ></dataTable>
@@ -23,7 +24,7 @@ import apiLib from '@/services/apiLib'
 import store from '@/store'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import dataTable from "@/components/base/BaseDataTableComponent";
-const awayEndpoint = 'carer/away/' + store.getters.getterUserId
+// const awayEndpoint = 'carer/away/' + store.getters.getterUserId
 
 export default {
   mixins: [crudRoutines],
@@ -32,8 +33,8 @@ export default {
   },
   data: () => ({
     legend: "Away Periods",
-    updateUrl: awayEndpoint,
-    readUrl: awayEndpoint,
+    updateUrl: 'carer/away/21',
+    readUrl: 'carer/away/21',
     items: [],
     // awayPeriods: [
     //   {

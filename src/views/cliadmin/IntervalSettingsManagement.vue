@@ -4,7 +4,7 @@
       :users="users"
       :selectAll="selectAll"
       :searchName="searchName"
-      :multiple="multiple"
+      @get-selected-user="getSelectedUser"
     ></baseSelect>
     <subAlertCard
       :dataBox="dataBox1"
@@ -28,6 +28,7 @@
 <script>
 import subAlertCard from '@/components/sub/subIntervalSettingsComponent.vue'
 import baseSelect from '@/components/base/BaseUserSelectComponent.vue'
+import apiLib from '@/services/apiLib.js'
 
 export default {
   components: {
@@ -37,20 +38,22 @@ export default {
   data () {
     return {
       multiple: false,
+      user: '',
+      data: [],
       selectAll: 'Select all',
       searchName: 'Search user..',
       intervalOptions: 'eDroplet Reminder Interval Options',
       advancedOptions: 'Advanced Options (Power saving)',
       users: [
-        { userId: '1', name: 'Elsa' },
-        { userId: '2', name: 'Tamara' },
-        { userId: '3', name: 'Daniek' },
-        { userId: '4', name: 'Mitchell' },
-        { userId: '5', name: 'Jasper' },
-        { userId: '6', name: 'Bram' },
-        { userId: '7', name: 'Kevin' },
-        { userId: '8', name: 'Julian' },
-        { userId: '9', name: 'Patricia' }
+        { userId: '21', name: 'TEST ID 001' },
+        { userId: '22', name: 'Tamara' },
+        { userId: '23', name: 'Daniek' },
+        { userId: '24', name: 'Mitchell' },
+        { userId: '25', name: 'Jasper' },
+        { userId: '26', name: 'Bram' },
+        { userId: '27', name: 'Kevin' },
+        { userId: '28', name: 'Julian' },
+        { userId: '29', name: 'Patricia' }
       ],
       data: [
         { blueLight: '20', voiceInter: '40', wakeUp: 'never', commInter: '20' }
@@ -70,6 +73,11 @@ export default {
   methods: {
     iconClicked () {
       console.log('collapse');
+    },
+    getSelectedUser (user) {
+      // this.user = user.userId
+      let vals = apiLib.getData('cliadmin/')
+      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
     }
   }
 }

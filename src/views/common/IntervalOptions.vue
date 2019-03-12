@@ -18,8 +18,8 @@
         <v-flex xs12 lg6>
           <BaseRadioOptions
             @radio-option-changed="setNewValue"
-            :radioConfig="lightOptions"
-            :defaultValue="setValues(lightOptions)"
+            :radioConfig="intervals.blueLightFlashingInterval"
+            :defaultValue="setValues(intervals.blueLightFlashingInterval)"
             :groupHeader="drinkGroupHeader"
             :groupDescription="drinkRadioDescription"
             :radioHeader="drinkRadioHeader"
@@ -30,9 +30,9 @@
         <v-flex xs12 lg6>
           <BaseRadioOptions
             @radio-option-changed="setNewValue"
-            :radioConfig="voiceOptions"
+            :radioConfig="intervals.spokenReminder"
             :groupHeader="voiceGroupHeader"
-            :defaultValue="setValues(voiceOptions)"
+            :defaultValue="setValues(intervals.spokenReminder)"
             :groupDescription="voiceRadioDescription"
             :radioHeader="voiceRadioHeader"
             :height="height"
@@ -50,8 +50,8 @@
       <v-flex xs12 lg6>
         <BaseRadioOptions
           @radio-option-changed="setNewValue"
-          :radioConfig="wakeUpOptions"
-          :defaultValue="setValues(wakeUpOptions)"
+          :radioConfig="intervals.wakeUpInterval"
+          :defaultValue="setValues(intervals.wakeUpInterval)"
           :groupHeader="wakeUpGroupHeader"
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
@@ -62,8 +62,8 @@
       <v-flex xs12 lg6>
         <BaseRadioOptions
           @radio-option-changed="setNewValue"
-          :radioConfig="commsOptions"
-          :defaultValue="setValues(commsOptions)"
+          :radioConfig="intervals.buServerInterval"
+          :defaultValue="setValues(intervals.buServerInterval)"
           :groupHeader="commsGroupHeader"
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
@@ -85,15 +85,6 @@
       </v-btn>
     </v-fade-transition>
     </v-layout>
-    <v-snackbar
-      v-model="snack"
-      bottom
-      :timeout="timeout"
-      :color="snackColor"
-    >
-      {{ snackText }}
-      <v-btn flat @click="snack = false">Close</v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -103,6 +94,7 @@ import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import apiLib from '@/services/apiLib'
+import { log } from 'util';
 
 export default {
   name: 'IntervalOptions',
@@ -111,9 +103,9 @@ export default {
     SubPageNavButton,
     selectComponent
   },
-  // mixins: [getData, postData],
   data () {
     return {
+      intervals: [],
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
@@ -138,7 +130,7 @@ export default {
         { name: 'Naomi' },
         { name: 'Leeroy' }
       ],
-      userPerms: false,
+      userLevel: JSON.parse(localStorage.getItem('auth')).level,
       readUrl: 'intervalget',
       writeUrl: 'intervalupdate',
       newDefaultValue: false,
@@ -167,33 +159,42 @@ export default {
       commsRadioHeader: 'Time interval in minutes'
     }
   },
-  methods: {
-    async getValues () {
-      for (var i = 0; i < this.intervalTypes.length; i++) {
-        let url = this.readUrl + this.intervalTypes[i]
-        let arr = await apiLib.getData(url)
-        switch (this.intervalTypes[i]) {
-          case '/bluelight':
-            this.lightOptions = arr
-            break
-          case '/wakeup':
-            this.wakeUpOptions = arr
-            break
-          case '/voice':
-            this.voiceOptions = arr
-            break
-          case '/communication':
-            this.commsOptions = arr
-            break
-          default:
-        }
+  computed: {
+    userPerms () {
+      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        return true
+      } else {
+        return false
       }
     },
+    height () {
+      var cardHeight = 0
+      if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
+      if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
+      return cardHeight
+    }
+  },
+  methods: {
+    async getValues () {
+      let arr = apiLib.getData('sysadmin/interval-options', true).then(response => {
+        console.log(response)
+        return response
+      })
+      return arr
+    },
     // Sets the default radio button value following getValues
-    setValues (arr) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i].default === 'Y') return Number(arr[i].time)
+    setValues (object) {
+      // console.log(this.intervals)
+      for (let obj in object) {
+        if (object.hasOwnProperty(obj)) {
+          let element = object[obj]
+          console.log(element)
+          if (element.default === 'Y') return Number(element.time)
+        }
       }
+      // for (var i = 0; i < arr.length; i++) {
+
+      // }
     },
     // Sets the new value of the radio group and appends to editedItems
     setNewValue (obj) {
@@ -234,30 +235,14 @@ export default {
     async save () {
       for (var i = 0; i < this.editedItems.length; i++) {
         this.snackText = await this.postData(this.writeUrl + '/' + this.editedItems[i].type, { id: this.editedItems[i].id, type: this.editedItems[i].type })
-        if (this.snackText === 'Updated Interval Options') {
-          this.snackColor = 'success'
-          this.snack = true
-        } else {
-          this.snackColor = 'error'
-          this.snack = true
-        }
       }
       await this.getValues()
       this.newDefaultValue = false
       this.editedItems = []
     }
   },
-  computed: {
-    height () {
-      var cardHeight = 0
-      if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
-      if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
-      return cardHeight
-    }
-  },
   mounted () {
-    this.getValues()
-    if (localStorage.auth.level === 'CLIENT ADMINISTRATOR') this.userPerms = true
+    this.intervals = this.getValues()
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {

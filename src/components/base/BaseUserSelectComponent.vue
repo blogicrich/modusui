@@ -33,10 +33,10 @@
           <v-divider></v-divider>
           <v-card-text>
             <v-layout justify-start column>
-              <div v-for="item in filteredName" :value="item.name" :key="item.name">
+              <div v-for="item in filteredName" :value="item.name":key="item.userId">
                 <v-checkbox
                   v-model="selectedUsers"
-                  :value="item.name"
+                  :value="item.userId"
                   v-bind:label="item.name"
                   @click.native="select">
                 </v-checkbox>
@@ -102,6 +102,7 @@ export default {
         this.dialog = false
         this.savedUsers = this.selectedUsers
         this.allSelectSave = this.allSelected
+        this.$emit('get-selected-user', this.selectedUsers[0].userId)
       }
     },
     toggleAll (checked) {
@@ -116,14 +117,17 @@ export default {
     },
     select () {
       if (this.multiple) {
+        this.$emit('user-selected', this.selectedUsers)
         if (this.selectedUsers.length === this.users.length) {
           this.allSelected = true
+          
         } else {
           this.allSelected = false
         }
       } else {
         if (this.selectedUsers.length === 2) {
           this.selectedUsers = this.selectedUsers.slice(1, 2)
+          this.$emit('user-selected', this.selectedUsers)
         }
       }
     }
