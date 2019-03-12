@@ -8,6 +8,11 @@
     <BaseDataTable
       :headers="headers"
       :items="drinks"
+      :editPerms="{
+        create: true,
+        update: true,
+        delete: true
+      }"
       :newItem="newItem"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
@@ -59,10 +64,14 @@ export default {
       errorMsg: "",
       loadingMsg: "",
       loadedMsg: "",
-      delUrl: "carer/adddrinks",
-      updateUrl: "carer/adddrinks",
-      readUrl: "carer/adddrinks",
-      createUrl: "carer/adddrinks",
+      delUrl: "carer/adddrinks/" + this.$store.state.userId,
+      updateUrl: "carer/adddrinks/" + this.$store.state.userId,
+      readUrl:
+        "carer/adddrinks/" +
+        this.$store.state.userId +
+        "/" +
+        this.$store.state.date,
+      createUrl: "carer/adddrinks/" + this.$store.state.userId,
       primaryColor: "primary",
       secondaryColor: "primary darken-2",
       icon: "local_drink",
@@ -72,13 +81,13 @@ export default {
       },
       selected: [],
       headers: [
-        { text: "Name", value: "name" },
-        { text: "Amount", value: "amount" }
+        { text: "Name", align: 'left', sortable: true, cellType: 'tb', value: "name", editable: true },
+        { text: "Amount", align: 'left', sortable: true, cellType: 'tb', value: "quantity", editable: true }
       ],
       drinks: [],
       newItem: [
         {
-          Name: "",
+          name: "",
           cellType: "tb",
           attr: "name",
           cellLabel: "Drink Name",
@@ -86,15 +95,15 @@ export default {
           validators: []
         },
         {
-          Amount: "",
+          quantity: "",
           cellType: "tb",
-          attr: "amount",
+          attr: "quantity",
           cellLabel: "Amount Drank",
           menuItems: [],
           validators: []
         }
       ],
-      defaultItem: [{ Name: "", Amount: "" }]
+      defaultItem: [{ name: "", quantity: 0 }]
     };
   },
   methods: {
@@ -122,6 +131,8 @@ export default {
   },
   mounted() {
     this.getItems(this.readUrl);
+    this.$store.dispatch('fetchDashboardUsersGet')
+    console.log('dashboardUsers:', this.$store.state.dashboardUsers.dashboardUsersGet)
   }
 };
 </script>
