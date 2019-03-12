@@ -11,7 +11,7 @@
           v-for="(item, index) in items"
           :key="index"
         >
-        {{ item.alertTypeDescription + ' - ' + item.description }}
+        {{ item.alertTypeDescription + ' - ' + item.communicationTypeDescription }}
         </v-tab>
         <v-tabs-items
           v-model="currentItem"
@@ -24,6 +24,15 @@
               <v-layout justify-space-around mt-4>
                 <v-flex v-if="item.description === 'Email'" lg4 md4 xs12>
                   <h2 class="table-header">{{ cardEmailHeader }}</h2>
+                  <BaseDataTableInfoCard
+                    :errorMsg="errorMsg"
+                    :loadingMsg="loadingMsg"
+                    :loadedMsg="loadedMsg"
+                    :loading="loading"
+                    :loaded="loaded"
+                    :error="error"
+                    :color="primaryColor"
+                  />
                   <v-text-field
                     label="Subject"
                     v-model.sync="item.subject"
@@ -113,6 +122,7 @@
 
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
+import BaseDataTableInfo from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
   components: {
@@ -139,7 +149,8 @@ export default {
     error: Boolean,
     errorMsg: String,
     loadingMsg: String,
-    loadedMsg: String
+    loadedMsg: String,
+    infoCardColor: String
   },
   methods: {
     saveChanges () {

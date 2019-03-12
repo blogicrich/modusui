@@ -19,7 +19,7 @@
           <BaseRadioOptions
             @radio-option-changed="setNewValue"
             :radioConfig="intervals.blueLightFlashingInterval"
-            :defaultValue="setValues(intervals.blueLightFlashingInterval)"
+            :defaultValue="0"
             :groupHeader="drinkGroupHeader"
             :groupDescription="drinkRadioDescription"
             :radioHeader="drinkRadioHeader"
@@ -32,7 +32,7 @@
             @radio-option-changed="setNewValue"
             :radioConfig="intervals.spokenReminder"
             :groupHeader="voiceGroupHeader"
-            :defaultValue="setValues(intervals.spokenReminder)"
+            :defaultValue="0"
             :groupDescription="voiceRadioDescription"
             :radioHeader="voiceRadioHeader"
             :height="height"
@@ -51,7 +51,7 @@
         <BaseRadioOptions
           @radio-option-changed="setNewValue"
           :radioConfig="intervals.wakeUpInterval"
-          :defaultValue="setValues(intervals.wakeUpInterval)"
+          :defaultValue="0"
           :groupHeader="wakeUpGroupHeader"
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
@@ -63,7 +63,7 @@
         <BaseRadioOptions
           @radio-option-changed="setNewValue"
           :radioConfig="intervals.buServerInterval"
-          :defaultValue="setValues(intervals.buServerInterval)"
+          :defaultValue="0"
           :groupHeader="commsGroupHeader"
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
@@ -109,51 +109,23 @@ export default {
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
-      users: [
-        { name: 'Elsa' },
-        { name: 'Tamara' },
-        { name: 'Daniek' },
-        { name: 'Mitchell' },
-        { name: 'Jasper' },
-        { name: 'Bram' },
-        { name: 'Kevin' },
-        { name: 'Julian' },
-        { name: 'Patricia' },
-        { name: 'Marcel' },
-        { name: 'Fred' },
-        { name: 'Joke' },
-        { name: 'Kaily' },
-        { name: 'Michelle' },
-        { name: 'Lisa' },
-        { name: 'Cheyenne' },
-        { name: 'Shalina' },
-        { name: 'Naomi' },
-        { name: 'Leeroy' }
-      ],
+      users: [],
       userLevel: JSON.parse(localStorage.getItem('auth')).level,
       readUrl: 'intervalget',
       writeUrl: 'intervalupdate',
       newDefaultValue: false,
       editedItems: [],
-      intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
-      intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
-      snackColor: 'primary',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
-      lightOptions: [],
+      // intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
+      // intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
       drinkGroupHeader: 'Blue light flashing interval options',
       drinkRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       drinkRadioHeader: 'Please select an option from the following:',
-      voiceOptions: [],
       voiceGroupHeader: 'Voice Interval Options',
       voiceRadioDescription: 'Time betweeen drink reminders - (Voice message)',
       voiceRadioHeader: 'Time interval in minutes',
-      wakeUpOptions: [],
       wakeUpGroupHeader: 'Wake-up Interval Options',
       wakeUpRadioDescription: 'Time betweeen wake up and first communication of the day - (Voice message)',
       wakeUpRadioHeader: 'Time interval in minutes',
-      commsOptions: [],
       commsGroupHeader: 'Communication Interval Options',
       commsRadioDescription: 'Time betweeen edroplet communications - (Voice message)',
       commsRadioHeader: 'Time interval in minutes'
@@ -175,26 +147,29 @@ export default {
     }
   },
   methods: {
-    async getValues () {
+    getValues () {
       let arr = apiLib.getData('sysadmin/interval-options', true).then(response => {
-        console.log(response)
+        console.log(response[0])
         return response
       })
       return arr
     },
     // Sets the default radio button value following getValues
-    setValues (object) {
-      // console.log(this.intervals)
-      for (let obj in object) {
-        if (object.hasOwnProperty(obj)) {
-          let element = object[obj]
-          console.log(element)
-          if (element.default === 'Y') return Number(element.time)
+    async setValues (key) {
+      console.log(this.intervals, key)
+      for (let i = 0; i < this.intervals.length; i++) {
+        const element = this.intervals[i]['key']
+        for (const item in element) {
+          if (element.hasOwnProperty(item)) {
+            console.log(item);
+            
+            
+          }
         }
+        console.log(element);
+        
+        
       }
-      // for (var i = 0; i < arr.length; i++) {
-
-      // }
     },
     // Sets the new value of the radio group and appends to editedItems
     setNewValue (obj) {
@@ -243,6 +218,10 @@ export default {
   },
   mounted () {
     this.intervals = this.getValues()
+    let userData = apiLib.getData('cliadmin/users').then(response => {
+      return response
+    })
+    this.users = userData
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {

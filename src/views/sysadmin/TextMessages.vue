@@ -8,7 +8,7 @@
     </v-divider>
     <baseTab
       v-if="items"
-      :items= "items"
+      :items="items"
       :loading="loading"
       :loaded="loaded"
       :error="error"
@@ -24,15 +24,6 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     ></baseTab>
-    <v-snackbar
-      v-model="snack"
-      bottom
-      :timeout="timeout"
-      :color="snackColor"
-    >
-      {{ snackText }}
-      <v-btn flat @click="snack = false">Close</v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -51,10 +42,7 @@ export default {
   data () {
     return {
       items: [],
-      snackColor: 'primary',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
+      infoMsgColor: 'primary',
       loading: true,
       loaded: false,
       error: false,
@@ -76,6 +64,10 @@ export default {
     //     // console.log(data)
     //     // console.log('Items: ', this.items)
     //   })
+  },
+  mounted () {
+    console.log(this.items);
+    
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')

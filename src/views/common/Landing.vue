@@ -50,7 +50,7 @@
               color="white"
               >notifications_active
             </v-icon>
-            <h2 class="ma-1 text-white">Message options</h2>
+            <h2 class="ma-1 text-white">Message Options</h2>
           </v-layout>
           <BaseLinkComponent
             routerTitle= "Text/Email Messages"
@@ -139,7 +139,7 @@
             />
             <BaseLinkComponent
               routerTitle= "Interval Settings Management"
-              link="/intervalsettingsmanagement"
+              link="/intervaloptions"
               tooltipText="Set the reminder and Communication intervals for your eDroplets"
               icon="notification_important"
               colorIcon="#006480"

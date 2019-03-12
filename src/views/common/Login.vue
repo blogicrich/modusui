@@ -37,7 +37,7 @@ export default {
   methods: {
     submitCredentials (item) {
       this.isAuthenticating = true
-      let data = apiLib.postAuth('login', item, true).then(response => {
+      let data = apiLib.postAuth('login', item).then(response => {
         if (response) {
           if (response.roles) {
             this.isActive = false

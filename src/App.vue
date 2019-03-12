@@ -179,7 +179,7 @@ export default {
         },
         {
           title: 'Consumption',
-          btnIcon: 'event',
+          btnIcon: 'date_range',
           btnColor: 'white',
           iconColor: 'white',
           route: 'consumptioncalender',
@@ -256,7 +256,7 @@ export default {
       let concatUser = ''
       for (let i = 0; i < this.user.length; i++) {
         const element = String(this.user[i])
-        concatUser = concatUser + element
+        concatUser = concatUser + element + ' | '
       }
       return greeting + concatUser
     }

@@ -94,10 +94,9 @@ export default {
       }
     }
   },
-  beforeMount () {
-    console.log(this.radioConfig)
-    // this.newValue = this.defaultValue
-    // console.log('mounted val:', this.newValue);
+  mounted () {
+    console.log('ROADIOCONFIG: ', this.radioConfig)
+    
   }
 }
 </script>
