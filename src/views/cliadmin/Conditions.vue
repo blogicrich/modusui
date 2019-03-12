@@ -10,6 +10,7 @@
       :selectAll="selectAll"
       :searchName="searchName"
       :multiple="multiple"
+      @get-selected-user="getSelectedUser"
     />
     </v-layout>
     <v-divider

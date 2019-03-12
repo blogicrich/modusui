@@ -44,7 +44,7 @@ export const crudRoutines = {
         for (var j = 0; j < defaultItem.length; j++) {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
-            // console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
+            console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
           })
           console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
           apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
@@ -67,7 +67,7 @@ export const crudRoutines = {
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      var response = await apiLib.getData(this.readUrl, true, true)
+      var response = await apiLib.getData(this.readUrl, false, true)
       // console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {

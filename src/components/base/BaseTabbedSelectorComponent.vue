@@ -22,9 +22,9 @@
           >
             <v-card flat>
               <v-layout justify-space-around mt-4>
-                <v-flex v-if="item.description === 'Email'" lg4 md4 xs12>
+                <v-flex v-if="item.communicationTypeDescription === 'Email'" lg4 md4 xs12>
                   <h2 class="table-header">{{ cardEmailHeader }}</h2>
-                  <BaseDataTableInfoCard
+                  <!-- <BaseDataTableInfoCard
                     :errorMsg="errorMsg"
                     :loadingMsg="loadingMsg"
                     :loadedMsg="loadedMsg"
@@ -32,11 +32,10 @@
                     :loaded="loaded"
                     :error="error"
                     :color="primaryColor"
-                  />
+                  /> -->
                   <v-text-field
                     label="Subject"
                     v-model.sync="item.subject"
-
                     @input="showBtns"
                   ></v-text-field>
                   <v-textarea
@@ -44,11 +43,10 @@
                     counter
                     maxlength="500"
                     v-model.sync="item.message"
-
                     @input="showBtns"
                   ></v-textarea>
                 </v-flex>
-                <v-flex v-if="item.description === 'SMS'" lg4 md4 xs12>
+                <v-flex v-if="item.communicationTypeDescription === 'SMS'" lg4 md4 xs12>
                   <v-layout column justify-space-around mt-4>
                     <h2 class="table-header">{{ cardSmsHeader }}</h2>
                     <v-textarea
@@ -155,8 +153,10 @@ export default {
   methods: {
     saveChanges () {
       var item = Number(this.currentItem)
-      // console.log(item)
-      this.$emit('itemsEdited', this.items[item])
+      var data = [this.items[item]]
+      this.$emit('itemsEdited', data)
+      console.log("CURRENT ITEM: ", data)
+      // this.$emit('items-edited', data)
     },
     eraseChange () {
       // for (var x = 0; x < this.items.length; x++) {
@@ -193,10 +193,10 @@ export default {
       // this.currentItem = this.activeHash
       // this.eraseChange()
       // this.dialog = false
+    },
+    mounted () {
+      console.log(this.items)
     }
-    // mounted () {
-    //   console.log(this.items);
-    // }
   }
 }
 </script>

@@ -149,6 +149,10 @@ export default {
       }
       return title
     }
+  },
+  mounted () {
+    console.log(this.users)
+    
   }
 }
 </script>

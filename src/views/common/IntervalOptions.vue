@@ -6,6 +6,7 @@
       :selectAll="selectAll"
       :searchName="searchName"
       :multiple="multiple"
+      @get-selected-user="getSelectedUser"
     ></selectComponent>
     <h1 class="pg-header">eDroplet Administration</h1>
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
@@ -111,12 +112,14 @@ export default {
       searchName: 'Search user..',
       users: [],
       userLevel: JSON.parse(localStorage.getItem('auth')).level,
-      readUrl: 'intervalget',
-      writeUrl: 'intervalupdate',
+      sysadminReadUrl: 'sysadmin/interval-options',
+      sysadminWriteUrl: 'intervalupdate',
+      cliadminReadUrl: 'cliadmin/intervalsettings/21',
+      cliadminWriteUrl: 'intervalupdate',
       newDefaultValue: false,
       editedItems: [],
       // intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
-      // intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
+      intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
       drinkGroupHeader: 'Blue light flashing interval options',
       drinkRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       drinkRadioHeader: 'Please select an option from the following:',
@@ -147,12 +150,31 @@ export default {
     }
   },
   methods: {
+    getSelectedUser (user) {
+      // this.user = user.userId
+      // let vals = apiLib.getData('cliadmin/')
+      console.log("USEEEERRRRRRRRRRRRRRRR: ", user[0])
+      // this.getItems(this.readUrl)
+    },
     getValues () {
-      let arr = apiLib.getData('sysadmin/interval-options', true).then(response => {
-        console.log(response[0])
-        return response
+      if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        let arr = apiLib.getData(this.cliadminReadUrl, true).then(response => {
+          console.log(response[0])
+          return response
+        })
+        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+          this.users = response
+          log('USERS: ', response)
+         })
+        return arr
+      }
+      if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+        let arr = apiLib.getData(this.sysadminReadUrl).then(response => {
+          console.log(response[0])
+          return response
       })
       return arr
+      }
     },
     // Sets the default radio button value following getValues
     async setValues (key) {
@@ -161,14 +183,10 @@ export default {
         const element = this.intervals[i]['key']
         for (const item in element) {
           if (element.hasOwnProperty(item)) {
-            console.log(item);
-            
-            
+            console.log(item)
           }
         }
-        console.log(element);
-        
-        
+        console.log(element)
       }
     },
     // Sets the new value of the radio group and appends to editedItems
@@ -209,7 +227,12 @@ export default {
     // Posts update requests
     async save () {
       for (var i = 0; i < this.editedItems.length; i++) {
-        this.snackText = await this.postData(this.writeUrl + '/' + this.editedItems[i].type, { id: this.editedItems[i].id, type: this.editedItems[i].type })
+        if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+          await this.postData(this.cliadminWriteUrl + '/' + this.editedItems[i].type, { id: this.editedItems[i].id, type: this.editedItems[i].type })
+        } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+          await this.postData(this.sysadminWriteUrl + '/' + this.editedItems[i].type, { id: this.editedItems[i].id, type: this.editedItems[i].type })
+        }
+        
       }
       await this.getValues()
       this.newDefaultValue = false
@@ -218,10 +241,6 @@ export default {
   },
   mounted () {
     this.intervals = this.getValues()
-    let userData = apiLib.getData('cliadmin/users').then(response => {
-      return response
-    })
-    this.users = userData
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {

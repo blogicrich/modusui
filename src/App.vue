@@ -94,7 +94,7 @@
     </v-container>
     <v-fade-transition>
       <v-footer
-        v-if="user.find(level => level !== 'CARER') && authenticated.state"
+        v-if="navFooter"
         :fixed="fixed"
         color="white"
         app
@@ -168,6 +168,7 @@ export default {
       snackTimeout: 0,
       authenticated: {},
       appNavConfig: {footer: true, sideMenu: true, header: true},
+      navFooter: '',
       items: [
         {
           title: 'Dashboard',
@@ -230,8 +231,12 @@ export default {
       if (this.authenticated.level) {
         this.user = this.authenticated.level
         if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR') || this.user.find(level => level === 'CLIENT ADMINISTRATOR') && newStatus.token) {
+          this.navFooter = true
           this.$router.push('/landing')
-        } else if (this.user.find(level => level === 'CARER')) {
+        }
+        if (this.user.find(level => level === 'CARER') || 
+        (this.user.find(level => level === 'CARER') && this.user.find(level => level === 'CLIENT ADMINISTRATOR')) && newStatus.token) {
+          this.navFooter = false
           this.$router.push('/dashboard')
         }
       }
@@ -256,10 +261,10 @@ export default {
       let concatUser = ''
       for (let i = 0; i < this.user.length; i++) {
         const element = String(this.user[i])
-        concatUser = concatUser + element + ' | '
+        concatUser = concatUser + element + ' '
       }
       return greeting + concatUser
-    }
+    },
   },
   watch: {
     authenticated: function () {
@@ -277,7 +282,7 @@ export default {
   },
   destroyed () {
     EventBus.$off('snack-msg')
-    userLevel = null
+    // userLevel = null
   }
 }
 </script>

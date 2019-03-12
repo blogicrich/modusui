@@ -10,6 +10,7 @@
             :selectAll="selectAll"
             :searchName="searchName"
             :multiple="multiple"
+            @get-selected-user="getSelectedUser"
           ></selectComponent>
         </v-layout>
         <v-card class="pa-2 my-3" v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId"

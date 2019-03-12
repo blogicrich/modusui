@@ -19,9 +19,7 @@
       dialogText= "Do you wish to proceed?"
       cardEmailHeader= "Email Message Template"
       cardSmsHeader= "SMS Message Template"
-      @newItem="addItem"
       @itemsEdited="editItems"
-      @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     ></baseTab>
   </v-container>
@@ -42,6 +40,7 @@ export default {
   data () {
     return {
       items: [],
+      crudIdKey: 'alertMessagesId',
       infoMsgColor: 'primary',
       loading: true,
       loaded: false,
@@ -52,22 +51,12 @@ export default {
       updateUrl: 'sysadmin/text-messages',
       readUrl: 'sysadmin/text-messages',
       defaultItem: [
-        { alertMessagesId: 0, alertNo: 0, alertTypeDescription: 0, alertTypeId: '', communicationMethodId: '', communicationType: '', description: '', message: '', status: '', subject: '' }
+        { alertMessagesId: 0, alertTypeDescription: 0, alertTypeId: '', communicationTypeDescription: '', communicationType: '', message: '', status: '', subject: '' }
       ]
     }
   },
-  created () {
-    // apiLib.getData(this.readUrl)
-    this.getItems(this.readUrl)
-    //   .catch(err => console.log(err))
-    //   .finally(() => {
-    //     // console.log(data)
-    //     // console.log('Items: ', this.items)
-    //   })
-  },
   mounted () {
-    console.log(this.items);
-    
+    this.getItems(this.readUrl)
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
