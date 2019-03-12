@@ -32,7 +32,14 @@ export const chartMixin = {
       this.optionsLine = {
         maintainAspectRatio: false,
         responsive: true,
+        spanGaps: true,
+        label: {
+
+        },
         elements: {
+          point: {
+            radius: 0
+          },
           line: {
             tension: 0.3
           }
@@ -43,13 +50,17 @@ export const chartMixin = {
           fontSize: 16
         },
         scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true
-              }
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              fontSize: 11
             }
-          ]
+          }],
+          xAxes: [{
+            ticks: {
+              fontSize: 11
+            }
+          }]
         }
       }
     },
@@ -86,19 +97,29 @@ export const chartMixin = {
       this.optionsBar = {
         responsive: true,
         maintainAspectRatio: false,
+        spanGaps: true,
         title: {
           display: true,
           text: 'Weelky summary 6L average',
           fontSize: 16
         },
+        elements: {
+          point: {
+            radius: 0
+          }
+        },
         scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true
-              }
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              fontSize: 11
             }
-          ]
+          }],
+          xAxes: [{
+            ticks: {
+              fontSize: 11
+            }
+          }]
         }
       }
     },

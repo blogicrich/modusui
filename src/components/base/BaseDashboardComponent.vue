@@ -117,8 +117,8 @@
 </template>
 
 <script>
-import charts from "@/components/base/BaseChartComponent";
-import baseDropletuser from "@/components/sub/SubUserSelectComponent";
+import charts from '@/components/base/BaseChartComponent'
+import baseDropletuser from '@/components/sub/SubUserSelectComponent'
 
 export default {
   components: {
@@ -134,84 +134,84 @@ export default {
   },
   watch: {
     date() {
-      this.$emit("onchangedate", this.date, this.$data);
+      this.$emit('onchangedate', this.date, this.$data)
     }
   },
   computed: {
     breakpoint() {
       switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return true;
-        case "sm":
-          return true;
+        case 'xs':
+          return true
+        case 'sm':
+          return true
         default:
-          return false;
+          return false
       }
     },
     alertColors() {
       for (var i = 0; i < this.dashboardUsers.length; i++) {
-        if (this.dashboardUsers[i].alertType === "hydrated") {
-          this.alertColor.push("green");
-        } else if (this.dashboardUsers[i].alertType === "dehydrated") {
-          this.alertColor.push("red");
-        } else if (this.dashboardUsers[i].alertType === "little dehydrated") {
-          this.alertColor.push("orange");
+        if (this.dashboardUsers[i].alertType === 'hydrated') {
+          this.alertColor.push('green')
+        } else if (this.dashboardUsers[i].alertType === 'dehydrated') {
+          this.alertColor.push('red')
+        } else if (this.dashboardUsers[i].alertType === 'little dehydrated') {
+          this.alertColor.push('orange')
         }
       }
-      return this.alertColor;
+      return this.alertColor
     }
   },
   methods: {
     addDate: function() {
-      let dateNow = new Date(this.date);
-      this.date = dateNow.setDate(new Date(dateNow.getDate() + 1));
-      this.date = dateNow.toISOString().substr(0, 10);
+      let dateNow = new Date(this.date)
+      this.date = dateNow.setDate(new Date(dateNow.getDate() + 1))
+      this.date = dateNow.toISOString().substr(0, 10)
     },
     subDate: function() {
-      let dateNow = new Date(this.date);
-      this.date = dateNow.setDate(new Date(dateNow.getDate() - 1));
-      this.date = dateNow.toISOString().substr(0, 10);
+      let dateNow = new Date(this.date)
+      this.date = dateNow.setDate(new Date(dateNow.getDate() - 1))
+      this.date = dateNow.toISOString().substr(0, 10)
     },
     openDialog: function(charType) {
       switch (charType) {
-        case "Line":
-          this.lineDialog = true;
+        case 'Line':
+          this.lineDialog = true
           let lineComp = this.$children[8].$children[0].$children[0]
-            .$children[0].$children[0].$children[0];
+            .$children[0].$children[0].$children[0]
           setTimeout(() => {
-            lineComp.renderChart(lineComp.chartData, lineComp.options);
-          }, 200);
-          break;
-        case "Bar":
-          this.barDialog = true;
+            lineComp.renderChart(lineComp.chartData, lineComp.options)
+          }, 200)
+          break
+        case 'Bar':
+          this.barDialog = true
           let barComp = this.$children[10].$children[0].$children[0]
-            .$children[0].$children[0].$children[0];
+            .$children[0].$children[0].$children[0]
           setTimeout(() => {
-            barComp.renderChart(barComp.chartData, barComp.options);
-          }, 200);
-          break;
-        case "Doughnut":
-          this.doughnutDialog = true;
+            barComp.renderChart(barComp.chartData, barComp.options)
+          }, 200)
+          break
+        case 'Doughnut':
+          this.doughnutDialog = true
           let doughnutComp = this.$children[9].$children[0].$children[0]
-            .$children[0].$children[0].$children[0];
+            .$children[0].$children[0].$children[0]
           setTimeout(() => {
             doughnutComp.renderChart(
               doughnutComp.chartData,
               doughnutComp.options
-            );
-          }, 200);
-          break;
+            )
+          }, 200)
+          break
       }
     }
   },
   data() {
     return {
-      searchName: "Search user..",
-      usersIcon: "person",
-      alertIcon: "report_problem",
-      commentIcon: "comment",
-      btnIcon: "settings",
-      primaryColor: "primary",
+      searchName: 'Search user..',
+      usersIcon: 'person',
+      alertIcon: 'report_problem',
+      commentIcon: 'comment',
+      btnIcon: 'settings',
+      primaryColor: 'primary',
       lineDialog: false,
       barDialog: false,
       doughnutDialog: false,
@@ -219,52 +219,54 @@ export default {
       menu: false,
       date: new Date().toISOString().substr(0, 10),
       lineChartData: {
-        labels: ["0:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00"],
-        labelLineOne: "Liter",
-        dataLineOne: [50, 30, 80, 40, 50, 100, 10],
-        borderColorLineOne: "rgba(54, 162, 235, 1)", // rgba
-        backgroundColorLineOne: "rgba(54, 162, 235, 0.2)", // rgba
+        labels: ["09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00", "12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00", "20:00 - 21:00", "21:00 - 22:00", "22:00 - 23:00", "23:00 - 00:00", "00:00 - 01:00", "01:00 - 02:00", "02:00 - 03:00", "03:00 - 04:00", "04:00 - 05:00", "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00", "08:00 - 09:00"],
+
+        labelLineOne: 'Consumed',
+        dataLineOne: [ 1.2, 0.8, 1.8, 0.8, 1, 1.5, 1, 1.2, 1.1, 1.4, 0.7, 0.7, 1.6, 1.3, 0.7, 1.5, 0.7, 0.8, 1.1, 1.3, 1.2, 1.8, 0.7, 1 ],
+        borderColorLineOne: 'rgba(54, 162, 235, 1)',
+        backgroundColorLineOne: 'rgba(54, 162, 235, 0.2)',
         borderWidthLineOne: 2,
-        labelLineTwo: "data1",
-        dataLineTwo: [60, 60, 60, 60, 60, 60, 60],
-        borderColorLineTwo: "rgba(102, 141, 62, 1)", // rgba
-        borderWidthLineTwo: 1,
-        labelLineThree: "data2",
-        dataLineThree: [50, 50, 50, 50, 50, 50, 50],
-        borderColorLineThree: "rgba(255, 159, 64, 1)", // rgba
-        borderWidthLineThree: 1
+
+        labelLineTwo: 'Target hydration',
+        dataLineTwo: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        borderColorLineTwo: 'rgba(102, 141, 62, 1)',
+        borderWidthLineTwo: 2,
+
+        labelLineThree: 'Target hydration (conditional)',
+        dataLineThree: [1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5],
+        borderColorLineThree: 'rgba(255, 159, 64, 1)',
+        borderWidthLineThree: 2
       },
       barChartData: {
-        labels: [4, 5, 6, 7, 8, 9],
-        labelLineOne: "data1",
-        dataLineOne: [50, 50, 50, 50, 50, 50],
-        borderColorLineOne: "rgba(255, 159, 64, 1)", // rgba
-        borderWidthLineOne: 1,
-        labelLineTwo: "data2",
-        dataLineTwo: [60, 60, 60, 60, 60, 60],
-        borderColorLineTwo: "rgba(102, 141, 62, 1)", // rgba
-        borderWidthLineTwo: 1,
-        labelBarOne: "bar1",
-        dataBarOne: [50, 30, 80, 40, 50, 100, 10],
-        borderColorBarOne: "rgba(54, 162, 235, 1)", // rgba
-        backgroundColorBarOne: "rgba(54, 162, 235, 0.2)", // rgba
-        borderWidthBarOne: 1
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+
+        labelBarOne: 'Consumed',
+        dataBarOne: [1.3, 1.2, 0.8, 1.6, 0.6, 0.9, 1.0],
+        borderColorBarOne: 'rgba(54, 162, 235, 1)',
+        backgroundColorBarOne: 'rgba(54, 162, 235, 0.2)',
+        borderWidthBarOne: 2,
+
+        labelLineOne: 'Target hydration (conditional)',
+        dataLineOne: [1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2],
+        borderColorLineOne: 'rgba(255, 159, 64, 1)',
+        borderWidthLineOne: 2,
+
+        labelLineTwo: 'Target hydration',
+        dataLineTwo: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        borderColorLineTwo: 'rgba(102, 141, 62, 1)',
+        borderWidthLineTwo: 2
       },
       doughnutChartData: {
-        labels: ["data1", "data2", "data3"],
-        dataDoughnut: [33.33, 33.33, 33.33],
-        borderColorDoughnut: "rgba(255, 255, 255, 1)", // rgba
-        backgroundColorDoughnut: [
-          "rgba(54, 162, 235, 0.5)",
-          "rgba(54, 162, 235, 0.7)",
-          "rgba(54, 162, 235, 1)"
-        ], // rgba
-        borderWidthDoughnut: 1,
+        labels: ['Consumed', 'Remaining'],
+        dataDoughnut: [0.8, 0.2],
+        borderColorDoughnut: 'rgba(255, 255, 255, 1)',
+        backgroundColorDoughnut: ['#00A1CD', 'rgba(200, 200, 200)' ],
+        borderWidthDoughnut: 2,
         cutoutPercentageDoughnut: 65
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
