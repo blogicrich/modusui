@@ -86,6 +86,11 @@ export default new Router({
       name: 'SettingsReports',
       component: () => import(/* webpackChunkName: "about" */ './views/carer/SettingsReports.vue')
     },
+    {
+      path: '/consumptioncalender',
+      name: 'ConsumptionCalender',
+      component: () => import(/* webpackChunkName: "about" */ './views/carer/ConsumptionCalendar.vue')
+    },
 
     // Cliadmin routes
 

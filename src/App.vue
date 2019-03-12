@@ -177,14 +177,14 @@ export default {
           route: 'dashboard',
           tip: 'Go to Dashboard'
         },
-        // {
-        //   title: 'Alerts',
-        //   btnIcon: 'notification_important',
-        //   btnColor: 'white',
-        //   iconColor: 'white',
-        //   route: 'alerts',
-        //   tip: 'View Alerts'
-        // },
+        {
+          title: 'Consumption',
+          btnIcon: 'event',
+          btnColor: 'white',
+          iconColor: 'white',
+          route: 'consumptioncalender',
+          tip: 'View consumption'
+        },
         {
           title: 'Add Drinks',
           btnIcon: 'local_drink',
