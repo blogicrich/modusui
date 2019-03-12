@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import store from '@/store'
 import BaseCalendarComponent from '@/components/base/BaseCalendarComponent'
 
 export default {
@@ -25,10 +24,10 @@ export default {
   methods: {
     getDayReports: function () {
       let dayReports = []
-      let apiData = store.state.report.reportsSnapshot
+      let apiData = this.$store.state.report.reportsSnapshotGet
       for (let i = 0; i < apiData.length; i++) {
         let dayReport = apiData[i]
-        let status = this.getDescription(dayReport.aggregatedHyration)
+        let status = this.getDescription(dayReport.aggregatedHydration)
         let hydrationLevel =
           dayReport.volumeConsumedViaEDroplet +
           dayReport.volumeConsumedViaOther +
