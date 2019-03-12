@@ -21,30 +21,30 @@ export const moduleReports = {
   },
   actions: {
     // get all data
-    fetchReportsConditionsGet (context) {
-      return apiLib.getData('carer/condition/' + this.getters.getterUserId + '/' + this.getters.getterDate).then((response) => {
-        if (typeof response === 'undefined' || response.length <= 0) {
+    async fetchReportsConditionsGet (context) {
+      await apiLib.getData('carer/condition/' + this.getters.getterUserId, true).then((response) => {
+        if (typeof response === 'undefined') {
           context.commit('SET_REPORTSCONDITIONS', null)
         } else {
-          context.commit('SET_REPORTSCONDITIONS', response.data)
+          context.commit('SET_REPORTSCONDITIONS', response)
         }
       })
     },
-    fetchReportsSnapshotGet (context) {
-      return apiLib.getData('carer/reports-snapshot/' + this.getters.getterUserId).then((response) => {
-        if (typeof response === 'undefined' || response.length <= 0) {
+    async fetchReportsSnapshotGet (context) {
+      await apiLib.getData('carer/reports-snapshot/' + this.getters.getterUserId + '/' + this.getters.getterDate, true).then((response) => {
+        if (typeof response === 'undefined') {
           context.commit('SET_REPORTSSNAPSHOT', null)
         } else {
-          context.commit('SET_REPORTSSNAPSHOT', response.data)
+          context.commit('SET_REPORTSSNAPSHOT', response)
         }
       })
     },
     fetchReportCommentsGet (context) {
-      return apiLib.getData('carer/reports-day-comments/' + this.getters.getterUserId).then((response) => {
-        if (typeof response === 'undefined' || response.length <= 0) {
+      return apiLib.getData('carer/reports-day-comments/' + this.getters.getterUserId, true).then((response) => {
+        if (typeof response === 'undefined') {
           context.commit('SET_REPORTSCOMMENTS', null)
         } else {
-          context.commit('SET_REPORTSCOMMENTS', response.data)
+          context.commit('SET_REPORTSCOMMENTS', response)
         }
       })
     }
