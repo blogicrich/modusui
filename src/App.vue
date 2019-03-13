@@ -8,8 +8,10 @@
     >
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
-      <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
-      <span v-if="authenticated.state">{{ userLevel }}</span>
+      <v-layout row fill-height wrap justify-end>
+        <v-icon outline class="mx-2" color="primary">person_outline</v-icon>
+        <v-chip class="ml-1 mt-3 mb-3" v-for="(level, index) in user" :key="index" color="secondary" text-color="primary">{{ level }}</v-chip>
+      </v-layout>
     </v-toolbar>
     <transition-group name="navBtns">
       <v-navigation-drawer

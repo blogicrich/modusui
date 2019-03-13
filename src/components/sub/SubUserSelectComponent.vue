@@ -2,7 +2,7 @@
   <v-layout column>
     <v-container fill-height align-center justify-center>
       <v-flex xs5 grow>
-        <v-layout fill-height align-center justify-start>
+        <v-layout fluid fill-height align-center justify-start>
           <v-icon large color="primary">group</v-icon>
           <h2 class="table-header">{{ userHeader }}</h2>
         </v-layout>
@@ -14,7 +14,7 @@
         </v-layout>
       </v-flex>
     </v-container>
-    <v-container v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.userId) }" class="userHoverSelect" :value="item.userId" :key="item.userId" @click="clickedPerson(item)">
+    <v-container fluid v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.userId) }" class="userHoverSelect" :value="item.userId" :key="item.userId" @click="clickedPerson(item)">
       <baseDropletuser
         :primaryColor="primaryColor"
         :userHeader="userHeader"
@@ -22,7 +22,7 @@
         :usersIcon="usersIcon"
       >
         <v-icon slot="leftSlot" large :color="primaryColor">{{ usersIcon }}</v-icon>
-        <v-chip slot="middleFirstNameSlot">{{ item.givenName }} {{ item.familyName }}</v-chip>
+        <v-chip slot="middleFirstNameSlot" color="secondary" text-color="primary">{{ item.givenName }} {{ item.familyName }}</v-chip>
         <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydrationValue }}  {{ item.calculatedTargetConsumption }}</span>
         <span slot="middleThirdNameSlot">{{ item.lastComm }}</span>
         <v-btn flat fab slot="firstRightSlot" to="/alerts"><v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon></v-btn>
