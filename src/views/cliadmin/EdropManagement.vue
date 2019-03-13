@@ -1,17 +1,17 @@
 <template>
-  <v-container>
+  <v-container class= "mx-4" fluid>
     <v-layout row fill-height align-center justify-end wrap>
-    <v-icon large color="primary">build</v-icon>
+    <v-icon large color="primary">local_drink</v-icon>
     <h1 class="pg-header">eDroplet Management</h1>
     <v-spacer></v-spacer>
-    <BaseUserSelect
+    <!-- <BaseUserSelect
       v-if="userPerms"
       :users="users"
       :selectAll="selectAll"
       :searchName="searchName"
       :multiple="multiple"
       @get-selected-user="getSelectedUser"
-    />
+    /> -->
     </v-layout>
     <v-divider
       class="mx-1 mb-4"
@@ -70,6 +70,7 @@ export default {
       // BaseDataTable
       crudIdKey: 'identifier',
       items: [],
+      userLevel: JSON.parse(localStorage.getItem('auth')).level,
       editPerms: { create: false, update: true, delete: false },
       snackColor: 'primary',
       snackText: '',
@@ -83,11 +84,11 @@ export default {
       loadedMsg: ' ',
       delUrl: '/cliadmin/conditions/1',
       updateUrl: '/cliadmin/conditions/1',
-      readUrl: '/cliadmin/conditions/2',
+      readUrl: '/cliadmin/edropman/',
       createUrl: '/cliadmin/conditions/1',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
-      icon: 'build',
+      icon: 'local_drink',
       iconAdd: 'build',
       headers: [
         { text: 'Identifier', align: 'left', sortable: false, value: 'identifier', cellType: 'tb', hidden: true, editable: false },
@@ -110,6 +111,15 @@ export default {
       //   { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }
       // ]
     }
+  },
+  computed: {
+    userPerms () {
+      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
   methods: {
     getSelectedUser (user) {
@@ -157,7 +167,7 @@ export default {
     },
   },
   mounted () {
-  
+    this.getItems(this.readUrl)
   }
 }
 </script>
