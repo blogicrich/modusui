@@ -1,7 +1,14 @@
 <template>
   <keep-alive>
   <v-container grid-list-md>
+    <v-layout v-if="user.find(level => level === 'SYSTEM ADMINISTRATOR')" row align-center fill-height justify-start>
+      <v-icon class="mr-1 ml-1" large color="primary">settings</v-icon>
       <h1 class="pg-header">eDroplet Administration</h1>
+    </v-layout>
+    <v-layout v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')" row align-center fill-height justify-start>
+      <v-icon class="mr-1 ml-1" large color="primary">settings</v-icon>
+      <h1 class="pg-header">eDroplet Client Administration</h1>
+    </v-layout>
       <v-layout v-if="user.find(level => level === 'SYSTEM ADMINISTRATOR')" row wrap align-start justify-start>
         <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-start justify-center style="background-color:#003c4d;border-radius:10px;">
