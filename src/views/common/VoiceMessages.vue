@@ -4,27 +4,27 @@
       <v-icon v-if="apiData.length > 0" large color="primary">settings</v-icon>
       <h1 v-if="apiData.length > 0" class="pg-header">eDroplet Administration</h1>
       <v-spacer></v-spacer>
-      <selectComponent
+      <!-- <selectComponent
         v-if="userPerms"
         :users="users"
         :selectAll="selectAll"
         :searchName="searchName"
         :multiple="multiple"
         @get-selected-user="getSelectedUser"
-      ></selectComponent>
+      ></selectComponent> -->
     </v-layout>
     <v-layout v-if="apiData.length > 0">
       <v-flex xs12>
         <v-layout row align-start justify-space-between>
           <h1 class="pg-header ma-2">Voice Messages</h1>
           <v-spacer></v-spacer>
-          <selectComponent
+          <!-- <selectComponent
             :users="users"
             :selectAll="selectAll"
             :searchName="searchName"
             :multiple="multiple"
             @get-selected-user="getSelectedUser"
-          ></selectComponent>
+          ></selectComponent> -->
         </v-layout>
         <v-card class="pa-2 my-3" v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: {{ config.voiceMessagedescription }}</h2>

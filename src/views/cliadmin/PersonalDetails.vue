@@ -1,6 +1,5 @@
 <template>
     <wizard-component/>
-
 </template>
 
 <script>
