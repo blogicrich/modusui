@@ -36,7 +36,7 @@
             :groupDescription="msgReminderRadioDescription"
             :radioHeader="msgReminderRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="config.audioFile"
+            :audioFile="'https://s1.vocaroo.com/media/download_temp/Vocaroo_s1pex2ARQm9Y.mp3'"
             :fileName="config.voiceMessagedescription"
           />
         </v-card>
