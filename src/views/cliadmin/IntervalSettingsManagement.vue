@@ -1,4 +1,18 @@
 <template lang="html">
+<v-container>
+  <v-layout row align-center fill-height>
+    <v-icon v-if="apiData.length > 0" large color="primary">settings</v-icon>
+    <h1 v-if="apiData.length > 0" class="pg-header">eDroplet Administration</h1>
+    <v-spacer></v-spacer>
+    <selectComponent
+      v-if="userPerms"
+      :users="users"
+      :selectAll="selectAll"
+      :searchName="searchName"
+      :multiple="multiple"
+      @get-selected-user="getSelectedUser"
+    ></selectComponent>
+  </v-layout>
   <v-layout column>
     <baseSelect
       :users="users"
@@ -23,6 +37,7 @@
       <v-icon slot="btnSlot" large @click="iconClicked">expand_more</v-icon>
     </subAlertCard>
   </v-layout>
+<v-container>
 </template>
 
 <script>

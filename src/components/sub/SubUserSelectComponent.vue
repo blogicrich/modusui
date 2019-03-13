@@ -3,6 +3,7 @@
     <v-container fill-height align-center justify-center>
       <v-flex xs5 grow>
         <v-layout fill-height align-center justify-start>
+          <v-icon large color="primary">group</v-icon>
           <h2 class="table-header">{{ userHeader }}</h2>
         </v-layout>
       </v-flex>
@@ -21,8 +22,8 @@
         :usersIcon="usersIcon"
       >
         <v-icon slot="leftSlot" large :color="primaryColor">{{ usersIcon }}</v-icon>
-        <span slot="middleFirstNameSlot">{{ item.givenName }} {{ item.familyName }}</span>
-        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydrationValue }} / {{ item.calculatedTargetConsumption }}</span>
+        <v-chip slot="middleFirstNameSlot">{{ item.givenName }} {{ item.familyName }}</v-chip>
+        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydrationValue }}  {{ item.calculatedTargetConsumption }}</span>
         <span slot="middleThirdNameSlot">{{ item.lastComm }}</span>
         <v-btn flat fab slot="firstRightSlot" to="/alerts"><v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon></v-btn>
         <v-btn flat fab slot="secondRightSlot" @click="addComment(item)"><v-icon :color="primaryColor">{{ commentIcon }}</v-icon></v-btn>
@@ -54,7 +55,34 @@
           <v-card-title><h2>{{ titleSettings }}</h2></v-card-title>
           </v-layout>
           <v-container>
-            <v-data-table
+          <BaseDataTable
+            :headers="headers"
+            :items="items"
+            :editPerms="editPerms"
+            :primaryColor="primaryColor"
+            :secondaryColor="secondaryColor"
+            :recordIcon="icon"
+            :addRecordIcon="iconAdd"
+            addBtnTitle="New Administrator"
+            :loading="loading"
+            :loaded="loaded"
+            :error="error"
+            :errorMsg="errorMsg"
+            :loadingMsg="loadingMsg"
+            :loadedMsg="loadedMsg"
+            item-key="username"
+            searchLabel="Search Records..."
+            tableTitle="Assigned eDroplet Bases"
+            newDialogTitle="Add a New Administrator Record"
+            editDialogTitle="Edit Administrator Records"
+            delDialogTitle="Confirm deletetion of selected items?"
+            msgDel="Are you sure you want to delete the selected items?"
+            @newItem="addItem"
+            @itemsEdited="editItems"
+            @deleteSelected="deleteItem"
+            @itemsCancelled="refreshItems"
+          />
+            <!-- <v-data-table
               :headers="headers"
               :items="dropletDetail"
               class="elevation-1"
@@ -65,7 +93,7 @@
               <template v-slot:items="props">
                 <td v-for="item in props.item">{{ item }}</td>
               </template>
-            </v-data-table>
+            </v-data-table> -->
           </v-container>
           <v-layout justify-center>
             <v-card-actions>
@@ -80,11 +108,15 @@
 
 <script>
 import baseDropletuser from '@/components/base/baseDropletuserComponent.vue'
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 
 export default {
   components: {
-    baseDropletuser
+    baseDropletuser,
+    BaseDataTable
   },
+  mixins: [crudRoutines],
   data () {
     return {
       search: '',
@@ -98,10 +130,22 @@ export default {
       commentRules: [
         v => v.length <= this.maxCharac || 'Name must be less than ' + this.maxCharac + ' characters'
       ],
+      items: [],
+      editPerms: { create: false, update: false, delete: false },
+      loading: true,
+      loaded: false,
+      error: false,
+      errorMsg: ' ',
+      loadingMsg: ' ',
+      loadedMsg: ' ',
+      readUrl: 'carer/bases/23',
+      secondaryColor: 'primary darken-2',
+      icon: 'local_drink',
+      iconAdd: 'person_add',
       headers: [
-        { text: 'Legend', align: 'left', sortable: false, value: 'legend', cellType: 'tb', hidden: true, editable: true },
-        { text: 'Mac Adress', align: 'left', sortable: false, value: 'MacAdress', cellType: 'tb', hidden: true, editable: true },
-        { text: 'Friendly Name', align: 'left', sortable: false, value: 'friendlyName', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Legend', align: 'left', sortable: false, value: 'legend', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Mac Adress', align: 'left', sortable: false, value: 'MacAdress', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Friendly Name', align: 'left', sortable: false, value: 'friendlyName', cellType: 'tb', hidden: false, editable: true },
         { text: 'Status', align: 'left', sortable: false, value: 'status', cellType: 'tb', hidden: false, editable: true },
         { text: 'Last Communicated', align: 'left', sortable: false, value: 'LastCommunicated', cellType: 'tb', hidden: false, editable: true }
       ]
@@ -175,6 +219,9 @@ export default {
         return true
       }
     }
+  },
+  mounted () {
+    this.getItems(this.readUrl)
   }
 }
 </script>

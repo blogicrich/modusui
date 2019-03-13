@@ -1,11 +1,10 @@
 <template>
-  <v-container>
-    <v-layout row fill-height align-center justify-end wrap>
-    <v-icon large color="primary">build</v-icon>
-    <h1 class="pg-header">Conditions</h1>
+  <v-container fluid >
+    <v-layout class="mx-4" row fill-height align-center justify-end wrap>
+    <v-icon v-if="items.length > 0" large color="primary">local_pharmacy</v-icon>
+    <h1 v-if="items.length > 0" class="pg-header">Conditions</h1>
     <v-spacer></v-spacer>
     <BaseUserSelect
-      v-if="userPerms"
       :users="users"
       :selectAll="selectAll"
       :searchName="searchName"
@@ -13,14 +12,16 @@
       @get-selected-user="getSelectedUser"
     />
     </v-layout>
+    <v-container v-if="items.length > 0" fluid>
     <v-divider
       class="mx-1 mb-4"
       color="#00a1cd"
       >
     </v-divider>
-    <BaseDataTable
+    <BaseDataTable      
       :headers="headers"
       :items="items"
+      :editPerms="editPerms"
       :newItem="newItem"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
@@ -34,7 +35,7 @@
       :loadingMsg="loadingMsg"
       :loadedMsg="loadedMsg"
       :crudIdKey="crudIdKey"
-      item-key="identifier"
+      item-key="conditionsId"
       searchLabel="Search Records..."
       tableTitle="User Condition Records"
       newDialogTitle="Add a New Condition Record"
@@ -47,6 +48,7 @@
       @itemsCancelled="refreshItems"
     />
   </v-container>
+  </v-container>
 </template>
 
 <script>
@@ -54,6 +56,7 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import apiLib from '@/services/apiLib.js'
 
 export default {
   name: 'Conditions',
@@ -68,30 +71,11 @@ export default {
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
-      users: [
-        { name: 'Elsa' },
-        { name: 'Tamara' },
-        { name: 'Daniek' },
-        { name: 'Mitchell' },
-        { name: 'Jasper' },
-        { name: 'Bram' },
-        { name: 'Kevin' },
-        { name: 'Julian' },
-        { name: 'Patricia' },
-        { name: 'Marcel' },
-        { name: 'Fred' },
-        { name: 'Joke' },
-        { name: 'Kaily' },
-        { name: 'Michelle' },
-        { name: 'Lisa' },
-        { name: 'Cheyenne' },
-        { name: 'Shalina' },
-        { name: 'Naomi' },
-        { name: 'Leeroy' }
-      ],
+      users: [],
       userPerms: true,
+      editPerms: { create: true, update: true, delete: true },
       // BaseDataTable
-      crudIdKey: 'identifier',
+      crudIdKey: 'conditionsId',
       items: [],
       snackColor: 'primary',
       snackText: '',
@@ -103,51 +87,80 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      delUrl: '/cliadmin/conditions/',
-      updateUrl: '/cliadmin/conditions/',
-      readUrl: '/cliadmin/conditions/21',
-      createUrl: '/cliadmin/conditions/',
+      delUrl: '',
+      updateUrl: '',
+      readUrl: '',
+      createUrl: '',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
-      icon: 'build',
-      iconAdd: 'build',
+      primaryColor: 'primary',
+      secondaryColor: 'primary darken-2',
+      icon: 'local_pharmacy',
+      iconAdd: 'add',
       headers: [
-        { text: 'Identifier', align: 'left', sortable: false, value: 'identifier', cellType: 'tb', hidden: true, editable: false },
-        { text: 'Comments', align: 'left', sortable: false, value: 'comments', cellType: 'md', hidden: false, editable: true },
-        { text: 'Start Date', value: 'startdate', cellType: 'tb', hidden: false, editable: true },
-        { text: 'End Date', value: 'enddate', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', value: 'status', cellType: 'tb', hidden: false, editable: false }
+        { text: 'conditionsId', align: 'left', sortable: true, value: 'conditionId', cellType: 'tb', hidden: true, editable: false },
+        { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true },
       ],
       newItem: [
-        // { identifier: 0, cellType: 'md', attr: 'identifier', cellLabel: 'id', menuItems: [], validators: [] },
-        { comments: ' ', cellType: 'tb', attr: 'comments', cellLabel: 'Comments', menuItems: [], validators: [] },
-        { startdate: 0, cellType: 'tb', attr: 'startdate', cellLabel: 'Start Date', menuItems: [], validators: [] },
-        { enddate: 0, cellType: 'tb', attr: 'enddate', cellLabel: 'End Date', menuItems: [], validators: [] },
+        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { identifier: 0, comments: ' ', startdate: 0, enddate: 0, status: ' '}
-      ],
-      // urls: [
-      //   { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }
-      // ]
+        { conditionsId: 0, description: ' ', status: ' ' }
+      ]
     }
   },
   methods: {
+    getSelectedUser (user) {
+      // let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
+      //   this.apiData = response
+      // })
+      this.createUrl = '/cliadmin/conditions/' + user
+      this.readUrl = '/cliadmin/conditions/' + user
+      this.updateUrl = '/cliadmin/conditions/' + user
+      this.delUrl = '/cliadmin/conditions/' + user
+      this.getItems(this.readUrl)
+      // this.user = user.userId
+      // let vals = apiLib.getData('cliadmin/')
+      // console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
+      // this.getItems(this.readUrl)
+    },
+    getUsersData () {
+      // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+          this.users = response
+          console.log('USERS: ', response)
+         })
+      // }
+      // if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+      //   await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
+      //   if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
+      //     let voiceMessageDefaultStore = this.$store.state.voiceMessages
+      //       .voiceMessagesDefaultsGet
+      //     for (let index = 0; index < voiceMessageDefaultStore.length; index++) {
+      //       const element = voiceMessageDefaultStore[index]
+      //       for (let j = 0; j < element.length; j++) {
+      //         const el = element[j]
+      //         this.apiData.push(el)
+      //       }
+      //     }
+      //   }
+      // }
+      // console.log(this.apiData, 'apiData')
+    },
     resetItem () {
       this.newItem = [
-        { comments: ' ', cellType: 'tb', attr: 'comments', cellLabel: 'Comments', menuItems: [], validators: [] },
-        { startdate: 0, cellType: 'tb', attr: 'startdate', cellLabel: 'Start Date', menuItems: [], validators: [] },
-        { enddate: 0, cellType: 'tb', attr: 'enddate', cellLabel: 'End Date', menuItems: [], validators: [] },
+        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { identifier: 0, comments: ' ', startdate: 0, enddate: 0, status: ' '}
+        { conditionsId: 0, description: ' ', status: ' ' }
       ]
     }
   },
   mounted () {
-    this.getItems(this.readUrl)
+    this.getUsersData()
   }
 }
 </script>

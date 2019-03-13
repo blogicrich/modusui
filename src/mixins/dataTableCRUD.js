@@ -67,7 +67,7 @@ export const crudRoutines = {
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      var response = await apiLib.getData(this.readUrl, false, true)
+      var response = await apiLib.getData(url, true, true)
       // console.log("Response: ", response)
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {

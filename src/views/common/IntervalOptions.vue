@@ -1,14 +1,19 @@
 <template>
-  <v-container grid-list-md text-xs-center>
-    <selectComponent
-      v-if="userPerms"
-      :users="users"
-      :selectAll="selectAll"
-      :searchName="searchName"
-      :multiple="multiple"
-      @get-selected-user="getSelectedUser"
-    ></selectComponent>
-    <h1 class="pg-header">eDroplet Administration</h1>
+  <v-container class="mx-4" grid-list-md text-xs-center>
+    <v-layout row align-center fill-height>
+      <v-icon v-if="intervals.length > 0" large color="primary">settings</v-icon>
+      <h1 v-if="intervals.length > 0" class="pg-header">eDroplet Administration</h1>
+      <v-spacer></v-spacer>
+      <selectComponent
+        v-if="userPerms"
+        :users="users"
+        :selectAll="selectAll"
+        :searchName="searchName"
+        :multiple="multiple"
+        @get-selected-user="getSelectedUser"
+      ></selectComponent>
+    </v-layout>
+    <v-container v-if="intervals.length > 0">
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
     <v-divider
       class="mx-1"
@@ -19,7 +24,7 @@
         <v-flex xs12 lg6>
           <BaseRadioOptions
             @radio-option-changed="setNewValue"
-            :radioConfig="intervals.blueLightFlashingInterval"
+            :radioConfig="intervals[0].blueLightFlashingInterval"
             :defaultValue="0"
             :groupHeader="drinkGroupHeader"
             :groupDescription="drinkRadioDescription"
@@ -31,7 +36,7 @@
         <v-flex xs12 lg6>
           <BaseRadioOptions
             @radio-option-changed="setNewValue"
-            :radioConfig="intervals.spokenReminder"
+            :radioConfig="intervals[0].spokenReminder"
             :groupHeader="voiceGroupHeader"
             :defaultValue="0"
             :groupDescription="voiceRadioDescription"
@@ -51,7 +56,7 @@
       <v-flex xs12 lg6>
         <BaseRadioOptions
           @radio-option-changed="setNewValue"
-          :radioConfig="intervals.wakeUpInterval"
+          :radioConfig="intervals[0].wakeUpInterval"
           :defaultValue="0"
           :groupHeader="wakeUpGroupHeader"
           :groupDescription="wakeUpRadioDescription"
@@ -63,7 +68,7 @@
       <v-flex xs12 lg6>
         <BaseRadioOptions
           @radio-option-changed="setNewValue"
-          :radioConfig="intervals.buServerInterval"
+          :radioConfig="intervals[0].buServerInterval"
           :defaultValue="0"
           :groupHeader="commsGroupHeader"
           :groupDescription="commsRadioDescription"
@@ -85,7 +90,9 @@
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
     </v-fade-transition>
+    
     </v-layout>
+    </v-container>
   </v-container>
 </template>
 
@@ -113,8 +120,8 @@ export default {
       users: [],
       userLevel: JSON.parse(localStorage.getItem('auth')).level,
       sysadminReadUrl: 'sysadmin/interval-options',
-      sysadminWriteUrl: 'intervalupdate',
-      cliadminReadUrl: 'cliadmin/intervalsettings/21',
+      sysadminWriteUrl: 'sysadmin/interval-options',
+      cliadminReadUrl: 'cliadmin/intervalsettings/',
       cliadminWriteUrl: 'intervalupdate',
       newDefaultValue: false,
       editedItems: [],
@@ -151,26 +158,28 @@ export default {
   },
   methods: {
     getSelectedUser (user) {
+      let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
+        this.intervals = response
+      })
       // this.user = user.userId
       // let vals = apiLib.getData('cliadmin/')
-      console.log("USEEEERRRRRRRRRRRRRRRR: ", user[0])
+      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
       // this.getItems(this.readUrl)
     },
     getValues () {
       if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        let arr = apiLib.getData(this.cliadminReadUrl, true).then(response => {
-          console.log(response[0])
-          return response
-        })
+        // let arr = apiLib.getData(this.cliadminReadUrl, true).then(response => {
+        //   console.log(response[0])
+        //   return response
+        // })
         let userData = apiLib.getData('cliadmin/users', true).then(response => {
           this.users = response
           log('USERS: ', response)
          })
-        return arr
       }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         let arr = apiLib.getData(this.sysadminReadUrl).then(response => {
-          console.log(response[0])
+          console.log(response)
           return response
       })
       return arr
@@ -228,9 +237,9 @@ export default {
     async save () {
       for (var i = 0; i < this.editedItems.length; i++) {
         if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-          await this.postData(this.cliadminWriteUrl + '/' + this.editedItems[i].type, { id: this.editedItems[i].id, type: this.editedItems[i].type })
+          await apiLib.postData(this.cliadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i])
         } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-          await this.postData(this.sysadminWriteUrl + '/' + this.editedItems[i].type, { id: this.editedItems[i].id, type: this.editedItems[i].type })
+          await apiLib.postData(this.sysadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i])
         }
         
       }
@@ -240,7 +249,11 @@ export default {
     }
   },
   mounted () {
-    this.intervals = this.getValues()
+    if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+      this.getValues()
+    } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+      this.getValues().then (response => this.intervals = response)
+    }
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {

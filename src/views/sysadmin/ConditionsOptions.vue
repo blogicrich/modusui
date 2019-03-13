@@ -29,15 +29,6 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
-  <v-snackbar
-    v-model="snack"
-    bottom
-    :timeout="timeout"
-    :color="snackColor"
-  >
-    {{ snackText }}
-    <v-btn flat @click="snack = false">Close</v-btn>
-  </v-snackbar>
   </v-container>
 </template>
 
@@ -57,10 +48,6 @@ export default {
       items: [],
       crudIdKey: 'conditionsId',
       editPerms: { create: true, update: true, delete: true },
-      snackColor: '',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
       loading: true,
       loaded: false,
       error: false,

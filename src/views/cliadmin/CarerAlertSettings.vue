@@ -1,5 +1,19 @@
 <template lang="html">
   <v-container>
+    <v-layout row align-center fill-height>
+      <v-icon large color="primary">local_drink</v-icon>
+      <h1 class="pg-header">Alert Settings Management</h1>
+      <v-spacer></v-spacer>
+      <!-- <selectComponent
+        v-if="userPerms"
+        :users="users"
+        :selectAll="selectAll"
+        :searchName="searchName"
+        :multiple="multiple"
+        @get-selected-user="getSelectedUser"
+      ></selectComponent> -->
+    </v-layout>
+    <v-divider class="ma-2" color="#00a1cd"></v-divider>
     <subAlertCard
       :carerName="carerName"
       :users="users"

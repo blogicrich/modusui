@@ -5,7 +5,7 @@
       <v-icon @click="subDate()" large>keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
         <v-text-field slot="activator" v-model="date" readonly></v-text-field>
-        <v-date-picker color="primary" v-model="date" no-title scrollable>
+        <v-date-picker color="primary" color-header="primary" v-model="date" no-title scrollable>
           <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
           <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
         </v-date-picker>
@@ -156,6 +156,8 @@ export default {
           this.alertColor.push('red')
         } else if (this.dashboardUsers[i].alertType === 'little dehydrated') {
           this.alertColor.push('orange')
+        } else {
+          this.alertColor.push('primary')
         }
       }
       return this.alertColor
@@ -287,4 +289,5 @@ export default {
   padding-top: 0;
   margin-top: 0;
 }
+
 </style>

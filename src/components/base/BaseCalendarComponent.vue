@@ -16,12 +16,12 @@
       </v-sheet>
     </v-flex>
     <v-flex xs6 class="text-xs-left">
-      <v-btn @click="$refs.calendar.prev()">
+      <v-btn color="primary" @click="$refs.calendar.prev()">
         <v-icon dark left>keyboard_arrow_left</v-icon>Prev
       </v-btn>
     </v-flex>
     <v-flex xs6 class="text-xs-right">
-      <v-btn @click="$refs.calendar.next()">Next
+      <v-btn color="primary" @click="$refs.calendar.next()">Next
         <v-icon right dark>keyboard_arrow_right</v-icon>
       </v-btn>
     </v-flex>

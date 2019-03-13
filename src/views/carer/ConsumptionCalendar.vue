@@ -1,7 +1,16 @@
 <template>
   <v-container>
-    <h1>Consumption per day</h1>
-    <base-calendar :events="getDayReports()" :colorStatusPairs="colorStatusPairs"></base-calendar>
+    <v-layout row align-center fill-height>
+      <v-icon large color="primary">local_drink</v-icon>
+      <h1 class="pg-header">Consumption Calender</h1>
+    </v-layout>
+    <v-divider
+      class="mx-1 mb-2"
+      color="#00a1cd"
+      >
+    </v-divider>
+
+    <base-calendar class="mt-4" :events="getDayReports()" :colorStatusPairs="colorStatusPairs"></base-calendar>
   </v-container>
 </template>
 
@@ -59,3 +68,7 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  @import "./public/scss/main.scss";
+</style>

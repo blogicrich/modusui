@@ -1,6 +1,19 @@
 <template lang="html">
   <v-container>
-    <v-layout>
+    <v-layout row align-center fill-height>
+      <v-icon v-if="apiData.length > 0" large color="primary">settings</v-icon>
+      <h1 v-if="apiData.length > 0" class="pg-header">eDroplet Administration</h1>
+      <v-spacer></v-spacer>
+      <selectComponent
+        v-if="userPerms"
+        :users="users"
+        :selectAll="selectAll"
+        :searchName="searchName"
+        :multiple="multiple"
+        @get-selected-user="getSelectedUser"
+      ></selectComponent>
+    </v-layout>
+    <v-layout v-if="apiData.length > 0">
       <v-flex xs12>
         <v-layout row align-start justify-space-between>
           <h1 class="pg-header ma-2">Voice Messages</h1>
@@ -13,8 +26,7 @@
             @get-selected-user="getSelectedUser"
           ></selectComponent>
         </v-layout>
-        <v-card class="pa-2 my-3" v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId"
->
+        <v-card class="pa-2 my-3" v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: {{ config.voiceMessagedescription }}</h2>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
@@ -82,28 +94,18 @@ export default {
   },
   data() {
     return {
-      users: [
-        { name: 'Elsa' },
-        { name: 'Tamara' },
-        { name: 'Daniek' },
-        { name: 'Mitchell' },
-        { name: 'Jasper' },
-        { name: 'Bram' },
-        { name: 'Kevin' },
-        { name: 'Julian' },
-        { name: 'Patricia' },
-        { name: 'Marcel' },
-        { name: 'Fred' },
-        { name: 'Joke' },
-        { name: 'Kaily' },
-        { name: 'Bryan' },
-        { name: 'Michelle' },
-        { name: 'Lisa' },
-        { name: 'Cheyenne' },
-        { name: 'Shalina' },
-        { name: 'Naomi' },
-        { name: 'Leeroy' }
-      ],
+      multiple: false,
+      selectAll: 'Select all',
+      searchName: 'Search user..',
+      apiData: [],
+      editedItems: [],
+      users: [],
+      userLevel: JSON.parse(localStorage.getItem('auth')).level,
+      sysadminReadUrl: 'sysadmin/voice-messages',
+      sysadminWriteUrl: 'sysadmin/voice-message',
+      cliadminReadUrl: 'cliadmin/voicemessage/',
+      cliadminWriteUrl: 'cliadmin/voicemessage/',
+      newDefaultValue: false,
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
@@ -187,38 +189,63 @@ export default {
       //       fileName: 'msg_003'
       //     }
       //   ],
-      apiData: []
     }
   },
-  mounted () {
-    this.getvoiceMessage()
+  computed: {
+    userPerms () {
+      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
+    getSelectedUser (user) {
+      let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
+        this.apiData = response
+      })
+      // this.user = user.userId
+      // let vals = apiLib.getData('cliadmin/')
+      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
+      // this.getItems(this.readUrl)
+    },
     async getvoiceMessage () {
-      await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
-      if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
-        let voiceMessageDefaultStore = this.$store.state.voiceMessages
-          .voiceMessagesDefaultsGet
-        for (let index = 0; index < voiceMessageDefaultStore.length; index++) {
-          const element = voiceMessageDefaultStore[index]
-          for (let j = 0; j < element.length; j++) {
-            const el = element[j]
-            this.apiData.push(el)
+      if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+          this.users = response
+          console.log('USERS: ', response)
+         })
+      }
+      if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+        await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
+        if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
+          let voiceMessageDefaultStore = this.$store.state.voiceMessages
+            .voiceMessagesDefaultsGet
+          for (let index = 0; index < voiceMessageDefaultStore.length; index++) {
+            const element = voiceMessageDefaultStore[index]
+            for (let j = 0; j < element.length; j++) {
+              const el = element[j]
+              this.apiData.push(el)
+            }
           }
         }
       }
       console.log(this.apiData, 'apiData')
     }
   },
+  mounted () {
+    this.getvoiceMessage()
+  },
   beforeRouteLeave (to, from, next) {
-    const answer = window.confirm(
-      'Do you really want to leave? You will loose all unsaved changes!'
-    )
-    if (answer) {
-      next()
-    } else {
-      next(false)
-    }
+    // const answer = window.confirm(
+    //   'Do you really want to leave? You will loose all unsaved changes!'
+    // )
+    // if (answer) {
+    //   next()
+    // } else {
+    //   next(false)
+    // }
   }
 }
 </script>

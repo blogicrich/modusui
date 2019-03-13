@@ -9,35 +9,37 @@
         ></SubPageNavButton>
         <v-card class="selectCard">
           <v-card-title>
-            <v-layout justify-center fill-height>
+            <v-layout justify-center align-center fill-height>
+              <v-icon large color="primary">person</v-icon>
               <h2 class="table-header">{{ checkUsers }}</h2>
             </v-layout>
           </v-card-title>
           <v-divider></v-divider>
           <v-card-title>
-            <v-layout justify-space-between>
-              <div>
+            <!-- <v-layout justify-space-between> -->
+              <!-- <div>
                 <v-checkbox
                   v-if="multiple"
                   v-model="allSelected"
                   v-bind:label="selectAll"
                   @change="toggleAll">
                 </v-checkbox>
-              </div>
-              <div>
+              </div> -->
+              <v-layout>
                 <v-icon>search</v-icon>
                 <input type="text" class="input-subhead-search" v-model="search" v-bind:placeholder="searchName"/>
-              </div>
-            </v-layout>
+              </v-layout>
+            <!-- </v-layout> -->
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
             <v-layout justify-start column>
-              <div v-for="item in filteredName" :value="item.name":key="item.userId">
+              <div v-for="item in filteredName" :value="item.comments" :key="item.userId">
+              <!-- <div v-for="item in filteredName" :value="item.comments":key="item.userId"> -->
                 <v-checkbox
                   v-model="selectedUsers"
                   :value="item.userId"
-                  v-bind:label="item.name"
+                  v-bind:label="item.comments"
                   @click.native="select">
                 </v-checkbox>
                 <p><hr class="dialog-hr"/><p/>
@@ -95,6 +97,9 @@ export default {
         this.dialog = false
         this.selectedUsers = this.savedUsers
         this.allSelected = this.allSelectSave
+        this.$router.push('/landing')
+      } else {
+        this.$router.push('/landing')
       }
     },
     save () {
@@ -102,7 +107,8 @@ export default {
         this.dialog = false
         this.savedUsers = this.selectedUsers
         this.allSelectSave = this.allSelected
-        this.$emit('get-selected-user', this.selectedUsers[0].userId)
+        console.log(this.selectedUsers[0])
+        this.$emit('get-selected-user', this.selectedUsers[0])
       }
     },
     toggleAll (checked) {
@@ -134,18 +140,20 @@ export default {
   },
   computed: {
     filteredName () {
-      return this.users.filter((name) => {
-        const Uppercase = name.name.toUpperCase()
-        const searchUppercase = this.search.toUpperCase()
-        return Uppercase.match(searchUppercase)
-      })
+      return this.users
+      // return this.users.filter((name) => {
+        // const Uppercase = name.name.toUpperCase()
+        // const Uppercase = name.comments.toUpperCase()
+        // const searchUppercase = this.search.toUpperCase()
+        // return Uppercase.match(searchUppercase)
+      // })
     },
     checkUsers () {
       let title
       if (this.multiple) {
-        title = 'Select Users'
+        title = 'Select eDroplet Users'
       } else {
-        title = 'Select User'
+        title = 'Select eDroplet User'
       }
       return title
     }
@@ -160,6 +168,7 @@ export default {
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
   .input-subhead-search {
+    width: 100%;
     outline: none;
     border-bottom: solid 1px;
     border-color: $vuetify-primary;
@@ -169,6 +178,7 @@ export default {
     font-weight: bold;
   }
   .selectCard {
+    border-radius: 1em;
     height: 500px;
   }
 </style>

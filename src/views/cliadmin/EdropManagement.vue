@@ -66,18 +66,7 @@ export default {
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
-      users: [
-        { userId: '21', name: 'TEST ID 001' },
-        { userId: '22', name: 'Tamara' },
-        { userId: '23', name: 'Daniek' },
-        { userId: '24', name: 'Mitchell' },
-        { userId: '25', name: 'Jasper' },
-        { userId: '26', name: 'Bram' },
-        { userId: '27', name: 'Kevin' },
-        { userId: '28', name: 'Julian' },
-        { userId: '29', name: 'Patricia' }
-      ],
-      userPerms: true,
+      users: [],
       // BaseDataTable
       crudIdKey: 'identifier',
       items: [],
@@ -123,6 +112,38 @@ export default {
     }
   },
   methods: {
+    getSelectedUser (user) {
+      let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
+        this.apiData = response
+      })
+      // this.user = user.userId
+      // let vals = apiLib.getData('cliadmin/')
+      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
+      // this.getItems(this.readUrl)
+    },
+    async getvoiceMessage () {
+      // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+          this.users = response
+          console.log('USERS: ', response)
+         })
+      // }
+      // if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+      //   await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
+      //   if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
+      //     let voiceMessageDefaultStore = this.$store.state.voiceMessages
+      //       .voiceMessagesDefaultsGet
+      //     for (let index = 0; index < voiceMessageDefaultStore.length; index++) {
+      //       const element = voiceMessageDefaultStore[index]
+      //       for (let j = 0; j < element.length; j++) {
+      //         const el = element[j]
+      //         this.apiData.push(el)
+      //       }
+      //     }
+      //   }
+      // }
+      console.log(this.apiData, 'apiData')
+    },
     resetItem () {
       this.newItem = [
         { comments: ' ', cellType: 'tb', attr: 'comments', cellLabel: 'Comments', menuItems: [], validators: [] },
@@ -134,12 +155,6 @@ export default {
         { identifier: 0, comments: ' ', startdate: 0, enddate: 0, status: ' '}
       ]
     },
-    getSelectedUser (user) {
-      // this.user = user.userId
-      let vals = apiLib.getData('cliadmin/')
-      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
-      // this.getItems(this.readUrl)
-    }
   },
   mounted () {
   
