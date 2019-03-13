@@ -13,7 +13,7 @@ export const moduleDashboardDay = {
   actions: {
     // get all data
     async fetchDashboardDayGet (context) {
-      await apiLib.getData('carer/dashboard-day/' + this.getters.getterUserId + '/' + this.getters.getterDate, true).then((response) => {
+      await apiLib.getData('carer/dashboard-day/' + this.getters.getterUserId + '/' + this.getters.getterDate).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_DASHBOARDDAY', null)
         } else {
