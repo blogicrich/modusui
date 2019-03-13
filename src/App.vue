@@ -6,6 +6,7 @@
       app
       :clipped-left="clipped"
     >
+      <!-- <v-toolbar-side-icon v-model="snackState"></v-toolbar-side-icon> -->
       <img alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <v-layout row fill-height wrap justify-end>
@@ -15,7 +16,7 @@
     </v-toolbar>
     <transition-group name="navBtns">
       <v-navigation-drawer
-        v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.lgAndUp"
+        v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.mdAndUp"
         key="bp-lg"
         class="primary"
         mini-variant
@@ -50,7 +51,8 @@
         </v-layout>
       </v-navigation-drawer>
       <v-navigation-drawer
-        v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.mdAndDown"
+        v-model="snackState"
+        v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.smAndDown"
         key="bp-sm"
         class="primary"
         disable-route-watcher
