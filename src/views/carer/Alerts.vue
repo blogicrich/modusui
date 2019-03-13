@@ -54,7 +54,7 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      readUrl: 'carer/alerts/',
+      readUrl: 'carer/alerts/23/1552470795',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'warning',

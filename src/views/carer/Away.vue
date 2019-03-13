@@ -10,10 +10,21 @@
       searchLabel="Search Records..."
       recordIcon="calendar_today"
       editDialogTitle="Edit Away Period(s)"
+      :secondaryColor="secondaryColor"
       item-key="awayId"
       :readUrl ="readUrl"
       :editPerms="editPerms"
+      :addRecordIcon="iconAdd"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
+      :errorMsg="errorMsg"
+      :loadingMsg="loadingMsg"
+      :loadedMsg="loadedMsg"
+      @newItem="addItem"
       @itemsEdited="editItems"
+      @deleteSelected="deleteItem"
+      @itemsCancelled="refreshItems"
     ></dataTable>
   </v-container>
 </template>
@@ -32,9 +43,20 @@ export default {
     dataTable
   },
   data: () => ({
+    crudIdKey: 'portalAuthorisedId',
+    items: [],
+    editPerms: { create: false, update: false, delete: false },
+    loading: true,
+    loaded: false,
+    error: false,
+    errorMsg: ' ',
+    loadingMsg: ' ',
+    loadedMsg: ' ',
     legend: "Away Periods",
     updateUrl: 'carer/away/21',
     readUrl: 'carer/away/21',
+    primaryColor: 'primary',
+    secondaryColor: 'primary darken-2',
     items: [],
     // awayPeriods: [
     //   {
@@ -119,11 +141,6 @@ export default {
         endDate: "9 Dec 2002, 12:00"
       }
     ],
-    editPerms: {
-      create: false, 
-      update: true, 
-      delete: false
-    },
     btnTitle: "Record Time Away",
     primaryColor: "primary"
   }),
@@ -178,9 +195,9 @@ export default {
     }
   },
   mounted () {
-    console.log('URL: ' + this.readUrl)
-    this.getItems(this.readUrl, true, true)
-    console.log(this.loadedMsg)
+    // console.log('URL: ' + this.readUrl)
+    this.getItems(this.readUrl)
+    // console.log(this.loadedMsg)
   }
 };
 </script>
