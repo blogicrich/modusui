@@ -30,19 +30,19 @@ export default {
       let SelectedUnixTime = Math.round((new Date(newDate)).getTime() / 1000)
       this.$store.state.date = 86400
       this.update = true
-      let array = [0.5, 0.7, 0.8, 0.9, 1.0, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8]
-      for (let point = 0; point < this.dashboardHour.length; point++) {
+      let array = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8, 0.9, 1.0, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8]
+      for (let point = 0; point < childData.lineChartData.dataLineOne.length; point++) {
         childData.lineChartData.dataLineOne[point] = array[Math.floor(Math.random() * array.length)]
         // childData.lineChartData.dataLineOne[point] = parseFloat(this.dashboardHour[point].volumeConsumedByViaOther) + parseFloat(this.dashboardHour[point].volumeConsumedViaEDroplet)
         // childData.lineChartData.labels[point] = this.dashboardHour[point].hour
       }
 
-      for (let point = 0; point < this.dashboardDay.length; point++) {
+      for (let point = 0; point < childData.barChartData.dataBarOne.length; point++) {
         // childData.barChartData.dataBarOne[point] = this.dashboardDay[point].aggregatedHyration
         childData.barChartData.dataBarOne[point] = array[Math.floor(Math.random() * array.length)]
       }
 
-      for (let point = 0; point < this.dashboardDay.length; point++) {
+      for (let point = 0; point < childData.doughnutChartData.dataDoughnut.length; point++) {
         // childData.doughnutChartData.dataDoughnut[point] = this.dashboardDay[point].hydrationTarget + this.dashboardDay[point].volumeConsumedViaEDroplet
         childData.doughnutChartData.dataDoughnut[point] = array[Math.floor(Math.random() * array.length)]
       }
