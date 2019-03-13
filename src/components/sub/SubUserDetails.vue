@@ -112,31 +112,31 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      comments: null,
+      comments: '',
       isUser: true,
-      timeStartUp: null,
-      timeWakeUp: null,
+      timeStartUp: '',
+      timeWakeUp: '',
       menuStartUp: false,
       menuWakeUp: false,
-      otherHydration: null,
-      selectedEDroplet: null,
-      eDroplets: ["Droplet 1", "Droplet 2"],
+      otherHydration: '',
+      selectedEDroplet: '',
+      eDroplets: ['Droplet 1', 'Droplet 2'],
       valid: true,
-      rule: [v => !!v || "This field is required"]
-    };
+      rule: [v => !!v || 'This field is required']
+    }
   },
   watch: {
-    isUser: function() {
-      this.$emit("onvalidation", !this.isUser);
+    isUser: function () {
+      this.$emit('onvalidation', !this.isUser)
     }
   },
   methods: {
-    validate() {
+    validate () {
       if (this.$refs.form.validate()) {
         this.$emit(
-          "onvalidation",
+          'onvalidation',
           true,
           this.isUser,
           this.timeStartUp,
@@ -144,13 +144,13 @@ export default {
           this.otherHydration,
           this.selectedEDroplet,
           this.comments
-        );
+        )
       } else {
-        this.$emit("onvalidation", false);
+        this.$emit('onvalidation', false)
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

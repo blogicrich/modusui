@@ -1,33 +1,31 @@
 <template>
-  <v-dialog v-model="dialog" >
+  <v-dialog v-model="dialog" persistent>
     <template v-slot:activator="{ on }">
-      <v-btn color="red lighten-2" dark v-on="on">
-        Click Me
-      </v-btn>
+      <v-btn color="primary" dark v-on="on">New user</v-btn>
     </template>
-        <v-stepper v-model="e1" vertical v-for="step in steps" v-bind:key="step.id">
-        <v-stepper-step :step="step.id" :complete="e1 > step.id">
-          {{ step.title }}
-          <small>{{ step.summarize }}</small>
-        </v-stepper-step>
-          <v-stepper-content :step="step.id">
-            <v-card class="mb-5" v-if="step.id === 1">
-              <BasicDetails @onvalidation="validateStep1(...arguments)" />
-            </v-card>
-            <v-card class="mb-5" v-else-if="step.id === 2">
-              <UserDetails @onvalidation="validateStep2(...arguments)" />
-            </v-card>
-            <v-card class="mb-5" v-else-if="step.id === 3">
-              <CarerDetails @onvalidation="validateStep3(...arguments)" />
-            </v-card>
-            <v-card class="mb-5" v-else-if="step.id === 4">
-              <AdminDetails @onvalidation="validateStep4(...arguments)" :submittedData="submittedData" />
-            </v-card>
-            <v-btn v-show="showBack" @click="step.back()" flat>Back</v-btn>
-            <v-btn color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
-        </v-stepper-content>
-        
-      </v-stepper>
+    <v-stepper v-model="e1" vertical v-for="step in steps" v-bind:key="step.id">
+      <v-stepper-step :step="step.id" :complete="e1 > step.id">
+        {{ step.title }}
+        <small>{{ step.summarize }}</small>
+      </v-stepper-step>
+      <v-stepper-content :step="step.id">
+        <v-card class="mb-5" v-if="step.id === 1">
+          <BasicDetails @onvalidation="validateStep1(...arguments)"/>
+        </v-card>
+        <v-card class="mb-5" v-else-if="step.id === 2">
+          <UserDetails @onvalidation="validateStep2(...arguments)"/>
+        </v-card>
+        <v-card class="mb-5" v-else-if="step.id === 3">
+          <CarerDetails @onvalidation="validateStep3(...arguments)"/>
+        </v-card>
+        <v-card class="mb-5" v-else-if="step.id === 4">
+          <AdminDetails @onvalidation="validateStep4(...arguments)" :submittedData="submittedData"/>
+        </v-card>
+        <v-btn v-show="showBack" @click="step.back()" flat>Back</v-btn>
+        <v-btn color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
+        <v-btn color="warning" absolute right @click="dialog = false">Cancel</v-btn>
+      </v-stepper-content>
+    </v-stepper>
   </v-dialog>
 </template>
 
@@ -52,13 +50,11 @@ export default {
         this.submittedData.givenName = givenName
         this.submittedData.familyName = familyName
         this.submittedData.aka = aka
-        console.log(this.submittedData)
       } else {
         this.showContinue = false
-        console.log('NOT VALID')
       }
     },
-    validateStep2(valid, isUser, timeStartUp, timeWakeUp, otherHydration, selectedEDroplet, comments) {
+    validateStep2 (valid, isUser, timeStartUp, timeWakeUp, otherHydration, selectedEDroplet, comments) {
       if (valid) {
         this.showContinue = true
         this.submittedData.startUp = timeStartUp
@@ -67,10 +63,8 @@ export default {
         this.submittedData.otherHydration = otherHydration
         this.submittedData.comments = comments
         this.submittedData.isEDropletUser = isUser
-        console.log(this.submittedData)
       } else {
         this.showContinue = false
-        console.log('NOT VALID')
       }
     },
     validateStep3 (valid, isAdmin, isCarer, username, phoneNumber, emailAddress, email, sms, selectedAlertTypes) {
@@ -84,22 +78,18 @@ export default {
         this.submittedData.email = email
         this.submittedData.sms = sms
         this.submittedData.alertTypes = selectedAlertTypes
-        console.log(this.submittedData)
       } else {
         this.showContinue = false
-        console.log('NOT VALID')
       }
     },
-    validateStep4(valid, username, phoneNumber, emailAddress) {
+    validateStep4 (valid, username, phoneNumber, emailAddress) {
       if (valid) {
         this.submittedData.username = username
         this.submittedData.phoneNumber = phoneNumber
         this.submittedData.emailAddress = emailAddress
         this.showContinue = true
-        console.log(this.submittedData)
       } else {
         this.showContinue = false
-        console.log('NOT VALID')
       }
     }
   },
@@ -160,7 +150,7 @@ export default {
             this.showBack = false
           }
         },
-        { 
+        {
           id: 3,
           next: 'continue',
           title: 'Carer details',
@@ -181,7 +171,6 @@ export default {
           summarize: '',
           continue: () => {
             this.dialog = false
-            
           },
           back: () => {
             this.e1--
@@ -196,5 +185,4 @@ export default {
 
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
-
 </style>
