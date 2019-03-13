@@ -1,13 +1,17 @@
 <template>
-  <v-container>
+    <wizard-component/>
 
-  </v-container>
 </template>
 
 <script>
+import wizardComponent from '@/components/base/BaseWizardComponent'
 
 export default {
   name: 'PersonalDetails',
+    components: {
+    wizardComponent
+  },
+
   data () {
     return {
     }

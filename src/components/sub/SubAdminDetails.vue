@@ -21,7 +21,7 @@
 <script>
 export default {
   props: ['submittedData'],
-  data() {
+  data () {
     return {
       valid: true,
       rule: [
@@ -30,7 +30,7 @@ export default {
     }
   },
   methods: {
-    validate() {
+    validate () {
       if (this.$refs.form.validate()) {
         this.$emit('onvalidation', true, this.submittedData.username, this.submittedData.phoneNumber, this.submittedData.emailAddress)
       } else {
