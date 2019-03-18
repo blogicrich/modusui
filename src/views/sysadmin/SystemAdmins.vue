@@ -27,7 +27,7 @@
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
-      @itemsCancelled="refreshItems"
+      @itemsCancelled="getItems(readUrl)"
     />
   </v-container>
 </template>
@@ -93,7 +93,7 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: [], validators: [] },
+        { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: this.newItem['titleId'].menuItems, validators: [] },
         { givenName: ' ', cellType: 'tb', attr: 'givenName', cellLabel: 'Given Name', menuItems: [], validators: [] },
         { familyName: ' ', cellType: 'tb', attr: 'familyName', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },

@@ -98,7 +98,11 @@
     </v-container>
     <v-fade-transition>
       <v-footer
-        v-if="navFooter"
+        v-if="
+          user.find(level => level === 'SYSTEM ADMINISTRATOR') || 
+          user.find(level => level === 'CLIENT ADMINISTRATOR') && 
+          !(user.find(level => level === 'CARER')) && 
+          this.authenticated.state"
         :fixed="fixed"
         color="white"
         app
@@ -115,7 +119,7 @@
             top
           />
           <BaseAppNavBtn
-            v-if="user.find(level => level === 'CARER')"
+            v-if="user.find(level => level === 'CARER') && this.authenticated.state"
             btnIcon="dashboard"
             btnColor="primary"
             route="dashboard"
@@ -278,7 +282,7 @@ export default {
   },
   mounted () {
     if (this.authenticated.state === null || this.authenticated.state === undefined) {
-      this.$router.push('/login')
+      this.logout()
     }
     EventBus.$on('snack-msg', data => {
       this.showSnack(data)

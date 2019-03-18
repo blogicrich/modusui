@@ -606,8 +606,9 @@
                         :color="primaryColor"
                         outline
                         required
-                        :item-value="item[key].returnVal"
-                        :item-text="item[key].displayVal"
+                        return-object
+                        :item-value="item.returnVal"
+                        :item-text="item.displayVal"
                       ></v-select>
                     </v-flex>
                   </v-layout>
@@ -661,8 +662,9 @@
                         :color="primaryColor"
                         outline
                         required
+                        return-object
                         :item-value="newItem.find(attribute => attribute).returnVal"
-                        :item-text="newItem.find(attribute => attribute).displayVal"    
+                        :item-text="newItem.find(attribute => attribute).displayVal"
                         >
                       </v-select>
                     </v-flex>

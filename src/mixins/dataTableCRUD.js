@@ -16,8 +16,7 @@ export const crudRoutines = {
       })
       .catch(error => {
       })
-      this.resetItem()
-      this.getItems(this.readUrl)
+      this.refreshItems()
     },
 
     async deleteItem (items) {
@@ -35,7 +34,7 @@ export const crudRoutines = {
         })
         
       }
-      this.getItems(this.readUrl)
+      this.refreshItems()
     },
 
     async editItems (items) {
@@ -58,9 +57,9 @@ export const crudRoutines = {
           )
         }
       }
-      if (this.newItem) {
-        this.resetItem()
-      }
+      // if (this.newItem) {
+      //   this.resetItem()
+      // }
       this.getItems(this.readUrl)
     },
 
@@ -95,8 +94,8 @@ export const crudRoutines = {
     },
     
     async refreshItems () {
-      this.resetItem()
       await this.getItems(this.readUrl)
+      this.resetItem()
       // if (this.urls) await this.setMenuItems(this.urls)
     },
 

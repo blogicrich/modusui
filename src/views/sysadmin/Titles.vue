@@ -27,7 +27,7 @@
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
-      @itemsCancelled="refreshItems"
+      @itemsCancelled="getItems(readUrl)"
     />
   </v-container>
 </template>
@@ -70,7 +70,6 @@ export default {
         { text: 'Description', align: 'left', sortable: false, value: 'longDescription', cellType: 'tb', hidden: false }
       ],
       newItem: [
-        // { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[] },
         { shortDescription: '', cellType: 'tb', attr: 'shortDescription', cellLabel: 'Abbreviation', menuItems: [], validators: [] },
         { LongDescription: '', cellType: 'tb', attr: 'longDescription', cellLabel: 'Description', menuItems: [], validators: [] }
       ],
@@ -83,9 +82,8 @@ export default {
   methods: {
     resetItem () {
       this.newItem = [
-        // { titleId: 0, cellType: 'tb', cellLabel: 'titleId', menuItems: [], validators:[]  },
-        { shortDescription: '', cellType: 'tb', cellLabel: 'shortDescription', menuItems: [], validators: [] },
-        { LongDescription: '', cellType: 'tb', cellLabel: 'longDescription', menuItems: [], validators: [] }
+        { shortDescription: '', cellType: 'tb', cellLabel: 'shortDescription', menuItems: this.newItem['shortDescription'].menuItems, validators: [] },
+        { LongDescription: '', cellType: 'tb', cellLabel: 'longDescription', menuItems: this.newItem['longDescription'].menuItems, validators: [] }
       ]
       this.defaultItem = [
         { titleId: 0, shortDescription: ' ', longDescription: ' ' }

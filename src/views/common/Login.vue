@@ -61,7 +61,6 @@ export default {
   },
   mounted () {
     this.$emit('authenticated', { state: false, level: [], token: null, deptPersonsId: null, portalAuthorisedId: null })
-
   }
 }
 </script>

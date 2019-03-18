@@ -83,7 +83,7 @@
 
 <script>
 import apiLib from '@/services/apiLib'
-import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
+// import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
 
 export default {
@@ -192,13 +192,13 @@ export default {
     }
   },
   computed: {
-    userPerms () {
-      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        return true
-      } else {
-        return false
-      }
-    }
+    // userPerms () {
+    //   if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // }
   },
   methods: {
     getSelectedUser (user) {
@@ -211,12 +211,12 @@ export default {
       // this.getItems(this.readUrl)
     },
     async getvoiceMessage () {
-      if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        let userData = apiLib.getData('cliadmin/users', true).then(response => {
-          this.users = response
-          console.log('USERS: ', response)
-         })
-      }
+      // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+      //   let userData = apiLib.getData('cliadmin/users', true).then(response => {
+      //     this.users = response
+      //     console.log('USERS: ', response)
+      //    })
+      // }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
         if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
