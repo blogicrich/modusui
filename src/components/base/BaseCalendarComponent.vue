@@ -2,7 +2,7 @@
   <v-layout wrap>
     <v-flex xs12 class="mb-3">
       <v-sheet height="650">
-        <v-calendar ref="calendar" :type="type" v-model="today" :end="today" color="primary">
+        <v-calendar ref="calendar" :type="type" v-model="today" :end="today" @change="onChange" color="primary">
           <template v-slot:day="{ date }">
             <calendarEvent
               v-for="(event, index) in eventsMap[date]"
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import calendarEvent from "@/components/base/BaseCalendarEventComponent";
+import calendarEvent from '@/components/base/BaseCalendarEventComponent'
 
 export default {
   components: { calendarEvent },
@@ -42,23 +42,26 @@ export default {
     colorStatusPairs: Array
   },
   computed: {
-    eventsMap: function() {
-      const map = {};
-      this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e));
-      return map;
+    eventsMap: function () {
+      const map = {}
+      this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e))
+      return map
     }
   },
   methods: {
-    getColorByStatus: function(status) {
+    getColorByStatus: function (status) {
       for (let i = 0; i < this.colorStatusPairs.length; i++) {
         if (
           this.colorStatusPairs[i].status.toLowerCase() === status.toLowerCase()
         ) {
-          return this.colorStatusPairs[i].color;
+          return this.colorStatusPairs[i].color
         }
       }
-      return "primary";
+      return 'primary'
+    },
+    onChange: function (event) {
+      this.$emit('change', { 'month': event.start.month, 'year': event.start.year })
     }
   }
-};
+}
 </script>
