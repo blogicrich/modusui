@@ -6,8 +6,12 @@ export const moduleWizard = {
     wizardUserPost: []
   },
   actions: {
-    fetchWizardUserPost: () => apiLib.postData('cliadmin/wizard/registerUser', this.getters.getterWizardPersonPost),
-    fetchWizardPersonPost: () => apiLib.postData('cliadmin/wizard/registerPerson', this.getters.getterWizardUserPost)
+    fetchWizardUserPost () {
+      return apiLib.postData('cliadmin/wizard/registerUser', this.getters.getterWizardUserPost)
+    },
+    fetchWizardPersonPost () {
+      return apiLib.postData('cliadmin/wizard/registerPerson', this.getters.getterWizardPersonPost)
+    }
   },
   getters: {
     getterWizardPersonPost: state => state.wizardPersonPost,
