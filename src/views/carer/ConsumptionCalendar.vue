@@ -26,34 +26,22 @@ export default {
       { color: 'green', status: 'Hydrated' },
       { color: 'amber', status: 'Little Dehydrated' },
       { color: 'red', status: 'Dehydrated' },
-      { color: 'amber', status: 'Little Overhydrated'},
-      { color: 'red', status: 'Overhydrated'}
+      { color: 'amber', status: 'Little Overhydrated' },
+      { color: 'red', status: 'Overhydrated' }
     ]
   }),
   methods: {
     getDayReports: function () {
-      let dayReports = []
-      let apiData = this.$store.state.report.reportsSnapshotGet
-      for (let i = 0; i < apiData.length; i++) {
-        let dayReport = apiData[i]
-        let status = this.getDescription(dayReport.aggregatedHydration)
-        let hydrationLevel =
-          dayReport.volumeConsumedViaEDroplet +
-          dayReport.volumeConsumedViaOther +
-          '/' +
-          dayReport.hydrationTarget
-        let date = dayReport.dateTime
+      let dayReports = this.$store.state.report.reportDayReportsGet
 
-        dayReports.push({
-          status: status,
-          hydrationLevel: hydrationLevel,
-          date: date
-        })
+      for (let i = 0; i < dayReports.length; i++) {
+        const dayReport = dayReports[i]
+        dayReports[i].status = this.getDescription(dayReport.status)
       }
       return dayReports
     },
     getDescription: function (aggregatedHydration) {
-      if(aggregatedHydration <= 60) {
+      if (aggregatedHydration <= 60) {
         return 'Dehydrated'
       } else if (aggregatedHydration <= 90) {
         return 'Little Dehydrated'
