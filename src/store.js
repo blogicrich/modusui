@@ -18,6 +18,7 @@ import { moduleCLIAdminConditions } from '@/store/StoreCLIAdminConditions'
 import { moduleEDropMan } from '@/store/StoreEDropMan'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
 import { modulePersonnelSettings } from '@/store/StorePersonnelSettings'
+import { moduleWizard } from '@/store/StoreWizard'
 
 // carer
 import { moduleAdditionalDrinks } from '@/store/StoreAdditionalDrinks'
@@ -76,6 +77,7 @@ export default new Vuex.Store({
     eDropletMan: moduleEDropMan,
     intervalSettings: moduleIntervalSettings,
     personnelSettings: modulePersonnelSettings,
+    wizard: moduleWizard,
 
     // carer
     additionalDrinks: moduleAdditionalDrinks,
