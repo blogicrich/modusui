@@ -68,24 +68,6 @@ export default {
       iconAdd: 'person_add',
       headers: [
         {
-          text: 'PortalId',
-          value: 'portalAuthorisedId',
-          align: 'left',
-          sortable: false,
-          cellType: 'tb',
-          hidden: true,
-          editable: false
-        },
-        {
-          text: 'Title',
-          value: 'titleId',
-          align: 'left',
-          sortable: false,
-          cellType: 'md',
-          hidden: true,
-          editable: true
-        },
-        {
           text: 'datetime',
           value: 'dateTime',
           align: 'left',
@@ -102,84 +84,30 @@ export default {
           cellType: 'tb',
           hidden: false,
           editable: false
-        },
-        {
-          text: 'Corporate ID',
-          value: 'corporateIdentification',
-          cellType: 'tb',
-          hidden: true,
-          editable: true
         }
       ],
       newItem: [
         {
-          titleId: 0,
-          cellType: 'md',
-          attr: 'titleId',
-          cellLabel: 'Title',
-          displayVal: 'shortDescription',
-          returnVal: 'titleId',
+          dateTime: ' ',
+          cellType: 'tb',
+          attr: 'dateTime',
+          cellLabel: 'datetime',
           menuItems: [],
           validators: []
         },
         {
-          givenName: ' ',
+          description: ' ',
           cellType: 'tb',
-          attr: 'givenName',
-          cellLabel: 'Given Name',
-          menuItems: [],
-          validators: []
-        },
-        {
-          familyName: ' ',
-          cellType: 'tb',
-          attr: 'familyName',
-          cellLabel: 'Family Name',
-          menuItems: [],
-          validators: []
-        },
-        {
-          corporateIdentification: 0,
-          cellType: 'tb',
-          attr: 'corporateIdentification',
-          cellLabel: 'Company',
-          menuItems: [],
-          validators: []
-        },
-        {
-          salutation: ' ',
-          cellType: 'tb',
-          attr: 'salutation',
-          cellLabel: 'Salutation',
-          menuItems: [],
-          validators: []
-        },
-        {
-          username: ' ',
-          cellType: 'tb',
-          attr: 'username',
-          cellLabel: 'Username',
-          menuItems: [],
-          validators: []
-        },
-        {
-          password: ' ',
-          cellType: 'tb',
-          attr: 'password',
-          cellLabel: 'Password',
+          attr: 'description',
+          cellLabel: 'Alert Type',
           menuItems: [],
           validators: []
         }
       ],
       defaultItem: [
         {
-          titleId: 0,
-          portalAuthorisedId: 0,
-          givenName: '',
-          familyName: '',
-          corporateIdentification: '',
-          username: '',
-          password: ''
+          dateTime: 0,
+          description: '',
         }
       ],
       urls: [{ url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }]
@@ -189,88 +117,28 @@ export default {
     resetItem () {
       this.newItem = [
         {
-          titleId: 0,
-          cellType: 'md',
-          attr: 'titleId',
-          cellLabel: 'Title',
-          displayVal: 'shortDescription',
-          returnVal: 'titleId',
+          dateTime: ' ',
+          cellType: 'tb',
+          attr: 'dateTime',
+          cellLabel: 'datetime',
           menuItems: [],
           validators: []
         },
         {
-          givenName: ' ',
+          description: ' ',
           cellType: 'tb',
-          attr: 'givenName',
-          cellLabel: 'Given Name',
+          attr: 'description',
+          cellLabel: 'Alert Type',
           menuItems: [],
           validators: []
         },
-        {
-          familyName: ' ',
-          cellType: 'tb',
-          attr: 'familyName',
-          cellLabel: 'Family Name',
-          menuItems: [],
-          validators: []
-        },
-        {
-          corporateIdentification: 0,
-          cellType: 'tb',
-          attr: 'corporateIdentification',
-          cellLabel: 'Company',
-          menuItems: [],
-          validators: []
-        },
-        {
-          salutation: ' ',
-          cellType: 'tb',
-          attr: 'salutation',
-          cellLabel: 'Family Name',
-          menuItems: [],
-          validators: []
-        },
-        {
-          username: ' ',
-          cellType: 'tb',
-          attr: 'username',
-          cellLabel: 'Username',
-          menuItems: [],
-          validators: []
-        },
-        {
-          password: ' ',
-          cellType: 'tb',
-          attr: 'password',
-          cellLabel: 'Password',
-          menuItems: [],
-          validators: []
-        }
       ]
       this.defaultItem = [
         {
-          titleId: 0,
-          portalAuthorisedId: 0,
-          givenName: '',
-          familyName: '',
-          corporateIdentification: '',
-          username: '',
-          password: ''
+          dateTime: 0,
+          description: '',
         }
       ]
-    },
-    async setData () {
-      await this.getItems('sysadmin/sysadmin')
-      // console.log('jkfvjgklfdslgjfljgfjdsklgjfdslgklfdsjgjfldjglfdsgfdsgfdsgfdsgfds')
-      for (let i = 0; i < this.items.length; i++) {
-        for (let item in this.items[i]) {
-          if (item === null) {
-            Object.defineProperty(this.items[i], 'salutation', {
-              value: ' '
-            })
-          }
-        }
-      }
     }
   },
   mounted () {
