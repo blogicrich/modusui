@@ -37,23 +37,11 @@ export default {
   }),
   methods: {
     getDayReports: function () {
-      let dayReports = []
-      let apiData = this.$store.state.report.reportsSnapshotGet
-      for (let i = 0; i < apiData.length; i++) {
-        let dayReport = apiData[i]
-        let status = this.getDescription(dayReport.aggregatedHydration)
-        let hydrationLevel =
-          dayReport.volumeConsumedViaEDroplet +
-          dayReport.volumeConsumedViaOther +
-          '/' +
-          dayReport.hydrationTarget
-        let date = dayReport.dateTime
+      let dayReports = this.$store.state.report.reportDayReportsGet
 
-        dayReports.push({
-          status: status,
-          hydrationLevel: hydrationLevel,
-          date: date
-        })
+      for (let i = 0; i < dayReports.length; i++) {
+        const dayReport = dayReports[i]
+        dayReports[i].status = this.getDescription(dayReport.status)
       }
       return dayReports
     },

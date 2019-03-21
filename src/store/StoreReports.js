@@ -5,7 +5,8 @@ export const moduleReports = {
     // store the data
     reportsConditionsGet: [],
     reportsSnapshotGet: [],
-    reportCommentsGet: []
+    reportCommentsGet: [],
+    reportDayReportsGet: []
   },
   mutations: {
     // set the data
@@ -17,6 +18,25 @@ export const moduleReports = {
     },
     SET_REPORTSCOMMENTS (state, data) {
       state.reportCommentsGet = data
+    },
+    SET_DAYREPORTS (state, data) {
+      let dayReports = []
+      for (let i = 0; i < data.length; i++) {
+        let dayReport = data[i]
+        let aggregatedHydration = dayReport.aggregatedHydration
+        let hydrationLevel = (dayReport.volumeConsumedViaEDroplet +
+            dayReport.volumeConsumedViaOther) +
+          '/' +
+          dayReport.hydrationTarget
+        let date = dayReport.dateTime
+
+        dayReports.push({
+          status: aggregatedHydration,
+          hydrationLevel: hydrationLevel,
+          date: date
+        })
+      }
+      state.reportDayReportsGet = dayReports
     }
   },
   actions: {
@@ -39,14 +59,27 @@ export const moduleReports = {
         }
       })
     },
-    fetchReportCommentsGet (context) {
-      return apiLib.getData('carer/reports-day-comments/' + this.getters.getterUserId, true).then((response) => {
+    async fetchReportCommentsGet (context) {
+      await apiLib.getData('carer/reports-day-comments/' + this.getters.getterUserId, true).then((response) => {
         if (typeof response === 'undefined') {
           context.commit('SET_REPORTSCOMMENTS', null)
         } else {
           context.commit('SET_REPORTSCOMMENTS', response)
         }
       })
+    },
+    async fetchDayReports (context) {
+      await apiLib.getData('carer/reports-snapshot/' +
+          this.getters.getterUserId + '/' +
+          this.getters.getterDate, true)
+        .then(
+          (response) => {
+            if (typeof response === 'undefined') {
+              context.commit('SET_DAYREPORTS', null)
+            } else {
+              context.commit('SET_DAYREPORTS', response)
+            }
+          })
     }
   }
 }
