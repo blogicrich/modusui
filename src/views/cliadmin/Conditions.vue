@@ -18,7 +18,7 @@
       color="#00a1cd"
       >
     </v-divider>
-    <BaseDataTable      
+    <BaseDataTable
       :headers="headers"
       :items="items"
       :editPerms="editPerms"
@@ -99,15 +99,19 @@ export default {
       iconAdd: 'add',
       headers: [
         { text: 'conditionsId', align: 'left', sortable: true, value: 'conditionId', cellType: 'tb', hidden: true, editable: false },
-        { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Comments', align: 'left', sortable: true, value: 'comments', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Start Date', align: 'left', sortable: true, value: 'startdate', cellType: 'tb', hidden: false, editable: true },
+        { text: 'End Date', align: 'left', sortable: true, value: 'enddate', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
+        { comments: ' ', cellType: 'tb', attr: 'comments', cellLabel: 'Comments', menuItems: [], validators: [] },
+        { startdate: ' ', cellType: 'tb', attr: 'startdate', cellLabel: 'Start Date', menuItems: [], validators: [] },
+        { enddate: ' ', cellType: 'tb', attr: 'enddate', cellLabel: 'End Date', menuItems: [], validators: [] },
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { conditionsId: 0, description: ' ', status: ' ' }
+        { conditionsId: 0, comments: ' ', startdate: 0, enddate: 0, status: ' ' }
       ]
     }
   },
@@ -128,10 +132,10 @@ export default {
     },
     getUsersData () {
       // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        let userData = apiLib.getData('cliadmin/users', true).then(response => {
-          this.users = response
-          console.log('USERS: ', response)
-         })
+      let userData = apiLib.getData('cliadmin/users', true).then(response => {
+        this.users = response
+        console.log('USERS: ', response)
+      })
       // }
       // if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
       //   await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
@@ -151,11 +155,13 @@ export default {
     },
     resetItem () {
       this.newItem = [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
+        { comments: ' ', cellType: 'tb', attr: 'comments', cellLabel: 'Comments', menuItems: [], validators: [] },
+        { startdate: ' ', cellType: 'tb', attr: 'startdate', cellLabel: 'Start Date', menuItems: [], validators: [] },
+        { enddate: ' ', cellType: 'tb', attr: 'enddate', cellLabel: 'End Date', menuItems: [], validators: [] },
         { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { conditionsId: 0, description: ' ', status: ' ' }
+        { conditionsId: 0, comments: ' ', startdate: 0, enddate: 0, status: ' ' }
       ]
     }
   },
