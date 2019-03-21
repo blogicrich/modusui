@@ -4,14 +4,14 @@
     <v-icon large color="primary">local_drink</v-icon>
     <h1 class="pg-header">eDroplet Management</h1>
     <v-spacer></v-spacer>
-    <!-- <BaseUserSelect
+    <BaseUserSelect
       v-if="userPerms"
       :users="users"
       :selectAll="selectAll"
       :searchName="searchName"
       :multiple="multiple"
       @get-selected-user="getSelectedUser"
-    /> -->
+    />
     </v-layout>
     <v-divider
       class="mx-1 mb-4"
@@ -37,7 +37,7 @@
       :crudIdKey="crudIdKey"
       item-key="accountId"
       searchLabel="Search Records..."
-      tableTitle="eDroplet Records Records"
+      tableTitle="User's eDroplets"
       editDialogTitle="Edit eDroplet Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
@@ -82,31 +82,34 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      delUrl: '/cliadmin/conditions/1',
-      updateUrl: '/cliadmin/conditions/1',
+      updateUrl: '/cliadmin/edropman/',
       readUrl: '/cliadmin/edropman/',
-      createUrl: '/cliadmin/conditions/1',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
       iconAdd: 'build',
       headers: [
-        { text: 'Identifier', align: 'left', sortable: false, value: 'identifier', cellType: 'tb', hidden: true, editable: false },
-        { text: 'Comments', align: 'left', sortable: false, value: 'comments', cellType: 'md', hidden: false, editable: true },
-        { text: 'Start Date', value: 'startdate', cellType: 'tb', hidden: false, editable: true },
-        { text: 'End Date', value: 'enddate', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', value: 'status', cellType: 'tb', hidden: false, editable: false }
+        { text: 'Identifier', align: 'left', sortable: false, value: 'userId', cellType: 'tb', hidden: true, editable: false },
+        { text: 'User Status', align: 'left', sortable: false, value: 'userStatus', cellType: 'md', hidden: true, editable: false },
+        { text: 'mac address', align: 'left', sortable: false, value: 'macAddress', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Friendly name', align: 'left', sortable: false, value: 'friendlyName', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Status', align: 'left', sortable: false, value: 'status', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Operational status', align: 'left', sortable: false, value: 'operationalStatus', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Night Light', align: 'left', sortable: false, value: 'nightLight', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
         // { identifier: 0, cellType: 'md', attr: 'identifier', cellLabel: 'id', menuItems: [], validators: [] },
-        { comments: ' ', cellType: 'tb', attr: 'comments', cellLabel: 'Comments', menuItems: [], validators: [] },
-        { startdate: 0, cellType: 'tb', attr: 'startdate', cellLabel: 'Start Date', menuItems: [], validators: [] },
-        { enddate: 0, cellType: 'tb', attr: 'enddate', cellLabel: 'End Date', menuItems: [], validators: [] },
-        { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
+        { userId: 0, cellType: 'tb', attr: 'userId', cellLabel: 'Identifier', menuItems: [], validators: [] },
+        { userStatus: ' ', cellType: 'tb', attr: 'userStatus', cellLabel: 'User Status', menuItems: [], validators: [] },
+        { macAddress: ' ', cellType: 'tb', attr: 'macAddress', cellLabel: 'mac address', menuItems: [], validators: [] },
+        { friendlyName: ' ', cellType: 'tb', attr: 'friendlyName', cellLabel: 'Friendly Name', menuItems: [], validators: [] },
+        { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] },
+        { operationalStatus: ' ', cellType: 'tb', attr: 'operationalStatus', cellLabel: 'Operational status', menuItems: [], validators: [] },
+        { nightLight: ' ', cellType: 'tb', attr: 'nightLight', cellLabel: 'Night Light', menuItems: [], validators: [] }
       ],
       defaultItem: [
-        { identifier: 0, comments: ' ', startdate: 0, enddate: 0, status: ' '}
-      ],
+        { userId: 0, userStatus: ' ', macAddress: ' ', friendlyName: ' ', status: ' ', operationalStatus: ' ', nightLight: ' ' }
+      ]
       // urls: [
       //   { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }
       // ]
@@ -119,24 +122,24 @@ export default {
       } else {
         return false
       }
-    },
+    }
   },
   methods: {
     getSelectedUser (user) {
-      let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
-        this.apiData = response
-      })
+      this.updateUrl = '/cliadmin/edropman/' + user
+      this.readUrl = '/cliadmin/edropman/' + user
+      this.getItems(this.readUrl)
       // this.user = user.userId
       // let vals = apiLib.getData('cliadmin/')
-      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
+      console.log('USER: ', user)
       // this.getItems(this.readUrl)
     },
     async getvoiceMessage () {
       // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        let userData = apiLib.getData('cliadmin/users', true).then(response => {
-          this.users = response
-          console.log('USERS: ', response)
-         })
+      let userData = apiLib.getData('cliadmin/users', true).then(response => {
+        this.users = response
+        console.log('USERS: ', response)
+      })
       // }
       // if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
       //   await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
@@ -156,15 +159,18 @@ export default {
     },
     resetItem () {
       this.newItem = [
-        { comments: ' ', cellType: 'tb', attr: 'comments', cellLabel: 'Comments', menuItems: [], validators: [] },
-        { startdate: 0, cellType: 'tb', attr: 'startdate', cellLabel: 'Start Date', menuItems: [], validators: [] },
-        { enddate: 0, cellType: 'tb', attr: 'enddate', cellLabel: 'End Date', menuItems: [], validators: [] },
-        { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
+        { userId: 0, cellType: 'tb', attr: 'userId', cellLabel: 'Identifier', menuItems: [], validators: [] },
+        { userStatus: ' ', cellType: 'tb', attr: 'userStatus', cellLabel: 'User Status', menuItems: [], validators: [] },
+        { macAddress: ' ', cellType: 'tb', attr: 'macAddress', cellLabel: 'mac address', menuItems: [], validators: [] },
+        { friendlyName: ' ', cellType: 'tb', attr: 'friendlyName', cellLabel: 'Friendly Name', menuItems: [], validators: [] },
+        { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] },
+        { operationalStatus: ' ', cellType: 'tb', attr: 'operationalStatus', cellLabel: 'Operational status', menuItems: [], validators: [] },
+        { nightLight: ' ', cellType: 'tb', attr: 'nightLight', cellLabel: 'Night Light', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
-        { identifier: 0, comments: ' ', startdate: 0, enddate: 0, status: ' '}
+        { userId: 0, userStatus: ' ', macAddress: ' ', friendlyName: ' ', status: ' ', operationalStatus: ' ', nightLight: ' ' }
       ]
-    },
+    }
   },
   mounted () {
     this.getItems(this.readUrl)
