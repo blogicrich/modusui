@@ -44,6 +44,7 @@
           </v-container>
           <v-layout justify-space-around>
             <v-card-actions>
+              <v-btn :color="primaryColor" flat @click="deleteComment">Delete</v-btn>
               <v-btn :color="primaryColor" flat @click="clearComment">Clear</v-btn>
               <v-btn :color="primaryColor" flat @click="saveComment">Save</v-btn>
               <v-btn :color="primaryColor" flat @click="cancelComment">Cancel</v-btn>
@@ -213,6 +214,14 @@ export default {
       this.commentText = this.commentSavedText
       this.dialogToggle = false
       this.dialogComment = false
+    },
+    deleteComment () {
+      if (this.commentSavedText !== '') {
+        this.commentText = ''
+        this.commentSavedText = ''
+        this.dialogToggle = false
+        this.dialogComment = false
+      }
     },
     getClass (property) {
       if (this.clickedUser.userId === property) {
