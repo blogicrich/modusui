@@ -1,32 +1,34 @@
 <template>
-  <v-dialog v-model="dialog" persistent>
-    <template v-slot:activator="{ on }">
-      <v-btn color="primary" dark v-on="on">New user</v-btn>
-    </template>
-    <v-stepper v-model="e1" vertical v-for="step in steps" v-bind:key="step.id">
-      <v-stepper-step :step="step.id" :complete="e1 > step.id">
-        {{ step.title }}
-        <small>{{ step.summarize }}</small>
-      </v-stepper-step>
-      <v-stepper-content :step="step.id">
-        <v-card class="mb-5" v-if="step.id === 1">
-          <BasicDetails @onvalidation="validateStep1(...arguments)"/>
-        </v-card>
-        <v-card class="mb-5" v-else-if="step.id === 2">
-          <UserDetails @onvalidation="validateStep2(...arguments)"/>
-        </v-card>
-        <v-card class="mb-5" v-else-if="step.id === 3">
-          <CarerDetails @onvalidation="validateStep3(...arguments)"/>
-        </v-card>
-        <v-card class="mb-5" v-else-if="step.id === 4">
-          <AdminDetails @onvalidation="validateStep4(...arguments)" :submittedData="submittedData"/>
-        </v-card>
-        <v-btn v-show="showBack" @click="step.back()" flat>Back</v-btn>
-        <v-btn color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
-        <v-btn color="warning" absolute right @click="dialog = false">Cancel</v-btn>
-      </v-stepper-content>
-    </v-stepper>
-  </v-dialog>
+  <v-container>
+    <v-dialog v-model="dialog" persistent>
+      <template v-slot:activator="{ on }">
+        <v-btn color="primary" dark v-on="on">New user</v-btn>
+      </template>
+      <v-stepper v-model="e1" vertical v-for="step in steps" v-bind:key="step.id">
+        <v-stepper-step :step="step.id" :complete="e1 > step.id">
+          {{ step.title }}
+          <small>{{ step.summarize }}</small>
+        </v-stepper-step>
+        <v-stepper-content :step="step.id">
+          <v-card class="mb-5" v-if="step.id === 1">
+            <BasicDetails @onvalidation="validateStep1(...arguments)"/>
+          </v-card>
+          <v-card class="mb-5" v-else-if="step.id === 2">
+            <UserDetails @onvalidation="validateStep2(...arguments)"/>
+          </v-card>
+          <v-card class="mb-5" v-else-if="step.id === 3">
+            <CarerDetails @onvalidation="validateStep3(...arguments)"/>
+          </v-card>
+          <v-card class="mb-5" v-else-if="step.id === 4">
+            <AdminDetails @onvalidation="validateStep4(...arguments)" :submittedData="submittedData"/>
+          </v-card>
+          <v-btn v-show="showBack" @click="step.back()" flat>Back</v-btn>
+          <v-btn color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
+          <v-btn color="warning" absolute right @click="dialog = false">Cancel</v-btn>
+        </v-stepper-content>
+      </v-stepper>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
