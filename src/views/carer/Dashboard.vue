@@ -29,17 +29,16 @@ export default {
     }
   },
   methods: {
-    changeDate (newDate = 0, childData = undefined) {
-      let SelectedUnixTime = Math.round(new Date(newDate).getTime() / 1000)
-      this.SelectedUnixTime = SelectedUnixTime
-      //this.setDay()
-      // this.setUsers()
-      //this.setComment()
+    changeDate (newDate, childData = undefined) {
+      if (newDate !== '') {
+        let SelectedUnixTime = Math.round(new Date(newDate).getTime() / 1000)
+        this.SelectedUnixTime = SelectedUnixTime
+      }
       this.childData = childData
       this.update = true
       setTimeout(() => {
         this.update = false
-      }, 50)
+      }, 100)
     },
     formatDate (date) {
       var monthNames = [
@@ -77,7 +76,7 @@ export default {
         let store = this.$store.state.dashboardUsers.dashboardUsersGet
         for (let index = 0; index < store.length; index++) {
           const element = store[index]
-          this.dashboardUsers = element
+          this.dashboardUsers.push(element)
         }
       }
     },
@@ -94,35 +93,37 @@ export default {
     },
     async setHour(SelectedUnixTime, chart) {
       this.$store.state.date = 0
-      console.log('setHour: ', chart)
       await this.$store.dispatch('fetchDashboardHourGet')
       if (this.$store.state.dashboardHour.dashboardHourGet) {
         let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
         for (let index = 0; index < hourStore.length; index++) {
-          chart.data.datasets[0][index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
+          this.childData.lineChartData.dataLineOne[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
         }
         chart.config.options.title.text = 'Activity on ' + this.formatDate(new Date(this.SelectedUnixTime * 1000))
       }
     },
-    async setDay() {
+    async setDay(chart) {
       await this.$store.dispatch('fetchDashboardDayGet')
       if (this.$store.state.dashboardDay.dashboardDayGet) {
         let dayStore = this.$store.state.dashboardDay.dashboardDayGet
         for (let index = 0; index < dayStore.length; index++) {
-          // this.childData.doughnutChartData.dataDoughnut[0] = parseFloat(dayStore[index].aggregatedHyration)
-          // this.childData.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(dayStore[index].hydrationTarget) - parseFloat(dayStore[index].aggregatedHyration))
-          // this.childData.doughnutChartData.title = dayStore[index].aggregatedHyration + 'L / ' + dayStore[index].hydrationTarget + 'L'
+          console.log(chart)
+          chart.config.data.datasets[0].data[0] = parseFloat(dayStore[index].aggregatedHyration)
+          chart.config.data.datasets[0].data[1] = parseInt(parseFloat(dayStore[index].hydrationTarget) - parseFloat(dayStore[index].aggregatedHyration))
+          chart.config.options.title.text = dayStore[index].aggregatedHyration + 'L / ' + dayStore[index].hydrationTarget + 'L'
         }
       }
     }
   },
   async mounted() {
     this.$store.state.userId = 21
-    // this.setHour(Math.round(new Date().getTime() / 1000))
-    this.setDay()
-    EventBus.$on('updateLine', chart => {
+    this.changeDate(new Date())
+    this.setUsers()
+    EventBus.$on('updateline', chart => {
       this.setHour(Math.round(new Date().getTime() / 1000), chart)
-      console.log('chart update: ', chart)
+    })
+    EventBus.$on('updatedoughnut', chart => {
+      this.setDay(chart)
     })
   }
 }

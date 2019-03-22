@@ -12,15 +12,22 @@ export default {
     update: Boolean
   },
   watch: {
-    update: function () {
-      EventBus.$emit('updateLine', this.$data._chart)
-      this.$data._chart.update()
-      // this.renderChart(this.chartData, this.options)
+    update () {
+      if (this.update) {
+        EventBus.$emit('updateline', this.$data._chart)
+        console.log('updateLine executed')
+        setTimeout(() => {
+          this.$data._chart.update()
+        }, 200)
+      }
     }
   },
   mounted () {
-    EventBus.$emit('update', this.$data._chart)
+    EventBus.$emit('updateline', this.$data._chart)
     this.renderChart(this.chartData, this.options)
+            setTimeout(() => {
+          this.$data._chart.update()
+        }, 200)
   }
 }
 </script>
