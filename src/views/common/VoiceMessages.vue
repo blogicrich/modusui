@@ -4,14 +4,14 @@
       <v-icon v-if="apiData.length > 0" large color="primary">settings</v-icon>
       <h1 v-if="apiData.length > 0" class="pg-header">eDroplet Administration</h1>
       <v-spacer></v-spacer>
-      <!-- <selectComponent
+      <selectComponent
         v-if="userPerms"
         :users="users"
         :selectAll="selectAll"
         :searchName="searchName"
         :multiple="multiple"
         @get-selected-user="getSelectedUser"
-      ></selectComponent> -->
+      ></selectComponent>
     </v-layout>
     <v-layout v-if="apiData.length > 0">
       <v-flex xs12>
@@ -192,31 +192,27 @@ export default {
     }
   },
   computed: {
-    // userPerms () {
-    //   if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // }
+    userPerms () {
+      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
     getSelectedUser (user) {
       let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
         this.apiData = response
       })
-      // this.user = user.userId
-      // let vals = apiLib.getData('cliadmin/')
-      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
-      // this.getItems(this.readUrl)
     },
     async getvoiceMessage () {
-      // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-      //   let userData = apiLib.getData('cliadmin/users', true).then(response => {
-      //     this.users = response
-      //     console.log('USERS: ', response)
-      //    })
-      // }
+      if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+          this.users = response
+          console.log('USERS: ', response)
+         })
+      }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
         if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
@@ -238,14 +234,14 @@ export default {
     this.getvoiceMessage()
   },
   beforeRouteLeave (to, from, next) {
-    // const answer = window.confirm(
-    //   'Do you really want to leave? You will loose all unsaved changes!'
-    // )
-    // if (answer) {
-    //   next()
-    // } else {
-    //   next(false)
-    // }
+    const answer = window.confirm(
+      'Do you really want to leave? You will loose all unsaved changes!'
+    )
+    if (answer) {
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>
