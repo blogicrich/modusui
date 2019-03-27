@@ -350,7 +350,7 @@
         </v-fade-transition>
         <v-fade-transition>
           <v-btn v-if="items.length > 0" class="std-btn" @click="searchDisplay" :color="primaryColor" large>search
-            <v-icon class="ml-2">delete</v-icon>
+            <v-icon class="ml-2">search</v-icon>
           </v-btn>
         </v-fade-transition>
       </v-layout>
