@@ -5,6 +5,7 @@ export const chartMixin = {
         labels: this.lineChartData.labels,
         datasets: [
           {
+            type: 'line',
             label: this.lineChartData.labelLineOne,
             data: this.lineChartData.dataLineOne,
             borderColor: this.lineChartData.borderColorLineOne,
@@ -46,7 +47,7 @@ export const chartMixin = {
         },
         title: {
           display: true,
-          text: 'Today\'s activity',
+          text: this.lineChartData.title,
           fontSize: 16
         },
         scales: {
@@ -100,7 +101,7 @@ export const chartMixin = {
         spanGaps: true,
         title: {
           display: true,
-          text: 'Weelky summary 6L average',
+          text: this.barChartData.title,
           fontSize: 16
         },
         elements: {
@@ -128,6 +129,7 @@ export const chartMixin = {
         labels: this.doughnutChartData.labels,
         datasets: [
           {
+            type: 'doughnut',
             data: this.doughnutChartData.dataDoughnut,
             borderColor: this.doughnutChartData.borderColorDoughnut,
             backgroundColor: this.doughnutChartData.backgroundColorDoughnut,
@@ -138,7 +140,12 @@ export const chartMixin = {
       this.optionsDoughnut = {
         responsive: true,
         maintainAspectRatio: false,
-        cutoutPercentage: this.doughnutChartData.cutoutPercentageDoughnut
+        cutoutPercentage: this.doughnutChartData.cutoutPercentageDoughnut,
+        title: {
+          display: true,
+          text: this.doughnutChartData.title,
+          fontSize: 16
+        }
       }
     }
   }
