@@ -4,78 +4,70 @@
       <v-icon v-if="apiData.length > 0" large color="primary">settings</v-icon>
       <h1 v-if="apiData.length > 0" class="pg-header">eDroplet Administration</h1>
       <v-spacer></v-spacer>
-      <!-- <selectComponent
+      <selectComponent
         v-if="userPerms"
         :users="users"
         :selectAll="selectAll"
         :searchName="searchName"
         :multiple="multiple"
         @get-selected-user="getSelectedUser"
-      ></selectComponent> -->
+      ></selectComponent>
     </v-layout>
     <v-layout v-if="apiData.length > 0">
       <v-flex xs12>
         <v-layout row align-start justify-space-between>
           <h1 class="pg-header ma-2">Voice Messages</h1>
           <v-spacer></v-spacer>
-          <!-- <selectComponent
+          <selectComponent
             :users="users"
             :selectAll="selectAll"
             :searchName="searchName"
             :multiple="multiple"
             @get-selected-user="getSelectedUser"
-          ></selectComponent> -->
+          ></selectComponent>
         </v-layout>
-        <v-card class="pa-2 my-3" v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId">
-          <h2 class="ma-2 pg-subheader text-primary">Message Type: {{ config.voiceMessagedescription }}</h2>
+        <v-card class="pa-2 my-3">
+          <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
+            v-for="voiceMessage in reminders"
             :radioConfig="msgReminderIntervalSettings"
-            :groupHeader="msgReminderGroupHeader"
             :groupDescription="msgReminderRadioDescription"
-            :radioHeader="msgReminderRadioHeader"
+            :radioHeader="msgRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="'https://s1.vocaroo.com/media/download_temp/Vocaroo_s1pex2ARQm9Y.mp3'"
-            :fileName="config.voiceMessagedescription"
+            :audioFile="voiceMessage.audioFile"
+            :fileName="voiceMessage.voiceMessagedescription"
           />
         </v-card>
-        <!-- <v-card class="pa-2 my-3">
-          <h2 class="pg-subheader text-primary ma-2">Message Type: {{ msgInstructGroupHeader }}</h2>
-          <v-divider
-            class="ma-2"
-            color="#00a1cd"
-            >
+        <v-card class="pa-2 my-3">
+          <h2 class="ma-2 pg-subheader text-primary">Message Type: Praises</h2>
+          <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId"
-            :radioConfig="msgReminderIntervalSettings"
-            :groupHeader="msgReminderGroupHeader"
-            :groupDescription="msgReminderRadioDescription"
-            :radioHeader="msgReminderRadioHeader"
+            v-for="voiceMessage in praises"
+            :radioConfig="msgPraiseIntervalSettings"
+            :groupDescription="msgPraiseRadioDescription"
+            :radioHeader="msgRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="config.audioFile"
-            :fileName="config.voiceMessagedescription"
+            :audioFile="voiceMessage.audioFile"
+            :fileName="voiceMessage.voiceMessagedescription"
           />
         </v-card>
-        <v-card class="pa-2 my-2">
-          <h2 class="pg-subheader text-primary ma-2">Message Type: {{ msgPraiseGroupHeader }}</h2>
-          <v-divider
-            class="ma-2"
-            color="#00a1cd"
-            >
+        <v-card class="pa-2 my-3">
+          <h2 class="ma-2 pg-subheader text-primary">Message Type: Instruct</h2>
+          <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
-            v-for="config in apiData" :key="'msgRem' + config.voiceMessagesId"
-            :radioConfig="msgReminderIntervalSettings"
-            :groupHeader="msgReminderGroupHeader"
-            :groupDescription="msgReminderRadioDescription"
-            :radioHeader="msgReminderRadioHeader"
+            v-for="voiceMessage in instructs"
+            :radioConfig="msgInstructIntervalSettings"
+            :groupDescription="msgInstructRadioDescription"
+            :radioHeader="msgRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="config.audioFile"
-            :fileName="config.voiceMessagedescription"
+            :audioFile="voiceMessage.audioFile"
+            :fileName="voiceMessage.voiceMessagedescription"
           />
-        </v-card> -->
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -85,6 +77,7 @@
 import apiLib from '@/services/apiLib'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
+import { isPending } from 'q';
 
 export default {
   name: 'VoiceMessageViewComponent',
@@ -94,6 +87,9 @@ export default {
   },
   data() {
     return {
+      reminders: [],
+      praises: [],
+      instructs: [],
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
@@ -110,142 +106,87 @@ export default {
       selectAll: 'Select all',
       searchName: 'Search user..',
       uploadIcon: 'cloud_upload',
-      // Messages reminders
       msgReminderIntervalSettings: [
         { label: '20', value: 20 },
         { label: '40', value: 40 },
         { label: '60', value: 60 },
         { label: 'Never', value: 'Never' }
       ],
-      msgReminderGroupHeader: 'Reminders',
-      msgReminderRadioDescription:
-        'Time betweeen drink reminders - (Blue light flashing)',
-      msgReminderRadioHeader: 'Time interval in minutes:',
-      msgReminderConfig: [
-        {
-          source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
-          fileName: 'msg_003'
-        }
+      msgPraiseIntervalSettings: [
+        { label: '20', value: 20 },
+        { label: '40', value: 40 },
+        { label: '60', value: 60 },
+        { label: 'Never', value: 'Never' }
       ],
-      // // Messages instructions
-      //   msgInstructIntervalSettings: [
-      //     { label: '20', value: 20 },
-      //     { label: '40', value: 40 },
-      //     { label: '60', value: 60 },
-      //     { label: 'Never', value: 'Never' }
-      //   ],
-      //   msgInstructGroupHeader: 'Instructions',
-      //   msgInstructRadioDescription:
-      //     'Time between drink reminders - (Blue light flashing)',
-      //   msgInstructRadioHeader: 'Please select an option from the following:',
-      //   msgInstructConfig: [
-      //     {
-      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
-      //       audioType: 'audio/mpeg',
-      //       audioRef: 'audio',
-      //       fileName: 'msg_001'
-      //     },
-      //     {
-      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
-      //       audioType: 'audio/mpeg',
-      //       audioRef: 'audio',
-      //       fileName: 'msg_002'
-      //     },
-      //     {
-      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
-      //       audioType: 'audio/mpeg',
-      //       audioRef: 'audio',
-      //       fileName: 'msg_003'
-      //     }
-      //   ],
-      // // Messages praise
-      //   msgPraiseIntervalSettings: [
-      //     { label: '20', value: 20 },
-      //     { label: '40', value: 40 },
-      //     { label: '60', value: 60 },
-      //     { label: 'Never', value: 'Never' }
-      //   ],
-      //   msgPraiseGroupHeader: 'Praise',
-      //   msgPraiseRadioDescription:
-      //     'Time betweeen drink reminders - (Blue light flashing)',
-      //   msgPraiseRadioHeader: 'Please select an option from the following:',
-      //   msgPraiseConfig: [
-      //     {
-      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
-      //       audioType: 'audio/mpeg',
-      //       audioRef: 'audio',
-      //       fileName: 'msg_001'
-      //     },
-      //     {
-      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
-      //       audioType: 'audio/mpeg',
-      //       audioRef: 'audio',
-      //       fileName: 'msg_002'
-      //     },
-      //     {
-      //       source: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
-      //       audioType: 'audio/mpeg',
-      //       audioRef: 'audio',
-      //       fileName: 'msg_003'
-      //     }
-      //   ],
+      msgInstructIntervalSettings: [
+        { label: '20', value: 20 },
+        { label: 'Never', value: 'Never' }
+      ],
+      msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
+      msgPraiseRadioDescription: 'Time betweeen drink praises - (Blue light flashing)',
+      msgInstructRadioDescription: 'Time between drink instructions - (Blue light flashing)',
+      msgRadioHeader: 'Time interval in minutes:',
     }
   },
   computed: {
-    // userPerms () {
-    //   if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // }
+    userPerms () {
+      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
+    setTypes () {
+      for (let i = 0; i < this.apiData.length; i++) {
+        let voiceMessageType = this.apiData[i].voiceMessagedescription
+        let voiceMessage = this.apiData[i]
+        voiceMessageType.includes('Reminder') 
+          ? this.reminders.push(voiceMessage) :
+        voiceMessageType.includes('Praise') 
+          ? this.praises.push(voiceMessage) :
+        voiceMessageType.includes('Instruct')
+          ? this.instructs.push(voiceMessage) : ''
+      }
+    },
     getSelectedUser (user) {
       let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
         this.apiData = response
       })
-      // this.user = user.userId
-      // let vals = apiLib.getData('cliadmin/')
-      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
-      // this.getItems(this.readUrl)
     },
     async getvoiceMessage () {
-      // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-      //   let userData = apiLib.getData('cliadmin/users', true).then(response => {
-      //     this.users = response
-      //     console.log('USERS: ', response)
-      //    })
-      // }
+      if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+          this.users = response
+         })
+      }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
         if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
-          let voiceMessageDefaultStore = this.$store.state.voiceMessages
-            .voiceMessagesDefaultsGet
-          for (let index = 0; index < voiceMessageDefaultStore.length; index++) {
-            const element = voiceMessageDefaultStore[index]
-            for (let j = 0; j < element.length; j++) {
-              const el = element[j]
-              this.apiData.push(el)
+          let voiceMessageDefaultStore = await this.$store.state.voiceMessages.voiceMessagesDefaultsGet
+          for (let i = 0; i < voiceMessageDefaultStore.length; i++) {
+            for (let j = 0; j < voiceMessageDefaultStore[i].length; j++) {
+              this.apiData.push(voiceMessageDefaultStore[i][j])
             }
           }
         }
       }
-      console.log(this.apiData, 'apiData')
+      this.setTypes()
     }
   },
   mounted () {
     this.getvoiceMessage()
   },
   beforeRouteLeave (to, from, next) {
-    // const answer = window.confirm(
-    //   'Do you really want to leave? You will loose all unsaved changes!'
-    // )
-    // if (answer) {
-    //   next()
-    // } else {
-    //   next(false)
-    // }
+    const answer = window.confirm(
+      'Do you really want to leave? You will loose all unsaved changes!'
+    )
+    if (answer) {
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>

@@ -5,14 +5,13 @@ const { reactiveProp } = mixins
 export default {
   extends: Bar,
   mixins: [reactiveProp],
-  props: {
-    chartData: Object,
-    options: Object,
-    update: Boolean
-  },
+  props: ['chartData', 'options'],
   watch: {
-    update: function () {
-      if (this.update) this.renderChart(this.chartData, this.options)
+    'options': {
+      handler(newOption, oldOption) {
+        this.renderChart(this.chartData, this.options)
+      },
+      deep: true
     }
   },
   mounted () {

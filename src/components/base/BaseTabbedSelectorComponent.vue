@@ -7,11 +7,18 @@
       show-arrows
     >
     <v-tabs-slider color="white"></v-tabs-slider>
-        <v-tab
-          v-for="(item, index) in items"
-          :key="index"
-        >
-        {{ item.alertTypeDescription + ' - ' + item.communicationTypeDescription }}
+        <v-tab v-for="(item, index) in items" :key="index">
+        <span>
+                  <v-badge color="red" right v-if="itemIsEmpty(item)">
+          <span>{{ item.alertTypeDescription + ' - ' + item.communicationTypeDescription }}</span>
+        <template v-slot:badge>
+          <span>!</span>
+        </template>
+      </v-badge>
+            <v-badge v-else>
+        <span>{{ item.alertTypeDescription + ' - ' + item.communicationTypeDescription }}</span>
+      </v-badge>
+        </span>
         </v-tab>
         <v-tabs-items
           v-model="currentItem"
@@ -24,7 +31,7 @@
               <v-layout justify-space-around mt-4>
                 <v-flex v-if="item.communicationTypeDescription === 'Email'" lg4 md4 xs12>
                   <h2 class="table-header">{{ cardEmailHeader }}</h2>
-                  <!-- <BaseDataTableInfoCard
+                  <BaseDataTableInfoCard
                     :errorMsg="errorMsg"
                     :loadingMsg="loadingMsg"
                     :loadedMsg="loadedMsg"
@@ -32,7 +39,7 @@
                     :loaded="loaded"
                     :error="error"
                     :color="primaryColor"
-                  /> -->
+                  />
                   <v-text-field
                     label="Subject"
                     v-model.sync="item.subject"
@@ -54,7 +61,6 @@
                       counter
                       maxlength="160"
                       v-model.sync="item.message"
-
                       @input="showBtns"
                     ></v-textarea>
                   </v-layout>
@@ -117,7 +123,6 @@
 </template>
 
 <script>
-
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
 import BaseDataTableInfo from '@/components/base/BaseDataTableInfoComponent.vue'
@@ -136,6 +141,11 @@ export default {
       activeHash: ''
     }
   },
+  watch: {
+    items () {
+      this.itemIsEmpty()
+    }
+  },
   props: {
     items: Array,
     dialogTitle: String,
@@ -151,11 +161,13 @@ export default {
     infoCardColor: String
   },
   methods: {
+    itemIsEmpty (item) {
+      return item.message === '' ? true : false
+    },
     saveChanges () {
       var item = Number(this.currentItem)
       var data = [this.items[item]]
       this.$emit('itemsEdited', data)
-      console.log("CURRENT ITEM: ", data)
       // this.$emit('items-edited', data)
     },
     eraseChange () {
@@ -193,14 +205,12 @@ export default {
       // this.currentItem = this.activeHash
       // this.eraseChange()
       // this.dialog = false
-    },
-    mounted () {
-      console.log(this.items)
     }
   }
 }
+
 </script>
 
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
+@import "./public/scss/main.scss";
 </style>

@@ -19,7 +19,7 @@
       dialogText= "Do you wish to proceed?"
       cardEmailHeader= "Email Message Template"
       cardSmsHeader= "SMS Message Template"
-      @itemsEdited="editItems"
+      @itemsEdited="editItems(...arguments)"
       @itemsCancelled="refreshItems"
     ></baseTab>
   </v-container>

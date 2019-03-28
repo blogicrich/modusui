@@ -1,26 +1,20 @@
 <script>
 import { Doughnut, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
-import { EventBus } from '@/mixins/eventBus'
 
 export default {
   extends: Doughnut,
   mixins: [reactiveProp],
-  props: {
-    chartData: Object,
-    options: Object,
-    update: Boolean
-  },
+  props: ['chartData', 'options'],
   watch: {
-    update: function () {
-      EventBus.$emit('updatedoughnut', this.$data._chart)
-      setTimeout(() => {
-        this.$data._chart.update()
-      }, 200)
+    'options': {
+      handler(newOption, oldOption) {
+        this.renderChart(this.chartData, this.options)
+      },
+      deep: true
     }
   },
   mounted () {
-    EventBus.$emit('updatedoughnut', this.$data._chart)
     this.renderChart(this.chartData, this.options)
   }
 }

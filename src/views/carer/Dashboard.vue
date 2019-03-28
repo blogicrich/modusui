@@ -1,17 +1,15 @@
 <template>
   <dashboard-component
-    :update="update"
     :dashboardUsers="dashboardUsers"
     :dashboardComment="dashboardComment"
     :dashboardDay="dashboardDay"
     :dashboardHour="dashboardHour"
-    @onchangedate="changeDate(...arguments)"
+    @ondatechange="updateCharts(...arguments)"
   />
 </template>
 
 <script>
 import dashboardComponent from '@/components/base/BaseDashboardComponent'
-import { EventBus } from '@/mixins/eventBus'
 
 export default {
   components: {
@@ -19,117 +17,53 @@ export default {
   },
   data () {
     return {
-      update: false,
-      dashboardDay: [],
+      dashboardDay: {},
       dashboardHour: [],
       dashboardUsers: [],
-      dashboardComment: [],
-      SelectedUnixTime: '',
-      childData: []
+      dashboardComment: []
     }
   },
   methods: {
-    changeDate (newDate, childData = undefined) {
-      if (newDate !== '') {
-        let SelectedUnixTime = Math.round(new Date(newDate).getTime() / 1000)
-        this.SelectedUnixTime = SelectedUnixTime
-      }
-      this.childData = childData
-      this.update = true
-      setTimeout(() => {
-        this.update = false
-      }, 100)
-    },
-    formatDate (date) {
-      var monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ]
-
-      var day = date.getDate()
-      var monthIndex = date.getMonth()
-      var year = date.getFullYear()
-
-      return day + ' ' + monthNames[monthIndex] + ' ' + year
-    },
-
-    setBarPoints() {
-      for (let point = 0; point < this.dashboardDay.length; point++) {
-        this.childData.barChartData.dataBarOne[point] = this.dashboardDay[
-          point
-        ].aggregatedHyration
-      }
+    updateCharts(SelectedUnixTime) {
+      this.setHour(SelectedUnixTime)
+      this.setDay()
     },
     async setUsers() {
       await this.$store.dispatch('fetchDashboardUsersGet')
-      if (this.$store.state.dashboardUsers.dashboardUsersGet) {
-        let store = this.$store.state.dashboardUsers.dashboardUsersGet
-        for (let index = 0; index < store.length; index++) {
-          const element = store[index]
-          this.dashboardUsers.push(element)
-        }
+      if (this.$store.state.dashboardUsers.dashboardUsersGet) { 
+        this.dashboardUsers = await this.$store.state.dashboardUsers.dashboardUsersGet
       }
     },
     async setComment() {
       await this.$store.dispatch('fetchDashboardCommentGet')
       if (this.$store.state.DashboardComment.dashboardCommentGet) {
-        let commentStore = this.$store.state.DashboardComment
-          .dashboardCommentGet
+        let commentStore = await this.$store.state.DashboardComment.dashboardCommentGet
         for (let index = 0; index < commentStore.length; index++) {
-          const element = commentStore[index]
-          this.dashboardComment.push(element)
+          this.dashboardComment.push(commentStore[index])
         }
       }
     },
-    async setHour(SelectedUnixTime, chart) {
+    async setHour(SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      this.$store.state.userId = 21
       this.$store.state.date = 0
       await this.$store.dispatch('fetchDashboardHourGet')
       if (this.$store.state.dashboardHour.dashboardHourGet) {
         let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
         for (let index = 0; index < hourStore.length; index++) {
-          this.childData.lineChartData.dataLineOne[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
+          this.dashboardHour[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
         }
-        chart.config.options.title.text = 'Activity on ' + this.formatDate(new Date(this.SelectedUnixTime * 1000))
       }
     },
-    async setDay(chart) {
+    async setDay() {
       await this.$store.dispatch('fetchDashboardDayGet')
       if (this.$store.state.dashboardDay.dashboardDayGet) {
-        let dayStore = this.$store.state.dashboardDay.dashboardDayGet
-        for (let index = 0; index < dayStore.length; index++) {
-          console.log(chart)
-          chart.config.data.datasets[0].data[0] = parseFloat(dayStore[index].aggregatedHyration)
-          chart.config.data.datasets[0].data[1] = parseInt(parseFloat(dayStore[index].hydrationTarget) - parseFloat(dayStore[index].aggregatedHyration))
-          chart.config.options.title.text = dayStore[index].aggregatedHyration + 'L / ' + dayStore[index].hydrationTarget + 'L'
-        }
+        this.dashboardDay = this.$store.state.dashboardDay.dashboardDayGet
       }
     }
   },
-  async mounted() {
-    this.$store.state.userId = 21
-    this.changeDate(new Date())
+  mounted () {
     this.setUsers()
-    EventBus.$on('updateline', chart => {
-      this.setHour(Math.round(new Date().getTime() / 1000), chart)
-    })
-    EventBus.$on('updatedoughnut', chart => {
-      this.setDay(chart)
-    })
+    this.setComment()
   }
 }
-
 </script>
-
-<style lang="scss" scoped>
-@import "./public/scss/main.scss";
-</style>
