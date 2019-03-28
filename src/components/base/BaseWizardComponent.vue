@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog v-model="dialog" persistent>
       <template v-slot:activator="{ on }">
         <v-btn color="primary" dark v-on="on">New user</v-btn>
@@ -10,25 +9,27 @@
           <small>{{ step.summarize }}</small>
         </v-stepper-step>
         <v-stepper-content :step="step.id">
-          <v-card class="mb-5" v-if="step.id === 1">
+          <div class="mb-5" v-if="step.id === 1">
             <BasicDetails @onvalidation="validateStep1(...arguments)"/>
-          </v-card>
-          <v-card class="mb-5" v-else-if="step.id === 2">
+          </div>
+          <div class="mb-5" v-else-if="step.id === 2">
             <UserDetails @onvalidation="validateStep2(...arguments)"/>
-          </v-card>
-          <v-card class="mb-5" v-else-if="step.id === 3">
+          </div>
+          <div class="mb-5" v-else-if="step.id === 3">
             <CarerDetails @onvalidation="validateStep3(...arguments)"/>
-          </v-card>
-          <v-card class="mb-5" v-else-if="step.id === 4">
-            <AdminDetails @onvalidation="validateStep4(...arguments)" :submittedData="submittedData"/>
-          </v-card>
+          </div>
+          <div class="mb-5" v-else-if="step.id === 4">
+            <AdminDetails
+              @onvalidation="validateStep4(...arguments)"
+              :submittedData="submittedData"
+            />
+          </div>
           <v-btn v-show="showBack" @click="step.back()" flat>Back</v-btn>
           <v-btn color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
-          <v-btn color="warning" absolute right @click="dialog = false">Cancel</v-btn>
+          <v-btn color="red" dark absolute right @click="dialog = false">Cancel</v-btn>
         </v-stepper-content>
       </v-stepper>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>
@@ -56,7 +57,15 @@ export default {
         this.showContinue = false
       }
     },
-    validateStep2 (valid, isUser, timeStartUp, timeWakeUp, otherHydration, selectedEDroplet, comments) {
+    validateStep2 (
+      valid,
+      isUser,
+      timeStartUp,
+      timeWakeUp,
+      otherHydration,
+      selectedEDroplet,
+      comments
+    ) {
       if (valid) {
         this.showContinue = true
         this.submittedData.startUp = timeStartUp
@@ -69,7 +78,17 @@ export default {
         this.showContinue = false
       }
     },
-    validateStep3 (valid, isAdmin, isCarer, username, phoneNumber, emailAddress, email, sms, selectedAlertTypes) {
+    validateStep3 (
+      valid,
+      isAdmin,
+      isCarer,
+      username,
+      phoneNumber,
+      emailAddress,
+      email,
+      sms,
+      selectedAlertTypes
+    ) {
       if (valid) {
         this.showContinue = true
         this.submittedData.isAdmin = isAdmin
