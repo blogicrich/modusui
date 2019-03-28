@@ -1,25 +1,39 @@
 <template>
   <v-container>
-    <wizard-component/>
-    <data-table
-      :editPerms="editPerms"
-      :headers="headers"
-      :items="items"
-      primaryColor="primary"
-      recordIcon="person"
-      tableTitle="Personal Details"
-    ></data-table>
+    <v-layout row>
+      <v-flex x12>
+        <data-table
+          :editPerms="editPerms"
+          :headers="headers"
+          :items="personalDetails"
+          :loading="loading"
+          :loaded="loaded"
+          :error="error"
+          :errorMsg="errorMsg"
+          :loadingMsg="loadingMsg"
+          :loadedMsg="loadedMsg"
+          primaryColor="primary"
+          recordIcon="person"
+          tableTitle="Personal Details"
+        ></data-table>
+      </v-flex>
+    </v-layout>
+    <v-layout row justify-end>
+      <wizard-component/>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
-import apiLib from '@/services/apiLib'
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import DataTable from '@/components/base/BaseDataTableComponent'
 import WizardComponent from '@/components/base/BaseWizardComponent'
-console.log(apiLib.getData('', true))
+
+const getUrl = 'cliadmin/personaldetails'
 
 export default {
   name: 'PersonalDetails',
+  mixins: [crudRoutines],
   components: {
     DataTable,
     WizardComponent
@@ -69,14 +83,18 @@ export default {
           celltype: 'tb',
           align: 'left'
         }
-      ]
+      ],
+      personalDetails: [],
+      loading: true,
+      loaded: false,
+      error: false,
+      errorMsg: '',
+      loadingMsg: '',
+      loadedMsg: ''
     }
   },
-  computed: {
-    items: function () {
-      let items = [{}]
-      return items
-    }
+  mounted () {
+    this.getItems(getUrl)
   }
 }
 </script>

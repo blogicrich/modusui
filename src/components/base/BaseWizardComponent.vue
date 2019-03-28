@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog v-model="dialog" persistent>
       <template v-slot:activator="{ on }">
         <v-btn color="primary" dark v-on="on">New user</v-btn>
@@ -31,7 +30,6 @@
         </v-stepper-content>
       </v-stepper>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>
