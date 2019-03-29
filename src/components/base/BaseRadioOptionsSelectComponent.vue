@@ -93,10 +93,6 @@ export default {
         return newValue
       }
     }
-  },
-  mounted () {
-    console.log('ROADIOCONFIG: ', this.radioConfig)
-    
   }
 }
 </script>

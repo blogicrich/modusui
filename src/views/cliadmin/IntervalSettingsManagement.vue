@@ -90,9 +90,7 @@ export default {
       console.log('collapse');
     },
     getSelectedUser (user) {
-      // this.user = user.userId
       let vals = apiLib.getData('cliadmin/')
-      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
     }
   }
 }

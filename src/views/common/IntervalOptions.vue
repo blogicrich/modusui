@@ -102,7 +102,6 @@ import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import apiLib from '@/services/apiLib'
-import { log } from 'util';
 
 export default {
   name: 'IntervalOptions',
@@ -128,16 +127,16 @@ export default {
       // intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
       intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
       drinkGroupHeader: 'Blue light flashing interval options',
-      drinkRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
+      drinkRadioDescription: 'Time between drink reminders - (Blue light flashing)',
       drinkRadioHeader: 'Please select an option from the following:',
       voiceGroupHeader: 'Voice Interval Options',
-      voiceRadioDescription: 'Time betweeen drink reminders - (Voice message)',
+      voiceRadioDescription: 'Time between drink reminders - (Voice message)',
       voiceRadioHeader: 'Time interval in minutes',
       wakeUpGroupHeader: 'Wake-up Interval Options',
-      wakeUpRadioDescription: 'Time betweeen wake up and first communication of the day - (Voice message)',
+      wakeUpRadioDescription: 'Time between wake up and first communication of the day - (Voice message)',
       wakeUpRadioHeader: 'Time interval in minutes',
       commsGroupHeader: 'Communication Interval Options',
-      commsRadioDescription: 'Time betweeen edroplet communications - (Voice message)',
+      commsRadioDescription: 'Time between edroplet communications - (Voice message)',
       commsRadioHeader: 'Time interval in minutes'
     }
   },
@@ -161,25 +160,18 @@ export default {
       let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
         this.intervals = response
       })
-      // this.user = user.userId
-      // let vals = apiLib.getData('cliadmin/')
-      console.log("USEEEERRRRRRRRRRRRRRRR: ", user)
-      // this.getItems(this.readUrl)
     },
     getValues () {
       if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        // let arr = apiLib.getData(this.cliadminReadUrl, true).then(response => {
-        //   console.log(response[0])
-        //   return response
-        // })
+        let arr = apiLib.getData(this.cliadminReadUrl, true).then(response => {
+          return response
+        })
         let userData = apiLib.getData('cliadmin/users', true).then(response => {
           this.users = response
-          log('USERS: ', response)
          })
       }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         let arr = apiLib.getData(this.sysadminReadUrl).then(response => {
-          console.log(response)
           return response
       })
       return arr
@@ -187,7 +179,6 @@ export default {
     },
     // Sets the default radio button value following getValues
     async setValues (key) {
-      console.log(this.intervals, key)
       for (let i = 0; i < this.intervals.length; i++) {
         const element = this.intervals[i]['key']
         for (const item in element) {
@@ -195,7 +186,6 @@ export default {
             console.log(item)
           }
         }
-        console.log(element)
       }
     },
     // Sets the new value of the radio group and appends to editedItems
