@@ -33,20 +33,21 @@
           </v-card>
         </v-flex>
         <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
-          <v-card dark>
+          <v-card dark v-if="hourLoaded">
             <charts
-              v-if="hourLoaded"
               class="chart"
               :chartType="'Line'"
               :lineChartData="lineChartData"
               :update="update"
             />
           </v-card>
+            <v-alert :value="true" type="error" v-else>
+              Chart data not available
+          </v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
-          <v-card class="userSelect">
+          <v-card class="userSelect" v-if="usersLoaded">
             <baseDropletuser
-              v-if="usersLoaded"
               @userSelected="$emit('onchangedate', '', $data)"
               userHeader="eDroplet Users"
               :users="dashboardUsers"
@@ -60,29 +61,39 @@
               :maxCharac="'50'"
             ></baseDropletuser>
           </v-card>
+          <v-alert :value="true" type="error" v-else>
+            User data not available
+          </v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
           <v-layout row wrap>
             <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
-              <v-card dark>
+              <v-card dark v-if="weekLoaded">
                 <charts
+                  
                   class="chart"
                   :update="update"
                   :chartType="'Bar'"
                   :barChartData="barChartData"
                 />
+  
               </v-card>
+                            <v-alert :value="true" type="error" v-else>
+                  Chart data not available
+                </v-alert>
             </v-flex>
             <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
-              <v-card dark>
+              <v-card dark v-if="dayLoaded">
                 <charts
-                  v-if="dayLoaded"
                   class="chart"
                   :update="update"
                   :chartType="'Doughnut'"
                   :doughnutChartData="doughnutChartData"
                 />
               </v-card>
+                <v-alert :value="true" type="error" v-else>
+                  Chart data not available
+                </v-alert>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -129,7 +140,7 @@ export default {
     charts,
     baseDropletuser
   },
-  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'usersLoaded', 'dayLoaded', 'hourLoaded'],
+  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'usersLoaded', 'dayLoaded', 'hourLoaded', 'weekLoaded'],
   computed: {
     breakpoint() {
       switch (this.$vuetify.breakpoint.name) {
@@ -160,8 +171,14 @@ export default {
     date: function () {
       this.dateChanged()
     },
-    usersLoaded: function () {
+    hourLoaded: function () {
       this.updateLine()
+    },
+    dayLoaded: function () {
+      this.updateDoughnut()
+    },
+    weekLoaded: function () {
+      this.updateBar()
     }
   },
   mounted () {
@@ -196,12 +213,11 @@ export default {
       this.$emit('ondatechange', this.SelectedUnixTime)
       this.updateLine()
       this.updateBar()
-      this.updateDougnut()
+      this.updateDoughnut()
       this.update = true
       setTimeout(() => {
         this.update = false
       }, 100)
-      this.loaded = true
     },
     updateLine: function () {
       this.lineChartData.title = 'Activity on: ' + this.formatDate(new Date (this.date))
@@ -212,7 +228,7 @@ export default {
     updateBar: async function () {
       this.barChartData.title = 'Weekly summary 2.5L average'
     },
-    updateDougnut: async function () {
+    updateDoughnut: async function () {
       if (this.dashboardDay.length === 1) {
         this.doughnutChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
         this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration)) 
@@ -265,7 +281,6 @@ export default {
   },
   data() {
     return {
-      loaded: false,
       update: false,
       searchName: 'Search user..',
       usersIcon: 'person',

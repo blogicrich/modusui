@@ -8,6 +8,7 @@
     :usersLoaded="usersLoaded"
     :hourLoaded="hourLoaded"
     :dayLoaded="dayLoaded"
+    :weekLoaded="weekLoaded"
   />
 </template>
 
@@ -26,7 +27,8 @@ export default {
       dashboardComment: [],
       usersLoaded: false,
       dayLoaded: false,
-      hourLoaded: false
+      hourLoaded: false,
+      weekLoaded: false
     }
   },
   methods: {
@@ -56,7 +58,7 @@ export default {
       this.$store.state.userId = 21
       this.$store.state.date = 0
       await this.$store.dispatch('fetchDashboardHourGet')
-      if (this.$store.state.dashboardHour.dashboardHourGet) {
+      if (this.$store.state.dashboardHour.dashboardHourGet.length === 24) {
         let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
         for (let index = 0; index < hourStore.length; index++) {
           this.dashboardHour[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
@@ -68,7 +70,7 @@ export default {
     },
     async setDay() {
       await this.$store.dispatch('fetchDashboardDayGet')
-      if (this.$store.state.dashboardDay.dashboardDayGet) {
+      if (this.$store.state.dashboardDay.dashboardDayGet.length === 1) {
         this.dashboardDay = await this.$store.state.dashboardDay.dashboardDayGet
         this.dayLoaded = true
       } else {
