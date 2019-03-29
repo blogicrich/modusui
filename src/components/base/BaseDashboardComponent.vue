@@ -17,6 +17,7 @@
         <v-flex d-flex xs12 sm12 md5 lg5 xl5 v-if="breakpoint">
           <v-card class="userSelect">
             <baseDropletuser
+              v-if="usersLoaded"
               @userSelected="$emit('onchangedate', '', $data)"
               userHeader="eDroplet Users"
               :users="dashboardUsers"
@@ -34,6 +35,7 @@
         <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
           <v-card dark>
             <charts
+              v-if="hourLoaded"
               class="chart"
               :chartType="'Line'"
               :lineChartData="lineChartData"
@@ -44,6 +46,7 @@
         <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
           <v-card class="userSelect">
             <baseDropletuser
+              v-if="usersLoaded"
               @userSelected="$emit('onchangedate', '', $data)"
               userHeader="eDroplet Users"
               :users="dashboardUsers"
@@ -73,6 +76,7 @@
             <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
               <v-card dark>
                 <charts
+                  v-if="dayLoaded"
                   class="chart"
                   :update="update"
                   :chartType="'Doughnut'"
@@ -125,7 +129,7 @@ export default {
     charts,
     baseDropletuser
   },
-  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay'],
+  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'usersLoaded', 'dayLoaded', 'hourLoaded'],
   computed: {
     breakpoint() {
       switch (this.$vuetify.breakpoint.name) {
@@ -156,9 +160,14 @@ export default {
     date: function () {
       this.dateChanged()
     },
-    dashboardHour: function () {
+    usersLoaded: function () {
       this.updateLine()
     }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.dateChanged()
+    }, 200)
   },
   methods: {
     formatDate (date) {
@@ -191,7 +200,8 @@ export default {
       this.update = true
       setTimeout(() => {
         this.update = false
-      }, 200)
+      }, 100)
+      this.loaded = true
     },
     updateLine: function () {
       this.lineChartData.title = 'Activity on: ' + this.formatDate(new Date (this.date))
@@ -206,7 +216,7 @@ export default {
       if (this.dashboardDay.length === 1) {
         this.doughnutChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
         this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration)) 
-        this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': \r\n' + parseFloat(this.dashboardDay[0].aggregatedHyration) + 'L / ' + parseInt(this.dashboardDay[0].hydrationTarget) + 'L'
+        this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + parseFloat(this.dashboardDay[0].aggregatedHyration) + 'L / ' + parseInt(this.dashboardDay[0].hydrationTarget) + 'L'
       }
     },
     addDate: function() {
@@ -253,16 +263,9 @@ export default {
       }
     }
   },
-  mounted () {
-    console.log('mounted', this.dashboardHour)
-    this.updateLine()
-  },
-  created () {
-    console.log('created', this.dashboardHour)
-    this.updateLine()
-  },
   data() {
     return {
+      loaded: false,
       update: false,
       searchName: 'Search user..',
       usersIcon: 'person',

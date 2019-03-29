@@ -5,6 +5,9 @@
     :dashboardDay="dashboardDay"
     :dashboardHour="dashboardHour"
     @ondatechange="updateCharts(...arguments)"
+    :usersLoaded="usersLoaded"
+    :hourLoaded="hourLoaded"
+    :dayLoaded="dayLoaded"
   />
 </template>
 
@@ -20,7 +23,10 @@ export default {
       dashboardDay: {},
       dashboardHour: [],
       dashboardUsers: [],
-      dashboardComment: []
+      dashboardComment: [],
+      usersLoaded: false,
+      dayLoaded: false,
+      hourLoaded: false
     }
   },
   methods: {
@@ -32,6 +38,9 @@ export default {
       await this.$store.dispatch('fetchDashboardUsersGet')
       if (this.$store.state.dashboardUsers.dashboardUsersGet) { 
         this.dashboardUsers = await this.$store.state.dashboardUsers.dashboardUsersGet
+        this.usersLoaded = true
+      } else {
+        this.usersLoaded = false
       }
     },
     async setComment() {
@@ -52,12 +61,18 @@ export default {
         for (let index = 0; index < hourStore.length; index++) {
           this.dashboardHour[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
         }
+        this.hourLoaded = true
+      } else {
+        this.hourLoaded = false
       }
     },
     async setDay() {
       await this.$store.dispatch('fetchDashboardDayGet')
       if (this.$store.state.dashboardDay.dashboardDayGet) {
-        this.dashboardDay = this.$store.state.dashboardDay.dashboardDayGet
+        this.dashboardDay = await this.$store.state.dashboardDay.dashboardDayGet
+        this.dayLoaded = true
+      } else {
+        this.dayLoaded = false
       }
     }
   },
