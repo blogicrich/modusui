@@ -282,7 +282,8 @@
           </v-dialog>
     <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="98%">
-            <v-card class="pa-0">
+            <v-form v-model="valid" ref="form">
+                          <v-card class="pa-0">
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
                 <span class="pg-subheader text-primary">{{ editDialogTitle }}</span>
@@ -298,6 +299,7 @@
                         v-model.sync="item[key]"
                         :color="primaryColor"
                         outline
+                        :rules="rules"
                         required
                       >{{ item[key].value }}
                       </v-text-field>
@@ -324,6 +326,8 @@
                 <v-btn :color="secondaryColor" flat @click.native="saveChanges">save</v-btn>
               </v-card-actions>
             </v-card>
+            </v-form>
+
           </v-dialog>
         </v-container>
       </v-card>
@@ -579,6 +583,7 @@
           </v-dialog>
   <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="500px">
+            <v-form ref="form">
             <v-card>
               <v-card-title>
                 <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
@@ -595,6 +600,7 @@
                         v-model="newItem[key].sync"
                         :color="primaryColor"
                         outline
+                        :rules="rules"
                         required
                       ></v-text-field>
                       <v-select
@@ -605,6 +611,7 @@
                         :label="newItem[key].cellLabel"
                         :color="primaryColor"
                         outline
+                        :rules="rules"
                         required
                         return-object
                         :item-value="item.returnVal"
@@ -620,9 +627,11 @@
                 <v-btn :color="secondaryColor" flat @click.native.stop="save">Save</v-btn>
               </v-card-actions>
             </v-card>
+            </v-form>
           </v-dialog>
   <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="500px">
+            <v-form v-model="valid" ref="form1">
             <v-card>
               <v-card-title class="pa-0">
                 <v-layout class="ma-0 pa-0" row fill-height justify-center>
@@ -645,6 +654,7 @@
                       <v-text-field
                         v-if="inputType(item, key, 'tb')"
                         class="ma-1"
+                        :rules="rules"
                         :label="getCellLabel(item, key, index)"
                         v-model.sync="item[key]"
                         :color="primaryColor"
@@ -661,6 +671,7 @@
                         :placeholder="item[key].value"
                         :color="primaryColor"
                         outline
+                        :rules="rules"
                         required
                         return-object
                         :item-value="newItem.find(attribute => attribute).returnVal"
@@ -679,6 +690,7 @@
                 </v-layout>
               </v-card-actions>
             </v-card>
+            </v-form>
           </v-dialog>
         </v-container>
       </v-card>
@@ -697,6 +709,8 @@ export default {
   name: 'BaseDataTable',
   data () {
     return {
+      valid: true,
+      rules: [v => !!v || 'This field is required!'],
       rows: [ 5, 10, 15, 20, 25, 50, 100 ],
       editIndex: 0,
       editDialog: false,
@@ -787,12 +801,10 @@ export default {
     },
     getCellLabel (item, key, index) {
       for (var i = 0; i < this.newItem.length; i++) {
-        // console.log(this.newItem[i].attr, key)
         if (this.newItem[i].attr === key) return this.newItem[i].cellLabel
       }
     },
     increment (index) {
-      // console.log(this.selected)
       if (this.selected[index] && this.selected[index + 1]) {
         this.editIndex = index + 1
       } else {
@@ -813,7 +825,6 @@ export default {
     },
     menuItems (key) {
       for (var i = 0; i < this.newItem.length; i++) {
-        // console.log('retrun menItem: ', this.newItem[i].menuItems, i)
         if (this.newItem[i].attr === key) return this.newItem[i].menuItems
       }
     },
@@ -823,7 +834,6 @@ export default {
       return this.searchBarHidden
     },
     toggleAll () {
-      // console.log(this.selected)
       if (this.selected.length) {
         this.selected = []
       }
@@ -834,15 +844,12 @@ export default {
       this.close()
     },
     saveChanges () {
-      this.$emit('itemsEdited', this.selected)
-      console.log(this.selected)
-      this.close()
-      this.selected = []
+      if (this.$refs.form.validate()) {
+        this.$emit('itemsEdited', this.selected)
+        this.close()
+        this.selected = []
+      }
     }
-  },
-  mounted() {
-    // console.log(this.newItem.find(attribute => attribute).returnVal)
-    // console.log(this.loadedMsg)
   }
 }
 </script>
