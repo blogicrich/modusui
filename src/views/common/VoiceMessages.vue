@@ -18,13 +18,13 @@
         <v-layout row align-start justify-space-between>
           <h1 class="pg-header ma-2">Voice Messages</h1>
           <v-spacer></v-spacer>
-          <selectComponent
+          <!-- <selectComponent
             :users="users"
             :selectAll="selectAll"
             :searchName="searchName"
             :multiple="multiple"
             @get-selected-user="getSelectedUser"
-          ></selectComponent>
+          ></selectComponent> -->
         </v-layout>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>

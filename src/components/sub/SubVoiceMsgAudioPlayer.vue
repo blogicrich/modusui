@@ -2,10 +2,13 @@
   <v-container class="pa-0">
     <v-layout row wrap align-center justify-space-around>
       <v-flex xl2 md3 lg2 sm12 xs12>
-        <v-layout row align-center justify-center>
-          <h3 class="text-intervals">{{ fileName }}</h3>
-          <v-icon class="mx-2" color="primary">{{ uploadIcon }}</v-icon>
-          <h3 class="text-intervals">{{ audioType }}</h3>
+          <v-layout row align-center justify-center>
+            <h3 class="text-intervals">{{ fileName }}</h3>
+            <v-icon @click="openFileDialog()" class="mx-2" color="primary">{{ uploadIcon }}</v-icon>
+          </v-layout>
+          <v-layout cloumn align-center justify-center>
+          <input @change="toggleSave()" type="file" style="display:none" ref="fileInput" accept=".mp3">
+          <v-btn v-if="save" color="primary" @click="saveAudio()">Save changes</v-btn>
         </v-layout>
       </v-flex>
       <v-flex xl5 md3 lg5 sm12 xs12>
@@ -34,6 +37,11 @@ export default {
   components: {
     BaseAudioPlayer
   },
+  data () {
+    return {
+      save: false
+    }
+  },
   props: {
     radioConfig: Array,
     uploadIcon: String,
@@ -41,6 +49,18 @@ export default {
     value: String,
     audioType: String,
     audioFile: String
+  },
+  methods: {
+    openFileDialog () {
+      this.$refs.fileInput.click()
+    },
+    toggleSave () {
+      this.save = true
+    },
+    saveAudio () {
+      
+      this.save = false
+    }
   }
 }
 </script>
