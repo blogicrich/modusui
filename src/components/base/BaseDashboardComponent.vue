@@ -140,7 +140,7 @@ export default {
     charts,
     baseDropletuser
   },
-  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'usersLoaded', 'dayLoaded', 'hourLoaded', 'weekLoaded'],
+  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'dashboardWeek', 'usersLoaded', 'dayLoaded', 'hourLoaded', 'weekLoaded'],
   computed: {
     breakpoint() {
       switch (this.$vuetify.breakpoint.name) {
@@ -226,7 +226,20 @@ export default {
       }
     },
     updateBar: async function () {
-      this.barChartData.title = 'Weekly summary 2.5L average'
+      let weekArr = []
+      let elementCount = 0
+      if (this.dashboardWeek.length === 7) {
+        for (let i = 0; i < this.dashboardWeek.length; i++) {
+          const element = this.dashboardWeek[i]
+          weekArr.push(parseFloat(element.aggregatedHyration))
+          if (weekArr[i] >= 0) {
+            elementCount = elementCount + weekArr[i]
+          }
+        }
+        this.barChartData.dataBarOne = weekArr
+        this.weeklyAverage = Math.floor((elementCount / 7) * 100) / 100
+        this.barChartData.title = 'Weekly summary ' + this.weeklyAverage + 'L average'
+      }
     },
     updateDoughnut: async function () {
       if (this.dashboardDay.length === 1) {
@@ -281,6 +294,7 @@ export default {
   },
   data() {
     return {
+      weeklyAverage: 0,
       update: false,
       searchName: 'Search user..',
       usersIcon: 'person',
@@ -318,7 +332,7 @@ export default {
         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
 
         labelBarOne: 'Consumed',
-        dataBarOne: [1.3, 1.2, 0.8, 1.6, 0.6, 0.9, 1.0],
+        dataBarOne: [],
         borderColorBarOne: 'rgba(54, 162, 235, 1)',
         backgroundColorBarOne: 'rgba(54, 162, 235, 0.2)',
         borderWidthBarOne: 2,
@@ -332,7 +346,7 @@ export default {
         dataLineTwo: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         borderColorLineTwo: 'rgba(102, 141, 62, 1)',
         borderWidthLineTwo: 2,
-        title: 'Weekly summary 2.5L average'
+        title: 'Weekly summary ' + this.weeklyAverage + 'L average'
       },
       doughnutChartData: {
         labels: ['Consumed', 'Remaining'],

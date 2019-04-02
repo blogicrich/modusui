@@ -4,6 +4,7 @@
     :dashboardComment="dashboardComment"
     :dashboardDay="dashboardDay"
     :dashboardHour="dashboardHour"
+    :dashboardWeek="dashboardWeek"
     @ondatechange="updateCharts(...arguments)"
     :usersLoaded="usersLoaded"
     :hourLoaded="hourLoaded"
@@ -25,6 +26,7 @@ export default {
       dashboardHour: [],
       dashboardUsers: [],
       dashboardComment: [],
+      dashboardWeek: [],
       usersLoaded: false,
       dayLoaded: false,
       hourLoaded: false,
@@ -35,6 +37,7 @@ export default {
     updateCharts(SelectedUnixTime) {
       this.setHour(SelectedUnixTime)
       this.setDay()
+      this.setWeek(SelectedUnixTime)
     },
     async setUsers() {
       await this.$store.dispatch('fetchDashboardUsersGet')
@@ -75,6 +78,17 @@ export default {
         this.dayLoaded = true
       } else {
         this.dayLoaded = false
+      }
+    },
+    async setWeek(SelectedUnixTime) {
+      this.$store.state.userId = 21
+      this.$store.state.date = 1552521600
+      await this.$store.dispatch('fetchDashboardWeekGet')
+      if (this.$store.state.dashboardWeek.dashboardWeekGet.length === 7) {
+        this.dashboardWeek = await this.$store.state.dashboardWeek.dashboardWeekGet
+        this.weekLoaded = true
+      } else {
+        this.weekLoaded = false
       }
     }
   },

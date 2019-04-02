@@ -162,49 +162,45 @@ export default {
   },
   methods: {
     itemIsEmpty (item) {
-      return item.message === '' ? true : false
+      if (item) {
+        return item.message === '' ? true : false
+      } else {
+        return false
+      }
     },
     saveChanges () {
       var item = Number(this.currentItem)
       var data = [this.items[item]]
       this.$emit('itemsEdited', data)
-      // this.$emit('items-edited', data)
     },
     eraseChange () {
-      // for (var x = 0; x < this.items.length; x++) {
-      //   this.items[x].subject = this.items[x].subject
-      //   this.items[x].text = this.items[x].text
-      //   this.btns = false
-      // }
+      for (var x = 0; x < this.items.length; x++) {
+        this.items[x].subject = this.items[x].subject
+        this.items[x].text = this.items[x].text
+        this.btns = false
+      }
     },
     switchTab (event) {
-      // for (var y = 0; y < this.items.length; y++) {
-      //   if (this.items[y].subject !== this.items[y].subject || this.items[y].text !== this.items[y].text) {
-      //     this.dialog = true
-      //     this.activeHash = event.target.hash
-      //     this.activeHash = this.activeHash.replace('#', '')
-      //     this.activeHash = this.activeHash.replace(/%20/gi, ' ')
-      //     event.stopImmediatePropagation()
-      //   }
-      // }
+      for (var y = 0; y < this.items.length; y++) {
+        if (this.items[y].subject !== this.items[y].subject || this.items[y].text !== this.items[y].text) {
+          this.dialog = true
+          this.activeHash = event.target.hash
+          this.activeHash = this.activeHash.replace('#', '')
+          this.activeHash = this.activeHash.replace(/%20/gi, ' ')
+          event.stopImmediatePropagation()
+        }
+      }
     },
     showBtns () {
-      // for (var z = 0; z < this.items.length; z++) {
-      //   if (this.items[z].subject !== this.items[z].subject || this.items[z].text !== this.items[z].text) {
       this.btns = true
-      //     return
-      //   } else {
-      //     this.btns = false
-      //   }
-      // }
     },
     dialogCancel () {
-      // this.dialog = false
+      this.dialog = false
     },
     discard () {
-      // this.currentItem = this.activeHash
-      // this.eraseChange()
-      // this.dialog = false
+      this.currentItem = this.activeHash
+      this.eraseChange()
+      this.dialog = false
     }
   }
 }
