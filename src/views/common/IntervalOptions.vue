@@ -90,7 +90,7 @@
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
     </v-fade-transition>
-    
+
     </v-layout>
     </v-container>
   </v-container>
@@ -162,19 +162,19 @@ export default {
       })
     },
     getValues () {
-      if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
         let arr = apiLib.getData(this.cliadminReadUrl, true).then(response => {
           return response
         })
         let userData = apiLib.getData('cliadmin/users', true).then(response => {
           this.users = response
-         })
+        })
       }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         let arr = apiLib.getData(this.sysadminReadUrl).then(response => {
           return response
-      })
-      return arr
+        })
+        return arr
       }
     },
     // Sets the default radio button value following getValues
@@ -231,7 +231,6 @@ export default {
         } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
           await apiLib.postData(this.sysadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i])
         }
-        
       }
       await this.getValues()
       this.newDefaultValue = false
@@ -242,7 +241,7 @@ export default {
     if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
       this.getValues()
     } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-      this.getValues().then (response => this.intervals = response)
+      this.getValues().then(response => this.intervals = response)
     }
   },
   beforeRouteLeave (to, from, next) {

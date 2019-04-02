@@ -34,7 +34,7 @@
 import apiLib from '@/services/apiLib'
 import store from '@/store'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import dataTable from "@/components/base/BaseDataTableComponent";
+import dataTable from '@/components/base/BaseDataTableComponent'
 // const awayEndpoint = 'carer/away/' + store.getters.getterUserId
 
 export default {
@@ -52,7 +52,7 @@ export default {
     errorMsg: ' ',
     loadingMsg: ' ',
     loadedMsg: ' ',
-    legend: "Away Periods",
+    legend: 'Away Periods',
     updateUrl: 'carer/away/21',
     readUrl: 'carer/away/21',
     primaryColor: 'primary',
@@ -80,56 +80,56 @@ export default {
     // ],
     headers: [
       {
-        text: "awayId",
-        align: "left",
+        text: 'awayId',
+        align: 'left',
         sortable: false,
-        value: "awayId",
-        cellType: "md",
+        value: 'awayId',
+        cellType: 'md',
         hidden: true,
         editable: false
       },
       {
-        text: "Drinks Accounted?",
-        align: "left",
+        text: 'Drinks Accounted?',
+        align: 'left',
         sortable: false,
-        value: "drinksAccounted",
-        cellType: "md",
+        value: 'drinksAccounted',
+        cellType: 'md',
         hidden: false,
         editable: true
       },
       {
-        text: "Start Date",
-        align: "left",
+        text: 'Start Date',
+        align: 'left',
         sortable: true,
-        value: "startDate",
-        cellType: "tb",
+        value: 'startDate',
+        cellType: 'tb',
         hidden: false,
         editable: false
       },
       {
-        text: "End Date",
-        align: "left",
+        text: 'End Date',
+        align: 'left',
         sortable: true,
-        value: "endDate",
-        cellType: "tb",
+        value: 'endDate',
+        cellType: 'tb',
         hidden: false,
         editable: false
       }
     ],
     newItem: [
       {
-        description: " ",
-        cellType: "tb",
-        attr: "drinksAccounted",
-        cellLabel: "Drinks Accounted?",
+        description: ' ',
+        cellType: 'tb',
+        attr: 'drinksAccounted',
+        cellLabel: 'Drinks Accounted?',
         menuItems: [],
         validators: []
       },
       {
-        volume: " ",
-        cellType: "tb",
-        attr: "volume",
-        cellLabel: "Volume",
+        volume: ' ',
+        cellType: 'tb',
+        attr: 'volume',
+        cellLabel: 'Volume',
         menuItems: [],
         validators: []
       }
@@ -137,12 +137,12 @@ export default {
     defaultItem: [
       {
         drinksAccounted: false,
-        startDate: "26 Feb 2001, 12:00",
-        endDate: "9 Dec 2002, 12:00"
+        startDate: '26 Feb 2001, 12:00',
+        endDate: '9 Dec 2002, 12:00'
       }
     ],
-    btnTitle: "Record Time Away",
-    primaryColor: "primary"
+    btnTitle: 'Record Time Away',
+    primaryColor: 'primary'
   }),
   // computed: {
   //   items: function() {
@@ -162,36 +162,36 @@ export default {
   //   }
   // },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
-          description: " ",
-          cellType: "tb",
-          attr: "drinksAccounted",
-          cellLabel: "Drinks Accounted?",
+          description: ' ',
+          cellType: 'tb',
+          attr: 'drinksAccounted',
+          cellLabel: 'Drinks Accounted?',
           menuItems: [],
           validators: []
         }
-      ];
+      ]
       this.defaultItem = [
         {
           drinksAccounted: false,
-          startDate: "26 Feb 2001, 12:00",
-          endDate: "9 Dec 2002, 12:00"
+          startDate: '26 Feb 2001, 12:00',
+          endDate: '9 Dec 2002, 12:00'
         }
-      ];
+      ]
     },
-    formatDateAsString: function(date) {
+    formatDateAsString: function (date) {
       const options = {
-        timeZone: "UTC",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      };
-      let dateString = date.toLocaleString("en-GB", options);
-      return dateString;
+        timeZone: 'UTC',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+      let dateString = date.toLocaleString('en-GB', options)
+      return dateString
     }
   },
   mounted () {
@@ -199,7 +199,7 @@ export default {
     this.getItems(this.readUrl)
     // console.log(this.loadedMsg)
   }
-};
+}
 </script>
 <style scoped lang="scss">
 @import "./public/scss/main.scss";

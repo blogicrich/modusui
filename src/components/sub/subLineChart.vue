@@ -8,7 +8,7 @@ export default {
   props: ['chartData', 'options'],
   watch: {
     'options': {
-      handler(newOption, oldOption) {
+      handler (newOption, oldOption) {
         this.renderChart(this.chartData, this.options)
       },
       deep: true

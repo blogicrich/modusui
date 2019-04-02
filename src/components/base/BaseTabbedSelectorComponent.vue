@@ -163,7 +163,7 @@ export default {
   methods: {
     itemIsEmpty (item) {
       if (item) {
-        return item.message === '' ? true : false
+        return item.message === ''
       } else {
         return false
       }

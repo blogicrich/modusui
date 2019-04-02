@@ -99,9 +99,9 @@
     <v-fade-transition>
       <v-footer
         v-if="
-          user.find(level => level === 'SYSTEM ADMINISTRATOR') || 
-          user.find(level => level === 'CLIENT ADMINISTRATOR') && 
-          !(user.find(level => level === 'CARER')) && 
+          user.find(level => level === 'SYSTEM ADMINISTRATOR') ||
+          user.find(level => level === 'CLIENT ADMINISTRATOR') &&
+          !(user.find(level => level === 'CARER')) &&
           this.authenticated.state"
         :fixed="fixed"
         color="white"
@@ -109,7 +109,7 @@
       >
         <v-layout row fill height align-space-between justify-space-between>
           <v-layout class="pt-2" row align-center justify-start>
-            <span class="ml-3"style="align-center">Version: ALPHA</span>
+            <span class="ml-3" style="align-center">Version: ALPHA</span>
           </v-layout>
           <BaseAppNavBtn
             btnIcon="home"

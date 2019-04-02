@@ -34,21 +34,21 @@ export default {
     }
   },
   methods: {
-    updateCharts(SelectedUnixTime) {
+    updateCharts (SelectedUnixTime) {
       this.setHour(SelectedUnixTime)
       this.setDay()
       this.setWeek(SelectedUnixTime)
     },
-    async setUsers() {
+    async setUsers () {
       await this.$store.dispatch('fetchDashboardUsersGet')
-      if (this.$store.state.dashboardUsers.dashboardUsersGet) { 
+      if (this.$store.state.dashboardUsers.dashboardUsersGet) {
         this.dashboardUsers = await this.$store.state.dashboardUsers.dashboardUsersGet
         this.usersLoaded = true
       } else {
         this.usersLoaded = false
       }
     },
-    async setComment() {
+    async setComment () {
       await this.$store.dispatch('fetchDashboardCommentGet')
       if (this.$store.state.DashboardComment.dashboardCommentGet) {
         let commentStore = await this.$store.state.DashboardComment.dashboardCommentGet
@@ -57,7 +57,7 @@ export default {
         }
       }
     },
-    async setHour(SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+    async setHour (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.$store.state.userId = 21
       this.$store.state.date = 0
       await this.$store.dispatch('fetchDashboardHourGet')
@@ -71,7 +71,7 @@ export default {
         this.hourLoaded = false
       }
     },
-    async setDay() {
+    async setDay () {
       await this.$store.dispatch('fetchDashboardDayGet')
       if (this.$store.state.dashboardDay.dashboardDayGet.length === 1) {
         this.dashboardDay = await this.$store.state.dashboardDay.dashboardDayGet
@@ -80,7 +80,7 @@ export default {
         this.dayLoaded = false
       }
     },
-    async setWeek(SelectedUnixTime) {
+    async setWeek (SelectedUnixTime) {
       this.$store.state.userId = 21
       this.$store.state.date = 1552521600
       await this.$store.dispatch('fetchDashboardWeekGet')

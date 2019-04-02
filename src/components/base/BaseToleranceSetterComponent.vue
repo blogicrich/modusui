@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted () {
-    console.log("fjhdkshfkdjfhkjdsahkj: ", this.tolerances)
+    console.log('fjhdkshfkdjfhkjdsahkj: ', this.tolerances)
   }
 }
 </script>

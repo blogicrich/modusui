@@ -92,7 +92,7 @@
                 <th v-for="header in headers">{{ header.text }}</th>
               </template>
               <template v-slot:items="props">
-                <td v-for="item in props.item">{{ item }}</td>
+                <td> v-for="item in props.item" v-bind:key="item" {{ item }}</td> 
               </template>
             </v-data-table> -->
           </v-container>

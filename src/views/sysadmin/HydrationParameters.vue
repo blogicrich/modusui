@@ -77,11 +77,11 @@ export default {
     },
     async save () {
       for (var i = 0; i < this.tolerances.length; i++) {
-        await apiLib.updateData(this.writeUrl, { 
-          dehydratedRedAmberBound: this.tolerances[i].dehydratedRedAmberBound, 
-          dehydratedAmberGreenBound: this.tolerances[i].dehydratedAmberGreenBound, 
-          overHydratedAmberRedBound: this.tolerances[i].overHydratedAmberRedBound, 
-          overHydratedGreenAmberBound: this.tolerances[i].overHydratedGreenAmberBound 
+        await apiLib.updateData(this.writeUrl, {
+          dehydratedRedAmberBound: this.tolerances[i].dehydratedRedAmberBound,
+          dehydratedAmberGreenBound: this.tolerances[i].dehydratedAmberGreenBound,
+          overHydratedAmberRedBound: this.tolerances[i].overHydratedAmberRedBound,
+          overHydratedGreenAmberBound: this.tolerances[i].overHydratedGreenAmberBound
         }, false, true)
       }
       await this.getValues()

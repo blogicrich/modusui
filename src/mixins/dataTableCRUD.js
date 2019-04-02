@@ -14,8 +14,8 @@ export const crudRoutines = {
       await apiLib.postData(this.createUrl, row, true, true).then(response => {
         return response
       })
-      .catch(error => {
-      })
+        .catch(error => {
+        })
       this.refreshItems()
     },
 
@@ -27,12 +27,11 @@ export const crudRoutines = {
         // console.log('id: ', id)
         // console.log(this.delUrl, + '/' + items[i][this.crudIdKey])
         await apiLib.deleteData(this.delUrl + '/' + id, true, true)
-        .then(response => {
-          this.items.splice(index, 1)
-        })
-        .catch(error => {
-        })
-        
+          .then(response => {
+            this.items.splice(index, 1)
+          })
+          .catch(error => {
+          })
       }
       this.refreshItems()
     },
@@ -43,18 +42,18 @@ export const crudRoutines = {
         for (var j = 0; j < defaultItem.length; j++) {
           Object.keys(defaultItem[j]).forEach(function (key) {
             if (items[i][key]) defaultItem[j][key] = items[i][key]
-            console.log("Looping Inner: ", key, defaultItem[j], items[i][key])
+            console.log('Looping Inner: ', key, defaultItem[j], items[i][key])
           })
-          console.log("Update Item: ", this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
+          console.log('Update Item: ', this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
           apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
-          .then(response => {
+            .then(response => {
 
-          })
-          .catch(error => {
-          })
-          .finally(
+            })
+            .catch(error => {
+            })
+            .finally(
 
-          )
+            )
         }
       }
       // if (this.newItem) {
@@ -92,7 +91,7 @@ export const crudRoutines = {
         this.error = false
       }
     },
-    
+
     async refreshItems () {
       await this.getItems(this.readUrl)
       this.resetItem()

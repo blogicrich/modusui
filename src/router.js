@@ -156,6 +156,6 @@ export default new Router({
       path: '/titles',
       name: 'Titles',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
-    },
+    }
   ]
 })

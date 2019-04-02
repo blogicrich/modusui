@@ -126,7 +126,6 @@ export default {
         this.$emit('user-selected', this.selectedUsers)
         if (this.selectedUsers.length === this.users.length) {
           this.allSelected = true
-          
         } else {
           this.allSelected = false
         }
@@ -142,10 +141,10 @@ export default {
     filteredName () {
       return this.users
       // return this.users.filter((name) => {
-        // const Uppercase = name.name.toUpperCase()
-        // const Uppercase = name.comments.toUpperCase()
-        // const searchUppercase = this.search.toUpperCase()
-        // return Uppercase.match(searchUppercase)
+      // const Uppercase = name.name.toUpperCase()
+      // const Uppercase = name.comments.toUpperCase()
+      // const searchUppercase = this.search.toUpperCase()
+      // return Uppercase.match(searchUppercase)
       // })
     },
     checkUsers () {
@@ -160,7 +159,6 @@ export default {
   },
   mounted () {
     console.log(this.users)
-    
   }
 }
 </script>

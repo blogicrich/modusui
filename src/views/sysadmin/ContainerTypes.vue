@@ -68,7 +68,7 @@ export default {
         { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
-        { description: ' ', cellType: 'tb',  attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
+        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
         { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
       ],
       defaultItem: [

@@ -70,13 +70,13 @@
             <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
               <v-card dark v-if="weekLoaded">
                 <charts
-                  
+
                   class="chart"
                   :update="update"
                   :chartType="'Bar'"
                   :barChartData="barChartData"
                 />
-  
+
               </v-card>
                             <v-alert :value="true" type="error" v-else>
                   Chart data not available
@@ -134,15 +134,17 @@
 <script>
 import charts from '@/components/base/BaseChartComponent'
 import baseDropletuser from '@/components/sub/SubUserSelectComponent'
+import { validation } from '@/mixins/validation'
 
 export default {
+  mixins: [validation],
   components: {
     charts,
     baseDropletuser
   },
   props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'dashboardWeek', 'usersLoaded', 'dayLoaded', 'hourLoaded', 'weekLoaded'],
   computed: {
-    breakpoint() {
+    breakpoint () {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
           return true
@@ -152,7 +154,7 @@ export default {
           return false
       }
     },
-    alertColors() {
+    alertColors () {
       for (var i = 0; i < this.dashboardUsers.length; i++) {
         if (this.dashboardUsers[i].alertType === 'hydrated') {
           this.alertColor.push('green')
@@ -185,6 +187,7 @@ export default {
     setTimeout(() => {
       this.dateChanged()
     }, 200)
+    this.validateString()
   },
   methods: {
     formatDate (date) {
@@ -220,7 +223,7 @@ export default {
       }, 100)
     },
     updateLine: function () {
-      this.lineChartData.title = 'Activity on: ' + this.formatDate(new Date (this.date))
+      this.lineChartData.title = 'Activity on: ' + this.formatDate(new Date(this.date))
       if (this.dashboardHour.length === 24) {
         this.lineChartData.dataLineOne = this.dashboardHour
       }
@@ -244,23 +247,23 @@ export default {
     updateDoughnut: async function () {
       if (this.dashboardDay.length === 1) {
         this.doughnutChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
-        this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration)) 
+        this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration))
         this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + parseFloat(this.dashboardDay[0].aggregatedHyration) + 'L / ' + parseInt(this.dashboardDay[0].hydrationTarget) + 'L'
       }
     },
-    addDate: function() {
+    addDate: function () {
       let dateNow = new Date(this.date)
       this.date = dateNow.setDate(new Date(dateNow.getDate() + 1))
       this.date = dateNow.toISOString().substr(0, 10)
       this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
     },
-    subDate: function() {
+    subDate: function () {
       let dateNow = new Date(this.date)
       this.date = dateNow.setDate(new Date(dateNow.getDate() - 1))
       this.date = dateNow.toISOString().substr(0, 10)
       this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
     },
-    openDialog: function(charType) {
+    openDialog: function (charType) {
       switch (charType) {
         case 'Line':
           this.lineDialog = true
@@ -292,7 +295,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       weeklyAverage: 0,
       update: false,
@@ -309,7 +312,7 @@ export default {
       menu: false,
       date: new Date().toISOString().substr(0, 10),
       lineChartData: {
-        labels: ["09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00", "12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00", "20:00 - 21:00", "21:00 - 22:00", "22:00 - 23:00", "23:00 - 00:00", "00:00 - 01:00", "01:00 - 02:00", "02:00 - 03:00", "03:00 - 04:00", "04:00 - 05:00", "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00", "08:00 - 09:00"],
+        labels: ['09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00', '22:00 - 23:00', '23:00 - 00:00', '00:00 - 01:00', '01:00 - 02:00', '02:00 - 03:00', '03:00 - 04:00', '04:00 - 05:00', '05:00 - 06:00', '06:00 - 07:00', '07:00 - 08:00', '08:00 - 09:00'],
 
         labelLineOne: 'Consumed',
         dataLineOne: [],
@@ -318,7 +321,7 @@ export default {
         borderWidthLineOne: 2,
 
         labelLineTwo: 'Target hydration',
-        dataLineTwo: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        dataLineTwo: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         borderColorLineTwo: 'rgba(102, 141, 62, 1)',
         borderWidthLineTwo: 2,
 
@@ -355,7 +358,7 @@ export default {
         backgroundColorDoughnut: ['#00A1CD', 'rgba(200, 200, 200)' ],
         borderWidthDoughnut: 2,
         cutoutPercentageDoughnut: 65,
-        title: 'Hydration for ' + this.formatDate(new Date(this.date)) 
+        title: 'Hydration for ' + this.formatDate(new Date(this.date))
       }
     }
   }

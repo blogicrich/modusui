@@ -18,13 +18,13 @@
         <v-layout row align-start justify-space-between>
           <h1 class="pg-header ma-2">Voice Messages</h1>
           <v-spacer></v-spacer>
-          <!-- <selectComponent
+          <selectComponent
             :users="users"
             :selectAll="selectAll"
             :searchName="searchName"
             :multiple="multiple"
             @get-selected-user="getSelectedUser"
-          ></selectComponent> -->
+          ></selectComponent>
         </v-layout>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>
@@ -32,6 +32,8 @@
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in reminders"
+            v-bind:data="voiceMessage"
+            v-bind:key="voiceMessage.voiceMessagesId"
             :radioConfig="msgReminderIntervalSettings"
             :groupDescription="msgReminderRadioDescription"
             :radioHeader="msgRadioHeader"
@@ -46,6 +48,8 @@
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in praises"
+                        v-bind:data="voiceMessage"
+            v-bind:key="voiceMessage.voiceMessagesId"
             :radioConfig="msgPraiseIntervalSettings"
             :groupDescription="msgPraiseRadioDescription"
             :radioHeader="msgRadioHeader"
@@ -60,6 +64,8 @@
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in instructs"
+                        v-bind:data="voiceMessage"
+            v-bind:key="voiceMessage.voiceMessagesId"
             :radioConfig="msgInstructIntervalSettings"
             :groupDescription="msgInstructRadioDescription"
             :radioHeader="msgRadioHeader"
@@ -77,7 +83,7 @@
 import apiLib from '@/services/apiLib'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
-import { isPending } from 'q';
+import { isPending } from 'q'
 
 export default {
   name: 'VoiceMessageViewComponent',
@@ -85,7 +91,7 @@ export default {
     selectComponent,
     SubVoiceMsgAudioPlayer
   },
-  data() {
+  data () {
     return {
       reminders: [],
       praises: [],
@@ -125,7 +131,7 @@ export default {
       msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgPraiseRadioDescription: 'Time betweeen drink praises - (Blue light flashing)',
       msgInstructRadioDescription: 'Time between drink instructions - (Blue light flashing)',
-      msgRadioHeader: 'Time interval in minutes:',
+      msgRadioHeader: 'Time interval in minutes:'
     }
   },
   computed: {
@@ -142,12 +148,12 @@ export default {
       for (let i = 0; i < this.apiData.length; i++) {
         let voiceMessageType = this.apiData[i].voiceMessagedescription
         let voiceMessage = this.apiData[i]
-        voiceMessageType.includes('Reminder') 
-          ? this.reminders.push(voiceMessage) :
-        voiceMessageType.includes('Praise') 
-          ? this.praises.push(voiceMessage) :
-        voiceMessageType.includes('Instruct')
-          ? this.instructs.push(voiceMessage) : ''
+        voiceMessageType.includes('Reminder')
+          ? this.reminders.push(voiceMessage)
+          : voiceMessageType.includes('Praise')
+            ? this.praises.push(voiceMessage)
+            : voiceMessageType.includes('Instruct')
+              ? this.instructs.push(voiceMessage) : ''
       }
     },
     getSelectedUser (user) {
@@ -156,10 +162,10 @@ export default {
       })
     },
     async getvoiceMessage () {
-      if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
         let userData = apiLib.getData('cliadmin/users', true).then(response => {
           this.users = response
-         })
+        })
       }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')

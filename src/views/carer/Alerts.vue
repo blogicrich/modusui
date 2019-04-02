@@ -107,7 +107,7 @@ export default {
       defaultItem: [
         {
           dateTime: 0,
-          description: '',
+          description: ''
         }
       ],
       urls: [{ url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }]
@@ -131,12 +131,12 @@ export default {
           cellLabel: 'Alert Type',
           menuItems: [],
           validators: []
-        },
+        }
       ]
       this.defaultItem = [
         {
           dateTime: 0,
-          description: '',
+          description: ''
         }
       ]
     }

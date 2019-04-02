@@ -1,8 +1,8 @@
-            /* apiLIB.js - Spearmark API request library BETA
-/* -----------------------------------------------------------------------------       
+/* apiLIB.js - Spearmark API request library BETA
+/* -----------------------------------------------------------------------------
 
 A wrapper for the axios library for communication with the Spearmark eDroplet API
- 
+
 --------------------------------------------------------------------------------
 
 API:
@@ -25,22 +25,22 @@ response :
 - The request was made and the server responded with a status of 2xx
 
 error.response :
-- The request was made and the server responded with a status code that falls 
+- The request was made and the server responded with a status code that falls
 out of the range of 2xx
 
 error.request :
-- The request was made but no response was received. `error.request` is an 
+- The request was made but no response was received. `error.request` is an
 instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
 
 error.message :
 - Something happened in setting up the request that triggered an Error
 
------------------------------------------------------------------------------ */   
+----------------------------------------------------------------------------- */
 
 import axios from 'axios'
 import { EventBus } from '@/mixins/eventBus.js'
 
-let url = function() {
+let url = function () {
   let val = ''
   switch (process.env.NODE_ENV) {
     case 'development':
@@ -58,7 +58,7 @@ let url = function() {
   return val
 }
 
-let setToken = function() {
+let setToken = function () {
   try {
     if (localStorage.getItem('auth') !== null) {
       axios.defaults.headers.common['authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token
@@ -86,11 +86,11 @@ axi.interceptors.response.use(function (response) {
 // Utils
 
 var logger = function (responseObj, url, data) {
-  if (data) console.log("data: ", data)
-  console.log("URL: ", url)
-  console.log("response.data: ", responseObj.data)
-  console.log("response.status: ", responseObj.status)
-  console.log("response.statusText: ", responseObj.statusText)
+  if (data) console.log('data: ', data)
+  console.log('URL: ', url)
+  console.log('response.data: ', responseObj.data)
+  console.log('response.status: ', responseObj.status)
+  console.log('response.statusText: ', responseObj.statusText)
   console.log('response.headers:', responseObj.headers)
   console.log('response.request:', responseObj.request)
 }
@@ -100,31 +100,31 @@ export default {
   async deleteData (url, log, toast) {
     await setToken()
     return axi.delete(url).then(response => {
-      if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true } )
+      if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
       if (log) logger(response, url)
       return response.data
     })
-    .catch(error => { 
-      if (error.response) {
-        if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true } )
-        if (log) logger(response.error, url)
-        return error.response.statusText + ' ' + error.response.status + '\n'
-      } else if (error.request) {
-        if (toast) EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true } )
-        console.log(error.request)
-      } else {
-        if (toast) EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true } )
-        console.log('error.message: ', error.message)
-      }
-      console.log(error.config)
-    })
-    .finally(() => {
+      .catch(error => {
+        if (error.response) {
+          if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
+          if (log) logger(response.error, url)
+          return error.response.statusText + ' ' + error.response.status + '\n'
+        } else if (error.request) {
+          if (toast) EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true })
+          console.log(error.request)
+        } else {
+          if (toast) EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true })
+          console.log('error.message: ', error.message)
+        }
+        console.log(error.config)
+      })
+      .finally(() => {
       // ROUTER TO STD PAGE IF ERR?
-    })
+      })
   },
 
   // Get data
-  
+
   async getData (url, log, toast) {
     await setToken()
     return axi.get(url).then(response => {
@@ -132,39 +132,11 @@ export default {
       if (log) logger(response, url)
       return response.data
     })
-    .catch(error => { 
-      if (error.response) {
-        if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true } )
-        if (log) logger(error.response, url)
-        return error.response.message + ' ' + error.response.status
-      } else if (error.request) {
-        console.log(error.request)
-      } else {
-        console.log('error.message: ', error.message)
-      }
-      console.log(error.config)
-    })
-    .finally(() => {
-      // ROUTER TO STD PAGE IF ERR?
-    })
-  },
-
-  // Add (POST) new data
-  
-  async postData (url, data, log, toast) {
-    await setToken()
-    if (data) {
-
-      return axi.post(url, data).then(response => {
-        if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true } )
-        if (log) logger(response, url, data)
-        return response.data
-      })
-      .catch(error => { 
+      .catch(error => {
         if (error.response) {
-          if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true } )
-          if (log) logger(error.response, url, data)
-          return error.response.statusText + ' ' + error.response.status + '\n'
+          if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
+          if (log) logger(error.response, url)
+          return error.response.message + ' ' + error.response.status
         } else if (error.request) {
           console.log(error.request)
         } else {
@@ -173,9 +145,36 @@ export default {
         console.log(error.config)
       })
       .finally(() => {
-        console.log('URL', url)
-        // ROUTER TO STD PAGE IF ERR?
+      // ROUTER TO STD PAGE IF ERR?
       })
+  },
+
+  // Add (POST) new data
+
+  async postData (url, data, log, toast) {
+    await setToken()
+    if (data) {
+      return axi.post(url, data).then(response => {
+        if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
+        if (log) logger(response, url, data)
+        return response.data
+      })
+        .catch(error => {
+          if (error.response) {
+            if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
+            if (log) logger(error.response, url, data)
+            return error.response.statusText + ' ' + error.response.status + '\n'
+          } else if (error.request) {
+            console.log(error.request)
+          } else {
+            console.log('error.message: ', error.message)
+          }
+          console.log(error.config)
+        })
+        .finally(() => {
+          console.log('URL', url)
+        // ROUTER TO STD PAGE IF ERR?
+        })
     }
   },
 
@@ -189,21 +188,21 @@ export default {
         if (log) logger(response, url)
         return response.data
       })
-      .catch(error => { 
-        if (error.response) {
-          if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true } )
-          if (log) logger(response, url, data)
-          return error.response.statusText + ' ' + error.response.status + '\n'
-        } else if (error.request) {
-          console.log(error.request)
-        } else {
-          console.log('error.message: ', error.message)
-        }
-        console.log(error.config)
-      })
-      .finally(() => {
+        .catch(error => {
+          if (error.response) {
+            if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
+            if (log) logger(response, url, data)
+            return error.response.statusText + ' ' + error.response.status + '\n'
+          } else if (error.request) {
+            console.log(error.request)
+          } else {
+            console.log('error.message: ', error.message)
+          }
+          console.log(error.config)
+        })
+        .finally(() => {
         // ROUTER TO STD PAGE IF ERR?
-      })
+        })
     }
   },
 
@@ -213,25 +212,25 @@ export default {
     await setToken()
     if (data) {
       return axi.put(url, data).then(response => {
-        if (toast) EventBus.$emit('snack-msg', { text: response.statusText || response.data, time: 6000, color: 'success', state: true } )
+        if (toast) EventBus.$emit('snack-msg', { text: response.statusText || response.data, time: 6000, color: 'success', state: true })
         if (log) logger(response, url, data)
         return response.data
       })
-      .catch(error => { 
-        if (error.response) {
-          if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true } )
-          if (log) logger(response, url, data)
-          return error.response.statusText + ' ' + error.response.status + '\n'
-        } else if (error.request) {
-          console.log(error.request)
-        } else {
-          console.log('error.message: ', error.message)
-        }
-        console.log(error.config)
-      })
-      .finally(() => {
+        .catch(error => {
+          if (error.response) {
+            if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
+            if (log) logger(response, url, data)
+            return error.response.statusText + ' ' + error.response.status + '\n'
+          } else if (error.request) {
+            console.log(error.request)
+          } else {
+            console.log('error.message: ', error.message)
+          }
+          console.log(error.config)
+        })
+        .finally(() => {
         // ROUTER TO STD PAGE IF ERR?
-      })
+        })
     }
   }
 }

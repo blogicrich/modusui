@@ -36,7 +36,7 @@
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
-import { log } from 'util';
+import { log } from 'util'
 
 export default {
   name: 'SystemAdmins',
@@ -71,7 +71,7 @@ export default {
         { text: 'Family Name', value: 'familyName', align: 'left', sortable: false, cellType: 'tb', hidden: false, editable: true },
         { text: 'Salutation', value: 'salutation', align: 'left', sortable: false, cellType: 'tb', hidden: false, editable: true },
         { text: 'Username', value: 'username', align: 'left', sortable: false, cellType: 'tb', hidden: true, editable: true },
-        { text: 'Corporate ID', value: 'corporateIdentification', cellType: 'tb', hidden: true, editable: true },
+        { text: 'Corporate ID', value: 'corporateIdentification', cellType: 'tb', hidden: true, editable: true }
       ],
       newItem: [
         { titleId: 0, cellType: 'md', attr: 'titleId', cellLabel: 'Title', displayVal: 'shortDescription', returnVal: 'titleId', menuItems: [], validators: [] },
@@ -80,13 +80,13 @@ export default {
         { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
         { salutation: ' ', cellType: 'tb', attr: 'salutation', cellLabel: 'Salutation', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
-        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] },
+        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ],
       defaultItem: [
         { titleId: 0, portalAuthorisedId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', password: '' }
       ],
       urls: [
-        { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' },
+        { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }
       ]
     }
   },
@@ -99,7 +99,7 @@ export default {
         { corporateIdentification: 0, cellType: 'tb', attr: 'corporateIdentification', cellLabel: 'Company', menuItems: [], validators: [] },
         { salutation: ' ', cellType: 'tb', attr: 'salutation', cellLabel: 'Family Name', menuItems: [], validators: [] },
         { username: ' ', cellType: 'tb', attr: 'username', cellLabel: 'Username', menuItems: [], validators: [] },
-        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] },
+        { password: ' ', cellType: 'tb', attr: 'password', cellLabel: 'Password', menuItems: [], validators: [] }
       ]
       this.defaultItem = [
         { titleId: 0, portalAuthorisedId: 0, givenName: '', familyName: '', corporateIdentification: '', username: '', password: '' }
@@ -117,7 +117,7 @@ export default {
           }
         }
       }
-    },
+    }
   },
   mounted () {
     this.setData()

@@ -65,7 +65,7 @@ export default {
       headers: [
         { text: 'conditionsId', align: 'left', sortable: true, value: 'conditionId', cellType: 'tb', hidden: true, editable: false },
         { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true }
       ],
       newItem: [
         { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },

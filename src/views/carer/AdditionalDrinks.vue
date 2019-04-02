@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import AdditionalDrink from "../../components/base/BaseAdditionalDrinkComponent.vue";
+import AdditionalDrink from '../../components/base/BaseAdditionalDrinkComponent.vue'
 
 export default {
   components: {
     AdditionalDrink
   }
-};
+}
 </script>

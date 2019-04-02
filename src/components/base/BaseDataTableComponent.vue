@@ -836,8 +836,7 @@ export default {
     toggleAll () {
       if (this.selected.length) {
         this.selected = []
-      }
-      else this.selected = this.items.slice()
+      } else this.selected = this.items.slice()
     },
     save () {
       this.$emit('newItem', this.newItem)

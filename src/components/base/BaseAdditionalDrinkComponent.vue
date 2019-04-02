@@ -41,100 +41,100 @@
 </template>
 
 <script>
-import { crudRoutines } from "@/mixins/dataTableCRUD.js";
-import apiLib from "@/services/apiLib.js";
-import BaseDataTable from "@/components/base/BaseDataTableComponent.vue";
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import apiLib from '@/services/apiLib.js'
+import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 
 export default {
-  name: "SystemAdmins",
+  name: 'SystemAdmins',
   mixins: [crudRoutines],
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       selected: [],
-      snackColor: "primary",
-      snackText: "",
+      snackColor: 'primary',
+      snackText: '',
       snack: false,
       timeout: 6000,
       loading: true,
       loaded: false,
       error: false,
-      errorMsg: "",
-      loadingMsg: "",
-      loadedMsg: "",
-      delUrl: "carer/adddrinks/" + this.$store.state.userId,
-      updateUrl: "carer/adddrinks/" + this.$store.state.userId,
+      errorMsg: '',
+      loadingMsg: '',
+      loadedMsg: '',
+      delUrl: 'carer/adddrinks/' + this.$store.state.userId,
+      updateUrl: 'carer/adddrinks/' + this.$store.state.userId,
       readUrl:
-        "carer/adddrinks/" +
+        'carer/adddrinks/' +
         this.$store.state.userId +
-        "/" +
+        '/' +
         this.$store.state.date,
-      createUrl: "carer/adddrinks/" + this.$store.state.userId,
-      primaryColor: "primary",
-      secondaryColor: "primary darken-2",
-      icon: "local_drink",
-      iconAdd: "add",
+      createUrl: 'carer/adddrinks/' + this.$store.state.userId,
+      primaryColor: 'primary',
+      secondaryColor: 'primary darken-2',
+      icon: 'local_drink',
+      iconAdd: 'add',
       pagination: {
-        sortBy: "name"
+        sortBy: 'name'
       },
       selected: [],
       headers: [
-        { text: "Name", align: 'left', sortable: true, cellType: 'tb', value: "name", editable: true },
-        { text: "Amount", align: 'left', sortable: true, cellType: 'tb', value: "quantity", editable: true }
+        { text: 'Name', align: 'left', sortable: true, cellType: 'tb', value: 'name', editable: true },
+        { text: 'Amount', align: 'left', sortable: true, cellType: 'tb', value: 'quantity', editable: true }
       ],
       drinks: [],
       newItem: [
         {
-          name: "",
-          cellType: "tb",
-          attr: "name",
-          cellLabel: "Drink Name",
+          name: '',
+          cellType: 'tb',
+          attr: 'name',
+          cellLabel: 'Drink Name',
           menuItems: [],
           validators: []
         },
         {
-          quantity: "",
-          cellType: "tb",
-          attr: "quantity",
-          cellLabel: "Amount Drank",
+          quantity: '',
+          cellType: 'tb',
+          attr: 'quantity',
+          cellLabel: 'Amount Drank',
           menuItems: [],
           validators: []
         }
       ],
-      defaultItem: [{ name: "", quantity: 0 }]
-    };
+      defaultItem: [{ name: '', quantity: 0 }]
+    }
   },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
-          Name: "",
-          cellType: "tb",
-          attr: "name",
-          cellLabel: "Drink Name",
+          Name: '',
+          cellType: 'tb',
+          attr: 'name',
+          cellLabel: 'Drink Name',
           menuItems: [],
           validators: []
         },
         {
-          Amount: "",
-          cellType: "tb",
-          attr: "amount",
-          cellLabel: "Amount Drank",
+          Amount: '',
+          cellType: 'tb',
+          attr: 'amount',
+          cellLabel: 'Amount Drank',
           menuItems: [],
           validators: []
         }
-      ];
-      this.defaultItem = [{ Name: "", Amount: "" }];
+      ]
+      this.defaultItem = [{ Name: '', Amount: '' }]
     }
   },
-  mounted() {
-    this.getItems(this.readUrl);
+  mounted () {
+    this.getItems(this.readUrl)
     this.$store.dispatch('fetchDashboardUsersGet')
     console.log('dashboardUsers:', this.$store.state.dashboardUsers.dashboardUsersGet)
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

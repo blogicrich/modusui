@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     iconClicked () {
-      console.log('collapse');
+      console.log('collapse')
     },
     getSelectedUser (user) {
       let vals = apiLib.getData('cliadmin/')
