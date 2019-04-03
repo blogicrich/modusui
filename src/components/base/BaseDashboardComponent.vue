@@ -261,33 +261,40 @@ export default {
       this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
     },
     openDialog: function (charType) {
+      console.log(this)
       switch (charType) {
         case 'Line':
-          this.lineDialog = true
-          let lineComp = this.$children[8].$children[0].$children[0]
-            .$children[0].$children[0].$children[0]
-          setTimeout(() => {
-            lineComp.renderChart(lineComp.chartData, lineComp.options)
-          }, 200)
+          if (this.hourLoaded === true) {
+            this.lineDialog = true
+            let lineComp = this.$children[8].$children[0].$children[0]
+              .$children[0].$children[0].$children[0]
+            setTimeout(() => {
+              lineComp.renderChart(lineComp.chartData, lineComp.options)
+            }, 200)
+          }
           break
         case 'Bar':
-          this.barDialog = true
-          let barComp = this.$children[10].$children[0].$children[0]
-            .$children[0].$children[0].$children[0]
-          setTimeout(() => {
-            barComp.renderChart(barComp.chartData, barComp.options)
-          }, 200)
+          if (this.weekLoaded === true) {
+            this.barDialog = true
+            let barComp = this.$children[10].$children[0].$children[0]
+              .$children[0].$children[0].$children[0]
+            setTimeout(() => {
+              barComp.renderChart(barComp.chartData, barComp.options)
+            }, 200)
+          }
           break
         case 'Doughnut':
-          this.doughnutDialog = true
-          let doughnutComp = this.$children[9].$children[0].$children[0]
-            .$children[0].$children[0].$children[0]
-          setTimeout(() => {
-            doughnutComp.renderChart(
-              doughnutComp.chartData,
-              doughnutComp.options
-            )
-          }, 200)
+          if (this.dayLoaded === true) {
+            this.doughnutDialog = true
+            let doughnutComp = this.$children[9].$children[0].$children[0]
+              .$children[0].$children[0].$children[0]
+            setTimeout(() => {
+              doughnutComp.renderChart(
+                doughnutComp.chartData,
+                doughnutComp.options
+              )
+            }, 200)
+          }
           break
       }
     }
