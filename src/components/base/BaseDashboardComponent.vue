@@ -42,7 +42,7 @@
             />
           </v-card>
             <v-alert :value="true" type="error" v-else>
-              Chart data not available
+              Hydration snapshot not found. The base may not have communicated yet.
           </v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
@@ -62,7 +62,7 @@
             ></baseDropletuser>
           </v-card>
           <v-alert :value="true" type="error" v-else>
-            User data not available
+            Hydration snapshot not found. The base may not have communicated yet.
           </v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
@@ -79,7 +79,7 @@
 
               </v-card>
                             <v-alert :value="true" type="error" v-else>
-                  Chart data not available
+                  Hydration snapshot not found. The base may not have communicated yet.
                 </v-alert>
             </v-flex>
             <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
@@ -92,7 +92,7 @@
                 />
               </v-card>
                 <v-alert :value="true" type="error" v-else>
-                  Chart data not available
+                  Hydration snapshot not found. The base may not have communicated yet.
                 </v-alert>
             </v-flex>
           </v-layout>
@@ -134,10 +134,8 @@
 <script>
 import charts from '@/components/base/BaseChartComponent'
 import baseDropletuser from '@/components/sub/SubUserSelectComponent'
-import { validation } from '@/mixins/validation'
 
 export default {
-  mixins: [validation],
   components: {
     charts,
     baseDropletuser
@@ -187,7 +185,6 @@ export default {
     setTimeout(() => {
       this.dateChanged()
     }, 200)
-    this.validateString()
   },
   methods: {
     formatDate (date) {

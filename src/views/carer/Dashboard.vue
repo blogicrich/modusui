@@ -71,7 +71,9 @@ export default {
         this.hourLoaded = false
       }
     },
-    async setDay () {
+    async setDay (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      this.$store.state.userId = 21
+      this.$store.state.date = 0
       await this.$store.dispatch('fetchDashboardDayGet')
       if (this.$store.state.dashboardDay.dashboardDayGet.length === 1) {
         this.dashboardDay = await this.$store.state.dashboardDay.dashboardDayGet
@@ -80,15 +82,20 @@ export default {
         this.dayLoaded = false
       }
     },
-    async setWeek (SelectedUnixTime) {
+    async setWeek (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.$store.state.userId = 21
       this.$store.state.date = 1552521600
       await this.$store.dispatch('fetchDashboardWeekGet')
       if (this.$store.state.dashboardWeek.dashboardWeekGet.length === 7) {
-        this.dashboardWeek = await this.$store.state.dashboardWeek.dashboardWeekGet
-        this.weekLoaded = true
-      } else {
-        this.weekLoaded = false
+        for (let i = 0; i < this.$store.state.dashboardWeek.dashboardWeekGet.length; i++) {
+          const element = this.$store.state.dashboardWeek.dashboardWeekGet[i]
+          if (element.length < 0) {
+            this.dashboardWeek = await this.$store.state.dashboardWeek.dashboardWeekGet
+            this.weekLoaded = true
+          } else {
+            this.weekLoaded = false
+          }
+        }
       }
     }
   },
