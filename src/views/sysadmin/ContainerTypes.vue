@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-primary text-center mx-3" text-xs-center>Container Types</h2>
+    <h2
+      v-if="this.$vuetify.breakpoint.mdAndDown"
+      class="pg-subheader text-primary text-center mx-3"
+      text-xs-center
+    >Container Types</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -33,9 +37,9 @@
 </template>
 
 <script>
-
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import validation from '@/mixins/validation'
 
 export default {
   name: 'ContainerTypes',
@@ -43,7 +47,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data () {
+  data() {
     return {
       items: [],
       crudIdKey: 'containerTypeId',
@@ -63,35 +67,103 @@ export default {
       icon: 'local_drink',
       iconAdd: 'add',
       headers: [
-        { text: 'containerTypeId', align: 'left', sortable: true, value: 'containerTypeId', cellType: 'tb', hidden: true, editable: true },
-        { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Volume', align: 'left', sortable: true, value: 'volume', cellType: 'tb', hidden: false, editable: true }
+        {
+          text: 'containerTypeId',
+          align: 'left',
+          sortable: true,
+          value: 'containerTypeId',
+          cellType: 'tb',
+          hidden: true,
+          editable: true
+        },
+        {
+          text: 'Description',
+          align: 'left',
+          sortable: true,
+          value: 'description',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        },
+        {
+          text: 'Volume',
+          align: 'left',
+          sortable: true,
+          value: 'volume',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        }
       ],
       newItem: [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
+        {
+          description: '',
+          cellType: 'tb',
+          attr: 'description',
+          cellLabel: 'Description',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        },
+        {
+          volume: '',
+          cellType: 'tb',
+          attr: 'volume',
+          cellLabel: 'Volume',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateLiters(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        }
       ],
-      defaultItem: [
-        { containerTypeId: 0, description: ' ', volume: 0 }
-      ]
+      defaultItem: [{ containerTypeId: 0, description: ' ', volume: 0 }]
     }
   },
   methods: {
-    resetItem () {
+    resetItem() {
       this.newItem = [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { volume: ' ', cellType: 'tb', attr: 'volume', cellLabel: 'Volume', menuItems: [], validators: [] }
+        {
+          description: '',
+          cellType: 'tb',
+          attr: 'description',
+          cellLabel: 'Description',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        },
+        {
+          volume: '',
+          cellType: 'tb',
+          attr: 'volume',
+          cellLabel: 'Volume',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateLiters(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        }
       ]
-      this.defaultItem = [
-        { containerTypeId: 0, description: ' ', volume: 0 }
-      ]
+      this.defaultItem = [{ containerTypeId: 0, description: ' ', volume: 0 }]
     }
   },
-  mounted () {
+  mounted() {
     this.getItems(this.readUrl)
   }
 }
 </script>
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
+@import "./public/scss/main.scss";
 </style>

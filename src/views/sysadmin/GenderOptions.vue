@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-primary text-center mx-3" text-xs-center>Gender Options</h2>
+    <h2
+      v-if="this.$vuetify.breakpoint.mdAndDown"
+      class="pg-subheader text-primary text-center mx-3"
+      text-xs-center
+    >Gender Options</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -29,22 +33,17 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
-  <v-snackbar
-    v-model="snack"
-    bottom
-    :timeout="timeout"
-    :color="snackColor"
-  >
-    {{ snackText }}
-    <v-btn flat @click="snack = false">Close</v-btn>
-  </v-snackbar>
+    <v-snackbar v-model="snack" bottom :timeout="timeout" :color="snackColor">
+      {{ snackText }}
+      <v-btn flat @click="snack = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
-
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import validation from '@/mixins/validation'
 
 export default {
   name: 'ContainerTypes',
@@ -52,7 +51,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data () {
+  data() {
     return {
       items: [],
       editPerms: { create: true, update: true, delete: true },
@@ -76,38 +75,101 @@ export default {
       icon: 'wc',
       iconAdd: 'add',
       headers: [
-        { text: 'genderId', align: 'left', sortable: true, value: 'genderId', cellType: 'tb', hidden: true, editable: true },
-        { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Target Consumption', align: 'left', sortable: true, value: 'targetConsumption', cellType: 'tb', hidden: false, editable: true }
+        {
+          text: 'genderId',
+          align: 'left',
+          sortable: true,
+          value: 'genderId',
+          cellType: 'tb',
+          hidden: true,
+          editable: true
+        },
+        {
+          text: 'Description',
+          align: 'left',
+          sortable: true,
+          value: 'description',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        },
+        {
+          text: 'Target Consumption',
+          align: 'left',
+          sortable: true,
+          value: 'targetConsumption',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        }
       ],
       newItem: [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { volume: ' ', cellType: 'tb', attr: 'targetConsumption', cellLabel: 'Target Consumption', menuItems: [], validators: [] }
+        {
+          description: '',
+          cellType: 'tb',
+          attr: 'description',
+          cellLabel: 'Description',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        },
+        {
+          volume: '',
+          cellType: 'tb',
+          attr: 'targetConsumption',
+          cellLabel: 'Target Consumption',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateLiter(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        }
       ],
-      defaultItem: [
-        { genderId: 0, description: ' ', targetConsumption: 0 }
-      ]
+      defaultItem: [{ genderId: 0, description: '', targetConsumption: 0 }]
     }
   },
   methods: {
-    resetItem () {
+    resetItem() {
       this.newItem = [
-        { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Target Consumption', align: 'left', sortable: true, value: 'targetConsumption', cellType: 'tb', hidden: false, editable: true }
+        {
+          text: 'Description',
+          align: 'left',
+          sortable: true,
+          value: 'description',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        },
+        {
+          text: 'Target Consumption',
+          align: 'left',
+          sortable: true,
+          value: 'targetConsumption',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        }
       ]
       this.defaultItem = [
-        { genderId: 0, description: ' ', targetConsumption: 0 }
+        { genderId: 0, description: '', targetConsumption: 0 }
       ]
     },
-    notify (items) {
+    notify(items) {
       this.showSnack(items.snackText, items.snackColor)
     }
   },
-  created () {
+  created() {
     this.getItems(this.readUrl)
   }
 }
+
 </script>
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
+@import "./public/scss/main.scss";
 </style>

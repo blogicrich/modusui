@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <h2 v-if="this.$vuetify.breakpoint.mdAndDown" class="pg-subheader text-primary text-center mx-3" text-xs-center>Container Types</h2>
+    <h2
+      v-if="this.$vuetify.breakpoint.mdAndDown"
+      class="pg-subheader text-primary text-center mx-3"
+      text-xs-center
+    >Container Types</h2>
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -33,9 +37,9 @@
 </template>
 
 <script>
-
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import validation from '@/mixins/validation'
 
 export default {
   name: 'ContainerTypes',
@@ -43,7 +47,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data () {
+  data() {
     return {
       items: [],
       crudIdKey: 'conditionsId',
@@ -63,35 +67,103 @@ export default {
       icon: 'local_pharmacy',
       iconAdd: 'add',
       headers: [
-        { text: 'conditionsId', align: 'left', sortable: true, value: 'conditionId', cellType: 'tb', hidden: true, editable: false },
-        { text: 'Description', align: 'left', sortable: true, value: 'description', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', align: 'left', sortable: true, value: 'status', cellType: 'tb', hidden: false, editable: true }
+        {
+          text: 'conditionsId',
+          align: 'left',
+          sortable: true,
+          value: 'conditionId',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Description',
+          align: 'left',
+          sortable: true,
+          value: 'description',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        },
+        {
+          text: 'Status',
+          align: 'left',
+          sortable: true,
+          value: 'status',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        }
       ],
       newItem: [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
+        {
+          description: '',
+          cellType: 'tb',
+          attr: 'description',
+          cellLabel: 'Description',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        },
+        {
+          status: '',
+          cellType: 'tb',
+          attr: 'status',
+          cellLabel: 'Status',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        }
       ],
-      defaultItem: [
-        { conditionsId: 0, description: ' ', status: ' ' }
-      ]
+      defaultItem: [{ conditionsId: 0, description: ' ', status: ' ' }]
     }
   },
   methods: {
-    resetItem () {
+    resetItem() {
       this.newItem = [
-        { description: ' ', cellType: 'tb', attr: 'description', cellLabel: 'Description', menuItems: [], validators: [] },
-        { status: ' ', cellType: 'tb', attr: 'status', cellLabel: 'Status', menuItems: [], validators: [] }
+        {
+          description: '',
+          cellType: 'tb',
+          attr: 'description',
+          cellLabel: 'Description',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        },
+        {
+          status: '',
+          cellType: 'tb',
+          attr: 'status',
+          cellLabel: 'Status',
+          menuItems: [],
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
+        }
       ]
-      this.defaultItem = [
-        { conditionsId: 0, description: ' ', status: ' ' }
-      ]
+      this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]
     }
   },
-  created () {
+  created() {
     this.getItems(this.readUrl)
   }
 }
 </script>
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
+@import "./public/scss/main.scss";
 </style>

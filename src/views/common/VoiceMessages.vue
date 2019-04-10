@@ -1,8 +1,8 @@
 <template lang="html">
   <v-container>
     <v-layout row align-center fill-height>
-      <v-icon v-if="apiData.length > 0" large color="primary">settings</v-icon>
-      <h1 v-if="apiData.length > 0" class="pg-header">eDroplet Administration</h1>
+      <v-icon large color="primary">settings</v-icon>
+      <h1 class="pg-header">eDroplet Administration</h1>
       <v-spacer></v-spacer>
       <selectComponent
         v-if="userPerms"
@@ -48,7 +48,7 @@
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in praises"
-                        v-bind:data="voiceMessage"
+            v-bind:data="voiceMessage"
             v-bind:key="voiceMessage.voiceMessagesId"
             :radioConfig="msgPraiseIntervalSettings"
             :groupDescription="msgPraiseRadioDescription"
@@ -64,7 +64,7 @@
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in instructs"
-                        v-bind:data="voiceMessage"
+            v-bind:data="voiceMessage"
             v-bind:key="voiceMessage.voiceMessagesId"
             :radioConfig="msgInstructIntervalSettings"
             :groupDescription="msgInstructRadioDescription"
@@ -75,6 +75,9 @@
           />
         </v-card>
       </v-flex>
+    </v-layout>
+    <v-layout v-else>
+      <v-alert :value="true" type="error" >No data found.</v-alert>
     </v-layout>
   </v-container>
 </template>
@@ -157,13 +160,13 @@ export default {
       }
     },
     getSelectedUser (user) {
-      let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
+      let arr = apiLib.getData(this.cliadminReadUrl + user, true, true).then(response => {
         this.apiData = response
       })
     },
     async getvoiceMessage () {
       if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+        let userData = apiLib.getData('cliadmin/users', true, true).then(response => {
           this.users = response
         })
       }

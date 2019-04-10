@@ -35,6 +35,7 @@ import apiLib from '@/services/apiLib'
 import store from '@/store'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import dataTable from '@/components/base/BaseDataTableComponent'
+import validation from '@/mixins/validation'
 // const awayEndpoint = 'carer/away/' + store.getters.getterUserId
 
 export default {
@@ -118,20 +119,29 @@ export default {
     ],
     newItem: [
       {
-        description: ' ',
+        description: '',
         cellType: 'tb',
         attr: 'drinksAccounted',
         cellLabel: 'Drinks Accounted?',
         menuItems: [],
-        validators: []
+        validators: payload => {
+          return [
+            validation.validateNumber(payload),
+          ]
+        }
       },
       {
-        volume: ' ',
+        volume: '',
         cellType: 'tb',
         attr: 'volume',
         cellLabel: 'Volume',
         menuItems: [],
-        validators: []
+        validators: payload => {
+          return [
+            validation.validateLiters(payload),
+            validation.validateRequired(payload)
+          ]
+        }
       }
     ],
     defaultItem: [
@@ -165,12 +175,16 @@ export default {
     resetItem () {
       this.newItem = [
         {
-          description: ' ',
+          description: '',
           cellType: 'tb',
           attr: 'drinksAccounted',
           cellLabel: 'Drinks Accounted?',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateNumber(payload)
+            ]
+          }
         }
       ]
       this.defaultItem = [

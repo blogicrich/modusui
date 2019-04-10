@@ -238,6 +238,7 @@
           </v-dialog>
   <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="96%">
+            <v-form ref="newForm" v-model="valid">
             <v-card>
               <v-card-title>
                 <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
@@ -254,8 +255,9 @@
                         v-model="newItem[key].sync"
                         :color="primaryColor"
                         outline
-                        required
+                        :rules="item.validators(newItem[key].sync)"
                       ></v-text-field>
+                      
                       <v-select
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
@@ -276,14 +278,15 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
-                <v-btn :color="secondaryColor" flat @click.native="save">Save</v-btn>
+                <v-btn :color="secondaryColor" :disabled="!valid" flat @click.native="save">Save</v-btn>
               </v-card-actions>
             </v-card>
+            </v-form>
           </v-dialog>
     <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="98%">
-            <v-form v-model="valid" ref="form">
-                          <v-card class="pa-0">
+            <v-form v-model="valid" ref="editForm">
+              <v-card class="pa-0">
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
                 <span class="pg-subheader text-primary">{{ editDialogTitle }}</span>
@@ -299,7 +302,6 @@
                         v-model.sync="item[key]"
                         :color="primaryColor"
                         outline
-                        :rules="rules"
                         required
                       >{{ item[key].value }}
                       </v-text-field>
@@ -314,7 +316,7 @@
                         outline
                         required
                         :item-value="newItem.find(attribute => attribute).returnVal"
-                        :item-text="newItem.find(attribute => attribute).displayVal"                      >
+                        :item-text="newItem.find(attribute => attribute).displayVal">
                       </v-select>
                     </v-flex>
                   </v-layout>
@@ -323,7 +325,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
-                <v-btn :color="secondaryColor" flat @click.native="saveChanges">save</v-btn>
+                <v-btn :color="secondaryColor" :disabled="!valid" flat @click.native="saveChanges">save</v-btn>
               </v-card-actions>
             </v-card>
             </v-form>
@@ -583,7 +585,7 @@
           </v-dialog>
   <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="500px">
-            <v-form ref="form">
+            <v-form ref="form" v-model="valid">
             <v-card>
               <v-card-title>
                 <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
@@ -600,7 +602,7 @@
                         v-model="newItem[key].sync"
                         :color="primaryColor"
                         outline
-                        :rules="rules"
+                        :rules="item.validators(newItem[key].sync)"
                         required
                       ></v-text-field>
                       <v-select
@@ -611,7 +613,6 @@
                         :label="newItem[key].cellLabel"
                         :color="primaryColor"
                         outline
-                        :rules="rules"
                         required
                         return-object
                         :item-value="item.returnVal"
@@ -624,14 +625,14 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn :color="primaryColor" flat @click.native.stop="close">Cancel</v-btn>
-                <v-btn :color="secondaryColor" flat @click.native.stop="save">Save</v-btn>
+                <v-btn :color="secondaryColor" :disabled="!valid" flat @click.native.stop="save">Save</v-btn>
               </v-card-actions>
             </v-card>
             </v-form>
           </v-dialog>
   <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="500px">
-            <v-form v-model="valid" ref="form1">
+            <v-form v-model="valid" ref="editForm">
             <v-card>
               <v-card-title class="pa-0">
                 <v-layout class="ma-0 pa-0" row fill-height justify-center>
@@ -654,11 +655,11 @@
                       <v-text-field
                         v-if="inputType(item, key, 'tb')"
                         class="ma-1"
-                        :rules="rules"
                         :label="getCellLabel(item, key, index)"
                         v-model.sync="item[key]"
                         :color="primaryColor"
                         outline
+                        :rules="item.validators(item[key])"
                         required
                       >{{ item[key].value }}
                       </v-text-field>
@@ -671,7 +672,6 @@
                         :placeholder="item[key].value"
                         :color="primaryColor"
                         outline
-                        :rules="rules"
                         required
                         return-object
                         :item-value="newItem.find(attribute => attribute).returnVal"
@@ -686,7 +686,7 @@
                 <v-layout row wrap>
                   <v-spacer></v-spacer>
                   <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
-                  <v-btn :color="secondaryColor" flat @click.native="saveChanges">Save</v-btn>
+                  <v-btn :color="secondaryColor" :disabled="!valid" flat @click.native="saveChanges">Save</v-btn>
                 </v-layout>
               </v-card-actions>
             </v-card>
@@ -710,7 +710,6 @@ export default {
   data () {
     return {
       valid: true,
-      rules: [v => !!v || 'This field is required!'],
       rows: [ 5, 10, 15, 20, 25, 50, 100 ],
       editIndex: 0,
       editDialog: false,
@@ -839,12 +838,15 @@ export default {
       } else this.selected = this.items.slice()
     },
     save () {
+      if (this.$refs.newForm.validate()) {
       this.$emit('newItem', this.newItem)
       this.close()
+      }
     },
     saveChanges () {
-      if (this.$refs.form.validate()) {
+      if (this.$refs.editForm.validate()) {
         this.$emit('itemsEdited', this.selected)
+        console.log('this.selected: ', this.selected)
         this.close()
         this.selected = []
       }

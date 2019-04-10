@@ -15,7 +15,7 @@ export const moduleVoiceMessagesDefaults = {
   actions: {
     // get all data
     fetchVoiceMessagesDefaultsGet (context) {
-      return apiLib.getData('sysadmin/voice-message').then((response) => {
+      return apiLib.getData('sysadmin/voice-message', true, true).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_VOICEMESSAGESDEFAULTS', null)
         } else {

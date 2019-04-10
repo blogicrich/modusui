@@ -13,7 +13,7 @@ export const moduleDashboardWeek = {
   actions: {
     // get all data
     async fetchDashboardWeekGet (context) {
-      await apiLib.getData('carer/dashboard-week/' + this.getters.getterUserId + '/' + this.getters.getterDate).then((response) => {
+      await apiLib.getData('carer/dashboard-week/' + this.getters.getterUserId + '/' + this.getters.getterDate, false, true).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_DASHBOARDWEEK', null)
         } else {

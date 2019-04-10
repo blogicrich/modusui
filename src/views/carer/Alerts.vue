@@ -38,7 +38,7 @@
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
-import { log } from 'util'
+import validation from '@/mixins/validation'
 
 export default {
   name: 'SystemAdmins',
@@ -46,7 +46,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data () {
+  data() {
     return {
       crudIdKey: 'portalAuthorisedId',
       items: [],
@@ -54,9 +54,9 @@ export default {
       loading: true,
       loaded: false,
       error: false,
-      errorMsg: ' ',
-      loadingMsg: ' ',
-      loadedMsg: ' ',
+      errorMsg: '',
+      loadingMsg: '',
+      loadedMsg: '',
       readUrl:
         'carer/alerts/' +
         this.$store.state.userId +
@@ -88,20 +88,30 @@ export default {
       ],
       newItem: [
         {
-          dateTime: ' ',
+          dateTime: '',
           cellType: 'tb',
           attr: 'dateTime',
           cellLabel: 'datetime',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateTime(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         },
         {
-          description: ' ',
+          description: '',
           cellType: 'tb',
           attr: 'description',
           cellLabel: 'Alert Type',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         }
       ],
       defaultItem: [
@@ -114,23 +124,33 @@ export default {
     }
   },
   methods: {
-    resetItem () {
+    resetItem() {
       this.newItem = [
         {
-          dateTime: ' ',
+          dateTime: '',
           cellType: 'tb',
           attr: 'dateTime',
           cellLabel: 'datetime',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateTime(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         },
         {
-          description: ' ',
+          description: '',
           cellType: 'tb',
           attr: 'description',
           cellLabel: 'Alert Type',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         }
       ]
       this.defaultItem = [
@@ -141,7 +161,7 @@ export default {
       ]
     }
   },
-  mounted () {
+  mounted() {
     this.getItems(this.readUrl)
   }
 }

@@ -153,17 +153,7 @@ export default {
       }
     },
     alertColors () {
-      for (var i = 0; i < this.dashboardUsers.length; i++) {
-        if (this.dashboardUsers[i].alertType === 'hydrated') {
-          this.alertColor.push('green')
-        } else if (this.dashboardUsers[i].alertType === 'dehydrated') {
-          this.alertColor.push('red')
-        } else if (this.dashboardUsers[i].alertType === 'little dehydrated') {
-          this.alertColor.push('orange')
-        } else {
-          this.alertColor.push('primary')
-        }
-      }
+      this.setAlertColors()
       return this.alertColor
     }
   },
@@ -187,6 +177,19 @@ export default {
     }, 200)
   },
   methods: {
+    setAlertColors () {
+      for (var i = 0; i < this.dashboardUsers.length; i++) {
+        if (this.dashboardUsers[i].alertType === 'hydrated') {
+          this.alertColor.push('green')
+        } else if (this.dashboardUsers[i].alertType === 'dehydrated') {
+          this.alertColor.push('red')
+        } else if (this.dashboardUsers[i].alertType === 'little dehydrated') {
+          this.alertColor.push('orange')
+        } else {
+          this.alertColor.push('primary')
+        }
+      }
+    },
     formatDate (date) {
       var monthNames = [
         'January',
@@ -261,7 +264,6 @@ export default {
       this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
     },
     openDialog: function (charType) {
-      console.log(this)
       switch (charType) {
         case 'Line':
           if (this.hourLoaded === true) {
@@ -359,7 +361,7 @@ export default {
         labels: ['Consumed', 'Remaining'],
         dataDoughnut: [],
         borderColorDoughnut: 'rgba(255, 255, 255, 1)',
-        backgroundColorDoughnut: ['#00A1CD', 'rgba(200, 200, 200)' ],
+        backgroundColorDoughnut: ['#00A1CD', 'rgba(200, 200, 200)'],
         borderWidthDoughnut: 2,
         cutoutPercentageDoughnut: 65,
         title: 'Hydration for ' + this.formatDate(new Date(this.date))
