@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       items: [],
+      valid: false,
       editPerms: { create: true, update: true, delete: true },
       name: 'name',
       loading: true,
@@ -130,10 +131,12 @@ export default {
       for (let i = 0; i < selected.length; i++) {
         for (const key in selected[i]) {
           if (selected[i].hasOwnProperty(key)) {
-            const element = selected[i][key];
+            const element = selected[i][key]
             console.log(element)
             if (validation.validateAlphabetical(validation.validateRequired(element.shortDescription)) && validation.validateAlphabetical(validation.validateRequired(element.longDescription))) {
               this.editItems(element)
+            } else {
+              this.valid = false
             }
           }
         }
@@ -161,12 +164,13 @@ export default {
         }
       ]
       this.defaultItem = [
-        { titleId: 0, shortDescription: ' ', longDescription: ' ' }
+        { titleId: 0, shortDescription: '', longDescription: '' }
       ]
     }
   },
   mounted() {
     this.getItems(this.readUrl)
+    console.log(this.items)
   }
 }
 </script>

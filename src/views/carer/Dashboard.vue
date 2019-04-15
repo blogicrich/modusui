@@ -64,6 +64,7 @@ export default {
       if (this.$store.state.dashboardHour.dashboardHourGet.length === 24) {
         let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
         for (let index = 0; index < hourStore.length; index++) {
+
           this.dashboardHour[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
         }
         this.hourLoaded = true

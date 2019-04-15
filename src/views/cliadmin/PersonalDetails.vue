@@ -5,7 +5,7 @@
         <data-table
           :editPerms="editPerms"
           :headers="headers"
-          :items="personalDetails"
+          :items="items"
           :loading="loading"
           :loaded="loaded"
           :error="error"
@@ -29,7 +29,7 @@ import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import DataTable from '@/components/base/BaseDataTableComponent'
 import WizardComponent from '@/components/base/BaseWizardComponent'
 
-const getUrl = 'cliadmin/personaldetails'
+const getUrl = '/register'
 
 export default {
   name: 'PersonalDetails',
@@ -46,7 +46,7 @@ export default {
         {
           hidden: false,
           text: 'Title',
-          value: 'title',
+          value: 'longDescription',
           sortable: true,
           celltype: 'tb',
           align: 'left'
@@ -84,7 +84,7 @@ export default {
           align: 'left'
         }
       ],
-      personalDetails: [],
+      items: [],
       loading: true,
       loaded: false,
       error: false,
@@ -93,8 +93,15 @@ export default {
       loadedMsg: ''
     }
   },
-  mounted () {
+  created () {
     this.getItems(getUrl)
+  },
+  mounted () {
+    console.log(this.items)
+    for (let i = 0; i < this.items.length; i++) {
+      const element = this.items[i]
+      console.log('element', element)
+    }
   }
 }
 </script>

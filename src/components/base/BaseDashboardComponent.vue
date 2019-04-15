@@ -33,7 +33,7 @@
           </v-card>
         </v-flex>
         <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
-          <v-card dark v-if="hourLoaded">
+          <v-card dark v-if="!hourLoaded">
             <charts
               class="chart"
               :chartType="'Line'"
@@ -68,7 +68,7 @@
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
           <v-layout row wrap>
             <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
-              <v-card dark v-if="weekLoaded">
+              <v-card dark v-if="!weekLoaded">
                 <charts
 
                   class="chart"
@@ -83,7 +83,7 @@
                 </v-alert>
             </v-flex>
             <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
-              <v-card dark v-if="dayLoaded">
+              <v-card dark v-if="!dayLoaded">
                 <charts
                   class="chart"
                   :update="update"
@@ -224,6 +224,8 @@ export default {
     },
     updateLine: function () {
       this.lineChartData.title = 'Activity on: ' + this.formatDate(new Date(this.date))
+              // this.lineChartData.dataLineOne = [1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 0.5, 1.2]
+
       if (this.dashboardHour.length === 24) {
         this.lineChartData.dataLineOne = this.dashboardHour
       }
@@ -231,6 +233,8 @@ export default {
     updateBar: async function () {
       let weekArr = []
       let elementCount = 0
+//               this.barChartData.dataBarOne = [2.5, 1.8, 1.5, 1.3, 1.0, 1.6, 1.9]
+// this.barChartData.title = 'Weekly summary ' + 1.6 + 'L average'
       if (this.dashboardWeek.length === 7) {
         for (let i = 0; i < this.dashboardWeek.length; i++) {
           const element = this.dashboardWeek[i]
@@ -245,6 +249,9 @@ export default {
       }
     },
     updateDoughnut: async function () {
+//       this.doughnutChartData.dataDoughnut[0] = 1.2
+// this.doughnutChartData.dataDoughnut[1] = 0.8
+// this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + 1.2 + 'L / ' + 0.8 + 'L'
       if (this.dashboardDay.length === 1) {
         this.doughnutChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
         this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration))

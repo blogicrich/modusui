@@ -38,7 +38,10 @@
 </template>
 
 <script>
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+
 export default {
+  mixins: [crudRoutines],
   data () {
     return {
       aka: '',
@@ -52,20 +55,7 @@ export default {
       ]
     }
   },
-  // mounted() {
-  //   this.$store.dispatch("fetchTitlesGet").then(() => {
-  //     this.setTitles()
-  //   })
-  // },
   methods: {
-    // setTitles() {
-    //   if(this.$store.state.titels.titleGet) {
-    //     for (let index = 0; index < this.$store.state.titels.titleGet.length; index++) {
-    //       const element = this.$store.state.titels.titleGet[index].shortDescription
-    //       this.titles.push(element)
-    //     }
-    //   }
-    // },
     validate () {
       if (this.$refs.form.validate()) {
         this.$emit('onvalidation', true, this.selectedTitle, this.givenName, this.familyName, this.aka)
@@ -73,6 +63,9 @@ export default {
         this.$emit('onvalidation', false)
       }
     }
+  },
+  mounted() {
+    this.getItems('register')
   }
 }
 </script>

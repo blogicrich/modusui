@@ -6,7 +6,6 @@
       <v-stepper v-model="e1" vertical v-for="step in steps" v-bind:key="step.id">
         <v-stepper-step :step="step.id" :complete="e1 > step.id">
           {{ step.title }}
-          <small>{{ step.summarize }}</small>
         </v-stepper-step>
         <v-stepper-content :step="step.id">
           <div class="mb-5" v-if="step.id === 1">
