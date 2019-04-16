@@ -19,6 +19,7 @@
           <h1 class="pg-header ma-2">Voice Messages</h1>
           <v-spacer></v-spacer>
           <selectComponent
+            v-if="userPerms"
             :users="users"
             :selectAll="selectAll"
             :searchName="searchName"

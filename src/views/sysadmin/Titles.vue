@@ -28,8 +28,9 @@
       editDialogTitle="Edit Titles"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+      :validators="validators"
       @newItem="addItem"
-      @itemsEdited="validateItems(...arguments)"
+      @itemsEdited="editItems"
       @deleteSelected="deleteItem"
       @itemsCancelled="getItems(readUrl)"
     />
@@ -56,9 +57,9 @@ export default {
       loading: true,
       loaded: false,
       error: false,
-      errorMsg: ' ',
-      loadingMsg: ' ',
-      loadedMsg: ' ',
+      errorMsg: '',
+      loadingMsg: '',
+      loadedMsg: '',
       delUrl: 'sysadmin/title',
       updateUrl: 'sysadmin/title',
       readUrl: 'sysadmin/title',
@@ -125,8 +126,8 @@ export default {
   },
   methods: {
     validateItems (selected) {
-    // longDescription: "To"
-    // shortDescription: "T"
+    // longDescription: 'To'
+    // shortDescription: 'T'
     // titleId: 32
       for (let i = 0; i < selected.length; i++) {
         for (const key in selected[i]) {

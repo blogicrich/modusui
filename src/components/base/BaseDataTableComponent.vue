@@ -303,6 +303,7 @@
                         :color="primaryColor"
                         outline
                         required
+                        :rules="payload => validators(payload)"
                       >{{ item[key].value }}
                       </v-text-field>
                       <v-select
@@ -659,7 +660,7 @@
                         v-model.sync="item[key]"
                         :color="primaryColor"
                         outline
-                        :rules="item.validators(item[key])"
+                        :rules="validators"
                         required
                       >{{ item[key].value }}
                       </v-text-field>
@@ -757,8 +758,8 @@ export default {
     recordIcon: String,
     addRecordIcon: String,
     addBtnTitle: String,
-    editPerms: Object
-
+    editPerms: Object,
+    validators: Array
   },
   computed: {
     pages () {
