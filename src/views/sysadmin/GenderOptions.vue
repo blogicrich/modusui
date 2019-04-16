@@ -125,7 +125,7 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateLiter(payload),
+              validation.validateLiters(payload),
               validation.validateRequired(payload)
             ]
           }

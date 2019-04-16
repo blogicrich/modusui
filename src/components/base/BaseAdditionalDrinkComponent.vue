@@ -44,6 +44,7 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import apiLib from '@/services/apiLib.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import validation from '@/mixins/validation'
 
 export default {
   name: 'SystemAdmins',
@@ -92,7 +93,12 @@ export default {
           attr: 'name',
           cellLabel: 'Drink Name',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         },
         {
           quantity: '',
@@ -100,7 +106,12 @@ export default {
           attr: 'quantity',
           cellLabel: 'Amount Drank',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         }
       ],
       defaultItem: [{ name: '', quantity: 0 }]
@@ -115,7 +126,12 @@ export default {
           attr: 'name',
           cellLabel: 'Drink Name',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         },
         {
           Amount: '',
@@ -123,7 +139,12 @@ export default {
           attr: 'amount',
           cellLabel: 'Amount Drank',
           menuItems: [],
-          validators: []
+          validators: payload => {
+            return [
+              validation.validateAlphabetical(payload),
+              validation.validateRequired(payload)
+            ]
+          }
         }
       ]
       this.defaultItem = [{ Name: '', Amount: '' }]

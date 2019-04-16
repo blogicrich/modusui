@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AdditionalDrink from '../../components/base/BaseAdditionalDrinkComponent.vue'
+import AdditionalDrink from '@/components/base/BaseAdditionalDrinkComponent'
 
 export default {
   components: {
