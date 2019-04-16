@@ -46,7 +46,8 @@ export default {
   data: () => ({
     crudIdKey: 'portalAuthorisedId',
     items: [],
-    editPerms: { create: false, update: false, delete: false },
+    iconAdd: 'person_add',
+    editPerms: { create: false, update: true, delete: false },
     loading: true,
     loaded: false,
     error: false,
