@@ -2,7 +2,7 @@
   <v-form v-model="valid" lazy-validation ref="form">
     <v-container grid-list-xl>
       <v-layout align-start justify-space-around row wrap>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-select
             label="Title"
             :items="titles"
@@ -11,10 +11,10 @@
             @change="validate()"
           ></v-select>
         </v-flex>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field label="AKA" :rules="rule" v-model="aka" required @input="validate()"></v-text-field>
         </v-flex>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
             label="Given Name"
             :rules="rule"
@@ -23,7 +23,7 @@
             @input="validate()"
           ></v-text-field>
         </v-flex>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
             label="Family Name"
             :rules="rule"
@@ -38,10 +38,7 @@
 </template>
 
 <script>
-import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-
 export default {
-  mixins: [crudRoutines],
   data () {
     return {
       aka: '',
@@ -49,7 +46,7 @@ export default {
       familyName: '',
       valid: true,
       selectedTitle: '',
-      titles: ['Mr.', 'Ms.', 'Dr.'],
+      titles: [],
       rule: [
         v => !!v || 'This field is required'
       ]
@@ -62,10 +59,18 @@ export default {
       } else {
         this.$emit('onvalidation', false)
       }
+    },
+    setTitle () {
+      this.$store.dispatch('fetchWizardGet').then(response => {
+        let titleStore = this.$store.state.wizard.wizardGet
+        for (let index = 0; index < titleStore[0].length; index++) {
+          this.titles.push(titleStore[0][index].shortDescription)
+        }
+      })
     }
   },
   mounted() {
-    this.getItems('register')
+    this.setTitle()
   }
 }
 </script>

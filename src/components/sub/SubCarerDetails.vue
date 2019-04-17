@@ -1,8 +1,8 @@
 <template>
   <v-form v-model="valid" lazy-validation ref="form">
     <v-container grid-list-xl>
-      <v-layout row>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+      <v-layout row wrap>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-switch
             color="primary"
             v-model="isCarer"
@@ -10,7 +10,7 @@
             @input="validate()"
           ></v-switch>
         </v-flex>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-switch
             color="primary"
             v-model="isAdmin"
@@ -20,8 +20,9 @@
         </v-flex>
       </v-layout>
 
-      <v-layout row>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+      <v-flex v-if="isCarer">
+      <v-layout v-if="!breakpoint" wrap>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
             label="Username"
             :rules="rule"
@@ -31,7 +32,7 @@
             height="42px"
           ></v-text-field>
         </v-flex>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-select
             v-model="selectedAlertTypes"
             :items="alertTypes"
@@ -42,13 +43,35 @@
           ></v-select>
         </v-flex>
       </v-layout>
+      <v-layout v-else wrap>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
+          <v-select
+            v-model="selectedAlertTypes"
+            :items="alertTypes"
+            attach
+            chips
+            label="Alert Messages"
+            multiple
+          ></v-select>
+        </v-flex>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
+          <v-text-field
+            label="Username"
+            :rules="rule"
+            v-model="username"
+            required
+            @input="validate()"
+            height="42px"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
       <v-layout row wrap>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field label="Mobile Phone Number (Optional)" v-model="phoneNumber"></v-text-field>
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
             label="Email Address"
             :rules="rule"
@@ -59,22 +82,27 @@
         </v-flex>
       </v-layout>
 
-      <v-flex d-flex xs6 sm6 md6 lg6 xl6>
+      <v-flex d-flex xs12 sm12 md6 lg6 xl6>
         <v-radio-group v-model="row" row>
           <v-radio v-model="email" label="Email" :value="email"></v-radio>
           <v-radio v-model="sms" label="SMS" :value="sms"></v-radio>
         </v-radio-group>
+      </v-flex>
       </v-flex>
     </v-container>
   </v-form>
 </template>
 
 <script>
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+
 export default {
+    mixins: [crudRoutines],
+
   data () {
     return {
       isAdmin: false,
-      isCarer: false,
+      isCarer: true,
       row: null,
       username: '',
       phoneNumber: '',
@@ -82,9 +110,23 @@ export default {
       valid: true,
       email: false,
       sms: true,
+      alerts: [],
       rule: [v => !!v || 'This field is required'],
-      alertTypes: ['Dehydrated', 'Still Dehydrated', 'No Drink', 'Rehydrated', 'Low Battery'],
+      alertTypes: [],
       selectedAlertTypes: ['Dehydrated', 'Still Dehydrated', 'No Drink', 'Rehydrated', 'Low Battery']
+    }
+  },
+  watch: {
+    isCarer: function () {
+      this.$emit('onvalidation', !this.isCarer)
+    },
+    isAdmin: function () {
+      this.$emit('changeAdmin', this.isAdmin)
+    }
+  },
+  computed: {
+    breakpoint () {
+      return this.$vuetify.breakpoint.smAndDown
     }
   },
   methods: {
@@ -94,7 +136,19 @@ export default {
       } else {
         this.$emit('onvalidation', false)
       }
+    },
+        async setAlerts () {
+      await this.$store.dispatch('fetchWizardGet')
+      if (this.$store.state.wizard.wizardGet) {
+        let alertStore = await this.$store.state.wizard.wizardGet[2]
+        for (let index = 0; index < alertStore.length; index++) {
+          this.alertTypes.push(alertStore[index])
+        }
+      }
     }
+  },
+  mounted () {
+    this.setAlerts()
   }
 }
 </script>

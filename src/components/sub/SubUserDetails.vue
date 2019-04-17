@@ -8,7 +8,7 @@
       ></v-switch>
       <v-flex v-if="isUser">
         <v-layout row wrap>
-          <v-flex d-flex xs5 sm5 md5 lg5 xl5>
+          <v-flex d-flex xs12 sm12 md5 lg5 xl5>
             <v-menu
               class="manu"
               color="primary"
@@ -31,7 +31,7 @@
                   append-icon="access_time"
                   readonly
                   v-on="on"
-                  :rules="rule"
+                  :rules="ruleRequired"
                 ></v-text-field>
               </template>
               <v-time-picker
@@ -40,12 +40,12 @@
                 full-width
                 @click:minute="$refs.menuStartUp.save(timeStartUp)"
                 @input="validate()"
-                :rules="rule"
+                :rules="ruleRequired"
                 required
               ></v-time-picker>
             </v-menu>
           </v-flex>
-          <v-flex d-flex xs5 sm5 md5 lg5 xl5>
+          <v-flex d-flex xs12 sm12 md5 lg5 xl5>
             <v-menu
               class="manu"
               color="primary"
@@ -68,7 +68,7 @@
                   append-icon="access_time"
                   readonly
                   v-on="on"
-                  :rules="rule"
+                  :rules="ruleRequired"
                 ></v-text-field>
               </template>
               <v-time-picker
@@ -78,27 +78,27 @@
                 @click:minute="$refs.menuWakeUp.save(timeWakeUp)"
                 required
                 @input="validate()"
-                :rules="rule"
+                :rules="ruleRequired"
               ></v-time-picker>
             </v-menu>
           </v-flex>
-          <v-flex d-flex xs2 sm2 md2 lg2 xl2 v-if="eDroplets.length >= 1">
+          <v-flex d-flex xs12 sm12 md2 lg2 xl2 v-if="eDroplets.length >= 1">
             <v-select :items="eDroplets" label="Link eDroplets" v-model="selectedEDroplet"></v-select>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
-          <v-flex d-flex xs5 sm5 md5 lg5 xl5>
+          <v-flex d-flex xs12 sm12 md5 lg5 xl5>
             <v-text-field
               label="Daily Other Hydration (Optional)"
               v-model="otherHydration"
-              mask="##"
+              mask="#.##"
               append-icon="L"
             ></v-text-field>
           </v-flex>
-          <v-flex d-flex xs7 sm7 md7 lg7 xl7>
+          <v-flex d-flex xs12 sm12 md7 lg7 xl7>
             <v-text-field
               label="Comments"
-              :rules="rule"
+              :rules="ruleRequired"
               v-model="comments"
               required
               @input="validate()"
@@ -111,6 +111,7 @@
 </template>
 
 <script>
+import validation from '@/mixins/validation'
 export default {
   data () {
     return {
@@ -124,7 +125,9 @@ export default {
       selectedEDroplet: '',
       eDroplets: ['Droplet 1', 'Droplet 2'],
       valid: true,
-      rule: [v => !!v || 'This field is required']
+      ruleRequired: [
+        v => !!v || 'This field is required'
+      ]
     }
   },
   watch: {

@@ -15,17 +15,25 @@
             <UserDetails @onvalidation="validateStep2(...arguments)"/>
           </div>
           <div class="mb-5" v-else-if="step.id === 3">
-            <CarerDetails @onvalidation="validateStep3(...arguments)"/>
+            <CarerDetails @onvalidation="validateStep3(...arguments)" @changeAdmin="changeAdmin(...arguments)"/>
           </div>
           <div class="mb-5" v-else-if="step.id === 4">
             <AdminDetails
+              v-if="isAdmin"
               @onvalidation="validateStep4(...arguments)"
               :submittedData="submittedData"
             />
+            <v-flex class="mb-5" v-else>
+              This person is not an admin.
+            </v-flex>
           </div>
-          <v-btn v-show="showBack" @click="step.back()" flat>Back</v-btn>
-          <v-btn color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
-          <v-btn color="red" dark absolute right @click="dialog = false">Cancel</v-btn>
+          <v-flex xs12 sm12 md4 lg4 xl4 offset-md4 offset-lg4 offset-xl4>
+          <v-btn block v-show="showBack" @click="step.back()" flat>Back</v-btn>
+          <v-btn block color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
+          </v-flex>
+          <v-flex xs12 sm12 md4 lg4 xl4 offset-md4 offset-lg4 offset-xl4>
+            <v-btn block color="red" dark @click="dialog = false">Cancel</v-btn>
+          </v-flex>
         </v-stepper-content>
       </v-stepper>
     </v-dialog>
@@ -99,6 +107,7 @@ export default {
         this.submittedData.sms = sms
         this.submittedData.alertTypes = selectedAlertTypes
       } else {
+        this.isAdmin = isAdmin
         this.showContinue = false
       }
     },
@@ -108,13 +117,22 @@ export default {
         this.submittedData.phoneNumber = phoneNumber
         this.submittedData.emailAddress = emailAddress
         this.showContinue = true
+        this.saveData()
       } else {
         this.showContinue = false
       }
+    },
+    changeAdmin (isAdmin) {
+      this.isAdmin = isAdmin
+    },
+    saveData() {
+      this.$store.wizardUserPost = this.submittedData
+      this.$store.dispatch('fetchWizardUserPost')
     }
   },
   data () {
     return {
+      isAdmin: false,
       e1: 1,
       showContinue: false,
       showBack: false,
@@ -131,7 +149,7 @@ export default {
         comments: '',
         droplets: '',
         isCarer: false,
-        isAdmin: false,
+        isAdmin: true,
         username: '',
         phoneNumber: '',
         email: false,

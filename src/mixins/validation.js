@@ -2,7 +2,7 @@ export default {
   data: {
     alphabeticalRegEx: /^[A-z ]{0,}$/,
     alphaNumericRegEx: /^[A-z0-9 ]{0,}$/,
-    litersRegEx: /[0-9 ]/g,
+    litersRegEx: /[0-9 .,]/g,
     timeRegEx: /(2[0-3]|[01]?[0-9]):([0-5]?[0-9])/,
     phoneRegEx: /[0-9]/,
     emailRegEx: /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/
