@@ -29,6 +29,7 @@
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
       :validators="validators"
+      :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
@@ -70,6 +71,9 @@ export default {
       secondaryColor: 'primary darken-2',
       icon: 'perm_identity',
       iconAdd: 'add',
+      editRules: payload => {
+        return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+      },
       headers: [
         {
           text: 'Title',

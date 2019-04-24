@@ -127,6 +127,7 @@ export default {
     },
     saveData() {
       this.$store.wizardUserPost = this.submittedData
+      console.log(this.submittedData)
       this.$store.dispatch('fetchWizardUserPost')
     }
   },
@@ -209,6 +210,7 @@ export default {
           summarize: '',
           continue: () => {
             this.dialog = false
+            this.saveData()
           },
           back: () => {
             this.e1--

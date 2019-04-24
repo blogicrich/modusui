@@ -60,13 +60,15 @@ export default {
         this.$emit('onvalidation', false)
       }
     },
-    setTitle () {
+    async setTitle () {
+      setTimeout(() => {
       this.$store.dispatch('fetchWizardGet').then(response => {
         let titleStore = this.$store.state.wizard.wizardGet
         for (let index = 0; index < titleStore[0].length; index++) {
           this.titles.push(titleStore[0][index].shortDescription)
         }
       })
+      }, 200)
     }
   },
   mounted() {

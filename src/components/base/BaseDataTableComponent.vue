@@ -301,9 +301,9 @@
                         :label="getCellLabel(item, key, index)"
                         v-model.sync="item[key]"
                         :color="primaryColor"
+                        :rules="editRules(item[key])"
                         outline
                         required
-                        :rules="payload => validators(payload)"
                       >{{ item[key].value }}
                       </v-text-field>
                       <v-select
@@ -660,7 +660,7 @@
                         v-model.sync="item[key]"
                         :color="primaryColor"
                         outline
-                        :rules="validators"
+                        :rules="editRules(item[key])"
                         required
                       >{{ item[key].value }}
                       </v-text-field>
@@ -759,7 +759,8 @@ export default {
     addRecordIcon: String,
     addBtnTitle: String,
     editPerms: Object,
-    validators: Array
+    validators: Function,
+    editRules: Function
   },
   computed: {
     pages () {
