@@ -13,13 +13,12 @@ export const moduleCLIAdminConditions = {
     }
   },
   actions: {
-    // get all data
-    fetchCLIAdminConditionsGet (context) {
-      apiLib.getData('cliadmin/conditions/' + this.getters.getterUserId).then((response) => {
+    async fetchCLIAdminConditionsGet (context) {
+      await apiLib.getData('cliadmin/conditions/' + this.getters.getterUserId, false, true).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_CLIADMINCONDITIONS', null)
         } else {
-          context.commit('SET_CLIADMINCONDITIONS', response.data)
+          context.commit('SET_CLIADMINCONDITIONS', response)
         }
       })
     },

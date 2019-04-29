@@ -1,20 +1,23 @@
 <template>
   <v-app>
+    <!-- HEADER -->
     <v-toolbar
       v-if="authenticated.state"
       color="white"
       app
       :clipped-left="clipped"
     >
-      <!-- <v-toolbar-side-icon v-model="snackState"></v-toolbar-side-icon> -->
-      <img alt="" src="./assets/ed_logo.svg"><img>
+      <img v-if="$vuetify.breakpoint.smAndDown" @click="drawerState = !drawerState" alt="" src="./assets/ed_logo.svg"><img>
+      <img v-if="$vuetify.breakpoint.mdAndUp" alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <v-layout row fill-height wrap justify-end>
         <v-icon outline medium class="mx-2" color="primary">person_outline</v-icon>
         <v-chip class="ml-1 mt-3 mb-3" v-for="(level, index) in user" :key="index" color="secondary" text-color="primary">{{ level }}</v-chip>
       </v-layout>
     </v-toolbar>
+    <!-- SIDEBAR -->
     <transition-group name="navBtns">
+      <!-- FOR MD AND UP -->
       <v-navigation-drawer
         v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.mdAndUp"
         key="bp-lg"
@@ -50,14 +53,16 @@
           />
         </v-layout>
       </v-navigation-drawer>
+      <!-- FOR SM AND DOWN -->
       <v-navigation-drawer
-        v-model="snackState"
+        v-model="drawerState"
         v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.smAndDown"
         key="bp-sm"
         class="primary"
         disable-route-watcher
         mini-variant
         mini-variant-width="160"
+        temporary
         app
         clipped
         flat
@@ -89,6 +94,7 @@
         </v-layout>
       </v-navigation-drawer>
     </transition-group>
+    <!-- ROUTER VIEW -->
     <v-container fluid>
       <v-content>
         <v-slide-y-transition mode="out-in">
@@ -96,6 +102,7 @@
         </v-slide-y-transition>
       </v-content>
     </v-container>
+    <!-- FOOTER -->
     <v-fade-transition>
       <v-footer
         v-if="
@@ -136,6 +143,7 @@
         </v-layout>
       </v-footer>
     </v-fade-transition>
+    <!-- SNACKBAR -->
     <v-snackbar
       v-model="snackState"
       :color="snackColor"

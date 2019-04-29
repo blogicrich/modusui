@@ -4,14 +4,6 @@
       <v-icon large color="primary">local_drink</v-icon>
       <h1 class="pg-header">eDroplet Management</h1>
       <v-spacer></v-spacer>
-      <!-- <BaseUserSelect
-      v-if="userPerms"
-      :users="users"
-      :selectAll="selectAll"
-      :searchName="searchName"
-      :multiple="multiple"
-      @get-selected-user="getSelectedUser"
-      />-->
     </v-layout>
     <v-divider class="mx-1 mb-4" color="#00a1cd"></v-divider>
     <BaseDataTable
@@ -45,7 +37,6 @@
 
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 
@@ -53,16 +44,10 @@ export default {
   name: 'EdropletManagement',
   mixins: [crudRoutines],
   components: {
-    BaseDataTable,
-    BaseUserSelect
+    BaseDataTable
   },
   data() {
     return {
-      // BaseUserSelect
-      multiple: false,
-      selectAll: 'Select all',
-      searchName: 'Search user..',
-      users: [],
       // BaseDataTable
       crudIdKey: 'identifier',
       items: [],
@@ -256,48 +241,7 @@ export default {
       // ]
     }
   },
-  computed: {
-    userPerms() {
-      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        return true
-      } else {
-        return false
-      }
-    }
-  },
   methods: {
-    getSelectedUser(user) {
-      this.updateUrl = '/cliadmin/edropman/' + user
-      this.readUrl = '/cliadmin/edropman/' + user
-      this.getItems(this.readUrl)
-      // this.user = user.userId
-      // let vals = apiLib.getData('cliadmin/')
-      console.log('USER: ', user)
-      // this.getItems(this.readUrl)
-    },
-    async getvoiceMessage() {
-      // if(this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-      let userData = apiLib.getData('cliadmin/users', true).then(response => {
-        this.users = response
-        console.log('USERS: ', response)
-      })
-      // }
-      // if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-      //   await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
-      //   if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
-      //     let voiceMessageDefaultStore = this.$store.state.voiceMessages
-      //       .voiceMessagesDefaultsGet
-      //     for (let index = 0; index < voiceMessageDefaultStore.length; index++) {
-      //       const element = voiceMessageDefaultStore[index]
-      //       for (let j = 0; j < element.length; j++) {
-      //         const el = element[j]
-      //         this.apiData.push(el)
-      //       }
-      //     }
-      //   }
-      // }
-      console.log(this.apiData, 'apiData')
-    },
     resetItem() {
       this.newItem = [
         {
@@ -404,6 +348,7 @@ export default {
     this.getItems(this.readUrl)
   }
 }
+
 </script>
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
