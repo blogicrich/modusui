@@ -1,5 +1,11 @@
 <template>
-  <v-app>
+  <v-app
+    v-touch="{
+    left: () => swipe('Left'),
+    right: () => swipe('Right'),
+    up: () => swipe('Up'),
+    down: () => swipe('Down')
+  }">
     <!-- HEADER -->
     <v-toolbar
       v-if="authenticated.state"
@@ -7,7 +13,7 @@
       app
       :clipped-left="clipped"
     >
-      <img v-if="$vuetify.breakpoint.smAndDown" @click="drawerState = !drawerState" alt="" src="./assets/ed_logo.svg"><img>
+      <img v-if="$vuetify.breakpoint.smAndDown" @click="drawerState = true" alt="" src="./assets/ed_logo.svg"><img>
       <img v-if="$vuetify.breakpoint.mdAndUp" alt="" src="./assets/ed_logo.svg"><img>
       <v-spacer></v-spacer>
       <v-layout row fill-height wrap justify-end>
@@ -177,6 +183,8 @@ export default {
   },
   data () {
     return {
+      drawerState: false,
+      swipeDirection: '',
       // Snackbar
       snackState: false,
       snackText: '',
@@ -241,6 +249,9 @@ export default {
     }
   },
   methods: {
+    swipe (direction) {
+      this.swipeDirection = direction
+    },
     setAuthenticated (newStatus) {
       localStorage.auth = JSON.stringify(newStatus)
       this.authenticated = newStatus
@@ -272,6 +283,7 @@ export default {
     },
   },
   computed: {
+
     userLevel () {
       const greeting = 'LOGGED IN AS: '
       let concatUser = ''
@@ -283,6 +295,12 @@ export default {
     },
   },
   watch: {
+    swipeDirection: function () {
+      if (this.swipeDirection === 'Right') {
+        this.drawerState = true
+        this.swipeDirection = ''
+      }
+    },
     authenticated: function () {
       console.log('Auth changed: ', this.authenticated)
       if (this.authenticated.state === null) this.logout()
