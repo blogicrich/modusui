@@ -47,7 +47,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       items: [],
       crudIdKey: 'conditionsId',
@@ -127,7 +127,7 @@ export default {
     }
   },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           description: '',
@@ -159,7 +159,7 @@ export default {
       this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]
     }
   },
-  created() {
+  created () {
     this.getItems(this.readUrl)
   }
 }

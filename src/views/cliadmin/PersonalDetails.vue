@@ -5,7 +5,7 @@
         <data-table
           :editPerms="editPerms"
           :headers="headers"
-          :items="items"
+          :items="title"
           :loading="loading"
           :loaded="loaded"
           :error="error"
@@ -85,6 +85,7 @@ export default {
         }
       ],
       items: [],
+      title: [],
       loading: true,
       loaded: false,
       error: false,
@@ -93,15 +94,21 @@ export default {
       loadedMsg: ''
     }
   },
-  created () {
-    this.getItems(getUrl)
-  },
-  mounted () {
-    console.log(this.items)
-    for (let i = 0; i < this.items.length; i++) {
-      const element = this.items[i]
-      console.log('element', element)
+  methods: {
+    formItems () {
+      console.log(this.items[1])
+      for (let i = 0; i < this.items[0].length; i++) {
+        const element = this.items[1][i]
+        this.title.push(element)
+        console.log('element', element)
+      }
+      console.log(this.items)
     }
+  },
+  created () {
+    this.getItems(getUrl).then(() => {
+      this.formItems()
+    })
   }
 }
 </script>

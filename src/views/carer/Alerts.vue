@@ -46,7 +46,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       crudIdKey: 'portalAuthorisedId',
       items: [],
@@ -124,7 +124,7 @@ export default {
     }
   },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           dateTime: '',
@@ -161,7 +161,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.getItems(this.readUrl)
   }
 }

@@ -42,7 +42,6 @@
 
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import apiLib from '@/services/apiLib.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 
@@ -54,7 +53,6 @@ export default {
   },
   data () {
     return {
-      selected: [],
       snackColor: 'primary',
       snackText: '',
       snack: false,

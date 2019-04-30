@@ -46,7 +46,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       // BaseDataTable
       crudIdKey: 'identifier',
@@ -242,7 +242,7 @@ export default {
     }
   },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           userId: 0,
@@ -344,7 +344,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.getItems(this.readUrl)
   }
 }

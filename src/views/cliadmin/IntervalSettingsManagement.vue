@@ -34,7 +34,7 @@
       :data="data"
       :headerText="advancedOptions"
     >
-      <v-icon slot="btnSlot" large @click="iconClicked">expand_more</v-icon>
+      <v-icon slot="btnSlot" large>expand_more</v-icon>
     </subAlertCard>
   </v-layout>
 <v-container>
@@ -43,7 +43,6 @@
 <script>
 import subAlertCard from '@/components/sub/subIntervalSettingsComponent.vue'
 import baseSelect from '@/components/base/BaseUserSelectComponent.vue'
-import apiLib from '@/services/apiLib.js'
 
 export default {
   components: {
@@ -54,7 +53,6 @@ export default {
     return {
       multiple: false,
       user: '',
-      data: [],
       selectAll: 'Select all',
       searchName: 'Search user..',
       intervalOptions: 'eDroplet Reminder Interval Options',
@@ -83,14 +81,6 @@ export default {
         { settingText: 'Wake Up interval', cardText: 'Time between Wake up and first eDroplet/portal Communications of the day.' },
         { settingText: 'Communication interval', cardText: 'Time interval between eDroplet/portal communications.' }
       ]
-    }
-  },
-  methods: {
-    iconClicked () {
-      console.log('collapse')
-    },
-    getSelectedUser (user) {
-      let vals = apiLib.getData('cliadmin/')
     }
   }
 }

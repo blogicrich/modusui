@@ -47,7 +47,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       crudIdKey: 'portalAuthorisedId',
       items: [],
@@ -247,7 +247,7 @@ export default {
     }
   },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           titleId: 0,
@@ -354,7 +354,7 @@ export default {
         }
       ]
     },
-    async setData() {
+    async setData () {
       await this.getItems('sysadmin/sysadmin')
       // console.log('jkfvjgklfdslgjfljgfjdsklgjfdslgklfdsjgjfldjglfdsgfdsgfdsgfdsgfds')
       for (let i = 0; i < this.items.length; i++) {
@@ -368,7 +368,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.setData()
   }
 }

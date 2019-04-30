@@ -23,7 +23,7 @@ export const moduleDashboardComment = {
       })
     },
     fetchDashboardCommentPost () {
-      return apiLib.postData('carer/dashboard-comment/' + this.getters.getterUserId + '/' + this.getters.getterDate, this.getterDashboardCommentPost)
+      return apiLib.postData('carer/dashboard-comment/' + this.getters.getterUserId + '/' + this.getters.getterDate, this.getterDashboardCommentPost, true)
     },
     fetchDashboardCommentDelete () {
       return apiLib.deleteData('carer/dashboard-comment/' + this.getters.getterDayReportId)

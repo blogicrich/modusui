@@ -62,16 +62,16 @@ export default {
     },
     async setTitle () {
       setTimeout(() => {
-      this.$store.dispatch('fetchWizardGet').then(response => {
-        let titleStore = this.$store.state.wizard.wizardGet
-        for (let index = 0; index < titleStore[0].length; index++) {
-          this.titles.push(titleStore[0][index].shortDescription)
-        }
-      })
+        this.$store.dispatch('fetchWizardGet').then(response => {
+          let titleStore = this.$store.state.wizard.wizardGet
+          for (let index = 0; index < titleStore[0].length; index++) {
+            this.titles.push(titleStore[0][index].shortDescription)
+          }
+        })
       }, 200)
     }
   },
-  mounted() {
+  mounted () {
     this.setTitle()
   }
 }

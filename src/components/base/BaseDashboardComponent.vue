@@ -59,6 +59,7 @@
               :alertColor="alertColors"
               :commentIcon="commentIcon"
               :maxCharac="'50'"
+              @commentText="saveComment(...arguments)"
             ></baseDropletuser>
           </v-card>
           <v-alert :value="true" type="error" v-else>
@@ -134,12 +135,14 @@
 <script>
 import charts from '@/components/base/BaseChartComponent'
 import baseDropletuser from '@/components/sub/SubUserSelectComponent'
+import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 
 export default {
   components: {
     charts,
     baseDropletuser
   },
+  mixins: [crudRoutines],
   props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'dashboardWeek', 'usersLoaded', 'dayLoaded', 'hourLoaded', 'weekLoaded'],
   computed: {
     breakpoint () {
@@ -177,6 +180,9 @@ export default {
     }, 200)
   },
   methods: {
+    saveComment (newComment) {
+      this.addItem(newComment)
+    },
     setAlertColors () {
       for (var i = 0; i < this.dashboardUsers.length; i++) {
         if (this.dashboardUsers[i].alertType === 'hydrated') {
@@ -224,7 +230,7 @@ export default {
     },
     updateLine: function () {
       this.lineChartData.title = 'Activity on: ' + this.formatDate(new Date(this.date))
-              // this.lineChartData.dataLineOne = [1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 0.5, 1.2]
+      // this.lineChartData.dataLineOne = [1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 0.5, 1.2]
 
       if (this.dashboardHour.length === 24) {
         this.lineChartData.dataLineOne = this.dashboardHour
@@ -233,8 +239,8 @@ export default {
     updateBar: async function () {
       let weekArr = []
       let elementCount = 0
-//               this.barChartData.dataBarOne = [2.5, 1.8, 1.5, 1.3, 1.0, 1.6, 1.9]
-// this.barChartData.title = 'Weekly summary ' + 1.6 + 'L average'
+      //               this.barChartData.dataBarOne = [2.5, 1.8, 1.5, 1.3, 1.0, 1.6, 1.9]
+      // this.barChartData.title = 'Weekly summary ' + 1.6 + 'L average'
       if (this.dashboardWeek.length === 7) {
         for (let i = 0; i < this.dashboardWeek.length; i++) {
           const element = this.dashboardWeek[i]
@@ -249,9 +255,9 @@ export default {
       }
     },
     updateDoughnut: async function () {
-//       this.doughnutChartData.dataDoughnut[0] = 1.2
-// this.doughnutChartData.dataDoughnut[1] = 0.8
-// this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + 1.2 + 'L / ' + 0.8 + 'L'
+      //       this.doughnutChartData.dataDoughnut[0] = 1.2
+      // this.doughnutChartData.dataDoughnut[1] = 0.8
+      // this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + 1.2 + 'L / ' + 0.8 + 'L'
       if (this.dashboardDay.length === 1) {
         this.doughnutChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
         this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration))
@@ -310,6 +316,7 @@ export default {
   },
   data () {
     return {
+      createUrl: 'carer/dashboard-comment/' + 21 + '/' + this.$store.getters.getterDate,
       weeklyAverage: 0,
       update: false,
       searchName: 'Search user..',

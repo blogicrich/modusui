@@ -14,7 +14,9 @@ export const crudRoutines = {
       await apiLib.postData(this.createUrl, row, true, true).then(response => {
         return response
       })
-        .catch(error => {})
+        .catch(error => {
+          console.error(error)
+        })
       this.refreshItems()
     },
 
@@ -29,7 +31,9 @@ export const crudRoutines = {
           .then(response => {
             this.items.splice(index, 1)
           })
-          .catch(error => {})
+          .catch(error => {
+            console.error(error)
+          })
       }
       this.refreshItems()
     },
@@ -45,7 +49,9 @@ export const crudRoutines = {
           console.log('Update Item: ', this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
           apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
             .then(response => {})
-            .catch(error => {})
+            .catch(error => {
+              console.error(error)
+            })
             .finally(
 
             )

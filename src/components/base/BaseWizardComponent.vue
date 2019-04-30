@@ -125,7 +125,7 @@ export default {
     changeAdmin (isAdmin) {
       this.isAdmin = isAdmin
     },
-    saveData() {
+    saveData () {
       this.$store.wizardUserPost = this.submittedData
       console.log(this.submittedData)
       this.$store.dispatch('fetchWizardUserPost')

@@ -31,8 +31,6 @@
 
 <script>
 
-import apiLib from '@/services/apiLib'
-import store from '@/store'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import dataTable from '@/components/base/BaseDataTableComponent'
 import validation from '@/mixins/validation'
@@ -59,7 +57,6 @@ export default {
     readUrl: 'carer/away/21',
     primaryColor: 'primary',
     secondaryColor: 'primary darken-2',
-    items: [],
     // awayPeriods: [
     //   {
     //     awayId: 0,
@@ -127,7 +124,7 @@ export default {
         menuItems: [],
         validators: payload => {
           return [
-            validation.validateNumber(payload),
+            validation.validateNumber(payload)
           ]
         }
       },
@@ -152,8 +149,7 @@ export default {
         endDate: '9 Dec 2002, 12:00'
       }
     ],
-    btnTitle: 'Record Time Away',
-    primaryColor: 'primary'
+    btnTitle: 'Record Time Away'
   }),
   // computed: {
   //   items: function() {

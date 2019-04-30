@@ -28,7 +28,6 @@
 <script>
 
 import baseTab from '@/components/base/BaseTabbedSelectorComponent.vue'
-import apiLib from '@/services/apiLib.js'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 
 export default {

@@ -43,7 +43,7 @@
         select-all
         hide-actions
         :pagination.sync="pagination"
-        :total.items="this.items.length"
+        :total="this.items.length"
         class="elevation-1"
       >
   <!-- Table: Headers -->
@@ -156,7 +156,7 @@
               class="ml-1 mr-4"
               v-model="pagination.page"
               total-visible="10"
-              :length="pages"
+              :length="pages()"
               >
             </v-pagination>
   <!-- Table: Footer Speed dial -->
@@ -257,7 +257,7 @@
                         outline
                         :rules="item.validators(newItem[key].sync)"
                       ></v-text-field>
-                      
+
                       <v-select
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
@@ -299,7 +299,7 @@
                         v-if="inputType(item, key, 'tb')"
                         class="ma-1"
                         :label="getCellLabel(item, key, index)"
-                        v-model.sync="item[key]"
+                        v-model="item[key]"
                         :color="primaryColor"
                         :rules="editRules(item[key])"
                         outline
@@ -456,7 +456,7 @@
         select-all
         hide-actions
         :pagination.sync="pagination"
-        :total.items="this.items.length"
+        :total="this.items.length"
         class="elevation-1"
       >
   <!-- Table: Headers -->
@@ -568,7 +568,7 @@
               class="ml-1 mr-4"
               v-model="pagination.page"
               total-visible="3"
-              :length="pages"
+              :length="pages()"
               >
             </v-pagination>
           </v-layout>
@@ -657,7 +657,7 @@
                         v-if="inputType(item, key, 'tb')"
                         class="ma-1"
                         :label="getCellLabel(item, key, index)"
-                        v-model.sync="item[key]"
+                        v-model="item[key]"
                         :color="primaryColor"
                         outline
                         :rules="editRules(item[key])"
@@ -762,7 +762,7 @@ export default {
     validators: Function,
     editRules: Function
   },
-  computed: {
+  methods: {
     pages () {
       this.pagination.totalItems = this.items.length
       if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) {
@@ -770,9 +770,7 @@ export default {
       } else {
         return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
       }
-    }
-  },
-  methods: {
+    },
     changeSort (column) {
       if (this.pagination.sortBy === column) {
         this.pagination.descending = !this.pagination.descending
@@ -841,8 +839,8 @@ export default {
     },
     save () {
       if (this.$refs.newForm.validate()) {
-      this.$emit('newItem', this.newItem)
-      this.close()
+        this.$emit('newItem', this.newItem)
+        this.close()
       }
     },
     saveChanges () {

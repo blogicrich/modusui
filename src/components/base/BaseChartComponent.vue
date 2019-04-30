@@ -43,7 +43,9 @@ export default {
   },
   watch: {
     update: function () {
-      this.update === true ? this.fillChart() : ''
+      if (this.update === true) {
+        this.fillChart()
+      }
     }
   },
   methods: {

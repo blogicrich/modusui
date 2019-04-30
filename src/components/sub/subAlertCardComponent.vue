@@ -1,6 +1,6 @@
 <template lang="html">
   <v-layout row wrap>
-    <v-flex xs12 sm6 v-for="(item, index) in users" :key="item.userId">
+    <v-flex xs12 sm6 v-for="item in users" :key="item.userId">
       <v-layout column class="pa-2 my-3">
         <v-card height="50">
           <v-layout fill-height align-center>

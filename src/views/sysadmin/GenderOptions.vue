@@ -51,7 +51,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       items: [],
       editPerms: { create: true, update: true, delete: true },
@@ -135,7 +135,7 @@ export default {
     }
   },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           text: 'Description',
@@ -160,11 +160,11 @@ export default {
         { genderId: 0, description: '', targetConsumption: 0 }
       ]
     },
-    notify(items) {
+    notify (items) {
       this.showSnack(items.snackText, items.snackColor)
     }
   },
-  created() {
+  created () {
     this.getItems(this.readUrl)
   }
 }

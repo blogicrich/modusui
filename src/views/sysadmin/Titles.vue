@@ -49,7 +49,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       items: [],
       valid: false,
@@ -147,7 +147,7 @@ export default {
         }
       }
     },
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           shortDescription: '',
@@ -173,7 +173,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.getItems(this.readUrl)
     console.log(this.items)
   }

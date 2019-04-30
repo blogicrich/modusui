@@ -87,7 +87,6 @@
 import apiLib from '@/services/apiLib'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
-import { isPending } from 'q'
 
 export default {
   name: 'VoiceMessageViewComponent',
@@ -112,9 +111,6 @@ export default {
       cliadminReadUrl: 'cliadmin/voicemessage/',
       cliadminWriteUrl: 'cliadmin/voicemessage/',
       newDefaultValue: false,
-      multiple: false,
-      selectAll: 'Select all',
-      searchName: 'Search user..',
       uploadIcon: 'cloud_upload',
       msgReminderIntervalSettings: [
         { label: '20', value: 20 },
@@ -152,22 +148,23 @@ export default {
       for (let i = 0; i < this.apiData.length; i++) {
         let voiceMessageType = this.apiData[i].voiceMessagedescription
         let voiceMessage = this.apiData[i]
-        voiceMessageType.includes('Reminder')
-          ? this.reminders.push(voiceMessage)
-          : voiceMessageType.includes('Praise')
-            ? this.praises.push(voiceMessage)
-            : voiceMessageType.includes('Instruct')
-              ? this.instructs.push(voiceMessage) : ''
+        if (voiceMessageType.includes('Reminder')) {
+          this.reminders.push(voiceMessage)
+        } else if (voiceMessageType.includes('Praise')) {
+          this.praises.push(voiceMessage)
+        } else if (voiceMessageType.includes('Instruct')) {
+          this.instructs.push(voiceMessage)
+        }
       }
     },
     getSelectedUser (user) {
-      let arr = apiLib.getData(this.cliadminReadUrl + user, true, true).then(response => {
+      apiLib.getData(this.cliadminReadUrl + user, true, true).then(response => {
         this.apiData = response
       })
     },
     async getvoiceMessage () {
       if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        let userData = apiLib.getData('cliadmin/users', true, true).then(response => {
+        apiLib.getData('cliadmin/users', true, true).then(response => {
           this.users = response
         })
       }

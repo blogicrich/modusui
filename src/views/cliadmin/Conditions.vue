@@ -42,7 +42,6 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
-import apiLib from '@/services/apiLib.js'
 import validation from '@/mixins/validation'
 
 export default {
@@ -52,7 +51,7 @@ export default {
     BaseDataTable,
     BaseUserSelect
   },
-  data() {
+  data () {
     return {
       userPerms: true,
       editPerms: { create: true, update: true, delete: true },
@@ -72,8 +71,6 @@ export default {
       updateUrl: '/cliadmin/conditions',
       readUrl: '/cliadmin/conditions',
       createUrl: '/cliadmin/conditions',
-      primaryColor: 'primary',
-      secondaryColor: 'primary darken-2',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_pharmacy',
@@ -170,7 +167,7 @@ export default {
         }
       })
     },
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           comments: '',
@@ -228,7 +225,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.setItems()
   }
 }

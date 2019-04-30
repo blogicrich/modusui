@@ -157,23 +157,19 @@ export default {
   },
   methods: {
     getSelectedUser (user) {
-      let arr = apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
+      apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
         this.intervals = response
       })
     },
     getValues () {
       if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        let arr = apiLib.getData(this.cliadminReadUrl, true).then(response => {
-          return response
-        })
-        let userData = apiLib.getData('cliadmin/users', true).then(response => {
+        apiLib.getData(this.cliadminReadUrl, true).then((response) => response)
+        apiLib.getData('cliadmin/users', true).then(response => {
           this.users = response
         })
       }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-        let arr = apiLib.getData(this.sysadminReadUrl).then(response => {
-          return response
-        })
+        let arr = apiLib.getData(this.sysadminReadUrl).then((response) => response)
         return arr
       }
     },
@@ -241,7 +237,9 @@ export default {
     if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
       this.getValues()
     } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-      this.getValues().then(response => this.intervals = response)
+      this.getValues().then((response) => {
+        this.intervals = response
+      })
     }
   },
   beforeRouteLeave (to, from, next) {

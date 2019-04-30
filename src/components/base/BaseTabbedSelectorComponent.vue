@@ -42,14 +42,14 @@
                   />
                   <v-text-field
                     label="Subject"
-                    v-model.sync="item.subject"
+                    v-model="item.subject"
                     @input="showBtns"
                   ></v-text-field>
                   <v-textarea
                     label="Email Body"
                     counter
                     maxlength="500"
-                    v-model.sync="item.message"
+                    v-model="item.message"
                     @input="showBtns"
                   ></v-textarea>
                 </v-flex>
@@ -60,7 +60,7 @@
                       label="SMS Body"
                       counter
                       maxlength="160"
-                      v-model.sync="item.message"
+                      v-model="item.message"
                       @input="showBtns"
                     ></v-textarea>
                   </v-layout>
@@ -125,7 +125,6 @@
 <script>
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
-import BaseDataTableInfo from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
   components: {
@@ -178,17 +177,6 @@ export default {
         this.items[x].subject = this.items[x].subject
         this.items[x].text = this.items[x].text
         this.btns = false
-      }
-    },
-    switchTab (event) {
-      for (var y = 0; y < this.items.length; y++) {
-        if (this.items[y].subject !== this.items[y].subject || this.items[y].text !== this.items[y].text) {
-          this.dialog = true
-          this.activeHash = event.target.hash
-          this.activeHash = this.activeHash.replace('#', '')
-          this.activeHash = this.activeHash.replace(/%20/gi, ' ')
-          event.stopImmediatePropagation()
-        }
       }
     },
     showBtns () {

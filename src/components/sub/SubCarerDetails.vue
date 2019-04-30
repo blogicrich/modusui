@@ -97,7 +97,7 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 
 export default {
-    mixins: [crudRoutines],
+  mixins: [crudRoutines],
 
   data () {
     return {
@@ -137,7 +137,7 @@ export default {
         this.$emit('onvalidation', false)
       }
     },
-        async setAlerts () {
+    async setAlerts () {
       await this.$store.dispatch('fetchWizardGet')
       if (this.$store.state.wizard.wizardGet) {
         let alertStore = await this.$store.state.wizard.wizardGet[2]

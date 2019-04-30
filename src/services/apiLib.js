@@ -46,11 +46,9 @@ let url = function () {
     case 'development':
       val = 'http://127.0.0.1:3000/'
       return val
-      break
     case 'production':
       val = 'https://edroplet.ndevr.co.uk:3000/'
       return val
-      break
     default:
       val = 'http://127.0.0.1:3000/'
       break
@@ -107,7 +105,7 @@ export default {
       .catch(error => {
         if (error.response) {
           if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-          if (log) logger(response.error, url)
+          if (log) logger(error.response, url)
           return error.response.statusText + ' ' + error.response.status + '\n'
         } else if (error.request) {
           if (toast) EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true })
@@ -191,7 +189,7 @@ export default {
         .catch(error => {
           if (error.response) {
             if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) logger(response, url, data)
+            if (log) logger(error.response, url, data)
             return error.response.statusText + ' ' + error.response.status + '\n'
           } else if (error.request) {
             console.log(error.request)
@@ -219,7 +217,7 @@ export default {
         .catch(error => {
           if (error.response) {
             if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) logger(response, url, data)
+            if (log) logger(error.response, url, data)
             return error.response.statusText + ' ' + error.response.status + '\n'
           } else if (error.request) {
             console.log(error.request)

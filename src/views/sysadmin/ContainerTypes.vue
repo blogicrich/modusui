@@ -47,7 +47,7 @@ export default {
   components: {
     BaseDataTable
   },
-  data() {
+  data () {
     return {
       items: [],
       crudIdKey: 'containerTypeId',
@@ -127,7 +127,7 @@ export default {
     }
   },
   methods: {
-    resetItem() {
+    resetItem () {
       this.newItem = [
         {
           description: '',
@@ -159,7 +159,7 @@ export default {
       this.defaultItem = [{ containerTypeId: 0, description: ' ', volume: 0 }]
     }
   },
-  mounted() {
+  mounted () {
     this.getItems(this.readUrl)
   }
 }
