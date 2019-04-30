@@ -28,6 +28,7 @@
       editDialogTitle="Edit Container Type Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+      :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
@@ -66,6 +67,9 @@ export default {
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
       iconAdd: 'add',
+      editRules: payload => {
+        return []
+      },
       headers: [
         {
           text: 'containerTypeId',

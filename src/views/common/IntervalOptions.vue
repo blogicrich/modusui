@@ -223,9 +223,9 @@ export default {
     async save () {
       for (var i = 0; i < this.editedItems.length; i++) {
         if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-          await apiLib.postData(this.cliadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i])
+          await apiLib.postData(this.cliadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i], true)
         } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-          await apiLib.postData(this.sysadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i])
+          await apiLib.postData(this.sysadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i], true)
         }
       }
       await this.getValues()

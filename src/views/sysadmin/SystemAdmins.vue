@@ -28,6 +28,7 @@
       editDialogTitle="Edit Administrator Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+      :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
@@ -51,6 +52,7 @@ export default {
     return {
       crudIdKey: 'portalAuthorisedId',
       items: [],
+      editRules: () => [],
       editPerms: { create: true, update: true, delete: true },
       loading: true,
       loaded: false,
@@ -149,7 +151,6 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
               validation.validateRequired(payload)
             ]
           }
@@ -356,7 +357,6 @@ export default {
     },
     async setData () {
       await this.getItems('sysadmin/sysadmin')
-      // console.log('jkfvjgklfdslgjfljgfjdsklgjfdslgklfdsjgjfldjglfdsgfdsgfdsgfdsgfds')
       for (let i = 0; i < this.items.length; i++) {
         for (let item in this.items[i]) {
           if (item === null) {

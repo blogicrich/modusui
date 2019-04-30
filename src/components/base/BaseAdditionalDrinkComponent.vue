@@ -70,7 +70,7 @@ export default {
         this.$store.state.userId +
         '/' +
         this.$store.state.date,
-      createUrl: 'carer/adddrinks/' + this.$store.state.userId,
+      createUrl: 'carer/adddrinks/' + this.$store.state.userId + '/' + 3,
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
@@ -106,7 +106,6 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
               validation.validateRequired(payload)
             ]
           }

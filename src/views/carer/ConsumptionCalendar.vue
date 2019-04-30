@@ -51,7 +51,7 @@ export default {
       } else if (aggregatedHydration <= 90) {
         return 'Little Dehydrated'
       } else if (aggregatedHydration >= 120) {
-        return 'little Overhydrated'
+        return 'Little Overhydrated'
       } else if (aggregatedHydration >= 150) {
         return 'Overhydrated'
       } else {

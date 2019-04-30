@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import apiLib from '@/services/apiLib'
+
 export default {
   data () {
     return {
@@ -59,20 +61,15 @@ export default {
       } else {
         this.$emit('onvalidation', false)
       }
-    },
-    async setTitle () {
-      setTimeout(() => {
-        this.$store.dispatch('fetchWizardGet').then(response => {
-          let titleStore = this.$store.state.wizard.wizardGet
-          for (let index = 0; index < titleStore[0].length; index++) {
-            this.titles.push(titleStore[0][index].shortDescription)
-          }
-        })
-      }, 200)
     }
   },
   mounted () {
-    this.setTitle()
+    apiLib.getData('register').then((response) => {
+      for (let i = 0; i < response[1].length; i++) {
+        const element = response[1][i].longDescription
+        this.titles.push(element)
+      }
+    })
   }
 }
 </script>

@@ -28,6 +28,7 @@
       editDialogTitle="Edit Gender Option Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+      :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
@@ -57,6 +58,7 @@ export default {
       editPerms: { create: true, update: true, delete: true },
       crudIdKey: 'genderId',
       snackColor: '',
+      editRules: payload => [],
       snackText: '',
       snack: false,
       timeout: 6000,
@@ -111,10 +113,7 @@ export default {
           cellLabel: 'Description',
           menuItems: [],
           validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
+            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
           }
         },
         {
@@ -124,10 +123,7 @@ export default {
           cellLabel: 'Target Consumption',
           menuItems: [],
           validators: payload => {
-            return [
-              validation.validateLiters(payload),
-              validation.validateRequired(payload)
-            ]
+            return [validation.validateRequired(payload)]
           }
         }
       ],
@@ -144,7 +140,10 @@ export default {
           value: 'description',
           cellType: 'tb',
           hidden: false,
-          editable: true
+          editable: true,
+          validators: payload => {
+            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+          }
         },
         {
           text: 'Target Consumption',
@@ -153,7 +152,10 @@ export default {
           value: 'targetConsumption',
           cellType: 'tb',
           hidden: false,
-          editable: true
+          editable: true,
+          validators: payload => {
+            return [validation.validateRequired(payload)]
+          }
         }
       ]
       this.defaultItem = [

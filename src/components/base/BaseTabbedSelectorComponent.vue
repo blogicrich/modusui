@@ -169,7 +169,12 @@ export default {
     },
     saveChanges () {
       var item = Number(this.currentItem)
-      var data = [this.items[item]]
+      var data = {
+        communicationType: this.items[item].communicationTypeDescription,
+        subject: this.items[item].alertTypeDescription,
+        body: this.items[item].message
+      }
+      console.log(data)
       this.$emit('itemsEdited', data)
     },
     eraseChange () {

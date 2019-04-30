@@ -19,7 +19,7 @@
       dialogText= "Do you wish to proceed?"
       cardEmailHeader= "Email Message Template"
       cardSmsHeader= "SMS Message Template"
-      @itemsEdited="editItems(...arguments)"
+      @itemsEdited="edittedItems(...arguments)"
       @itemsCancelled="refreshItems"
     ></baseTab>
   </v-container>
@@ -52,6 +52,11 @@ export default {
       defaultItem: [
         { alertMessagesId: 0, alertTypeDescription: 0, alertTypeId: '', communicationTypeDescription: '', communicationType: '', message: '', status: '', subject: '' }
       ]
+    }
+  },
+  methods: {
+    edittedItems (data) {
+      this.editItems(data)
     }
   },
   mounted () {

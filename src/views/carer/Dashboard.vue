@@ -59,7 +59,7 @@ export default {
     },
     async setHour (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.$store.state.userId = 21
-      this.$store.state.date = 0
+      this.$store.state.date = SelectedUnixTime
       await this.$store.dispatch('fetchDashboardHourGet')
       if (this.$store.state.dashboardHour.dashboardHourGet.length === 24) {
         let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
@@ -73,7 +73,7 @@ export default {
     },
     async setDay (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.$store.state.userId = 21
-      this.$store.state.date = 0
+      this.$store.state.date = SelectedUnixTime
       await this.$store.dispatch('fetchDashboardDayGet')
       if (this.$store.state.dashboardDay.dashboardDayGet.length === 1) {
         this.dashboardDay = await this.$store.state.dashboardDay.dashboardDayGet
@@ -84,7 +84,7 @@ export default {
     },
     async setWeek (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.$store.state.userId = 21
-      this.$store.state.date = 1552521600
+      this.$store.state.date = SelectedUnixTime
       await this.$store.dispatch('fetchDashboardWeekGet')
       if (this.$store.state.dashboardWeek.dashboardWeekGet.length === 7) {
         for (let i = 0; i < this.$store.state.dashboardWeek.dashboardWeekGet.length; i++) {

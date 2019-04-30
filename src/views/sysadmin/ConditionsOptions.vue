@@ -28,6 +28,7 @@
       editDialogTitle="Edit Condition Type Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+      :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
@@ -50,6 +51,7 @@ export default {
   data () {
     return {
       items: [],
+      editRules: payload => [],
       crudIdKey: 'conditionsId',
       editPerms: { create: true, update: true, delete: true },
       loading: true,

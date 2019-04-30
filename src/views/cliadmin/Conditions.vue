@@ -30,6 +30,7 @@
       editDialogTitle="Edit Condition Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+      :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
@@ -53,6 +54,7 @@ export default {
   },
   data () {
     return {
+      editRules: () => [],
       userPerms: true,
       editPerms: { create: true, update: true, delete: true },
       crudIdKey: 'conditionsId',
@@ -70,7 +72,7 @@ export default {
       delUrl: '/cliadmin/conditions',
       updateUrl: '/cliadmin/conditions',
       readUrl: '/cliadmin/conditions',
-      createUrl: '/cliadmin/conditions',
+      createUrl: '/cliadmin/conditions/' + +'/' + '',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_pharmacy',
@@ -160,7 +162,6 @@ export default {
   },
   methods: {
     async setItems () {
-      this.$store.getters.getteruserId = 21
       await this.$store.dispatch('fetchCLIAdminConditionsGet').then(() => {
         if (this.$store.state.conditions.CLIAdminConditionsGet) {
           this.items = this.$store.state.conditions.CLIAdminConditionsGet

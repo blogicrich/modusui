@@ -50,11 +50,9 @@ export const crudRoutines = {
           apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
             .then(response => {})
             .catch(error => {
-              console.error(error)
+              console.log(error)
             })
-            .finally(
-
-            )
+            .finally()
         }
       }
       // if (this.newItem) {

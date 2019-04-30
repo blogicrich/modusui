@@ -45,7 +45,7 @@ export default new Vuex.Store({
     accountHolderId: 1,
     deviceMessageTypeId: 1,
     messageNo: 1,
-    date: 1551867413,
+    date: 0,
     conditionId: 1,
     dayReportId: 1
   },

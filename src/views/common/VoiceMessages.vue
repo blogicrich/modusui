@@ -77,7 +77,7 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-layout v-else>
+    <v-layout row align-center fill-height v-else>
       <v-alert :value="true" type="error" >No data found.</v-alert>
     </v-layout>
   </v-container>
