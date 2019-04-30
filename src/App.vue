@@ -18,7 +18,7 @@
       <v-spacer></v-spacer>
       <v-layout row fill-height wrap justify-end>
         <v-icon outline medium class="mx-2" color="primary">person_outline</v-icon>
-        <v-chip class="ml-1 mt-3 mb-3" v-for="(level, index) in user" :key="index" color="secondary" text-color="primary">{{ level }}</v-chip>
+        <v-chip class="ml-1 mt-3 mb-3" v-for="(level, index) in user" :key="index" color="secondary" text-color="primary">{{ levelDisplay(level) }}</v-chip>
       </v-layout>
     </v-toolbar>
     <!-- SIDEBAR -->
@@ -281,9 +281,22 @@ export default {
     home () {
       this.$router.push('/landing')
     },
+    levelDisplay (level) {
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        return level
+      } else if (this.$vuetify.breakpoint.smAndDown) {
+        if(level.includes('CARER')) {
+          return 'CARER'
+        } else if (level.includes('CLIENT ADMINISTRATOR')) {
+          return 'CLI ADMIN'
+        } else if (level.includes('SYSTEM ADMINISTRATOR')) {
+          return 'SYS ADMIN'
+        }
+      }
+    },
+
   },
   computed: {
-
     userLevel () {
       const greeting = 'LOGGED IN AS: '
       let concatUser = ''
