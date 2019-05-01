@@ -21,50 +21,41 @@
       <v-flex xs12>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>
+          <p class="ma-2"> {{ msgReminderRadioDescription }}</p>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in reminders"
-            v-bind:data="voiceMessage"
-            v-bind:key="voiceMessage.voiceMessagesId"
+            :data="voiceMessage"
+            :key="voiceMessage.voiceMessagesId"
             :radioConfig="msgReminderIntervalSettings"
-            :groupDescription="msgReminderRadioDescription"
-            :radioHeader="msgRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="voiceMessage.audioFile"
-            :fileName="voiceMessage.voiceMessagedescription"
           />
         </v-card>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Praises</h2>
+          <p class="ma-2"> {{ msgPraiseRadioDescription }}</p>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in praises"
-            v-bind:data="voiceMessage"
-            v-bind:key="voiceMessage.voiceMessagesId"
+            :data="voiceMessage"
+            :key="voiceMessage.voiceMessagesId"
             :radioConfig="msgPraiseIntervalSettings"
-            :groupDescription="msgPraiseRadioDescription"
-            :radioHeader="msgRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="voiceMessage.audioFile"
-            :fileName="voiceMessage.voiceMessagedescription"
           />
         </v-card>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Instruct</h2>
+          <p class="ma-2"> {{ msgInstructRadioDescription }}</p>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in instructs"
-            v-bind:data="voiceMessage"
-            v-bind:key="voiceMessage.voiceMessagesId"
+            :data="voiceMessage"
+            :key="voiceMessage.voiceMessagesId"
             :radioConfig="msgInstructIntervalSettings"
-            :groupDescription="msgInstructRadioDescription"
-            :radioHeader="msgRadioHeader"
             :uploadIcon="uploadIcon"
-            :audioFile="voiceMessage.audioFile"
-            :fileName="voiceMessage.voiceMessagedescription"
           />
         </v-card>
       </v-flex>
@@ -124,8 +115,8 @@ export default {
         { label: '20', value: 20 },
         { label: 'Never', value: 'Never' }
       ],
-      msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
-      msgPraiseRadioDescription: 'Time betweeen drink praises - (Blue light flashing)',
+      msgReminderRadioDescription: 'Time between drink reminders - (Blue light flashing)',
+      msgPraiseRadioDescription: 'Time between drink praises - (Blue light flashing)',
       msgInstructRadioDescription: 'Time between drink instructions - (Blue light flashing)',
       msgRadioHeader: 'Time interval in minutes:',
     }

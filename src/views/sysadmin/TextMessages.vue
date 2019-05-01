@@ -16,6 +16,7 @@
       :errorMsg="errorMsg"
       :loadingMsg="loadingMsg"
       :loadedMsg="loadedMsg"
+      :btns="btns"
       dialogTitle= "You are about to lose unsaved data."
       dialogText= "Do you wish to proceed?"
       cardEmailHeader= "Email Message Template"
@@ -30,6 +31,7 @@
 
 import baseTab from '@/components/base/BaseTabbedSelectorComponent.vue'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import apiLib from '@/services/apiLib'
 
 export default {
   name: 'TextMessages',
@@ -43,6 +45,7 @@ export default {
       headerIcon: 'message',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Text / SMS Messages',
+      btns: false,
       items: [],
       crudIdKey: 'alertMessagesId',
       infoMsgColor: 'primary',
@@ -60,8 +63,8 @@ export default {
     }
   },
   methods: {
-    edittedItems (data) {
-      this.editItems(data)
+    edittedItems (data, item) {
+      apiLib.updateData(this.updateUrl + '/' + this.items[item].alertMessagesId, data, true, true)
     }
   },
   mounted () {

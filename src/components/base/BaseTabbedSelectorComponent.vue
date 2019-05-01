@@ -174,8 +174,8 @@ export default {
         subject: this.items[item].alertTypeDescription,
         body: this.items[item].message
       }
-      console.log(data)
-      this.$emit('itemsEdited', data)
+      this.$emit('itemsEdited', data, item)
+      this.btns = false
     },
     eraseChange () {
       for (var x = 0; x < this.items.length; x++) {

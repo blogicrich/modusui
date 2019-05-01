@@ -35,8 +35,6 @@ import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import DataTable from '@/components/base/BaseDataTableComponent'
 import WizardComponent from '@/components/base/BaseWizardComponent'
 
-const getUrl = '/register'
-
 export default {
   name: 'PersonalDetails',
   mixins: [crudRoutines],
@@ -53,6 +51,7 @@ export default {
       headerText: 'Person Details',
       // BaseDataTable
       editPerms: { create: false, update: false, delete: false },
+      getUrl: '/register',
       headers: [
         {
           hidden: false,
@@ -107,17 +106,14 @@ export default {
   },
   methods: {
     formItems () {
-      console.log(this.items[1])
-      for (let i = 0; i < this.items[0].length; i++) {
+      for (let i = 0; i < this.items[1].length; i++) {
         const element = this.items[1][i]
         this.title.push(element)
-        console.log('element', element)
       }
-      console.log(this.items)
     }
   },
   created () {
-    this.getItems(getUrl).then(() => {
+    this.getItems(this.getUrl).then(() => {
       this.formItems()
     })
   }
