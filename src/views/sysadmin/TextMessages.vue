@@ -1,12 +1,13 @@
 <template lang="html">
-  <v-container fluid ma-0 pa-0>
-    <h2 class="pg-subheader text-primary">eDroplet Administration - Reminder Messages</h2>
-    <v-divider
-      class="mx-1 mb-3"
-      color="#00a1cd"
-      >
-    </v-divider>
+  <v-container>
+    <BaseViewHeader
+      :headerIcon="headerIcon"
+      :iconColor="iconColor"
+      :headerText="headerText"
+      hasDivider
+    />
     <baseTab
+      class="mx-4"
       v-if="items"
       :items="items"
       :loading="loading"
@@ -38,6 +39,10 @@ export default {
   mixins: [crudRoutines],
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'message',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Text / SMS Messages',
       items: [],
       crudIdKey: 'alertMessagesId',
       infoMsgColor: 'primary',

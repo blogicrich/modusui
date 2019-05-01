@@ -1,10 +1,13 @@
 <template>
   <v-container>
-    <h2
+    <v-layout column>
+    <BaseViewHeader
       v-if="this.$vuetify.breakpoint.mdAndDown"
-      class="pg-subheader text-primary text-center mx-3"
-      text-xs-center
-    >Titles</h2>
+      :headerIcon="headerIcon"
+      :iconColor="iconColor"
+      :headerText="headerText"
+      hasDivider
+    />
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -35,6 +38,8 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="getItems(readUrl)"
     />
+    </v-layout>
+
   </v-container>
 </template>
 
@@ -51,6 +56,11 @@ export default {
   },
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'perm_identity',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Titles',
+      // BaseDataTable
       items: [],
       valid: false,
       editPerms: { create: true, update: true, delete: true },

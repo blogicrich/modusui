@@ -1,10 +1,12 @@
 <template>
   <v-container>
-    <h2
+    <BaseViewHeader
       v-if="this.$vuetify.breakpoint.mdAndDown"
-      class="pg-subheader text-primary text-center mx-3"
-      text-xs-center
-    >System Administrators</h2>
+      :headerIcon="headerIcon"
+      :iconColor="iconColor"
+      :headerText="headerText"
+      hasDivider
+    />
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -50,6 +52,10 @@ export default {
   },
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'persons',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'System Administrators',
       crudIdKey: 'portalAuthorisedId',
       items: [],
       editRules: () => [],

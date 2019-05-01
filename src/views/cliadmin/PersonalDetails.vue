@@ -1,6 +1,12 @@
 <template>
   <v-container>
-    <v-layout row>
+    <v-layout column>
+      <BaseViewHeader
+        class="mx-2 mb-4"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+      />
       <v-flex x12>
         <data-table
           :editPerms="editPerms"
@@ -41,6 +47,11 @@ export default {
 
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'person',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Person Details',
+      // BaseDataTable
       editPerms: { create: false, update: false, delete: false },
       headers: [
         {

@@ -1,8 +1,12 @@
 <template>
   <v-layout column>
-    <v-layout class="mx-4" row fill-height align-center justify-start>
-      <v-icon medium color="primary">local_drink</v-icon>
-      <h1 class="pg-header">Hydration Parameters</h1>
+    <v-layout row fill-height align-center justify-start>
+    <BaseViewHeader
+      :headerIcon="headerIcon"
+      :iconColor="iconColor"
+      :headerText="headerText"
+      hasDivider
+    />
     </v-layout>
     <v-layout row>
       <v-layout column>
@@ -56,6 +60,11 @@ export default {
   },
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'local_drink',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Hydration Parameters',
+      // BaseToleranceSetter
       clone: [],
       tolerances: [],
       newDefaultValue: false,

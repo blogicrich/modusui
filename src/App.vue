@@ -101,7 +101,7 @@
       </v-navigation-drawer>
     </transition-group>
     <!-- ROUTER VIEW -->
-    <v-container fluid>
+    <v-container class="px-0" fluid>
       <v-content>
         <v-slide-y-transition mode="out-in">
           <router-view class="px-0" @authenticated="setAuthenticated"/>

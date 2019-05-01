@@ -1,10 +1,11 @@
 <template>
   <v-container>
-    <h2
-      v-if="this.$vuetify.breakpoint.mdAndDown"
-      class="pg-subheader text-primary text-center mx-3"
-      text-xs-center
-    >Gender Options</h2>
+    <BaseViewHeader
+      :headerIcon="headerIcon"
+      :iconColor="iconColor"
+      :headerText="headerText"
+      hasDivider
+    />
     <BaseDataTable
       :headers="headers"
       :items="items"
@@ -54,6 +55,11 @@ export default {
   },
   data () {
     return {
+      // BaseViewHeader 
+      headerIcon: 'wc',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Gender Options',
+      // BaseDataTable
       items: [],
       editPerms: { create: true, update: true, delete: true },
       crudIdKey: 'genderId',

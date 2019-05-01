@@ -1,32 +1,24 @@
-<template lang="html">
+<template>
   <v-container>
-    <v-layout row align-center fill-height>
-      <v-icon large color="primary">settings</v-icon>
-      <h1 class="pg-header">eDroplet Administration</h1>
-      <v-spacer></v-spacer>
-      <selectComponent
-        v-if="userPerms"
-        :users="users"
-        :selectAll="selectAll"
-        :searchName="searchName"
-        :multiple="multiple"
-        @get-selected-user="getSelectedUser"
-      ></selectComponent>
+    <v-layout row align-center fill-height expand>
+      <BaseViewHeader
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+      />
+        <!-- <v-spacer></v-spacer> -->
+        <selectComponent
+          v-if="userPerms"
+          slot="search"
+          :users="users"
+          :selectAll="selectAll"
+          :searchName="searchName"
+          :multiple="multiple"
+          @get-selected-user="getSelectedUser"
+        ></selectComponent>
     </v-layout>
     <v-layout v-if="apiData.length > 0">
       <v-flex xs12>
-        <v-layout row align-start justify-space-between>
-          <h1 class="pg-header ma-2">Voice Messages</h1>
-          <v-spacer></v-spacer>
-          <selectComponent
-            v-if="userPerms"
-            :users="users"
-            :selectAll="selectAll"
-            :searchName="searchName"
-            :multiple="multiple"
-            @get-selected-user="getSelectedUser"
-          ></selectComponent>
-        </v-layout>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>
           <v-divider class="ma-2" color="#00a1cd">
@@ -96,6 +88,10 @@ export default {
   },
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'record_voice_over',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Voice Message Management',
       reminders: [],
       praises: [],
       instructs: [],
@@ -131,7 +127,7 @@ export default {
       msgReminderRadioDescription: 'Time betweeen drink reminders - (Blue light flashing)',
       msgPraiseRadioDescription: 'Time betweeen drink praises - (Blue light flashing)',
       msgInstructRadioDescription: 'Time between drink instructions - (Blue light flashing)',
-      msgRadioHeader: 'Time interval in minutes:'
+      msgRadioHeader: 'Time interval in minutes:',
     }
   },
   computed: {

@@ -1,11 +1,16 @@
 <template lang="html">
   <v-container>
     <v-layout row align-center fill-height>
-      <v-icon large color="primary">local_drink</v-icon>
-      <h1 class="pg-header">Alert Settings Management</h1>
+      <BaseViewHeader
+        class="mx-2 mb-4"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+        hasDivider
+      />
       <v-spacer></v-spacer>
     </v-layout>
-    <v-divider class="ma-2" color="#00a1cd"></v-divider>
+    <!-- <v-divider class="ma-2" color="#00a1cd"></v-divider> -->
     <subAlertCard
       :carerName="carerName"
       :users="users"
@@ -31,6 +36,10 @@ export default {
   },
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'local_drink',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Alert Settings Management',
       carerName: 'Carer1',
       selectLabel: 'Alert Messages',
       personnelsettings: [

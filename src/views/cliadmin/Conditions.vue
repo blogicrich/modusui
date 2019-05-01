@@ -1,12 +1,16 @@
 <template>
-  <v-container class="mx-4" fluid>
+  <v-container fluid>
     <v-layout row fill-height align-center justify-end wrap>
-      <v-icon large color="primary">local_pharmacy</v-icon>
-      <h1 class="pg-header">Conditions</h1>
-      <v-spacer></v-spacer>
+      <BaseViewHeader
+        class="mx-4 mb-4"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+        hasDivider
+      />
     </v-layout>
-    <v-divider class="mx-1 mb-4" color="#00a1cd"></v-divider>
     <BaseDataTable
+      class="mx-4"
       :headers="headers"
       :items="items"
       :editPerms="editPerms"
@@ -54,6 +58,10 @@ export default {
   },
   data () {
     return {
+            // BaseViewHeader
+      headerIcon: 'local_pharmacy',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'User Conditions',
       editRules: () => [],
       userPerms: true,
       editPerms: { create: true, update: true, delete: true },

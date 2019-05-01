@@ -1,7 +1,7 @@
-<template lang="html">
+<template>
   <div>
     <v-layout align-start>
-      <v-dialog v-model="dialog" persistent scrollable max-width="500px" >
+      <v-dialog v-model="dialog" persistent scrollable :max-width="maxWidth" >
         <SubPageNavButton
           slot="activator"
           v-model="checkUsers"
@@ -155,6 +155,13 @@ export default {
         title = 'Select eDroplet User'
       }
       return title
+    },
+    maxWidth () {
+      let size = window.innerWidth
+      if (size > 500) {
+        return size * 0.8
+      }
+      return size*0.85
     }
   },
   mounted () {
@@ -177,6 +184,6 @@ export default {
   }
   .selectCard {
     border-radius: 1em;
-    height: 500px;
+    height: 70%;
   }
 </style>

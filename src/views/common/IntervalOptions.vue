@@ -1,17 +1,22 @@
 <template>
   <v-container class="mx-4" grid-list-md text-xs-center>
     <v-layout row align-center fill-height>
-      <v-icon v-if="intervals.length > 0" large color="primary">settings</v-icon>
-      <h1 v-if="intervals.length > 0" class="pg-header">eDroplet Administration</h1>
-      <v-spacer></v-spacer>
-      <selectComponent
-        v-if="userPerms"
-        :users="users"
-        :selectAll="selectAll"
-        :searchName="searchName"
-        :multiple="multiple"
-        @get-selected-user="getSelectedUser"
-      ></selectComponent>
+      <BaseViewHeader
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+        hasDivider
+      />
+        <v-spacer></v-spacer>
+        <selectComponent
+          v-if="userPerms"
+          slot="search"
+          :users="users"
+          :selectAll="selectAll"
+          :searchName="searchName"
+          :multiple="multiple"
+          @get-selected-user="getSelectedUser"
+        ></selectComponent>
     </v-layout>
     <v-container v-if="intervals.length > 0">
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
@@ -112,6 +117,11 @@ export default {
   },
   data () {
     return {
+      // BaseViewHeader
+      headerIcon: 'notification_important',
+      iconColor: this.$vuetify.theme.primary,
+      headerText: 'Interval Options',
+      // BaseUserSelect
       intervals: [],
       multiple: false,
       selectAll: 'Select all',
