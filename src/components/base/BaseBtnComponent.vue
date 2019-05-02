@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-flex>
     <v-btn
       :type="type"
       :to="route"
@@ -8,10 +8,13 @@
       :class="btnClass"
       :block="block"
       :large="large"
+      :fab="fab"
+      :small="small"
     >
+      <v-icon v-if="icon">{{ btnIcon }}</v-icon>
       {{ title }}
     </v-btn>
-  </div>
+  </v-flex>
 </template>
 
 <script>
@@ -26,7 +29,11 @@ export default {
     btnColor: String,
     btnClass: String,
     block: Boolean,
-    large: Boolean
+    large: Boolean,
+    fab: Boolean,
+    small: Boolean,
+    icon: Boolean,
+    btnIcon: String
   }
 }
 </script>

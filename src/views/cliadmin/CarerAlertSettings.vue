@@ -10,11 +10,11 @@
       />
       <v-spacer></v-spacer>
     </v-layout>
-    <!-- <v-divider class="ma-2" color="#00a1cd"></v-divider> -->
+    <v-divider class="ma-2" color="#00a1cd"></v-divider>
     <subAlertCard
       :carerName="carerName"
       :users="users"
-      :personnelsettings="personnelsettings"
+      :personnelsettings="alertTypes"
       :textCheckboxes="textCheckboxes"
       :selectLabel="selectLabel"
     ></subAlertCard>
@@ -30,8 +30,13 @@ export default {
     subAlertCard
   },
   mounted () {
-    apiLib.getData('/cliadmin/personnelsettings/21', true, true).then((response) => {
-      console.log(response)
+    // apiLib.getData('/cliadmin/personnelsettings/21', true, true).then((response) => {
+    //   console.log(response)
+    // })
+    apiLib.getData('/carer/alerts/21', true, true).then((response) => {
+      if (typeof response === 'object') {
+        this.alertTypes = response
+      }
     })
   },
   data () {
@@ -42,18 +47,7 @@ export default {
       headerText: 'Alert Settings Management',
       carerName: 'Carer1',
       selectLabel: 'Alert Messages',
-      personnelsettings: [
-        'Dehydrated',
-        'Still Dehydrated',
-        'Rehydrated',
-        'Over Hydrated',
-        'Still Over Hydrated',
-        'No drink',
-        'User has Drunk',
-        'Low Battery',
-        'Base Offline',
-        'Base is now Communicating'
-      ],
+      alertTypes: [],
       textCheckboxes: 'Communication Method (Please Check Applicable)',
       users: [
         {

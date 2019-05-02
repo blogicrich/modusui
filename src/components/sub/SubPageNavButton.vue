@@ -7,6 +7,10 @@
     :title="title"
     :route="route"
     :large="large"
+    :fab="fab"
+    :small="small"
+    :icon="icon"
+    :btnIcon="btnIcon"
     />
   </div>
 </template>
@@ -29,7 +33,11 @@ export default {
   props: {
     title: String,
     route: String,
-    large: Boolean
+    large: Boolean,
+    fab: Boolean,
+    small: Boolean,
+    icon: Boolean,
+    btnIcon: String
   }
 }
 </script>

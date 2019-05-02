@@ -3,10 +3,24 @@
     <v-layout align-start>
       <v-dialog v-model="dialog" persistent scrollable :max-width="maxWidth" >
         <SubPageNavButton
+          v-if="$vuetify.breakpoint.mdAndDown"
+          slot="activator"
+          v-model="checkUsers"
+          :fab="$vuetify.breakpoint.smAndDown"
+          :small="$vuetify.breakpoint.smAndDown"
+          :icon="true"
+          :btnIcon="'person'"
+        ></SubPageNavButton>
+        <SubPageNavButton
+          v-if="$vuetify.breakpoint.mdAndUp"
           slot="activator"
           v-model="checkUsers"
           :title="checkUsers"
+          :fab="$vuetify.breakpoint.smAndDown"
+          :small="$vuetify.breakpoint.smAndDown"
+          :icon="false"
         ></SubPageNavButton>
+
         <v-card class="selectCard">
           <v-card-title>
             <v-layout justify-center align-center fill-height>

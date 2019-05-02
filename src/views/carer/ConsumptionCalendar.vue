@@ -66,7 +66,7 @@ export default {
   computed: {
     monthString: function () {
       const monthStrings = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-      return monthStrings[this.month] + ': ' + this.year
+      return monthStrings[this.month] + ' ' + this.year
     }
   }
 }

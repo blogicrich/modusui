@@ -1,7 +1,7 @@
 <template>
 
   <v-layout class="pt-1" row fill-height align-center justify-space-around>
-    <v-flex grow>
+    <v-flex grow @click="navigate">
       <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
         <span>{{ tip }}</span>
         <v-btn
@@ -10,7 +10,6 @@
           flat
           icon
           :color="btnColor"
-          @click="navigate"
         >
           <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
         </v-btn>
