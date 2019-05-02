@@ -175,7 +175,7 @@ export default {
       if (size > 500) {
         return size * 0.8
       }
-      return size*0.85
+      return size * 0.85
     }
   },
   mounted () {

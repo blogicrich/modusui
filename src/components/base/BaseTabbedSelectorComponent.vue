@@ -27,6 +27,7 @@
             v-for="(item, index) in items"
             :key="index"
           >
+          <keep-alive>
             <v-card flat>
               <v-layout justify-space-around mt-4>
                 <v-flex v-if="item.communicationTypeDescription === 'Email'" lg4 md4 xs12>
@@ -86,6 +87,7 @@
                 </v-container>
               </v-card-actions>
             </v-card>
+            </keep-alive>
           </v-tab-item>
         </v-tabs-items>
       </v-tabs>
