@@ -55,7 +55,7 @@ export default {
   },
   data () {
     return {
-      // BaseViewHeader 
+      // BaseViewHeader
       headerIcon: 'wc',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Gender Options',

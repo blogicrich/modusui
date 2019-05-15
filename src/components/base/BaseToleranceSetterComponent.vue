@@ -22,8 +22,9 @@
           prepend-icon="local_drink"
           required
           type="number"
+          :rules="[v => v <= 100 || 'Value cannot be higher than 100%', v => v >= 0 || 'Value cannot be lower than 0%']"
           v-model="tolerances[index][key]"
-          @change="$emit('tolerance-changed', {level:level, value:tolerance[level]} )"
+          @input="$emit('tolerance-changed', {level:level, value:tolerance[level]} )"
           box
           >{{ level }}
         </v-text-field>

@@ -72,26 +72,32 @@ export default {
       snackText: '',
       snack: false,
       timeout: 6000,
-      writeUrl: 'sysadmin/hydration-params'
+      writeUrl: 'sysadmin/hydration-params',
+      updateData: {}
     }
   },
   methods: {
     async getValues () {
-      let data = await apiLib.getData('sysadmin/hydration-params')
-      let dataClone = await apiLib.getData('sysadmin/hydration-params')
+      let data = await apiLib.getData('sysadmin/hydration-params', true, true)
+      let dataClone = await apiLib.getData('sysadmin/hydration-params', true, true)
       this.tolerances = data
       this.clone = dataClone
-      // console.log(this.tolerances)
-      // console.log(this.clone)
+    },
+    prepareData () {
+      this.tolerances.map(val => {
+        for (const tolerance in val) {
+          if (val[tolerance] !== null) {
+            this.updateData = {
+              [`${tolerance}`]: val[tolerance]
+            }
+          }
+        }
+      })
     },
     async save () {
       for (var i = 0; i < this.tolerances.length; i++) {
-        await apiLib.updateData(this.writeUrl, {
-          dehydratedRedAmberBound: this.tolerances[i].dehydratedRedAmberBound,
-          dehydratedAmberGreenBound: this.tolerances[i].dehydratedAmberGreenBound,
-          overHydratedAmberRedBound: this.tolerances[i].overHydratedAmberRedBound,
-          overHydratedGreenAmberBound: this.tolerances[i].overHydratedGreenAmberBound
-        }, false, true)
+        this.prepareData()
+        await apiLib.updateData(this.writeUrl, this.updateData, true, true)
       }
       await this.getValues()
     },

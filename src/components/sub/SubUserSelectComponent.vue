@@ -78,6 +78,7 @@
             editDialogTitle="Edit Administrator Records"
             delDialogTitle="Confirm deletetion of selected items?"
             msgDel="Are you sure you want to delete the selected items?"
+            :editRules="editRules"
             @newItem="addItem"
             @itemsEdited="editItems"
             @deleteSelected="deleteItem"
@@ -132,6 +133,7 @@ export default {
         v => v.length <= this.maxCharac || 'Name must be less than ' + this.maxCharac + ' characters'
       ],
       items: [],
+      editRules: payload => [],
       editPerms: { create: false, update: false, delete: false },
       loading: true,
       loaded: false,
@@ -139,16 +141,15 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      readUrl: 'carer/bases/23',
+      readUrl: 'carer/bases/' + this.$store.state.userId,
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
       iconAdd: 'person_add',
       headers: [
-        { text: 'Legend', align: 'left', sortable: false, value: 'legend', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Mac Adress', align: 'left', sortable: false, value: 'MacAdress', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Mac Adress', align: 'left', sortable: false, value: 'macAddress', cellType: 'tb', hidden: false, editable: true },
         { text: 'Friendly Name', align: 'left', sortable: false, value: 'friendlyName', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', align: 'left', sortable: false, value: 'status', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Last Communicated', align: 'left', sortable: false, value: 'LastCommunicated', cellType: 'tb', hidden: false, editable: true }
+        { text: 'Status', align: 'left', sortable: false, value: 'operationalStatus', cellType: 'tb', hidden: false, editable: true },
+        { text: 'Last Communicated', align: 'left', sortable: false, value: 'lastCommunicated', cellType: 'tb', hidden: false, editable: true }
       ]
     }
   },

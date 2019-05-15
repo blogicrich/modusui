@@ -239,7 +239,7 @@ export default {
     updateBar: async function () {
       let weekArr = []
       let elementCount = 0
-      //               this.barChartData.dataBarOne = [2.5, 1.8, 1.5, 1.3, 1.0, 1.6, 1.9]
+      // this.barChartData.dataBarOne = [2.5, 1.8, 1.5, 1.3, 1.0, 1.6, 1.9]
       // this.barChartData.title = 'Weekly summary ' + 1.6 + 'L average'
       if (this.dashboardWeek.length === 7) {
         for (let i = 0; i < this.dashboardWeek.length; i++) {
@@ -255,7 +255,7 @@ export default {
       }
     },
     updateDoughnut: async function () {
-      //       this.doughnutChartData.dataDoughnut[0] = 1.2
+      // this.doughnutChartData.dataDoughnut[0] = 1.2
       // this.doughnutChartData.dataDoughnut[1] = 0.8
       // this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + 1.2 + 'L / ' + 0.8 + 'L'
       if (this.dashboardDay.length === 1) {

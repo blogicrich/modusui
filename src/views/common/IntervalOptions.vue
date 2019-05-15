@@ -130,7 +130,7 @@ export default {
       userLevel: JSON.parse(localStorage.getItem('auth')).level,
       sysadminReadUrl: 'sysadmin/interval-options',
       sysadminWriteUrl: 'sysadmin/interval-options',
-      cliadminReadUrl: 'cliadmin/intervalsettings/',
+      cliadminReadUrl: 'cliadmin/intervalsettings/81/80/2',
       cliadminWriteUrl: 'intervalupdate',
       newDefaultValue: false,
       editedItems: [],
@@ -167,7 +167,7 @@ export default {
   },
   methods: {
     getSelectedUser (user) {
-      apiLib.getData(this.cliadminReadUrl + user, true).then(response => {
+      apiLib.getData(this.cliadminReadUrl, true).then(response => {
         this.intervals = response
       })
     },
@@ -179,7 +179,10 @@ export default {
         })
       }
       if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-        let arr = apiLib.getData(this.sysadminReadUrl).then((response) => response)
+        let arr = apiLib.getData(this.sysadminReadUrl).then((response) => {
+          console.log(response)
+          return response
+        })
         return arr
       }
     },

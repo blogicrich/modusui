@@ -119,6 +119,3 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-@import "./public/scss/main.scss";
-</style>

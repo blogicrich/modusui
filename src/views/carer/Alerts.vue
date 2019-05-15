@@ -57,11 +57,7 @@ export default {
       errorMsg: '',
       loadingMsg: '',
       loadedMsg: '',
-      readUrl:
-        'carer/alerts/' +
-        this.$store.state.userId +
-        '/' +
-        this.$store.state.date,
+      readUrl: 'carer/alerts/' + this.$store.state.userId + '/' + 1552922626,
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'warning',
@@ -119,8 +115,7 @@ export default {
           dateTime: 0,
           description: ''
         }
-      ],
-      urls: [{ url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }]
+      ]
     }
   },
   methods: {

@@ -174,7 +174,7 @@ export default {
       var data = {
         communicationType: this.items[item].communicationTypeDescription,
         subject: this.items[item].alertTypeDescription,
-        body: this.items[item].message
+        message: this.items[item].message
       }
       this.$emit('itemsEdited', data, item)
       this.btns = false

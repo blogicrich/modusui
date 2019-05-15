@@ -72,9 +72,6 @@ export default {
     }
   },
   watch: {
-    percentage: function () {
-      // document.getElementById('audio-' + this.uniqid).style.background = 'linear-gradient(to right, rgb(0, 146, 187) ' + this.percentage + '%, #00A1CD ' + this.percentage + '%)'
-    },
     currentTime: function () {
       this.timeLeft = this.audio ? formatTime(parseInt(this.totalDuration) - parseInt(this.audio.currentTime)) : ''
     }

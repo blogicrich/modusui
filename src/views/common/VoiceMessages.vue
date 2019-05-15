@@ -118,7 +118,7 @@ export default {
       msgReminderRadioDescription: 'Time between drink reminders - (Blue light flashing)',
       msgPraiseRadioDescription: 'Time between drink praises - (Blue light flashing)',
       msgInstructRadioDescription: 'Time between drink instructions - (Blue light flashing)',
-      msgRadioHeader: 'Time interval in minutes:',
+      msgRadioHeader: 'Time interval in minutes:'
     }
   },
   computed: {

@@ -58,7 +58,7 @@ export default {
   },
   data () {
     return {
-            // BaseViewHeader
+      // BaseViewHeader
       headerIcon: 'local_pharmacy',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'User Conditions',
@@ -77,10 +77,10 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      delUrl: '/cliadmin/conditions',
+      delUrl: '/cliadmin/conditions/' + this.$store.state.userId,
       updateUrl: '/cliadmin/conditions',
-      readUrl: '/cliadmin/conditions',
-      createUrl: '/cliadmin/conditions/' + +'/' + '',
+      readUrl: '/cliadmin/conditions/' + this.$store.state.userId,
+      createUrl: '/cliadmin/conditions',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_pharmacy',
@@ -162,6 +162,7 @@ export default {
       defaultItem: [
         {
           conditionsId: 0,
+          userId: 0,
           comments: '',
           status: ''
         }
@@ -169,13 +170,6 @@ export default {
     }
   },
   methods: {
-    async setItems () {
-      await this.$store.dispatch('fetchCLIAdminConditionsGet').then(() => {
-        if (this.$store.state.conditions.CLIAdminConditionsGet) {
-          this.items = this.$store.state.conditions.CLIAdminConditionsGet
-        }
-      })
-    },
     resetItem () {
       this.newItem = [
         {
@@ -225,6 +219,7 @@ export default {
       ]
       this.defaultItem = [
         {
+          userId: 0,
           conditionsId: 0,
           comments: '',
           startdate: 0,
@@ -234,8 +229,8 @@ export default {
       ]
     }
   },
-  mounted () {
-    this.setItems()
+  async mounted () {
+    this.getItems(this.readUrl)
   }
 }
 

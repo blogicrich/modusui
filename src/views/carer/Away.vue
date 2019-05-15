@@ -34,7 +34,6 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import dataTable from '@/components/base/BaseDataTableComponent'
 import validation from '@/mixins/validation'
-// const awayEndpoint = 'carer/away/' + store.getters.getterUserId
 
 export default {
   mixins: [crudRoutines],
@@ -57,26 +56,6 @@ export default {
     readUrl: 'carer/away/21',
     primaryColor: 'primary',
     secondaryColor: 'primary darken-2',
-    // awayPeriods: [
-    //   {
-    //     awayId: 0,
-    //     startDate: new Date("March 8, 2019 09:30:00"),
-    //     endDate: new Date("March 10, 2019 16:30:00"),
-    //     drinksAccounted: true
-    //   },
-    //   {
-    //     awayId: 1,
-    //     startDate: new Date("March 6, 2019 11:15:00"),
-    //     endDate: new Date("March 12, 2019 19:00:00"),
-    //     drinksAccounted: false
-    //   },
-    //   {
-    //     awayId: 2,
-    //     startDate: new Date("February 26, 2001 12:00:00"),
-    //     endDate: new Date("December 9, 2002 12:00:00"),
-    //     drinksAccounted: false
-    //   }
-    // ],
     headers: [
       {
         text: 'awayId',
@@ -151,23 +130,6 @@ export default {
     ],
     btnTitle: 'Record Time Away'
   }),
-  // computed: {
-  //   items: function() {
-  //     let items = [];
-
-  //     for (let i = 0; i < this.awayPeriods.length; i++) {
-  //       let awayPeriod = this.awayPeriods[i];
-  //       let item = {
-  //         awayId: awayPeriod.awayId,
-  //         startDate: this.formatDateAsString(awayPeriod.startDate),
-  //         endDate: this.formatDateAsString(awayPeriod.endDate),
-  //         drinksAccounted: awayPeriod.drinksAccounted
-  //       };
-  //       items.push(item);
-  //     }
-  //     return items;
-  //   }
-  // },
   methods: {
     resetItem () {
       this.newItem = [
@@ -206,9 +168,7 @@ export default {
     }
   },
   mounted () {
-    // console.log('URL: ' + this.readUrl)
     this.getItems(this.readUrl)
-    // console.log(this.loadedMsg)
   }
 }
 </script>

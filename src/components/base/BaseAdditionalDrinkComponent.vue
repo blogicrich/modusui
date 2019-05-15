@@ -56,6 +56,7 @@ export default {
       snackColor: 'primary',
       snackText: '',
       snack: false,
+      dashboardUsers: undefined,
       timeout: 6000,
       loading: true,
       loaded: false,
@@ -64,13 +65,13 @@ export default {
       loadingMsg: '',
       loadedMsg: '',
       delUrl: 'carer/adddrinks/' + this.$store.state.userId,
-      updateUrl: 'carer/adddrinks/' + this.$store.state.userId,
+      updateUrl: 'carer/adddrinks/' + 21,
       readUrl:
         'carer/adddrinks/' +
         this.$store.state.userId +
         '/' +
         this.$store.state.date,
-      createUrl: 'carer/adddrinks/' + this.$store.state.userId + '/' + 3,
+      createUrl: 'carer/adddrinks/' + 21 + '/' + 2,
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
@@ -150,6 +151,7 @@ export default {
   mounted () {
     this.getItems(this.readUrl)
     this.$store.dispatch('fetchDashboardUsersGet')
+    this.dashboardUsers = this.$store.state.dashboardUsers.dashboardUsersGet
     console.log('dashboardUsers:', this.$store.state.dashboardUsers.dashboardUsersGet)
   }
 }
