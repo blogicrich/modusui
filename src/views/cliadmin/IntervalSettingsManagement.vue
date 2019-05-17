@@ -67,17 +67,6 @@ export default {
       searchName: 'Search user..',
       intervalOptions: 'eDroplet Reminder Interval Options',
       advancedOptions: 'Advanced Options (Power saving)',
-      users: [
-        { userId: '21', name: 'TEST ID 001' },
-        { userId: '22', name: 'Tamara' },
-        { userId: '23', name: 'Daniek' },
-        { userId: '24', name: 'Mitchell' },
-        { userId: '25', name: 'Jasper' },
-        { userId: '26', name: 'Bram' },
-        { userId: '27', name: 'Kevin' },
-        { userId: '28', name: 'Julian' },
-        { userId: '29', name: 'Patricia' }
-      ],
       data: [
         { blueLight: '20', voiceInter: '40', wakeUp: 'never', commInter: '20' }
       ],

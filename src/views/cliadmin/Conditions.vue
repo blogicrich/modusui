@@ -161,6 +161,11 @@ export default {
       ],
       defaultItem: [
         {
+          // userId: Joi.number().integer().min(1).required(),
+          // conditionId: Joi.number().integer().min(1).required(),
+          // comment: Joi.string().min(1).max(45).optional(),
+          // adjustment: Joi.string().min(1).max(45).optional(),
+          // typeOfAdjustment: Joi.string().min(1).max(45).optional()
           conditionsId: 0,
           userId: 0,
           comments: '',
@@ -221,7 +226,7 @@ export default {
         {
           userId: 0,
           conditionsId: 0,
-          comments: '',
+          comment: '',
           startdate: 0,
           enddate: 0,
           status: ''

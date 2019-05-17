@@ -44,7 +44,7 @@
           </v-container>
           <v-layout justify-space-around>
             <v-card-actions>
-              <v-btn :color="primaryColor" flat @click="deleteComment">Delete</v-btn>
+              <v-btn :color="primaryColor" flat @click="deleteComment(commentData.dayReportId)">Delete</v-btn>
               <v-btn :color="primaryColor" flat @click="clearComment">Clear</v-btn>
               <v-btn :color="primaryColor" flat @click="saveComment">Save</v-btn>
               <v-btn :color="primaryColor" flat @click="cancelComment">Cancel</v-btn>
@@ -84,18 +84,6 @@
             @deleteSelected="deleteItem"
             @itemsCancelled="refreshItems"
           />
-            <!-- <v-data-table
-              :headers="headers"
-              :items="dropletDetail"
-              class="elevation-1"
-            >
-              <template>
-                <th v-for="header in headers">{{ header.text }}</th>
-              </template>
-              <template v-slot:items="props">
-                <td> v-for="item in props.item" v-bind:key="item" {{ item }}</td>
-              </template>
-            </v-data-table> -->
           </v-container>
           <v-layout justify-center>
             <v-card-actions>
@@ -112,6 +100,7 @@
 import baseDropletuser from '@/components/base/baseDropletuserComponent.vue'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import apiLib from '@/services/apiLib'
 
 export default {
   components: {
@@ -127,7 +116,7 @@ export default {
       dialogSettings: false,
       dialogComment: false,
       dialogWidth: '',
-      commentText: '',
+      commentText: this.commentData.comment,
       commentSavedText: '',
       commentRules: [
         v => v.length <= this.maxCharac || 'Name must be less than ' + this.maxCharac + ' characters'
@@ -166,7 +155,8 @@ export default {
     titleSettings: String,
     dropletDetail: Array,
     commentIcon: String,
-    maxCharac: String
+    maxCharac: String,
+    commentData: Object
   },
   computed: {
     filteredName () {
@@ -212,17 +202,15 @@ export default {
       this.commentText = ''
     },
     cancelComment () {
-      this.commentText = this.commentSavedText
       this.dialogToggle = false
       this.dialogComment = false
     },
-    deleteComment () {
-      if (this.commentSavedText !== '') {
-        this.commentText = ''
-        this.commentSavedText = ''
-        this.dialogToggle = false
-        this.dialogComment = false
-      }
+    deleteComment (dayReportId) {
+      this.commentText = ''
+      this.commentSavedText = ''
+      this.dialogToggle = false
+      this.dialogComment = false
+      apiLib.deleteData('carer/dashboard-comment/' + dayReportId, true, true)
     },
     getClass (property) {
       if (this.clickedUser.userId === property) {

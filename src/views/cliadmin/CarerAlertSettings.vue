@@ -30,9 +30,6 @@ export default {
     subAlertCard
   },
   mounted () {
-    // apiLib.getData('/cliadmin/personnelsettings/21', true, true).then((response) => {
-    //   console.log(response)
-    // })
     apiLib.getData('/carer/alerts/21', true, true).then((response) => {
       if (typeof response === 'object') {
         this.alertTypes = response

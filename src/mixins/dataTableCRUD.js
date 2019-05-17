@@ -69,7 +69,7 @@ export const crudRoutines = {
       // console.log("Respone Type", Array.isArray(response))
       if (Array.isArray(response) === false) {
         this.items = []
-        this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
+        this.errorMsg = 'Server response error: ' + response + ' - Please contact your system administrator.'
         this.loading = false
         this.loaded = false
         this.error = true

@@ -32,8 +32,8 @@
       editDialogTitle="Edit Additional Drinks"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      @newItem="addItem"
-      @itemsEdited="editItems"
+      @newItem="postData(...arguments)"
+      @itemsEdited="itemEdit(...arguments)"
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
     />
@@ -44,7 +44,7 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
-
+import apiLib from '@/services/apiLib'
 export default {
   name: 'SystemAdmins',
   mixins: [crudRoutines],
@@ -65,13 +65,9 @@ export default {
       loadingMsg: '',
       loadedMsg: '',
       delUrl: 'carer/adddrinks/' + this.$store.state.userId,
-      updateUrl: 'carer/adddrinks/' + 21,
-      readUrl:
-        'carer/adddrinks/' +
-        this.$store.state.userId +
-        '/' +
-        this.$store.state.date,
-      createUrl: 'carer/adddrinks/' + 21 + '/' + 2,
+      updateUrl: 'carer/adddrinks/' + this.$store.state.userId,
+      readUrl: 'carer/adddrinks/' + this.$store.state.userId,
+      createUrl: 'carer/adddrinks/' + this.$store.state.userId,
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
@@ -116,6 +112,16 @@ export default {
     }
   },
   methods: {
+    postData (newItem) {
+      console.log(newItem)
+      let data = {
+        userId: this.$store.state.userId,
+        containerTypeId: 1,
+        quantity: newItem[1].sync,
+        containerType: newItem[0].sync
+      }
+      apiLib.postData(this.createUrl, data, true, true)
+    },
     resetItem () {
       this.newItem = [
         {
@@ -139,7 +145,7 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
+              validation.validateNumber(payload),
               validation.validateRequired(payload)
             ]
           }

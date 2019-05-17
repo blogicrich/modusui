@@ -79,7 +79,7 @@ export default {
         text: 'Start Date',
         align: 'left',
         sortable: true,
-        value: 'startDate',
+        value: 'startDateTime',
         cellType: 'tb',
         hidden: false,
         editable: false
@@ -88,7 +88,7 @@ export default {
         text: 'End Date',
         align: 'left',
         sortable: true,
-        value: 'endDate',
+        value: 'endDateTime',
         cellType: 'tb',
         hidden: false,
         editable: false

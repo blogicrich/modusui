@@ -73,7 +73,7 @@ export default {
       loadingMsg: ' ',
       loadedMsg: ' ',
       updateUrl: '/cliadmin/edropman/',
-      readUrl: '/cliadmin/edropman/',
+      readUrl: '/cliadmin/edropman/131',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',

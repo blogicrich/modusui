@@ -28,6 +28,7 @@
               :btnIcon="btnIcon"
               :alertColor="alertColors"
               :commentIcon="commentIcon"
+              :commentData="commentData"
               :maxCharac="'50'"
             ></baseDropletuser>
           </v-card>
@@ -59,6 +60,7 @@
               :alertColor="alertColors"
               :commentIcon="commentIcon"
               :maxCharac="'50'"
+              :commentData="commentData"
               @commentText="saveComment(...arguments)"
             ></baseDropletuser>
           </v-card>
@@ -136,6 +138,7 @@
 import charts from '@/components/base/BaseChartComponent'
 import baseDropletuser from '@/components/sub/SubUserSelectComponent'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import apiLib from '@/services/apiLib'
 
 export default {
   components: {
@@ -178,10 +181,21 @@ export default {
     setTimeout(() => {
       this.dateChanged()
     }, 200)
+    this.getComment()
   },
   methods: {
+    getComment () {
+      apiLib.getData(this.readUrl, true, true).then(response => {
+        this.commentData = response[0]
+        console.log(response[0])
+      })
+    },
     saveComment (newComment) {
-      this.addItem(newComment)
+      const data = {
+        comment: newComment,
+        carerId: 12
+      }
+      apiLib.updateData(this.updateUrl, data, true, true)
     },
     setAlertColors () {
       for (var i = 0; i < this.dashboardUsers.length; i++) {
@@ -316,7 +330,9 @@ export default {
   },
   data () {
     return {
-      createUrl: 'carer/dashboard-comment/' + 21 + '/' + this.$store.getters.getterDate,
+      commentData: '',
+      updateUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
+      readUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
       weeklyAverage: 0,
       update: false,
       searchName: 'Search user..',
