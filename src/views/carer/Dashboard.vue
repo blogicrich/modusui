@@ -35,8 +35,11 @@ export default {
   },
   methods: {
     updateCharts (SelectedUnixTime) {
+      this.hourLoaded = false;
+      this.dayLoaded = false;
+      this.weekLoaded = false;
       this.setHour(SelectedUnixTime)
-      this.setDay()
+      this.setDay(SelectedUnixTime)
       this.setWeek(SelectedUnixTime)
     },
 
