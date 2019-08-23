@@ -34,7 +34,7 @@
           </v-card>
         </v-flex>
         <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
-          <v-card dark v-if="!hourLoaded">
+          <v-card dark v-if="hourLoaded">
             <charts
               class="chart"
               :chartType="'Line'"
@@ -71,7 +71,7 @@
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
           <v-layout row wrap>
             <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
-              <v-card dark v-if="!weekLoaded">
+              <v-card dark v-if="weekLoaded">
                 <charts
 
                   class="chart"
@@ -86,7 +86,7 @@
                 </v-alert>
             </v-flex>
             <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
-              <v-card dark v-if="!dayLoaded">
+              <v-card dark v-if="dayLoaded">
                 <charts
                   class="chart"
                   :update="update"

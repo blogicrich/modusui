@@ -39,63 +39,80 @@ export default {
       this.setDay()
       this.setWeek(SelectedUnixTime)
     },
+
     async setUsers () {
       await this.$store.dispatch('fetchDashboardUsersGet')
+
       if (this.$store.state.dashboardUsers.dashboardUsersGet) {
-        this.dashboardUsers = await this.$store.state.dashboardUsers.dashboardUsersGet
+        this.dashboardUsers = await this.$store.state.dashboardUsers
+          .dashboardUsersGet
         this.usersLoaded = true
       } else {
         this.usersLoaded = false
       }
     },
+
     async setComment () {
       await this.$store.dispatch('fetchDashboardCommentGet')
+
       if (this.$store.state.DashboardComment.dashboardCommentGet) {
-        let commentStore = await this.$store.state.DashboardComment.dashboardCommentGet
+        let commentStore = await this.$store.state.DashboardComment
+          .dashboardCommentGet
         for (let index = 0; index < commentStore.length; index++) {
           this.dashboardComment.push(commentStore[index])
         }
       }
     },
+
     async setHour (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
       this.$store.state.date = SelectedUnixTime
+
       await this.$store.dispatch('fetchDashboardHourGet')
+
       if (this.$store.state.dashboardHour.dashboardHourGet.length === 24) {
         let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
         for (let index = 0; index < hourStore.length; index++) {
-          this.dashboardHour[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
+          this.dashboardHour[index] =
+            parseFloat(hourStore[index].volumeConsumedByViaOther) +
+            parseFloat(hourStore[index].volumeConsumedViaEDroplet)
         }
         this.hourLoaded = true
       } else {
         this.hourLoaded = false
       }
     },
+
     async setDay (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
       this.$store.state.date = SelectedUnixTime
+
       await this.$store.dispatch('fetchDashboardDayGet')
-      if (this.$store.state.dashboardDay.dashboardDayGet.length === 1) {
-        this.dashboardDay = await this.$store.state.dashboardDay.dashboardDayGet
+
+      if (this.$store.state.dashboardDay.dashboardDayGet.length > 0) {
+        this.dashboardDay = await this.$store.state.dashboardDay
+          .dashboardDayGet
         this.dayLoaded = true
       } else {
         this.dayLoaded = false
       }
     },
+
     async setWeek (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
       this.$store.state.date = SelectedUnixTime
+
       await this.$store.dispatch('fetchDashboardWeekGet')
+
       if (this.$store.state.dashboardWeek.dashboardWeekGet.length === 7) {
-        for (let i = 0; i < this.$store.state.dashboardWeek.dashboardWeekGet.length; i++) {
-          const element = this.$store.state.dashboardWeek.dashboardWeekGet[i]
-          if (element.length < 0) {
-            this.dashboardWeek = await this.$store.state.dashboardWeek.dashboardWeekGet
-            this.weekLoaded = true
-          } else {
-            this.weekLoaded = false
-          }
-        }
+        this.dashboardWeek = await this.$store.state.dashboardWeek
+          .dashboardWeekGet
+        this.weekLoaded = true
+      } else {
+        this.weekLoaded = false
       }
     }
   },
