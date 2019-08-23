@@ -33,7 +33,7 @@
             ></baseDropletuser>
           </v-card>
         </v-flex>
-        <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
+        <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Hour')">
           <v-card dark v-if="hourLoaded">
             <charts
               class="chart"
@@ -70,7 +70,7 @@
         </v-flex>
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
           <v-layout row wrap>
-            <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
+            <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Week')">
               <v-card dark v-if="weekLoaded">
                 <charts
 
@@ -85,13 +85,13 @@
                   Hydration snapshot not found. The base may not have communicated yet.
                 </v-alert>
             </v-flex>
-            <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
+            <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Day')">
               <v-card dark v-if="dayLoaded">
                 <charts
                   class="chart"
                   :update="update"
                   :chartType="'Doughnut'"
-                  :doughnutChartData="doughnutChartData"
+                  :doughnutChartData="dayChartData"
                 />
               </v-card>
                 <v-alert :value="true" type="error" v-else>
@@ -103,31 +103,31 @@
       </v-layout>
     </v-container>
 
-    <v-dialog v-model="lineDialog">
+    <v-dialog v-model="dayChartDialog">
       <v-flex xs12 sm12 md12 lg12 xl12>
         <v-card dark>
           <charts class="chart" :chartType="'Line'" :lineChartData="hourChartData"/>
           <v-card-actions>
-            <v-btn color="primary" flat="flat" @click="lineDialog = false">Close</v-btn>
+            <v-btn color="primary" flat="flat" @click="dayChartDialog = false">Close</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
     </v-dialog>
 
-    <v-dialog v-model="doughnutDialog" max-width="750px">
+    <v-dialog v-model="dayChartDialog" max-width="750px">
       <v-card dark>
-        <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="doughnutChartData"/>
+        <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="dayChartData"/>
         <v-card-actions>
-          <v-btn color="primary" flat="flat" @click="doughnutDialog = false">Close</v-btn>
+          <v-btn color="primary" flat="flat" @click="dayChartDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="barDialog">
+    <v-dialog v-model="weekChartDialog">
       <v-card dark>
         <charts class="chart" :chartType="'Bar'" :barChartData="weekChartData"/>
         <v-card-actions>
-          <v-btn color="primary" flat="flat" @click="barDialog = false">Close</v-btn>
+          <v-btn color="primary" flat="flat" @click="weekChartDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -262,9 +262,9 @@ export default {
 
     updateDayChart: async function () {
       if (this.dashboardDay.length === 1) {
-        this.doughnutChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
-        this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration))
-        this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + parseFloat(this.dashboardDay[0].aggregatedHyration) + 'L / ' + parseInt(this.dashboardDay[0].hydrationTarget) + 'L'
+        this.dayChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
+        this.dayChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration))
+        this.dayChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + parseFloat(this.dashboardDay[0].aggregatedHyration) + 'L / ' + parseInt(this.dashboardDay[0].hydrationTarget) + 'L'
       }
     },
 
@@ -284,9 +284,11 @@ export default {
 
     openDialog: function (charType) {
       switch (charType) {
-        case 'Line':
+        case 'Hour':
           if (this.hourLoaded === true) {
-            this.lineDialog = true
+            this.hourChartDialog = true
+
+            // FIXME: Assumes fixed DOM structure
             let lineComp = this.$children[8].$children[0].$children[0]
               .$children[0].$children[0].$children[0]
             setTimeout(() => {
@@ -294,9 +296,11 @@ export default {
             }, 200)
           }
           break
-        case 'Bar':
+        case 'Week':
           if (this.weekLoaded === true) {
-            this.barDialog = true
+            this.weekChartDialog = true
+
+            // FIXME: Assumes fixed DOM structure
             let barComp = this.$children[10].$children[0].$children[0]
               .$children[0].$children[0].$children[0]
             setTimeout(() => {
@@ -304,9 +308,11 @@ export default {
             }, 200)
           }
           break
-        case 'Doughnut':
+        case 'Day':
           if (this.dayLoaded === true) {
-            this.doughnutDialog = true
+            this.dayChartDialog = true
+
+            // FIXME: Assumes fixed DOM structure
             let doughnutComp = this.$children[9].$children[0].$children[0]
               .$children[0].$children[0].$children[0]
             setTimeout(() => {
@@ -335,9 +341,9 @@ export default {
       commentIcon: 'comment',
       btnIcon: 'settings',
       primaryColor: 'primary',
-      lineDialog: false,
-      barDialog: false,
-      doughnutDialog: false,
+      hourChartDialog: false,
+      weekChartDialog: false,
+      dayChartDialog: false,
       alertColor: [],
       menu: false,
       date: new Date().toISOString().substr(0, 10),
@@ -388,7 +394,7 @@ export default {
         title: 'Weekly summary ' + this.weeklyAverage + 'L average'
       },
 
-      doughnutChartData: {
+      dayChartData: {
         labels: ['Consumed', 'Remaining'],
         dataDoughnut: [],
         borderColorDoughnut: 'rgba(255, 255, 255, 1)',
