@@ -219,7 +219,7 @@ export default {
     },
 
     formatDate (date) {
-      return moment(date).format('MMMM Do YYYY')
+      return moment(date).format('D MMMM YYYY')
     },
 
     dateChanged: function () {
@@ -242,29 +242,31 @@ export default {
     },
 
     updateWeekChart: async function () {
-      let weekArr = []
-      let elementCount = 0
+      const weekDataPoints = this.dashboardWeek.map(weekDayData => weekDayData.aggregatedHydration ? parseFloat(weekDayData.aggregatedHydration) : null)
+      const filteredDataPoints = weekDataPoints.filter(weekDataPoint => weekDataPoint !== null) // Exclude null from average calculation.
+      const sum = filteredDataPoints.reduce((total, currentValue) => total + currentValue, 0)
+      const average = sum / filteredDataPoints.length
 
-      if (this.dashboardWeek.length === 7) {
-        for (let i = 0; i < this.dashboardWeek.length; i++) {
-          const element = this.dashboardWeek[i]
-          weekArr.push(parseFloat(element.aggregatedHyration))
-          if (weekArr[i] >= 0) {
-            elementCount = elementCount + weekArr[i]
-          }
-        }
-
-        this.weekChartData.dataBarOne = weekArr
-        this.weeklyAverage = Math.floor((elementCount / 7) * 100) / 100
-        this.weekChartData.title = 'Weekly summary ' + this.weeklyAverage + 'L average'
-      }
+      this.weekChartData.dataBarOne = weekDataPoints
+      this.weekChartData.title = `Weekly summary (${average} litres per day on average)`
     },
 
     updateDayChart: async function () {
-      if (this.dashboardDay.length === 1) {
-        this.dayChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
-        this.dayChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration))
-        this.dayChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + parseFloat(this.dashboardDay[0].aggregatedHyration) + 'L / ' + parseInt(this.dashboardDay[0].hydrationTarget) + 'L'
+      const dashboardDay = this.dashboardDay[0]
+      if (dashboardDay) {
+        const consumed = parseFloat(dashboardDay.aggregatedHydration)
+        const target = parseFloat(dashboardDay.hydrationTarget)
+
+        let remaining = target - consumed
+
+        if (remaining < 0) {
+          remaining = 0
+        }
+
+        this.dayChartData.dataDoughnut[0] = consumed
+        this.dayChartData.dataDoughnut[1] = remaining
+
+        this.dayChartData.title = `Hydration on ${this.formatDate(this.date)}: ${consumed}L / ${target}L`
       }
     },
 
@@ -333,7 +335,6 @@ export default {
       // FIXME: Hardcoded IDs
       updateUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
       readUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
-      weeklyAverage: 0,
       update: false,
       searchName: 'Search user..',
       usersIcon: 'person',
