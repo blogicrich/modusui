@@ -27,7 +27,7 @@ import { chartMixin } from '@/mixins/chartOptions'
 export default {
   name: 'chart-page',
   mixins: [chartMixin],
-  props: ['lineChartData', 'barChartData', 'doughnutChartData', 'chartType', 'update'],
+  props: [ 'chartData', 'chartType' ],
   components: {
     lineChart,
     barChart,
@@ -38,26 +38,30 @@ export default {
       datacollection: null,
       optionsLine: null,
       optionsBar: null,
-      optionsDoughnut: null
+      optionsDoughnut: null,
+      lineChartData: null,
+      barChartData: null,
+      doughnutChartData: null
     }
   },
   watch: {
-    update: function () {
-      if (this.update === true) {
-        this.fillChart()
-      }
+    chartData () {
+      this.fillChart()
     }
   },
   methods: {
     fillChart () {
       switch (this.chartType) {
         case 'Line':
+          this.lineChartData = this.chartData
           this.fillDataLine()
           break
         case 'Bar':
+          this.barChartData = this.chartData
           this.fillDataBar()
           break
         case 'Doughnut':
+          this.doughnutChartData = this.chartData
           this.fillDataDoughnut()
           break
       }

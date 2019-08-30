@@ -39,8 +39,7 @@
               v-if="hourLoaded"
               class="chart"
               :chartType="'Line'"
-              :lineChartData="hourChartData"
-              :update="update"
+              :chartData="hourChartData"
             />
             <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
           </v-card>
@@ -88,9 +87,8 @@
                 <charts
                   v-if="weekLoaded"
                   class="chart"
-                  :update="update"
                   :chartType="'Bar'"
-                  :barChartData="weekChartData"
+                  :chartData="weekChartData"
                 />
                 <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
               </v-card>
@@ -105,9 +103,8 @@
                 <charts
                   v-if="dayLoaded"
                   class="chart"
-                  :update="update"
                   :chartType="'Doughnut'"
-                  :doughnutChartData="dayChartData"
+                  :chartData="dayChartData"
                 />
                 <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
               </v-card>
@@ -125,7 +122,7 @@
     <v-dialog v-model="dayChartDialog">
       <v-flex xs12 sm12 md12 lg12 xl12>
         <v-card dark>
-          <charts class="chart" :chartType="'Line'" :lineChartData="hourChartData" />
+          <charts class="chart" :chartType="'Line'" :chartData="hourChartData" />
           <v-card-actions>
             <v-btn color="primary" flat="flat" @click="dayChartDialog = false">Close</v-btn>
           </v-card-actions>
@@ -135,7 +132,7 @@
 
     <v-dialog v-model="dayChartDialog" max-width="750px">
       <v-card dark>
-        <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="dayChartData" />
+        <charts class="chart" :chartType="'Doughnut'" :chartData="dayChartData" />
         <v-card-actions>
           <v-btn color="primary" flat="flat" @click="dayChartDialog = false">Close</v-btn>
         </v-card-actions>
@@ -144,7 +141,7 @@
 
     <v-dialog v-model="weekChartDialog">
       <v-card dark>
-        <charts class="chart" :chartType="'Bar'" :barChartData="weekChartData" />
+        <charts class="chart" :chartType="'Bar'" :chartData="weekChartData" />
         <v-card-actions>
           <v-btn color="primary" flat="flat" @click="weekChartDialog = false">Close</v-btn>
         </v-card-actions>
@@ -260,10 +257,6 @@ export default {
       this.updateHourChart()
       this.updateWeekChart()
       this.updateDayChart()
-      this.update = true
-      setTimeout(() => {
-        this.update = false
-      }, 100)
     },
 
     updateHourChart: function () {
@@ -380,7 +373,6 @@ export default {
       // FIXME: Hardcoded IDs
       updateUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
       readUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
-      update: false,
       searchName: 'Search user..',
       usersIcon: 'person',
       alertIcon: 'report_problem',
