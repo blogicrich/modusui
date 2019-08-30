@@ -10,6 +10,10 @@
     :hourLoaded="hourLoaded"
     :dayLoaded="dayLoaded"
     :weekLoaded="weekLoaded"
+    :usersError="usersError"
+    :hourError="hourError"
+    :dayError="dayError"
+    :weekError="weekError"
   />
 </template>
 
@@ -30,14 +34,18 @@ export default {
       usersLoaded: false,
       dayLoaded: false,
       hourLoaded: false,
-      weekLoaded: false
+      weekLoaded: false,
+      usersError: false,
+      dayError: false,
+      hourError: false,
+      weekError: false
     }
   },
   methods: {
     updateCharts (SelectedUnixTime) {
-      this.hourLoaded = false;
-      this.dayLoaded = false;
-      this.weekLoaded = false;
+      this.hourLoaded = false
+      this.dayLoaded = false
+      this.weekLoaded = false
       this.setHour(SelectedUnixTime)
       this.setDay(SelectedUnixTime)
       this.setWeek(SelectedUnixTime)
@@ -51,7 +59,7 @@ export default {
           .dashboardUsersGet
         this.usersLoaded = true
       } else {
-        this.usersLoaded = false
+        this.usersError = true
       }
     },
 
@@ -83,7 +91,7 @@ export default {
         }
         this.hourLoaded = true
       } else {
-        this.hourLoaded = false
+        this.hourError = true
       }
     },
 
@@ -99,7 +107,7 @@ export default {
           .dashboardDayGet
         this.dayLoaded = true
       } else {
-        this.dayLoaded = false
+        this.dayError = true
       }
     },
 
@@ -115,7 +123,7 @@ export default {
           .dashboardWeekGet
         this.weekLoaded = true
       } else {
-        this.weekLoaded = false
+        this.weekError = true
       }
     }
   },

@@ -34,21 +34,26 @@
           </v-card>
         </v-flex>
         <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Hour')">
-          <v-card dark v-if="hourLoaded">
+          <v-card dark v-if="!hourError">
             <charts
+              v-if="hourLoaded"
               class="chart"
               :chartType="'Line'"
               :lineChartData="hourChartData"
               :update="update"
             />
+            <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
           </v-card>
-            <v-alert :value="true" type="error" v-else>
-              Hydration snapshot not found. The base may not have communicated yet.
-          </v-alert>
+          <v-alert
+            :value="true"
+            type="error"
+            v-else
+          >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
-          <v-card class="userSelect" v-if="usersLoaded">
+          <v-card class="userSelect" v-if="!usersError">
             <baseDropletuser
+              v-if="usersLoaded"
               @userSelected="$emit('onchangedate', '', $data)"
               userHeader="eDroplet Users"
               :users="dashboardUsers"
@@ -63,40 +68,54 @@
               :commentData="commentData"
               @commentText="saveComment(...arguments)"
             ></baseDropletuser>
+            <v-progress-circular
+              v-else
+              indeterminate
+              color="primary"
+              class="ma-2"
+            ></v-progress-circular>
           </v-card>
-          <v-alert :value="true" type="error" v-else>
-            Hydration snapshot not found. The base may not have communicated yet.
-          </v-alert>
+          <v-alert
+            :value="true"
+            type="error"
+            v-else
+          >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
           <v-layout row wrap>
             <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Week')">
-              <v-card dark v-if="weekLoaded">
+              <v-card dark v-if="!weekError">
                 <charts
-
+                  v-if="weekLoaded"
                   class="chart"
                   :update="update"
                   :chartType="'Bar'"
                   :barChartData="weekChartData"
                 />
-
+                <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
               </v-card>
-                            <v-alert :value="true" type="error" v-else>
-                  Hydration snapshot not found. The base may not have communicated yet.
-                </v-alert>
+              <v-alert
+                :value="true"
+                type="error"
+                v-else
+              >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
             </v-flex>
             <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Day')">
-              <v-card dark v-if="dayLoaded">
+              <v-card dark v-if="!dayError">
                 <charts
+                  v-if="dayLoaded"
                   class="chart"
                   :update="update"
                   :chartType="'Doughnut'"
                   :doughnutChartData="dayChartData"
                 />
+                <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
               </v-card>
-                <v-alert :value="true" type="error" v-else>
-                  Hydration snapshot not found. The base may not have communicated yet.
-                </v-alert>
+              <v-alert
+                :value="true"
+                type="error"
+                v-else
+              >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -106,7 +125,7 @@
     <v-dialog v-model="dayChartDialog">
       <v-flex xs12 sm12 md12 lg12 xl12>
         <v-card dark>
-          <charts class="chart" :chartType="'Line'" :lineChartData="hourChartData"/>
+          <charts class="chart" :chartType="'Line'" :lineChartData="hourChartData" />
           <v-card-actions>
             <v-btn color="primary" flat="flat" @click="dayChartDialog = false">Close</v-btn>
           </v-card-actions>
@@ -116,7 +135,7 @@
 
     <v-dialog v-model="dayChartDialog" max-width="750px">
       <v-card dark>
-        <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="dayChartData"/>
+        <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="dayChartData" />
         <v-card-actions>
           <v-btn color="primary" flat="flat" @click="dayChartDialog = false">Close</v-btn>
         </v-card-actions>
@@ -125,7 +144,7 @@
 
     <v-dialog v-model="weekChartDialog">
       <v-card dark>
-        <charts class="chart" :chartType="'Bar'" :barChartData="weekChartData"/>
+        <charts class="chart" :chartType="'Bar'" :barChartData="weekChartData" />
         <v-card-actions>
           <v-btn color="primary" flat="flat" @click="weekChartDialog = false">Close</v-btn>
         </v-card-actions>
@@ -147,7 +166,21 @@ export default {
     baseDropletuser
   },
   mixins: [crudRoutines],
-  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'dashboardWeek', 'usersLoaded', 'dayLoaded', 'hourLoaded', 'weekLoaded'],
+  props: [
+    'dashboardUsers',
+    'dashboardComment',
+    'dashboardHour',
+    'dashboardDay',
+    'dashboardWeek',
+    'usersLoaded',
+    'dayLoaded',
+    'hourLoaded',
+    'weekLoaded',
+    'usersError',
+    'dayError',
+    'hourError',
+    'weekError'
+  ],
   computed: {
     breakpoint () {
       switch (this.$vuetify.breakpoint.name) {
@@ -234,7 +267,8 @@ export default {
     },
 
     updateHourChart: function () {
-      this.hourChartData.title = 'Activity on: ' + this.formatDate(new Date(this.date))
+      this.hourChartData.title =
+        'Activity on: ' + this.formatDate(new Date(this.date))
 
       if (this.dashboardHour.length === 24) {
         this.hourChartData.dataLineOne = this.dashboardHour
@@ -242,9 +276,18 @@ export default {
     },
 
     updateWeekChart: async function () {
-      const weekDataPoints = this.dashboardWeek.map(weekDayData => weekDayData.aggregatedHydration ? parseFloat(weekDayData.aggregatedHydration) : null)
-      const filteredDataPoints = weekDataPoints.filter(weekDataPoint => weekDataPoint !== null) // Exclude null from average calculation.
-      const sum = filteredDataPoints.reduce((total, currentValue) => total + currentValue, 0)
+      const weekDataPoints = this.dashboardWeek.map(weekDayData =>
+        weekDayData.aggregatedHydration
+          ? parseFloat(weekDayData.aggregatedHydration)
+          : null
+      )
+      const filteredDataPoints = weekDataPoints.filter(
+        weekDataPoint => weekDataPoint !== null
+      ) // Exclude null from average calculation.
+      const sum = filteredDataPoints.reduce(
+        (total, currentValue) => total + currentValue,
+        0
+      )
       const average = sum / filteredDataPoints.length
 
       this.weekChartData.dataBarOne = weekDataPoints
@@ -266,7 +309,9 @@ export default {
         this.dayChartData.dataDoughnut[0] = consumed
         this.dayChartData.dataDoughnut[1] = remaining
 
-        this.dayChartData.title = `Hydration on ${this.formatDate(this.date)}: ${consumed}L / ${target}L`
+        this.dayChartData.title = `Hydration on ${this.formatDate(
+          this.date
+        )}: ${consumed}L / ${target}L`
       }
     },
 
@@ -350,7 +395,32 @@ export default {
       date: new Date().toISOString().substr(0, 10),
 
       hourChartData: {
-        labels: ['09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00', '22:00 - 23:00', '23:00 - 00:00', '00:00 - 01:00', '01:00 - 02:00', '02:00 - 03:00', '03:00 - 04:00', '04:00 - 05:00', '05:00 - 06:00', '06:00 - 07:00', '07:00 - 08:00', '08:00 - 09:00'],
+        labels: [
+          '09:00 - 10:00',
+          '10:00 - 11:00',
+          '11:00 - 12:00',
+          '12:00 - 13:00',
+          '13:00 - 14:00',
+          '14:00 - 15:00',
+          '15:00 - 16:00',
+          '16:00 - 17:00',
+          '17:00 - 18:00',
+          '18:00 - 19:00',
+          '19:00 - 20:00',
+          '20:00 - 21:00',
+          '21:00 - 22:00',
+          '22:00 - 23:00',
+          '23:00 - 00:00',
+          '00:00 - 01:00',
+          '01:00 - 02:00',
+          '02:00 - 03:00',
+          '03:00 - 04:00',
+          '04:00 - 05:00',
+          '05:00 - 06:00',
+          '06:00 - 07:00',
+          '07:00 - 08:00',
+          '08:00 - 09:00'
+        ],
 
         labelLineOne: 'Consumed',
         dataLineOne: [],
@@ -360,20 +430,78 @@ export default {
 
         // FIXME: Hardcoded Targets
         labelLineTwo: 'Target hydration',
-        dataLineTwo: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        dataLineTwo: [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
         borderColorLineTwo: 'rgba(102, 141, 62, 1)',
         borderWidthLineTwo: 2,
 
         // FIXME: Hardcoded Targets
         labelLineThree: 'Target hydration (conditional)',
-        dataLineThree: [1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5],
+        dataLineThree: [
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
         borderColorLineThree: 'rgba(255, 159, 64, 1)',
         borderWidthLineThree: 2,
         title: 'Activity on: ' + this.formatDate(new Date(this.date))
       },
 
       weekChartData: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        labels: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
+        ],
 
         labelBarOne: 'Consumed',
         dataBarOne: [],
@@ -404,7 +532,6 @@ export default {
         cutoutPercentageDoughnut: 65,
         title: 'Hydration for ' + this.formatDate(new Date(this.date))
       }
-
     }
   }
 }
@@ -428,5 +555,4 @@ export default {
   padding-top: 0;
   margin-top: 0;
 }
-
 </style>
