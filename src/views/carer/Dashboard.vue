@@ -43,9 +43,6 @@ export default {
   },
   methods: {
     updateCharts (SelectedUnixTime) {
-      this.hourLoaded = false
-      this.dayLoaded = false
-      this.weekLoaded = false
       this.setHour(SelectedUnixTime)
       this.setDay(SelectedUnixTime)
       this.setWeek(SelectedUnixTime)
@@ -76,6 +73,9 @@ export default {
     },
 
     async setHour (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      this.hourLoaded = false;
+      this.hourError = false;
+
       // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
       this.$store.state.date = SelectedUnixTime
@@ -96,6 +96,9 @@ export default {
     },
 
     async setDay (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      this.dayLoaded = false;
+      this.dayError = false;
+
       // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
       this.$store.state.date = SelectedUnixTime
@@ -112,6 +115,9 @@ export default {
     },
 
     async setWeek (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+      this.weekLoaded = false;
+      this.weekError = false;
+      
       // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
       this.$store.state.date = SelectedUnixTime
