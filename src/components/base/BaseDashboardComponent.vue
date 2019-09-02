@@ -5,7 +5,7 @@
       <v-icon @click="subtractDay()" large>keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
         <v-text-field slot="activator" v-model="formattedDate" readonly></v-text-field>
-        <v-date-picker color="primary" color-header="primary" v-model="date" no-title scrollable>
+        <v-date-picker color="primary" color-header="primary" v-model="date" :max="maxDate" no-title scrollable>
           <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
           <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
         </v-date-picker>
@@ -372,6 +372,7 @@ export default {
       alertColor: [],
       menu: false,
       date: '',
+      maxDate: this.$moment().format('YYYY-MM-DD'),
 
       hourChartData: {
         labels: [
