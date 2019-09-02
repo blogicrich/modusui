@@ -5,7 +5,7 @@
     :dashboardDay="dashboardDay"
     :dashboardHour="dashboardHour"
     :dashboardWeek="dashboardWeek"
-    @ondatechange="updateCharts(...arguments)"
+    @dateChange="updateCharts"
     :usersLoaded="usersLoaded"
     :hourLoaded="hourLoaded"
     :dayLoaded="dayLoaded"
@@ -42,10 +42,11 @@ export default {
     }
   },
   methods: {
-    updateCharts (SelectedUnixTime) {
-      this.setHour(SelectedUnixTime)
-      this.setDay(SelectedUnixTime)
-      this.setWeek(SelectedUnixTime)
+    updateCharts (selectedDate) {
+      const selectedUnixTime = this.$moment(selectedDate).unix()
+      this.setHour(selectedUnixTime)
+      this.setDay(selectedUnixTime)
+      this.setWeek(selectedUnixTime)
     },
 
     async setUsers () {
@@ -72,13 +73,13 @@ export default {
       }
     },
 
-    async setHour (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+    async setHour (selectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.hourLoaded = false
       this.hourError = false
 
       // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
-      this.$store.state.date = SelectedUnixTime
+      this.$store.state.date = selectedUnixTime
 
       await this.$store.dispatch('fetchDashboardHourGet')
 
@@ -95,13 +96,13 @@ export default {
       }
     },
 
-    async setDay (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+    async setDay (selectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.dayLoaded = false
       this.dayError = false
 
       // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
-      this.$store.state.date = SelectedUnixTime
+      this.$store.state.date = selectedUnixTime
 
       await this.$store.dispatch('fetchDashboardDayGet')
 
@@ -114,13 +115,13 @@ export default {
       }
     },
 
-    async setWeek (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+    async setWeek (selectedUnixTime = Math.round(new Date().getTime() / 1000)) {
       this.weekLoaded = false
       this.weekError = false
 
       // FIXME: Hardcoded IDs
       this.$store.state.userId = 21
-      this.$store.state.date = SelectedUnixTime
+      this.$store.state.date = selectedUnixTime
 
       await this.$store.dispatch('fetchDashboardWeekGet')
 

@@ -2,15 +2,15 @@
   <div>
     <v-layout row align-center justify-center prepend-icon="event">
       <v-icon large>event</v-icon>
-      <v-icon @click="subDate()" large>keyboard_arrow_left</v-icon>
+      <v-icon @click="subtractDay()" large>keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
-        <v-text-field slot="activator" v-model="date" readonly></v-text-field>
+        <v-text-field slot="activator" v-model="formattedDate" readonly></v-text-field>
         <v-date-picker color="primary" color-header="primary" v-model="date" no-title scrollable>
           <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
           <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
         </v-date-picker>
       </v-menu>
-      <v-icon @click="addDate()" large>keyboard_arrow_right</v-icon>
+      <v-icon @click="addDay()" large>keyboard_arrow_right</v-icon>
     </v-layout>
     <v-container fluid grid-list-md d-flex>
       <v-layout fill-height wrap>
@@ -155,7 +155,6 @@ import charts from '@/components/base/BaseChartComponent'
 import baseDropletuser from '@/components/sub/SubUserSelectComponent'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import apiLib from '@/services/apiLib'
-import * as moment from 'moment'
 
 export default {
   components: {
@@ -193,11 +192,16 @@ export default {
     alertColors () {
       this.setAlertColors()
       return this.alertColor
+    },
+
+    formattedDate () {
+      return this.$moment(this.date).format('L')
     }
   },
   watch: {
     date: function () {
-      this.dateChanged()
+      this.$emit('dateChange', this.date)
+      this.formattedDate = this.$moment(this.date).format('L')
     },
 
     hourLoaded: function () {
@@ -213,9 +217,7 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
-      this.dateChanged()
-    }, 200)
+    this.date = this.$moment().format('YYYY-MM-DD')
     this.getComment()
   },
   methods: {
@@ -234,6 +236,14 @@ export default {
       apiLib.updateData(this.updateUrl, data, true, true)
     },
 
+    addDay () {
+      this.date = this.$moment(this.date, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD')
+    },
+
+    subtractDay () {
+      this.date = this.$moment(this.date).subtract(1, 'day').format('YYYY-MM-DD')
+    },
+
     setAlertColors () {
       for (let i = 0; i < this.dashboardUsers.length; i++) {
         if (this.dashboardUsers[i].alertType === 'hydrated') {
@@ -249,14 +259,7 @@ export default {
     },
 
     formatDate (date) {
-      return moment(date).format('D MMMM YYYY')
-    },
-
-    dateChanged: function () {
-      this.$emit('ondatechange', this.SelectedUnixTime)
-      this.updateHourChart()
-      this.updateWeekChart()
-      this.updateDayChart()
+      return this.$moment(date).format('LL')
     },
 
     updateHourChart: function () {
@@ -302,24 +305,8 @@ export default {
         this.dayChartData.dataDoughnut[0] = consumed
         this.dayChartData.dataDoughnut[1] = remaining
 
-        this.dayChartData.title = `Hydration on ${this.formatDate(
-          this.date
-        )}: ${consumed}L / ${target}L`
+        this.dayChartData.title = `Hydration on ${this.formatDate(this.date)}: ${consumed}L / ${target}L`
       }
-    },
-
-    addDate: function () {
-      let dateNow = new Date(this.date)
-      this.date = dateNow.setDate(new Date(dateNow.getDate() + 1))
-      this.date = dateNow.toISOString().substr(0, 10)
-      this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
-    },
-
-    subDate: function () {
-      let dateNow = new Date(this.date)
-      this.date = dateNow.setDate(new Date(dateNow.getDate() - 1))
-      this.date = dateNow.toISOString().substr(0, 10)
-      this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
     },
 
     openDialog: function (charType) {
@@ -384,7 +371,7 @@ export default {
       dayChartDialog: false,
       alertColor: [],
       menu: false,
-      date: new Date().toISOString().substr(0, 10),
+      date: '',
 
       hourChartData: {
         labels: [
