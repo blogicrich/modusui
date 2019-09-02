@@ -10,7 +10,7 @@
           <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
         </v-date-picker>
       </v-menu>
-      <v-icon @click="addDay()" large>keyboard_arrow_right</v-icon>
+      <v-icon @click="addDay()" large :disabled="date === maxDate">keyboard_arrow_right</v-icon>
     </v-layout>
     <v-container fluid grid-list-md d-flex>
       <v-layout fill-height wrap>
@@ -284,7 +284,14 @@ export default {
         (total, currentValue) => total + currentValue,
         0
       )
-      const average = sum / filteredDataPoints.length
+
+      let average
+
+      if (filteredDataPoints.length > 0) {
+        average = sum / filteredDataPoints.length
+      } else {
+        average = 0
+      }
 
       this.weekChartData.dataBarOne = weekDataPoints
       this.weekChartData.title = `Weekly summary (${average} litres per day on average)`
