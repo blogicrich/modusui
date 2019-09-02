@@ -12,10 +12,11 @@ export const moduleDashboardUsers = {
   actions: {
     async fetchDashboardUsersGet (context) {
       const response = await apiLib.getData('carer/dashboard-users/', false, true)
-      if (typeof response === 'undefined' || response.length <= 0) {
-        context.commit('SET_DASHBOARDUSERS', null)
-      } else {
+
+      if (typeof response === 'object') {
         context.commit('SET_DASHBOARDUSERS', response)
+      } else {
+        context.commit('SET_DASHBOARDUSERS', null)
       }
     }
   }

@@ -14,7 +14,8 @@ export const moduleDashboardHour = {
     // get all data
     async fetchDashboardHourGet (context) {
       const response = await apiLib.getData('carer/dashboard-hour/' + this.getters.getterUserId + '/' + this.getters.getterDate, false, true)
-      if (typeof response === 'undefined' || response.length <= 0) {
+
+      if (Array.isArray(typeof response === 'object')) {
         context.commit('SET_DASHBOARDHOUR', null)
       } else {
         context.commit('SET_DASHBOARDHOUR', response)

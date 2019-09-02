@@ -14,11 +14,11 @@ export const moduleDashboardDay = {
   actions: {
     async fetchDashboardDayGet (context) {
       const response = await apiLib.getData('carer/dashboard-day/' + this.getters.getterUserId + '/' + this.getters.getterDate, false, true)
-
-      if (typeof response === 'undefined' || response.length <= 0) {
-        context.commit('SET_DASHBOARDDAY', null)
-      } else {
+      console.log(response)
+      if (typeof response === 'object') {
         context.commit('SET_DASHBOARDDAY', response)
+      } else {
+        context.commit('SET_DASHBOARDDAY', null)
       }
     }
   }
