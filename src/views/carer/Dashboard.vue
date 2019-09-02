@@ -83,7 +83,7 @@ export default {
 
       await this.$store.dispatch('fetchDashboardHourGet')
 
-      if (this.$store.state.dashboardHour.dashboardHourGet.length === 24) {
+      if (this.$store.state.dashboardHour.dashboardHourGet) {
         let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
         for (let index = 0; index < hourStore.length; index++) {
           this.dashboardHour[index] =
@@ -106,9 +106,8 @@ export default {
 
       await this.$store.dispatch('fetchDashboardDayGet')
 
-      if (this.$store.state.dashboardDay.dashboardDayGet.length > 0) {
-        this.dashboardDay = await this.$store.state.dashboardDay
-          .dashboardDayGet
+      if (this.$store.state.dashboardDay.dashboardDayGet) {
+        this.dashboardDay = this.$store.state.dashboardDay.dashboardDayGet
         this.dayLoaded = true
       } else {
         this.dayError = true
@@ -125,7 +124,7 @@ export default {
 
       await this.$store.dispatch('fetchDashboardWeekGet')
 
-      if (this.$store.state.dashboardWeek.dashboardWeekGet.length === 7) {
+      if (this.$store.state.dashboardWeek.dashboardWeekGet) {
         this.dashboardWeek = await this.$store.state.dashboardWeek
           .dashboardWeekGet
         this.weekLoaded = true
