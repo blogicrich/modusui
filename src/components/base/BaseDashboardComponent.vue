@@ -18,7 +18,7 @@
           <v-card class="userSelect">
             <baseDropletuser
               v-if="usersLoaded"
-              @userSelected="$emit('onchangedate', '', $data)"
+              @userSelected="$emit('userChange', $user)"
               userHeader="eDroplet Users"
               :users="dashboardUsers"
               :searchName="searchName"
@@ -53,7 +53,7 @@
           <v-card class="userSelect" v-if="!usersError">
             <baseDropletuser
               v-if="usersLoaded"
-              @userSelected="$emit('onchangedate', '', $data)"
+              @userSelected="$emit('userChange', $data)"
               userHeader="eDroplet Users"
               :users="dashboardUsers"
               :searchName="searchName"
@@ -223,7 +223,6 @@ export default {
     getComment () {
       apiLib.getData(this.readUrl, true, true).then(response => {
         this.commentData = response[0]
-        console.log(response[0])
       })
     },
 
@@ -361,7 +360,6 @@ export default {
       }
     }
   },
-
   data () {
     return {
       commentData: '',

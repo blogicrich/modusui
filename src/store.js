@@ -40,14 +40,22 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     storeId: 1,
-    userId: 1,
+    userId: null,
     carerId: 1,
     accountHolderId: 1,
     deviceMessageTypeId: 1,
     messageNo: 1,
-    date: 0,
+    date: null,
     conditionId: 1,
     dayReportId: 1
+  },
+  mutations: {
+    SET_USER_ID (state, payload) {
+      state.userId = payload
+    },
+    SET_DATE (state, payload) {
+      state.date = payload
+    }
   },
   getters: {
     getterStoreId: state => state.storeId,

@@ -2,7 +2,8 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardUsers = {
   state: {
-    dashboardUsersGet: []
+    dashboardUsersGet: [],
+    selectedUser: null
   },
   mutations: {
     SET_DASHBOARDUSERS (state, data) {

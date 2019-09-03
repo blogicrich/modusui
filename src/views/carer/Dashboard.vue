@@ -1,20 +1,21 @@
 <template>
-  <dashboard-component
-    :dashboardUsers="dashboardUsers"
-    :dashboardComment="dashboardComment"
-    :dashboardDay="dashboardDay"
-    :dashboardHour="dashboardHour"
-    :dashboardWeek="dashboardWeek"
-    @dateChange="updateCharts"
-    :usersLoaded="usersLoaded"
-    :hourLoaded="hourLoaded"
-    :dayLoaded="dayLoaded"
-    :weekLoaded="weekLoaded"
-    :usersError="usersError"
-    :hourError="hourError"
-    :dayError="dayError"
-    :weekError="weekError"
-  />
+    <dashboard-component
+        :dashboardUsers="dashboardUsers"
+        :dashboardComment="dashboardComment"
+        :dashboardDay="dashboardDay"
+        :dashboardHour="dashboardHour"
+        :dashboardWeek="dashboardWeek"
+        @dateChange="updateCharts"
+        @userChange="updateUser"
+        :usersLoaded="usersLoaded"
+        :hourLoaded="hourLoaded"
+        :dayLoaded="dayLoaded"
+        :weekLoaded="weekLoaded"
+        :usersError="usersError"
+        :hourError="hourError"
+        :dayError="dayError"
+        :weekError="weekError"
+    />
 </template>
 
 <script>
@@ -43,21 +44,33 @@ export default {
   },
   methods: {
     updateCharts (selectedDate) {
-      const selectedUnixTime = this.$moment(selectedDate).unix()
-      this.setHour(selectedUnixTime)
-      this.setDay(selectedUnixTime)
-      this.setWeek(selectedUnixTime)
+      this.$store.commit('SET_DATE', this.$moment(selectedDate).unix())
+
+      if (this.$store.state.userId) {
+        this.setHour()
+        this.setDay()
+        this.setWeek()
+      }
+    },
+
+    updateUser (selectedUser) {
+      console.log(selectedUser)
+      this.$store.commit('SET_USER_ID', selectedUser.userId)
     },
 
     async setUsers () {
       await this.$store.dispatch('fetchDashboardUsersGet')
+      this.dashboardUsers = this.$store.state.dashboardUsers.dashboardUsersGet
 
-      if (this.$store.state.dashboardUsers.dashboardUsersGet) {
-        this.dashboardUsers = await this.$store.state.dashboardUsers
-          .dashboardUsersGet
+      if (this.dashboardUsers && this.dashboardUsers.length !== 0) {
         this.usersLoaded = true
+        this.$store.commit('SET_USER_ID', this.dashboardUsers[0].userId)
+        this.updateCharts()
       } else {
         this.usersError = true
+        this.hourError = true
+        this.weekError = true
+        this.dayError = true
       }
     },
 
@@ -65,7 +78,7 @@ export default {
       await this.$store.dispatch('fetchDashboardCommentGet')
 
       if (this.$store.state.DashboardComment.dashboardCommentGet) {
-        let commentStore = await this.$store.state.DashboardComment
+        let commentStore = this.$store.state.DashboardComment
           .dashboardCommentGet
         for (let index = 0; index < commentStore.length; index++) {
           this.dashboardComment.push(commentStore[index])
@@ -73,22 +86,18 @@ export default {
       }
     },
 
-    async setHour (selectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+    async setHour () {
       this.hourLoaded = false
       this.hourError = false
-
-      // FIXME: Hardcoded IDs
-      this.$store.state.userId = 21
-      this.$store.state.date = selectedUnixTime
 
       await this.$store.dispatch('fetchDashboardHourGet')
 
       if (this.$store.state.dashboardHour.dashboardHourGet) {
-        let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
+        let hourStore = this.$store.state.dashboardHour.dashboardHourGet
         for (let index = 0; index < hourStore.length; index++) {
           this.dashboardHour[index] =
-            parseFloat(hourStore[index].volumeConsumedByViaOther) +
-            parseFloat(hourStore[index].volumeConsumedViaEDroplet)
+                        parseFloat(hourStore[index].volumeConsumedByViaOther) +
+                        parseFloat(hourStore[index].volumeConsumedViaEDroplet)
         }
         this.hourLoaded = true
       } else {
@@ -96,13 +105,9 @@ export default {
       }
     },
 
-    async setDay (selectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+    async setDay () {
       this.dayLoaded = false
       this.dayError = false
-
-      // FIXME: Hardcoded IDs
-      this.$store.state.userId = 21
-      this.$store.state.date = selectedUnixTime
 
       await this.$store.dispatch('fetchDashboardDayGet')
 
@@ -114,18 +119,14 @@ export default {
       }
     },
 
-    async setWeek (selectedUnixTime = Math.round(new Date().getTime() / 1000)) {
+    async setWeek () {
       this.weekLoaded = false
       this.weekError = false
-
-      // FIXME: Hardcoded IDs
-      this.$store.state.userId = 21
-      this.$store.state.date = selectedUnixTime
 
       await this.$store.dispatch('fetchDashboardWeekGet')
 
       if (this.$store.state.dashboardWeek.dashboardWeekGet) {
-        this.dashboardWeek = await this.$store.state.dashboardWeek
+        this.dashboardWeek = this.$store.state.dashboardWeek
           .dashboardWeekGet
         this.weekLoaded = true
       } else {

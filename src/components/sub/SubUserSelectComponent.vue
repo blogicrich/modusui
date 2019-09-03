@@ -225,17 +225,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
-  .userSelect {
-    background-color:$table-row-hover;
+@import "./public/scss/main.scss";
+.userSelect {
+    background-color: $table-row-hover;
     cursor: pointer;
-  }
-  .userHoverSelect:hover {
-    background-color:$table-row-hover;
+}
+.userHoverSelect:hover {
+    background-color: $table-row-hover;
     cursor: pointer;
-  }
-  .searchbar {
+}
+.searchbar {
     width: -webkit-fill-available;
     border-bottom: 1px solid $vuetify-primary;
-  }
+}
 </style>
