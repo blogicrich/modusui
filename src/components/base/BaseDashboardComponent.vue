@@ -4,7 +4,7 @@
       <v-icon large>event</v-icon>
       <v-icon @click="subtractDay()" large>keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
-        <v-text-field slot="activator" v-model="formattedDate" readonly></v-text-field>
+        <v-text-field slot="activator" :value="formattedDate" readonly></v-text-field>
         <v-date-picker color="primary" color-header="primary" v-model="date" :max="maxDate" no-title scrollable>
           <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
           <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
@@ -45,9 +45,9 @@
           </v-card>
           <v-alert
             :value="true"
-            type="error"
+            type="info"
             v-else
-          >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
+          >Hourly data is not available at this time.</v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
           <v-card class="userSelect" v-if="!usersError">
@@ -78,7 +78,7 @@
             :value="true"
             type="error"
             v-else
-          >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
+          >An error occurred while loading users.</v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
           <v-layout row wrap>
@@ -94,9 +94,9 @@
               </v-card>
               <v-alert
                 :value="true"
-                type="error"
+                type="ifno"
                 v-else
-              >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
+              >Weekly data is not available at this time.</v-alert>
             </v-flex>
             <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Day')">
               <v-card dark v-if="!dayError">
@@ -110,9 +110,9 @@
               </v-card>
               <v-alert
                 :value="true"
-                type="error"
+                type="info"
                 v-else
-              >Hydration snapshot not found. The base may not have communicated yet.</v-alert>
+              >Daily hydration data is not available at this time.</v-alert>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -201,7 +201,6 @@ export default {
   watch: {
     date: function () {
       this.$emit('dateChange', this.date)
-      this.formattedDate = this.$moment(this.date).format('L')
     },
 
     hourLoaded: function () {
@@ -277,9 +276,11 @@ export default {
           ? parseFloat(weekDayData.aggregatedHydration)
           : null
       )
+
       const filteredDataPoints = weekDataPoints.filter(
         weekDataPoint => weekDataPoint !== null
       ) // Exclude null from average calculation.
+
       const sum = filteredDataPoints.reduce(
         (total, currentValue) => total + currentValue,
         0
