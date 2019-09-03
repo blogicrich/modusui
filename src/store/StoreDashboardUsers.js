@@ -11,7 +11,7 @@ export const moduleDashboardUsers = {
   },
   actions: {
     async fetchDashboardUsersGet (context) {
-      const response = await apiLib.getData('carer/dashboard-users/', false, true)
+      const response = await apiLib.getData('carer/dashboard-users/', false, false)
 
       if (typeof response === 'object') {
         context.commit('SET_DASHBOARDUSERS', response)
