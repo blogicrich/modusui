@@ -252,8 +252,8 @@ export default {
 
     updateWeekChart: async function () {
       const weekDataPoints = this.dashboardWeek.map(weekDayData =>
-        weekDayData.aggregatedHydration
-          ? parseFloat(weekDayData.aggregatedHydration)
+        (weekDayData.volumeConsumedViaEDroplet && weekDayData.volumeConsumedViaOther)
+          ? (parseFloat(weekDayData.volumeConsumedViaEDroplet) + parseFloat(weekDayData.volumeConsumedViaOther))
           : null
       )
 
@@ -281,7 +281,7 @@ export default {
     updateDayChart: async function () {
       const dashboardDay = this.dashboardDay[0]
       if (dashboardDay) {
-        const consumed = parseFloat(dashboardDay.aggregatedHydration)
+        const consumed = parseFloat(dashboardDay.volumeConsumedViaEDroplet) + parseFloat(dashboardDay.volumeConsumedViaOther)
         const target = parseFloat(dashboardDay.hydrationTarget)
 
         let remaining = target - consumed
