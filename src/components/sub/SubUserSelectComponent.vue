@@ -116,7 +116,7 @@ export default {
       dialogSettings: false,
       dialogComment: false,
       dialogWidth: '',
-      commentText: this.commentData.comment,
+      commentText: '',
       commentSavedText: '',
       commentRules: [
         v => v.length <= this.maxCharac || 'Name must be less than ' + this.maxCharac + ' characters'

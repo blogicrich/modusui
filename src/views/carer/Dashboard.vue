@@ -140,7 +140,8 @@ export default {
   },
   mounted () {
     this.setUsers()
-    this.setComment()
+    // FIXME: Comments are broken, uses hardcoded IDs
+    // this.setComment()
   }
 }
 </script>
