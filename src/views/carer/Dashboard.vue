@@ -53,7 +53,7 @@ export default {
     },
 
     updateDate (date) {
-      this.$store.commit('SET_DATE', this.$moment(date).unix())
+      this.$store.commit('SET_DATE', this.$moment.utc(date).unix())
       this.updateCharts()
     },
 
