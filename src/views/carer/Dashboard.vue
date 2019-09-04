@@ -5,7 +5,7 @@
         :dashboardDay="dashboardDay"
         :dashboardHour="dashboardHour"
         :dashboardWeek="dashboardWeek"
-        @dateChange="updateCharts"
+        @dateChange="updateDate"
         @userChange="updateUser"
         :usersLoaded="usersLoaded"
         :hourLoaded="hourLoaded"
@@ -27,6 +27,7 @@ export default {
   },
   data () {
     return {
+      selectedDate: null,
       dashboardDay: {},
       dashboardHour: [],
       dashboardUsers: [],
@@ -43,19 +44,22 @@ export default {
     }
   },
   methods: {
-    updateCharts (selectedDate) {
-      this.$store.commit('SET_DATE', this.$moment(selectedDate).unix())
-
-      if (this.$store.state.userId) {
+    updateCharts () {
+      if (this.$store.state.userId && this.$store.state.date) {
         this.setHour()
         this.setDay()
         this.setWeek()
       }
     },
 
+    updateDate (date) {
+      this.$store.commit('SET_DATE', this.$moment(date).unix())
+      this.updateCharts()
+    },
+
     updateUser (selectedUser) {
-      console.log(selectedUser)
       this.$store.commit('SET_USER_ID', selectedUser.userId)
+      this.updateCharts()
     },
 
     async setUsers () {

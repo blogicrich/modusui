@@ -14,25 +14,6 @@
     </v-layout>
     <v-container fluid grid-list-md d-flex>
       <v-layout fill-height wrap>
-        <v-flex d-flex xs12 sm12 md5 lg5 xl5 v-if="breakpoint">
-          <v-card class="userSelect">
-            <baseDropletuser
-              v-if="usersLoaded"
-              @userSelected="$emit('userChange', $user)"
-              userHeader="eDroplet Users"
-              :users="dashboardUsers"
-              :searchName="searchName"
-              :primaryColor="primaryColor"
-              :usersIcon="usersIcon"
-              :alertIcon="alertIcon"
-              :btnIcon="btnIcon"
-              :alertColor="alertColors"
-              :commentIcon="commentIcon"
-              :commentData="commentData"
-              :maxCharac="'50'"
-            ></baseDropletuser>
-          </v-card>
-        </v-flex>
         <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Hour')">
           <v-card dark v-if="!hourError">
             <charts
@@ -53,7 +34,7 @@
           <v-card class="userSelect" v-if="!usersError">
             <baseDropletuser
               v-if="usersLoaded"
-              @userSelected="$emit('userChange', $data)"
+              @userSelected="$emit('userChange', $event)"
               userHeader="eDroplet Users"
               :users="dashboardUsers"
               :searchName="searchName"
@@ -65,7 +46,7 @@
               :commentIcon="commentIcon"
               :maxCharac="'50'"
               :commentData="commentData"
-              @commentText="saveComment(...arguments)"
+              @commentText="saveComment"
             ></baseDropletuser>
             <v-progress-circular
               v-else
