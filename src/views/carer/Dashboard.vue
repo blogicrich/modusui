@@ -5,6 +5,7 @@
         :dashboardDay="dashboardDay"
         :dashboardHour="dashboardHour"
         :dashboardWeek="dashboardWeek"
+        @refresh="updateCharts"
         @dateChange="updateDate"
         @userChange="updateUser"
         :usersLoaded="usersLoaded"

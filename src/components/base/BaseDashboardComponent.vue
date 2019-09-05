@@ -2,15 +2,16 @@
   <div>
     <v-layout row align-center justify-center prepend-icon="event">
       <v-icon large>event</v-icon>
-      <v-icon @click="subtractDay()" large>keyboard_arrow_left</v-icon>
+      <v-icon @click="subtractDay()" large title="Decrease date by one day">keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
-        <v-text-field slot="activator" :value="formattedDate" readonly></v-text-field>
+        <v-text-field slot="activator" :value="formattedDate" readonly title="Pick a date"></v-text-field>
         <v-date-picker color="primary" color-header="primary" v-model="date" :max="maxDate" no-title scrollable>
           <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
           <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
         </v-date-picker>
       </v-menu>
-      <v-icon @click="addDay()" large :disabled="date === maxDate">keyboard_arrow_right</v-icon>
+      <v-icon @click="addDay()" large :disabled="date === maxDate" title="Increase date by one day">keyboard_arrow_right</v-icon>
+      <v-icon @click="refresh()" large :disabled="!refreshEnabled" title="Check for new data">refresh</v-icon>
     </v-layout>
     <v-container fluid grid-list-md d-flex>
       <v-layout fill-height wrap>
@@ -223,6 +224,15 @@ export default {
       this.date = this.$moment(this.date).subtract(1, 'day').format('YYYY-MM-DD')
     },
 
+    refresh () {
+      this.$emit('refresh')
+      this.refreshEnabled = false
+
+      setTimeout(() => {
+        this.refreshEnabled = true
+      }, this.refreshCooldown)
+    },
+
     setAlertColors () {
       for (let i = 0; i < this.dashboardUsers.length; i++) {
         if (this.dashboardUsers[i].alertType === 'hydrated') {
@@ -356,6 +366,8 @@ export default {
       menu: false,
       date: '',
       maxDate: this.$moment().format('YYYY-MM-DD'),
+      refreshEnabled: true,
+      refreshCooldown: 2000,
 
       hourChartData: {
         labels: [
