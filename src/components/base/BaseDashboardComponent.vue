@@ -242,12 +242,8 @@ export default {
     },
 
     updateHourChart: function () {
-      this.hourChartData.title =
-        'Activity on: ' + this.formatDate(new Date(this.date))
-
-      if (this.dashboardHour.length === 24) {
-        this.hourChartData.dataLineOne = this.dashboardHour
-      }
+      this.hourChartData.title = `Activity on: ${this.formatDate(this.date)}`
+      this.hourChartData.dataLineOne = this.dashboardHour
     },
 
     updateWeekChart: async function () {
@@ -275,7 +271,7 @@ export default {
       }
 
       this.weekChartData.dataBarOne = weekDataPoints
-      this.weekChartData.title = `Weekly summary (${average} litres per day on average)`
+      this.weekChartData.title = `Weekly summary (${average.toFixed(2)} litres per day on average)`
     },
 
     updateDayChart: async function () {
@@ -293,7 +289,7 @@ export default {
         this.dayChartData.dataDoughnut[0] = consumed
         this.dayChartData.dataDoughnut[1] = remaining
 
-        this.dayChartData.title = `Hydration on ${this.formatDate(this.date)}: ${consumed}L / ${target}L`
+        this.dayChartData.title = `Hydration on ${this.formatDate(this.date)}: ${consumed.toFixed(2)}L / ${target.toFixed(2)}L`
       }
     },
 
