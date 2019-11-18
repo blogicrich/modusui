@@ -8,7 +8,7 @@
       />
         <!-- <v-spacer></v-spacer> -->
         <selectComponent
-          v-if="userPerms"
+          v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')"
           slot="search"
           :users="users"
           :selectAll="selectAll"
@@ -122,12 +122,8 @@ export default {
     }
   },
   computed: {
-    userPerms () {
-      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        return true
-      } else {
-        return false
-      }
+    user: function () {
+      return this.$store.getters.level
     }
   },
   methods: {

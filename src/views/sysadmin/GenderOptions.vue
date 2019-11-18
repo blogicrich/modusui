@@ -90,7 +90,7 @@ export default {
           value: 'genderId',
           cellType: 'tb',
           hidden: true,
-          editable: true
+          editable: false
         },
         {
           text: 'Description',

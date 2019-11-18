@@ -2,7 +2,7 @@
   <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
     <BaseLogin
       :msg="msg"
-      :isAuthenticating="isAuthenticating"
+      :isAuthenticating="authenticated"
       :isActive="isActive"
       :primaryColor="primaryColor"
       :spinnerSize="spinnerSize"
@@ -14,10 +14,8 @@
 
 <script>
 import BaseLogin from '@/components/base/BaseLoginComponent'
-import apiLib from '@/services/apiLib'
 
 export default {
-  /* eslint-disable */
   name: 'Login',
   components: {
     BaseLogin
@@ -25,42 +23,40 @@ export default {
   data: function () {
     return {
       msg: '',
-      active: false,
-      isAuthenticating: false,
-      isActive: false,
       primaryColor: 'primary',
       spinnerSize: '50',
       spinnerWidth: '3'
-      // src: './src/assets/ed_logo.svg'
     }
   },
   methods: {
-    submitCredentials (item) {
-      this.isAuthenticating = true
-      let data = apiLib.postAuth('login', item).then(response => {
-        if (response) {
-          if (response.roles) {
-            this.isActive = false
-            this.$emit('authenticated', { 
-              state: true, 
-              level: response.roles, 
-              token: response.token, 
-              deptPersonsId: response.deptPersonsId, 
-              portalAuthorisedId: response.portalAuthorisedId 
-              })
-          }
-        } else {
-          this.$emit('authenticated', { state: false, level: [], token: null, deptPersonsId: null, portalAuthorisedId: null })
-          this.msg = response.message
-          this.isActive = true
-        }
-      })
-      this.isAuthenticating = false
-      return data
+    async submitCredentials (item) {
+      await this.$store.dispatch('POST_LOGIN', item)
+      this.$emit('authenticated')
+    }
+  },
+  computed: {
+    authenticated: function () {
+      return this.$store.getters.authenticated
+    },
+    level: function () {
+      return this.$store.getters.level
+    },
+    token: function () {
+      return this.$store.getters.token
+    },
+    deptPersonsId: function () {
+      return this.$store.getters.deptPersonsId
+    },
+    isActive: function () {
+      return this.$store.getters.isActive
+    },
+    portalAuthorisedId: function () {
+      return this.$store.getters.portalAuthorisedId
     }
   },
   mounted () {
-    this.$emit('authenticated', { state: false, level: [], token: null, deptPersonsId: null, portalAuthorisedId: null })
+    this.$store.dispatch('LOGOUT')
+    this.$emit('authenticated')
   }
 }
 </script>

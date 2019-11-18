@@ -39,45 +39,55 @@ error.message :
 
 import axios from 'axios'
 import { EventBus } from '@/mixins/eventBus.js'
+import { moduleEdropletApp } from '@/store/StoreEdropletApp'
 
 let url = function () {
   let val = ''
   switch (process.env.NODE_ENV) {
     case 'development':
-      val = 'http://127.0.0.1:3000/'
+      // val = 'http://127.0.0.1:3000/'
+      val = 'http://3.9.170.202/api/'
       return val
     case 'production':
-      val = 'https://edroplet.ndevr.co.uk:3000/'
+      val = 'http://3.9.170.202/api/'
       return val
     default:
-      val = 'http://127.0.0.1:3000/'
+      val = 'http://3.9.170.202/api/'
       break
   }
   return val
 }
 
-let setToken = function () {
-  try {
-    if (localStorage.getItem('auth') !== null) {
-      axios.defaults.headers.common['authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token
-    } else {
-      delete axios.defaults.headers.common['authorization']
-      axios.defaults.headers.common['Content-Type'] = 'application/json'
-    }
-  } catch (error) {
-    console.log(error)
-    return 'none'
-  }
-}
+// let setToken = function () {
+//   try {
+//     if (localStorage.getItem('auth') !== null) {
+//       axios.defaults.headers.common['authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token
+//     } else {
+//       delete axios.defaults.headers.common['authorization']
+//       axios.defaults.headers.common['Content-Type'] = 'application/json'
+//     }
+//   } catch (error) {
+//     console.log(error)
+//     return 'none'
+//   }
+// }
 
 let axi = axios.create({
   baseURL: url(),
   timeout: 10000
 })
 
-axi.interceptors.response.use(function (response) {
-  return response
+axi.interceptors.request.use(function (config) {
+  // Do something before request is sent
+  if (moduleEdropletApp.getters.token === null || moduleEdropletApp.getters.token === undefined) {
+    config.headers.common['authorization'] = { 'Bearer ': moduleEdropletApp.getters['token'] }
+  } else {
+    delete axios.defaults.headers.common['authorization']
+    axios.defaults.headers.common['Content-Type'] = { 'Accept ': 'application/json' }
+  }
+  return config
 }, function (error) {
+  // Do something with request error
   return Promise.reject(error)
 })
 
@@ -96,7 +106,6 @@ var logger = function (responseObj, url, data) {
 export default {
 
   async deleteData (url, log, toast) {
-    await setToken()
     return axi.delete(url).then(response => {
       if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
       if (log) logger(response, url)
@@ -124,7 +133,6 @@ export default {
   // Get data
 
   async getData (url, log, toast) {
-    await setToken()
     return axi.get(url).then(response => {
       // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
       if (log) logger(response, url)
@@ -150,7 +158,6 @@ export default {
   // Add (POST) new data
 
   async postData (url, data, log, toast) {
-    await setToken()
     if (data) {
       return axi.post(url, data).then(response => {
         if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
@@ -179,7 +186,6 @@ export default {
   // Post Auth
 
   async postAuth (url, data, log, toast) {
-    await setToken()
     if (data) {
       return axi.post(url, data).then(response => {
         // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
@@ -207,7 +213,6 @@ export default {
   // Update (PUT) data
 
   async updateData (url, data, log, toast) {
-    await setToken()
     if (data) {
       return axi.put(url, data).then(response => {
         if (toast) EventBus.$emit('snack-msg', { text: response.statusText || response.data, time: 6000, color: 'success', state: true })

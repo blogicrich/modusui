@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+// App
+import { moduleEdropletApp } from '@/store/StoreEdropletApp'
 // system admins
 import { moduleSystemAdmin } from '@/store/StoreSystemAdmin'
 import { moduleConditionsOptions } from '@/store/StoreConditionsOptions'
@@ -11,7 +12,6 @@ import { moduleTextEmailMessages } from '@/store/StoreTextEmailMessages'
 import { moduleHydrationParameters } from '@/store/StoreHydrationParameters'
 import { moduleVoiceMessagesDefaults } from '@/store/StoreVoiceMessagesDefaults' // get no data
 import { moduleIntervalOptions } from '@/store/StoreIntervalOptions'
-
 // client admins
 import { moduleCLIAdminVoiceMessage } from '@/store/StoreVoiceMessage'
 import { moduleCLIAdminConditions } from '@/store/StoreCLIAdminConditions'
@@ -19,7 +19,6 @@ import { moduleEDropMan } from '@/store/StoreEDropMan'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
 import { modulePersonnelSettings } from '@/store/StorePersonnelSettings'
 import { moduleWizard } from '@/store/StoreWizard'
-
 // carer
 import { moduleAdditionalDrinks } from '@/store/StoreAdditionalDrinks'
 import { moduleConditions } from '@/store/StoreCarerConditions'
@@ -27,7 +26,6 @@ import { moduleAway } from '@/store/StoreAway'
 import { moduleAlerts } from '@/store/StoreAlerts'
 import { moduleReports } from '@/store/StoreReports'
 import { moduleBases } from '@/store/StoreBases'
-
 // Dashboard
 import { moduleDashboardDay } from '@/store/StoreDashboardDay'
 import { moduleDashboardHour } from '@/store/StoreDashboardHour'
@@ -38,40 +36,27 @@ import { moduleDashboardWeek } from '@/store/StoreDashboardWeek'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  namespaced: true, // All getters, actions and mutations will be namespaced according to the module path.
+  strict: process.env.NODE_ENV !== 'production', // Minimises the cost of VUEX mutations outside of the store. Expensive should not be utilised in production.
   state: {
+    userDataLoading: false,
     storeId: 1,
-    userId: null,
+    userId: 1,
     carerId: 1,
     accountHolderId: 1,
     deviceMessageTypeId: 1,
     messageNo: 1,
-    date: null,
+    date: 0,
     conditionId: 1,
     dayReportId: 1
   },
-  mutations: {
-    SET_USER_ID (state, payload) {
-      state.userId = payload
-    },
-    SET_DATE (state, payload) {
-      state.date = payload
-    }
-  },
-  getters: {
-    getterStoreId: state => state.storeId,
-    getterUserId: state => state.userId,
-    getterCarerId: state => state.carerId,
-    getterAccountHolderId: state => state.accountHolderId,
-    getterDeviceMessageTypeId: state => state.deviceMessageTypeId,
-    getterMessageNo: state => state.messageNo,
-    getterDate: state => state.date,
-    getterConditionId: state => state.conditionId,
-    getterDayReportId: state => state.dayReportId
-  },
   modules: {
+    // Each module can contain its own state, mutations, actions, getters and modules! It's fractal to nth degree.
+    // App
+    eDropletApp: moduleEdropletApp,
     // system admins
     containerTypes: moduleContainerTypes,
-    titels: moduleTitles,
+    titles: moduleTitles,
     genderOptions: moduleGenderOptions,
     conditionOptions: moduleConditionsOptions,
     textEmailMessages: moduleTextEmailMessages,
@@ -79,7 +64,6 @@ export default new Vuex.Store({
     voiceMessages: moduleVoiceMessagesDefaults,
     intervalOptions: moduleIntervalOptions,
     systemAdmin: moduleSystemAdmin,
-
     // client admins
     conditions: moduleCLIAdminConditions,
     cliAdminVoiceMessage: moduleCLIAdminVoiceMessage,
@@ -87,7 +71,6 @@ export default new Vuex.Store({
     intervalSettings: moduleIntervalSettings,
     personnelSettings: modulePersonnelSettings,
     wizard: moduleWizard,
-
     // carer
     additionalDrinks: moduleAdditionalDrinks,
     condition: moduleConditions,
@@ -95,7 +78,6 @@ export default new Vuex.Store({
     alerts: moduleAlerts,
     report: moduleReports,
     bases: moduleBases,
-
     // Dashboard
     dashboardDay: moduleDashboardDay,
     dashboardHour: moduleDashboardHour,
@@ -104,18 +86,3 @@ export default new Vuex.Store({
     dashboardWeek: moduleDashboardWeek
   }
 })
-
-// data () {
-//   return {
-//     apiData: null
-//   }
-// }
-// methods: {
-//   dispatchAPIData () {
-//     this.$store.state.~ID~ = ~GetterName~
-//     this.$store.dispatch('fetch~storeName~~method~').then((response) => this.apiData = response)
-//   }
-// }
-// mounted () {
-//   this.dispatchAPIData()
-// }

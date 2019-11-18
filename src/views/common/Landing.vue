@@ -229,15 +229,16 @@ export default {
   },
   data () {
     return {
-      user: '',
       redirecting: false,
       headerIcon: 'settings',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'eDroplet Client Administration'
     }
   },
-  created () {
-    this.user = JSON.parse(localStorage.auth).level
+  computed: {
+    user: function () {
+      return this.$store.getters.level
+    }
   }
 }
 </script>

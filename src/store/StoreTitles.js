@@ -35,7 +35,7 @@ export const moduleTitles = {
     }
   },
   getters: {
-    // get specific data
+    // get specific data from state
     getterTitlePost: state => {
       return state.titlePost
     },

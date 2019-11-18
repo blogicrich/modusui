@@ -119,20 +119,22 @@ export default {
           }
         },
         {
-          status: '',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
+          // status: '',
+          // cellType: 'tb',
+          // attr: 'status',
+          // cellLabel: 'Status',
+          // menuItems: [],
+          // validators: payload => {
+          //   return [
+          //     validation.validateAlphabetical(payload),
+          //     validation.validateRequired(payload)
+          //   ]
+          // }
         }
       ],
+      // defaultItem: [{ conditionsId: 0, description: ' ', status: ' ' }]
       defaultItem: [{ conditionsId: 0, description: ' ', status: ' ' }]
+
     }
   },
   methods: {
@@ -150,21 +152,22 @@ export default {
               validation.validateRequired(payload)
             ]
           }
-        },
-        {
-          status: '',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
         }
+        // {
+        //   status: '',
+        //   cellType: 'tb',
+        //   attr: 'status',
+        //   cellLabel: 'Status',
+        //   menuItems: [],
+        //   validators: payload => {
+        //     return [
+        //       validation.validateAlphabetical(payload),
+        //       validation.validateRequired(payload)
+        //     ]
+        //   }
+        // }
       ]
+      // this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]
       this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]
     }
   },
