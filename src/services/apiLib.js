@@ -77,12 +77,12 @@ let axi = axios.create({
   timeout: 10000
 })
 
-axi.interceptors.request.use(function (config) {
+axi.interceptors.request.use((config) => {
   // Do something before request is sent
-  if (moduleEdropletApp.getters.token === null || moduleEdropletApp.getters.token === undefined) {
-    config.headers.common['authorization'] = { 'Bearer ': moduleEdropletApp.getters['token'] }
+  if (moduleEdropletApp.getters.token) {
+    config.headers.common['authorization'] = 'Bearer ' + moduleEdropletApp.state.token
   } else {
-    delete axios.defaults.headers.common['authorization']
+    delete config.headers.common['authorization']
     axios.defaults.headers.common['Content-Type'] = { 'Accept ': 'application/json' }
   }
   return config
