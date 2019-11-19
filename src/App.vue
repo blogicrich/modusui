@@ -175,7 +175,6 @@ import { EventBus } from '@/mixins/eventBus.js'
 import { setTimeout } from 'timers'
 import { log, isArray } from 'util';
 
-
 export default {
   name: 'App',
   components: {

@@ -58,20 +58,6 @@ let url = function () {
   return val
 }
 
-// let setToken = function () {
-//   try {
-//     if (localStorage.getItem('auth') !== null) {
-//       axios.defaults.headers.common['authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token
-//     } else {
-//       delete axios.defaults.headers.common['authorization']
-//       axios.defaults.headers.common['Content-Type'] = 'application/json'
-//     }
-//   } catch (error) {
-//     console.log(error)
-//     return 'none'
-//   }
-// }
-
 let axi = axios.create({
   baseURL: url(),
   timeout: 10000
@@ -104,7 +90,6 @@ var logger = function (responseObj, url, data) {
 }
 
 export default {
-
   async deleteData (url, log, toast) {
     return axi.delete(url).then(response => {
       if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })

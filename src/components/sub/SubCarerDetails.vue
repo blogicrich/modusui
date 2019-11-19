@@ -138,7 +138,7 @@ export default {
       }
     },
     async setAlerts () {
-      await this.$store.dispatch('fetchWizardGet')
+      await this.$store.dispatch('fetchAllPersonDetails')
       if (this.$store.state.wizard.wizardGet) {
         let alertStore = await this.$store.state.wizard.wizardGet[2]
         for (let index = 0; index < alertStore.length; index++) {

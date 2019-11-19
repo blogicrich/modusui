@@ -2,24 +2,44 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleWizard = {
   state: {
-    wizardPersonPost: [],
-    wizardUserPost: [],
-    wizardGet: []
+    wizardPersonDetails: [],
+    wizardUserDetailst: [],
+    wizardAdminDetails: [],
+    allPersonDetails: []
   },
   mutations: {
     // set the data
     SET_WIZARD (state, data) {
-      state.wizardGet = data
+      state.getAllDetails = data
+    },
+    SET_PERSON_REG_DETAILS (state, data) {
+      state.wizardPersonDetails = data
+    },
+    SET_USER_REG_DETAILS (state, data) {
+      state.wizardUserDetails = data
+    },
+    SET_ADMIN_REG_DETAILS (state, data) {
+      state.wizardAdminDetails = data
+    },
+    PURGE_PERSON_REG_DETAILS (state) {
+      state.wizardPersonDetails = []
+    },
+    PURGE_USER_REG_DETAILS (state) {
+      state.wizardUserDetails = []
+    },
+    PURGE_ADMIN_REG_DETAILS (state) {
+      state.wizardAdminUserDetails = []
     }
   },
   actions: {
-    fetchWizardUserPost () {
-      return apiLib.postData('register', this.getters.getterWizardUserPost)
+    async wizardUserPost (context, payload) {
+      // TO DO - IMPLEMENT POST REGISTRANTS DETAILS
+      // let deptPersonId = null
+      let user = await apiLib.postData('cliadmin/wizard/registerUser/1', payload)
+      console.log(user)
+      return user
     },
-    fetchWizardPersonPost () {
-      return apiLib.postData('cliadmin/wizard/registerPerson', this.getters.getterWizardPersonPost)
-    },
-    async fetchWizardGet (context) {
+    async fetchAllPersonDetails (context) {
       await apiLib.getData('register').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_WIZARD', null)
@@ -27,10 +47,39 @@ export const moduleWizard = {
           context.commit('SET_WIZARD', response)
         }
       })
+    },
+    setWizardPersonRegDetails (context, payload) {
+      context.commit('SET_PERSON_REG_DETAILS', payload)
+    },
+    setWizardUserRegDetails (context, payload) {
+      context.commit('SET_USER_REG_DETAILS', payload)
+    },
+    setWizardAdminRegDetails (context, payload) {
+      context.commit('SET_USER_REG_DETAILS', payload)
+    },
+    postWizardPersonRegDetails (context, payload) {
+      // TO DO - IMPLEMENT POST REGISTRANTS DETAILS
+    },
+    postWizardUserRegDetails (context, payload) {
+      // TO DO - IMPLEMENT POST USER DETAILS
+    },
+    postAdminUserRegDetails (context, payload) {
+      // TO DO - IMPLEMENT POST ADMIN DETAILS
+    },
+    purgeWizardPersonRegDetails (context, payload) {
+      context.commit('PURGE_USER_REG_DETAILS', payload)
+    },
+    purgeWizardUserRegDetails (context, payload) {
+      context.commit('PURGE_PERSON_REG_DETAILS', payload)
+    },
+    purgeWizardAdminRegDetails (context, payload) {
+      context.commit('PURGE_ADMIN_REG_DETAILS', payload)
     }
   },
   getters: {
-    getterWizardPersonPost: state => state.wizardPersonPost,
-    getterWizardUserPost: state => state.wizardUserPost
+    getterAllPersonDetails: state => state.allPersonDetails,
+    getterWizardPersonDetails: state => state.wizardPersonPost,
+    getterWizardUserDetails: state => state.wizardUserPost,
+    getterWizardAdminDetails: state => state.wizardUserPost
   }
 }
