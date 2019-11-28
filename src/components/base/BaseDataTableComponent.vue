@@ -683,7 +683,7 @@
                   </v-layout>
                 </v-container>
               </v-card-text>
-              <v-card-actions colum>
+              <v-card-actions column>
                 <v-layout row wrap>
                   <v-spacer></v-spacer>
                   <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>

@@ -46,7 +46,8 @@ let url = function () {
   switch (process.env.NODE_ENV) {
     case 'development':
       // val = 'http://127.0.0.1:3000/'
-      val = 'http://3.9.170.202/api/'
+      // val = 'http://3.9.170.202/api/'
+      val = 'https://droplet.lemonstall.com/api/'
       return val
     case 'production':
       val = 'http://3.9.170.202/api/'

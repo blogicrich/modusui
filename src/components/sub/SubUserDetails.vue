@@ -83,7 +83,13 @@
             </v-menu>
           </v-flex>
           <v-flex d-flex xs12 sm12 md2 lg2 xl2 v-if="eDroplets.length >= 1">
-            <v-select :items="eDroplets" label="Link eDroplets" v-model="selectedEDroplet"></v-select>
+            <v-select 
+              :items="eDroplets" 
+              label="Link eDroplets" 
+              v-model="selectedEDroplet"
+              item-text="macAddress"
+              item-value="baseId"
+            ></v-select>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -122,11 +128,17 @@ export default {
       menuWakeUp: false,
       otherHydration: '',
       selectedEDroplet: '',
-      eDroplets: ['Droplet 1', 'Droplet 2'],
+      // eDroplets: ['Droplet 1', 'Droplet 2'],
       valid: true,
       ruleRequired: [
         v => !!v || 'This field is required'
       ]
+    }
+  },
+  computed: {
+    eDroplets () {
+      console.log(this.$store.getters.getterEdroplets)
+      return this.$store.getters.getterEdroplets
     }
   },
   watch: {

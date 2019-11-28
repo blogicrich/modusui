@@ -30,6 +30,12 @@ export const moduleEdropletApp = {
     SET_AUTHENTICATION_STATE (state, data) {
       state.authenticated = data
     },
+    SET_CARER_ID (state, data) {
+      state.carerId = data
+    },
+    SET_ACCOUNT_HOLDER_ID (state, data) {
+      state.accountHolderId = data
+    },
     SET_DEPT_PERSON_ID (state, data) {
       state.deptPersonsId = data
     },
@@ -54,6 +60,8 @@ export const moduleEdropletApp = {
         if (response) {
           if (response.roles) {
             context.commit('SET_AUTHENTICATION_STATE', true)
+            context.commit('SET_ACCOUNT_HOLDER_ID', response.accountHolderId)
+            context.commit('SET_CARER_ID', response.carerId)
             context.commit('SET_DEPT_PERSON_ID', response.deptPersonsId)
             context.commit('SET_PORTAL_AUTH_ID', response.portalAuthorisedId)
             context.commit('SET_LEVEL', response.roles)
@@ -63,6 +71,8 @@ export const moduleEdropletApp = {
         } else {
           context.commit('SET_LOAD_STATUS', false)
           context.commit('SET_AUTHENTICATION_STATE', false)
+          context.commit('SET_CARER_ID', null)
+          context.commit('SET_ACCOUNT_HOLDER_ID', null)
           context.commit('SET_DEPT_PERSON_ID', null)
           context.commit('SET_PORTAL_AUTH_ID', null)
           context.commit('SET_LEVEL', [])
@@ -76,6 +86,8 @@ export const moduleEdropletApp = {
     LOGOUT (context) {
       context.commit('SET_LOAD_STATUS', false)
       context.commit('SET_AUTHENTICATION_STATE', false)
+      context.commit('SET_CARER_ID', null)
+      context.commit('SET_ACCOUNT_HOLDER_ID', null)
       context.commit('SET_DEPT_PERSON_ID', null)
       context.commit('SET_PORTAL_AUTH_ID', null)
       context.commit('SET_LEVEL', [])

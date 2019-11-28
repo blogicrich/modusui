@@ -35,11 +35,13 @@
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-select
             v-model="selectedAlertTypes"
-            :items="alertTypes"
+            :items="alerts"
             attach
             chips
             label="Alert Messages"
             multiple
+            item-text="description"
+            item-value="alertTypeId"
           ></v-select>
         </v-flex>
       </v-layout>
@@ -110,7 +112,7 @@ export default {
       valid: true,
       email: false,
       sms: true,
-      alerts: [],
+      // alerts: [],
       rule: [v => !!v || 'This field is required'],
       alertTypes: [],
       selectedAlertTypes: ['Dehydrated', 'Still Dehydrated', 'No Drink', 'Rehydrated', 'Low Battery']
@@ -125,6 +127,9 @@ export default {
     }
   },
   computed: {
+    alerts () {
+      return this.$store.getters.getterWizardAlerts
+    },
     breakpoint () {
       return this.$vuetify.breakpoint.smAndDown
     }
@@ -136,19 +141,16 @@ export default {
       } else {
         this.$emit('onvalidation', false)
       }
-    },
-    async setAlerts () {
-      await this.$store.dispatch('fetchAllPersonDetails')
-      if (this.$store.state.wizard.wizardGet) {
-        let alertStore = await this.$store.state.wizard.wizardGet[2]
-        for (let index = 0; index < alertStore.length; index++) {
-          this.alertTypes.push(alertStore[index])
-        }
-      }
     }
-  },
-  mounted () {
-    this.setAlerts()
+    // async setAlerts () {
+      // await this.$store.dispatch('fetchAllPersonDetails')
+      // if (this.$store.state.wizard.wizardGet) {
+      //   let alertStore = await this.$store.state.wizard.wizardGet[2]
+      //   for (let index = 0; index < alertStore.length; index++) {
+      //     this.alertTypes.push(alertStore[index])
+      //   }
+      // }
+    // }
   }
 }
 </script>
