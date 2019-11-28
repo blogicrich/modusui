@@ -128,7 +128,6 @@ export default {
       menuWakeUp: false,
       otherHydration: '',
       selectedEDroplet: '',
-      // eDroplets: ['Droplet 1', 'Droplet 2'],
       valid: true,
       ruleRequired: [
         v => !!v || 'This field is required'

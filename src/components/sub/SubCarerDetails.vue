@@ -142,15 +142,6 @@ export default {
         this.$emit('onvalidation', false)
       }
     }
-    // async setAlerts () {
-      // await this.$store.dispatch('fetchAllPersonDetails')
-      // if (this.$store.state.wizard.wizardGet) {
-      //   let alertStore = await this.$store.state.wizard.wizardGet[2]
-      //   for (let index = 0; index < alertStore.length; index++) {
-      //     this.alertTypes.push(alertStore[index])
-      //   }
-      // }
-    // }
   }
 }
 </script>

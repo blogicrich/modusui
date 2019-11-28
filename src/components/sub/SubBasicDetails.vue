@@ -42,7 +42,6 @@
 </template>
 
 <script>
-// import apiLib from '@/services/apiLib'
 
 export default {
   data () {
@@ -52,7 +51,6 @@ export default {
       familyName: '',
       valid: true,
       selectedTitle: '',
-      // titles: [],
       rule: [
         v => !!v || 'This field is required'
       ]
@@ -73,14 +71,6 @@ export default {
         this.$emit('onvalidation', false)
       }
     }
-  },
-  mounted () {
-    // apiLib.getData('register').then((response) => {
-    //   for (let i = 0; i < response[1].length; i++) {
-    //     const element = response[1][i].longDescription
-    //     this.titles.push(element)
-    //   }
-    // })
   }
 }
 </script>

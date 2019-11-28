@@ -69,16 +69,7 @@ export const moduleEdropletApp = {
             context.commit('SET_ACTIVE', true)
           }
         } else {
-          context.commit('SET_LOAD_STATUS', false)
-          context.commit('SET_AUTHENTICATION_STATE', false)
-          context.commit('SET_CARER_ID', null)
-          context.commit('SET_ACCOUNT_HOLDER_ID', null)
-          context.commit('SET_DEPT_PERSON_ID', null)
-          context.commit('SET_PORTAL_AUTH_ID', null)
-          context.commit('SET_LEVEL', [])
-          context.commit('SET_TOKEN', null)
-          context.commit('SET_LOAD_STATUS', false)
-          context.commit('SET_ACTIVE', false)
+          context.dispatch('LOGOUT')
         }
       })
       return data

@@ -10,13 +10,13 @@ export const moduleWizard = {
   mutations: {
     // set the data
     SET_ALERTTYPES (state, data) {
-      state.alertTypes = data.alertTypes
+      state.alertTypes = data
     },
     SET_BASES (state, data) {
-      state.bases = data.edropman
+      state.bases = data
     },
     SET_TITLES (state, data) {
-      state.titles = data.titles
+      state.titles = data
     },
     // SET_PERSON_REG_DETAILS (state, data) {
     //   state.wizardPersonDetails = data
@@ -46,27 +46,18 @@ export const moduleWizard = {
       return user
     },
     async fetchWizardOptions (context) {
-      await apiLib.getData('cliadmin/wizard/get-pre-wizard-information').then((response) => {
+      await apiLib.getData('cliadmin/wizard/get-pre-wizard-information', true, true).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_WIZARD', [])
-          context.commit('SET_WIZARD', [])
-          context.commit('SET_WIZARD', [])
+          context.commit('SET_ALERTTYPES', [])
+          context.commit('SET_BASES', [])
+          context.commit('SET_TITLES', [])
         } else {
-          context.commit('SET_WIZARD', response.titles)
-          context.commit('SET_WIZARD', response.alertTypes)
-          context.commit('SET_WIZARD', response.edropman)
+          context.commit('SET_ALERTTYPES', response.alertTypes)
+          context.commit('SET_BASES', response.bases)
+          context.commit('SET_TITLES', response.titles)
         }
       })
     },
-    // async fetchWizardInfo (context) {
-    //   await apiLib.getData('/cliadmin/wizard/get-pre-wizard-information').then((response) => {
-    //     if (typeof response === 'undefined' || response.length <= 0) {
-    //       context.commit('SET_WIZARD', null)
-    //     } else {
-    //       context.commit('SET_WIZARD', response)
-    //     }
-    //   })
-    // },
     setWizardPersonRegDetails (context, payload) {
       context.commit('SET_PERSON_REG_DETAILS', payload)
     },
