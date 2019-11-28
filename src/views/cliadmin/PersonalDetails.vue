@@ -113,12 +113,6 @@ export default {
     }
   },
   methods: {
-    // formItems () {
-    //   for (let i = 0; i < this.items[1].length; i++) {
-    //     const element = this.items[1][i]
-    //     this.title.push(element)
-    //   }
-    // },
     async getWizardInfo () {
       await this.$store.dispatch('fetchWizardOptions')
       await this.$store.dispatch('fetchEDropmanGet')
@@ -128,6 +122,10 @@ export default {
     this.getItems(this.getUrl).then(() => {
       this.getWizardInfo()
     })
+  },
+  mounted () {
+    const parameters = this.$route.query
+    console.log('params: ', parameters)
   }
 }
 </script>

@@ -126,8 +126,8 @@ export default {
       this.isAdmin = isAdmin
     },
     saveData () {
-      console.log(this.submittedData)
-      this.$store.dispatch('wizardUserPost', this.submittedData)
+      console.log('Submitted Data:', this.submittedData)
+      // this.$store.dispatch('wizardFirstUserPost', this.submittedData)
     }
   },
   data () {

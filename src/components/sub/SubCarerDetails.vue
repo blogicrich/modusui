@@ -35,7 +35,7 @@
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-select
             v-model="selectedAlertTypes"
-            :items="alerts"
+            :items="alertTypes"
             attach
             chips
             label="Alert Messages"
@@ -54,6 +54,8 @@
             chips
             label="Alert Messages"
             multiple
+            item-text="description"
+            item-value="alertTypeId"
           ></v-select>
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
@@ -85,7 +87,7 @@
       </v-layout>
 
       <v-flex d-flex xs12 sm12 md6 lg6 xl6>
-        <v-radio-group v-model="row" row>
+        <v-radio-group v-model="row" :mandatory="false" row>
           <v-radio v-model="email" label="Email" :value="email"></v-radio>
           <v-radio v-model="sms" label="SMS" :value="sms"></v-radio>
         </v-radio-group>
@@ -105,17 +107,15 @@ export default {
     return {
       isAdmin: false,
       isCarer: true,
-      row: null,
+      row: 'email',
       username: '',
       phoneNumber: '',
       emailAddress: '',
       valid: true,
-      email: false,
-      sms: true,
-      // alerts: [],
+      email: true,
+      sms: false,
       rule: [v => !!v || 'This field is required'],
-      alertTypes: [],
-      selectedAlertTypes: ['Dehydrated', 'Still Dehydrated', 'No Drink', 'Rehydrated', 'Low Battery']
+      selectedAlertTypes: []
     }
   },
   watch: {
@@ -127,8 +127,8 @@ export default {
     }
   },
   computed: {
-    alerts () {
-      return this.$store.getters.getterWizardAlerts
+    alertTypes () {
+      return this.$store.getters.getterWizardAlertTypes
     },
     breakpoint () {
       return this.$vuetify.breakpoint.smAndDown

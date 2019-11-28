@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ['submittedData'],
+  // props: ['submittedData'],
   data () {
     return {
       valid: true,
