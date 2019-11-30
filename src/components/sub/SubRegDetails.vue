@@ -3,8 +3,14 @@
     <v-container grid-list-xl>
       <v-layout align-start justify-space-around row wrap>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
+          <v-text-field 
+            label="Base MAC Adress:"
+            :read-only="true"
+            :value="mac"
+          ></v-text-field>
+        </v-flex>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-select
-            v-if="titles"
             label="Title"
             :items="titles"
             v-model="selectedTitle"
@@ -15,7 +21,7 @@
             @change="validate()"
           ></v-select>
         </v-flex>
-        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
+        <!-- <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field 
             label="AKA" 
             :rules="rule" 
@@ -23,7 +29,7 @@
             required 
             @input="validate()"
           ></v-text-field>
-        </v-flex>
+        </v-flex> -->
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
             label="Given Name"
@@ -42,6 +48,24 @@
             @input="validate()"
           ></v-text-field>
         </v-flex>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
+          <v-text-field 
+            label="Username" 
+            :rules="rule" 
+            v-model="username" 
+            required 
+            @input="validate()"
+          ></v-text-field>
+        </v-flex>
+        <v-flex d-flex xs12 sm12 md6 lg6 xl6>
+          <v-text-field 
+            label="Password" 
+            :rules="rule" 
+            v-model="username" 
+            required 
+            @input="validate()"
+          ></v-text-field>
+        </v-flex>
       </v-layout>
     </v-container>
   </v-form>
@@ -55,28 +79,26 @@ export default {
       aka: '',
       givenName: '',
       familyName: '',
+      // mac: this.$route.query.mac,
       valid: true,
       selectedTitle: '',
       rule: [
         v => !!v || 'This field is required'
-      ]
+      ],
+      username: '',
+      password: ''
     }
   },
   computed: {
     titles () {
-      let data = this.$store.getters.getterWizardTitles
-      console.log(this.$store.getters.getterWizardTitles)
-      return data
+      return []
+    },
+    mac () {
+      return this.$route.query.mac
     }
   },
   methods: {
-    validate () {
-      if (this.$refs.form.validate()) {
-        this.$emit('onvalidation', true, this.selectedTitle, this.givenName, this.familyName, this.aka)
-      } else {
-        this.$emit('onvalidation', false)
-      }
-    }
+
   }
 }
 </script>

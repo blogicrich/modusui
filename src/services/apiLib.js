@@ -53,7 +53,7 @@ let url = function () {
       val = 'http://3.9.170.202/api/'
       return val
     default:
-      val = 'http://3.9.170.202/api/'
+      val = 'https://droplet.lemonstall.com/api/'
       break
   }
   return val

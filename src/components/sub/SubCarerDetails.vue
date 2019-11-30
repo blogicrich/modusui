@@ -102,7 +102,6 @@ import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 
 export default {
   mixins: [crudRoutines],
-
   data () {
     return {
       isAdmin: false,
