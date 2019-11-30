@@ -7,7 +7,7 @@ export const moduleWizard = {
     genders: [],
     parameters: {},
     submittedData: [],
-    titles: [],
+    titles: []
   },
   mutations: {
     // set the data

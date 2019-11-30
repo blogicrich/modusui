@@ -16,6 +16,14 @@ export default new Router({
       redirect: '/'
     },
 
+    // ByteSnap landing page
+
+    {
+      path: '/getting-started',
+      name: 'Getting Started',
+      component: () => import(/* webpackChunkName: "getting-started" */ './views/cliadmin/GettingStarted.vue')
+    },
+
     // Common routes
 
     {
@@ -25,71 +33,70 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/Login.vue')
+      component: () => import(/* webpackChunkName: "login" */ './views/common/Login.vue')
       // redirect: { name: 'Login' }
     },
     {
       path: '/landing',
       name: 'Landing',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/Landing.vue')
+      component: () => import(/* webpackChunkName: "landing" */ './views/common/Landing.vue')
     },
     {
       path: '/intervaloptions',
       name: 'IntervalOptions',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/IntervalOptions.vue')
+      component: () => import(/* webpackChunkName: "interval-options" */ './views/common/IntervalOptions.vue')
     },
     {
       path: '/passwordreset',
       name: 'PasswordReset',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/ForgotPassword.vue')
+      component: () => import(/* webpackChunkName: "password-reset" */ './views/common/ForgotPassword.vue')
     },
     {
       path: '/voicemessages',
       name: 'VoiceMessages',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
+      component: () => import(/* webpackChunkName: "voice-messages" */ './views/common/VoiceMessages.vue')
     },
 
     // Carer routes
-
     {
       path: '/additionaldrinks',
       name: 'AdditionalDrinks',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/AdditionalDrinks.vue')
+      component: () => import(/* webpackChunkName: "additional-drinks" */ './views/carer/AdditionalDrinks.vue')
     },
     {
       path: '/alerts',
       name: 'Alerts',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Alerts.vue')
+      component: () => import(/* webpackChunkName: "alerts" */ './views/carer/Alerts.vue')
     },
     {
       path: '/away',
       name: 'Away',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Away.vue')
+      component: () => import(/* webpackChunkName: "away" */ './views/carer/Away.vue')
     },
     {
       path: '/userconditions',
       name: 'UserConditions',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/UserConditions.vue')
+      component: () => import(/* webpackChunkName: "user-conditions" */ './views/carer/UserConditions.vue')
     },
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Dashboard.vue')
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/carer/Dashboard.vue')
     },
     {
       path: '/reports',
       name: 'Reports',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Reports.vue')
+      component: () => import(/* webpackChunkName: "reports" */ './views/carer/Reports.vue')
     },
     {
       path: '/settingsreports',
       name: 'SettingsReports',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/SettingsReports.vue')
+      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/SettingsReports.vue')
     },
     {
-      path: '/consumptioncalender',
-      name: 'ConsumptionCalender',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/ConsumptionCalendar.vue')
+      path: '/consumptioncalendar',
+      name: 'ConsumptionCalendar',
+      component: () => import(/* webpackChunkName: "consumption-calendar" */ './views/carer/ConsumptionCalendar.vue')
     },
 
     // Cliadmin routes

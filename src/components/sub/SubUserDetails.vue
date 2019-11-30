@@ -83,9 +83,9 @@
             </v-menu>
           </v-flex>
           <v-flex d-flex xs12 sm12 md2 lg2 xl2 v-if="eDroplets.length >= 1">
-            <v-select 
-              :items="eDroplets" 
-              label="Link eDroplets" 
+            <v-select
+              :items="eDroplets"
+              label="Link eDroplets"
               v-model="selectedEDroplet"
               item-text="macAddress"
               item-value="baseId"

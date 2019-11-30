@@ -31,7 +31,7 @@
       editDialogTitle="Edit Titles"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      
+
       :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"

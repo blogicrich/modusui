@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row align-center fill-height>
       <v-icon large color="primary">local_drink</v-icon>
-      <h1 class="pg-header">Consumption Calender</h1>
+      <h1 class="pg-header">Consumption Calendar</h1>
       <v-spacer></v-spacer>
       <h1>{{ monthString }}</h1>
     </v-layout>

@@ -1,5 +1,3 @@
-import apiLib from '@/services/apiLib.js'
-
 export const crudRoutines = {
   methods: {
     async addItem (item) {
@@ -17,7 +15,7 @@ export const crudRoutines = {
       } catch (error) {
         // Best practice for error reporting????
         this.items = []
-        this.errorMsg = 'Server response error: ' + response + ' - Please contact your system adminsitrator.'
+        this.errorMsg = 'Server response error: ' + error + ' - Please contact your system adminsitrator.'
         this.loading = false
         this.loaded = false
         this.error = true

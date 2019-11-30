@@ -206,7 +206,7 @@ export default {
           btnIcon: 'date_range',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'consumptioncalender',
+          route: 'consumptioncalendar',
           tip: 'View consumption'
         },
         {
