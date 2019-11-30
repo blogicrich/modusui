@@ -156,6 +156,15 @@ export default new Router({
       path: '/titles',
       name: 'Titles',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
+    },
+
+    // Unregistered users
+
+    {
+      path: '/register',
+      name: 'Registration',
+      props: (route) => ({ query: route.query.mac }),
+      component: () => import(/* webpackChunkName: "about" */ './views/unregistered/Registration.vue')
     }
   ]
 })
