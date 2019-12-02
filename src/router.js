@@ -16,14 +16,6 @@ export default new Router({
       redirect: '/'
     },
 
-    // ByteSnap landing page
-
-    {
-      path: '/getting-started',
-      name: 'Getting Started',
-      component: () => import(/* webpackChunkName: "getting-started" */ './views/cliadmin/GettingStarted.vue')
-    },
-
     // Common routes
 
     {
@@ -34,7 +26,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: () => import(/* webpackChunkName: "login" */ './views/common/Login.vue')
-      // redirect: { name: 'Login' }
+    },
+    {
+      path: '/error',
+      name: 'Error',
+      component: () => import(/* webpackChunkName: "about" */ './views/common/Error.vue')
     },
     {
       path: '/landing',
@@ -165,12 +161,12 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
     },
 
-    // Unregistered users
+    // Unregistered users and ByteSnap Landing Page
 
     {
       path: '/register',
       name: 'Registration',
-      props: (route) => ({ query: route.query.mac }),
+      props: (route) => ({ query: route.query.macAddress }),
       component: () => import(/* webpackChunkName: "about" */ './views/unregistered/Registration.vue')
     }
   ]

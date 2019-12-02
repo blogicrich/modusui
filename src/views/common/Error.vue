@@ -1,0 +1,43 @@
+<template>
+  <v-layout class="loginreset-container" column fill-height align-center justify-space-around>
+    <h1 
+      v-if="$vuetify.breakpoint.mdAndUp" 
+      class="display-4 text-center text-error">
+      This application will explode. 
+    </h1>
+    <router-link to="/login">
+      <a class="display-1 text-center text-primary">Back to login</a>
+    </router-link>
+  </v-layout>
+</template>
+
+<script>
+
+export default {
+  name: 'Error',
+  components: {
+
+  },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+  },
+  computed: {
+
+  },
+  watch: {
+
+  },
+  mounted () {
+  },
+  destroyed () {
+  }
+}
+</script>
+
+<style scoped lang="scss">
+@import "./public/scss/main.scss";
+</style>
