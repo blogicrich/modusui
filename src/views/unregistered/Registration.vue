@@ -63,7 +63,6 @@ export default {
     if (!this.query) {
       this.$router.push('/error')
     }
-    return
   }
 }
 </script>

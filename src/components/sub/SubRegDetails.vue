@@ -64,9 +64,9 @@
       <v-stepper-content step="2">
         <v-layout>
           <v-flex xs12 md4>
-            <v-text-field 
-              label="Email Address" 
-              v-model="stepTwo.email" 
+            <v-text-field
+              label="Email Address"
+              v-model="stepTwo.email"
               :rules="stepTwo.emailRules"
             ></v-text-field>
             <v-text-field
@@ -180,7 +180,7 @@ export default {
       },
 
       stepThree: {
-        config: {},
+        config: {}
       }
     }
   },
@@ -195,7 +195,6 @@ export default {
     showAlert (message, route) {
       alert(message)
       this.$router.push(route)
-      return
     },
     submitAccountDetails () {
       this.$emit('submit-account-details', this.stepOne)

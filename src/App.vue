@@ -169,11 +169,9 @@
 </template>
 
 <script>
-/* eslint-disable */
+
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
 import { EventBus } from '@/mixins/eventBus.js'
-import { setTimeout } from 'timers'
-import { log, isArray } from 'util';
 
 export default {
   name: 'App',
@@ -189,9 +187,7 @@ export default {
       snackText: '',
       snackColor: '',
       snackTimeout: 0,
-      // authenticated: {},
-      appNavConfig: {footer: true, sideMenu: true, header: true},
-      // navFooter: '',
+      appNavConfig: { footer: true, sideMenu: true, header: true },
       items: [
         {
           title: 'Dashboard',
@@ -243,8 +239,7 @@ export default {
         }
       ],
       clipped: true,
-      fixed: false,
-      // user: [],
+      fixed: false
     }
   },
   methods: {
@@ -256,7 +251,7 @@ export default {
         if (this.level.find(level => level === 'SYSTEM ADMINISTRATOR') || this.level.find(level => level === 'CLIENT ADMINISTRATOR')) {
           this.$router.push('/landing')
         }
-        if (this.level.find(level => level === 'CARER') || 
+        if (this.level.find(level => level === 'CARER') ||
         (this.level.find(level => level === 'CARER') && this.level.find(level => level === 'CLIENT ADMINISTRATOR'))) {
           this.$router.push('/dashboard')
         }
@@ -281,7 +276,7 @@ export default {
       if (this.$vuetify.breakpoint.mdAndUp) {
         return level
       } else if (this.$vuetify.breakpoint.smAndDown) {
-        if(level.includes('CARER')) {
+        if (level.includes('CARER')) {
           return 'CARER'
         } else if (level.includes('CLIENT ADMINISTRATOR')) {
           return 'CLI ADMIN'
@@ -289,7 +284,7 @@ export default {
           return 'SYS ADMIN'
         }
       }
-    },
+    }
   },
   computed: {
     userLevel () {
@@ -328,7 +323,7 @@ export default {
       } else {
         console.log('Still Authenticated: ', this.authenticated)
       }
-    },
+    }
   },
   mounted () {
     if (this.authenticated === null || this.authenticated === undefined || this.authenticated === false) {

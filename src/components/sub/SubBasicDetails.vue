@@ -16,11 +16,11 @@
           ></v-select>
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
-          <v-text-field 
-            label="AKA" 
-            :rules="rule" 
-            v-model="aka" 
-            required 
+          <v-text-field
+            label="AKA"
+            :rules="rule"
+            v-model="aka"
+            required
             @input="validate()"
           ></v-text-field>
         </v-flex>

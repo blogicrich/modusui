@@ -5,8 +5,8 @@
 </template>
 
 <script>
-/* eslint-disable */
-import BaseResetPasswordVue from '../../components/base/BaseResetPassword.vue';
+
+import BaseResetPasswordVue from '@/components/base/BaseResetPassword'
 
 export default {
   components: {
