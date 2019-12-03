@@ -1,31 +1,31 @@
 <template>
   <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
     <v-fade-transition>
-    <v-layout v-if="isWaitingForResponse" column justify-center align-center>
-      <v-progress-circular
-        class="ma-2"
-        :rotate="180"
-        :size="spinnerSize"
-        :width="spinnerWidth"
-        :color="primaryColor"
-        indeterminate
-      >
-      </v-progress-circular>
-      <h2 style="font-size:1em">Getting info. Please wait...</h2>
-    </v-layout>
-    <BasicRegDetailsForm
-      v-if="this.query"
-      :query="query"
-      @submit-account-details="submitAccountDetails"
-      @submit-edroplet-config="submitEdropletConfig"
-      @submit-edroplet-users="submitEdropletUsers"
-    ></BasicRegDetailsForm>
-  </v-fade-transition>
+      <v-layout v-if="isWaitingForResponse" column justify-center align-center>
+        <v-progress-circular
+          class="ma-2"
+          :rotate="180"
+          :size="spinnerSize"
+          :width="spinnerWidth"
+          :color="primaryColor"
+          indeterminate
+        ></v-progress-circular>
+        <h2 class="headline font-weight-light">Getting info. Please wait...</h2>
+      </v-layout>
+      <BasicRegDetailsForm
+        v-else
+        :macAddress="query"
+        :titles="titles"
+        @submit-account-details="submitAccountDetails"
+        @submit-edroplet-config="submitEdropletConfig"
+        @submit-edroplet-users="submitEdropletUsers"
+      ></BasicRegDetailsForm>
+    </v-fade-transition>
   </v-layout>
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 import BasicRegDetailsForm from '@/components/sub/SubRegDetails'
 
 export default {
@@ -38,7 +38,7 @@ export default {
   },
   data: function () {
     return {
-      isWaitingForResponse: false,
+      isWaitingForResponse: true,
       msg: '',
       primaryColor: 'primary',
       spinnerSize: '250',
@@ -57,12 +57,18 @@ export default {
     }
   },
   computed: {
-
+    ...mapState({
+      titles: state => state.gettingStartedWizard.titles
+    })
   },
   mounted () {
     if (!this.query) {
       this.$router.push('/error')
     }
+
+    this.$store.dispatch('getTitles').then(() => {
+      this.isWaitingForResponse = false
+    })
   }
 }
 </script>
