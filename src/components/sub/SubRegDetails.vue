@@ -156,7 +156,7 @@ export default {
 
       stepTwo: {
         email: '',
-        titleId,
+        titleId: null,
         givenName: '',
         familyName: '',
         salutation: '',
@@ -221,7 +221,7 @@ export default {
   },
   computed: {
     titleOptions () {
-      return this.titles.map(title => { return { text: title.longDescription, value: title.titleId}})
+      return this.titles.map(title => { return { text: title.longDescription, value: title.titleId } })
     }
   }
 }

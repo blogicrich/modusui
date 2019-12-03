@@ -29,6 +29,7 @@ export default {
   data () {
     return {
       selectedDate: null,
+      selectedUser: null,
       dashboardDay: {},
       dashboardHour: [],
       dashboardUsers: [],
@@ -46,7 +47,7 @@ export default {
   },
   methods: {
     updateCharts () {
-      if (this.$store.state.userId && this.$store.state.date) {
+      if (this.selectedUser && this.selectedDate) {
         this.setHour()
         this.setDay()
         this.setWeek()
@@ -54,12 +55,12 @@ export default {
     },
 
     updateDate (date) {
-      this.$store.commit('SET_DATE', this.$moment.utc(date).unix())
+      this.selectedDate = date
       this.updateCharts()
     },
 
     updateUser (selectedUser) {
-      this.$store.commit('SET_USER_ID', selectedUser.userId)
+      this.selectedUser = selectedUser
       this.updateCharts()
     },
 
@@ -69,7 +70,7 @@ export default {
 
       if (this.dashboardUsers && this.dashboardUsers.length !== 0) {
         this.usersLoaded = true
-        this.$store.commit('SET_USER_ID', this.dashboardUsers[0].userId)
+        this.updateUser(this.dashboardUsers[0].userId)
         this.updateCharts()
       } else {
         this.usersError = true
@@ -95,7 +96,7 @@ export default {
       this.hourLoaded = false
       this.hourError = false
 
-      await this.$store.dispatch('fetchDashboardHourGet')
+      await this.$store.dispatch('fetchDashboardHourGet', { userId: this.selectedUser, date: this.selectedDate })
 
       if (this.$store.state.dashboardHour.dashboardHourGet) {
         let hourStore = this.$store.state.dashboardHour.dashboardHourGet
@@ -114,7 +115,7 @@ export default {
       this.dayLoaded = false
       this.dayError = false
 
-      await this.$store.dispatch('fetchDashboardDayGet')
+      await this.$store.dispatch('fetchDashboardDayGet', { userId: this.selectedUser, date: this.selectedDate })
 
       if (this.$store.state.dashboardDay.dashboardDayGet) {
         this.dashboardDay = this.$store.state.dashboardDay.dashboardDayGet
@@ -128,7 +129,7 @@ export default {
       this.weekLoaded = false
       this.weekError = false
 
-      await this.$store.dispatch('fetchDashboardWeekGet')
+      await this.$store.dispatch('fetchDashboardWeekGet', { userId: this.selectedUser, date: this.selectedDate })
 
       if (this.$store.state.dashboardWeek.dashboardWeekGet) {
         this.dashboardWeek = this.$store.state.dashboardWeek

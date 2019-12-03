@@ -76,7 +76,7 @@
               </v-card>
               <v-alert
                 :value="true"
-                type="ifno"
+                type="info"
                 v-else
               >Weekly data is not available at this time.</v-alert>
             </v-flex>
