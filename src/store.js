@@ -33,6 +33,8 @@ import { moduleDashboardUsers } from '@/store/StoreDashboardUsers'
 import { moduleDashboardComment } from '@/store/StoreDashboardComment'
 import { moduleDashboardWeek } from '@/store/StoreDashboardWeek'
 
+import { moduleGettingStartedWizard } from '@/store/StoreGettingStartedWizard'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -83,6 +85,8 @@ export default new Vuex.Store({
     dashboardHour: moduleDashboardHour,
     dashboardUsers: moduleDashboardUsers,
     DashboardComment: moduleDashboardComment,
-    dashboardWeek: moduleDashboardWeek
+    dashboardWeek: moduleDashboardWeek,
+
+    gettingStartedWizard: moduleGettingStartedWizard
   }
 })

@@ -18,9 +18,9 @@ url : String - url tail without prepending forward slash
 data : Object - data object to be sent with request
 log : Boolean - Will send request details to dev tools console
 toast : Boolean - Will show v-snackbar with server response message
-status: Boolean - Will return an object - { 
-    response: response.data, 
-    status: response.status, 
+status: Boolean - Will return an object - {
+    response: response.data,
+    status: response.status,
     statusText: response.statusText
 }
 
@@ -50,9 +50,9 @@ let url = function () {
   let val = ''
   switch (process.env.NODE_ENV) {
     case 'development':
-      // val = 'http://127.0.0.1:3000/'
+      val = 'http://127.0.0.1:3000/'
       // val = 'http://3.9.170.202/api/'
-      val = 'https://droplet.lemonstall.com/api/'
+      // val = 'https://droplet.lemonstall.com/api/'
       return val
     case 'production':
       val = 'http://3.9.170.202/api/'
@@ -165,10 +165,10 @@ export default {
               return { status: error.response.status, statusText: error.response.statusText }
             }
             if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) { 
+            if (log) {
               logger(error.response, url, data)
               return error.response.statusText + ' ' + error.response.status + '\n'
-            } 
+            }
           } else if (error.request) {
             console.log(error.request)
           } else {
