@@ -54,6 +54,11 @@ export default {
   components: {
     BaseDataTable
   },
+  computed: {
+    items () {
+      return this.getters.getterTitles
+    }
+  },
   data () {
     return {
       // BaseViewHeader
@@ -61,7 +66,7 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Titles',
       // BaseDataTable
-      items: [],
+      // items: [],
       valid: false,
       editPerms: { create: true, update: true, delete: true },
       name: 'name',
@@ -71,10 +76,10 @@ export default {
       errorMsg: '',
       loadingMsg: '',
       loadedMsg: '',
-      delUrl: 'sysadmin/title',
-      updateUrl: 'sysadmin/title',
-      readUrl: 'sysadmin/title',
-      createUrl: 'sysadmin/title',
+      // delUrl: 'sysadmin/title',
+      // updateUrl: 'sysadmin/title',
+      // readUrl: 'sysadmin/title',
+      // createUrl: 'sysadmin/title',
       itemKey: 'titleId',
       crudIdKey: 'titleId',
       primaryColor: 'primary',
@@ -140,9 +145,6 @@ export default {
   },
   methods: {
     validateItems (selected) {
-    // longDescription: 'To'
-    // shortDescription: 'T'
-    // titleId: 32
       for (let i = 0; i < selected.length; i++) {
         for (const key in selected[i]) {
           if (selected[i].hasOwnProperty(key)) {
@@ -182,10 +184,6 @@ export default {
         { titleId: 0, shortDescription: '', longDescription: '' }
       ]
     }
-  },
-  mounted () {
-    this.getItems(this.readUrl)
-    console.log(this.items)
   }
 }
 </script>

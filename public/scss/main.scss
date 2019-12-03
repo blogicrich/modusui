@@ -106,6 +106,8 @@ input[type=checkbox]:checked + label{
 
 .loginreset {
   float: right;
+  padding: 1vh;
+  border-radius: 1vh;
   color: $dark-blue-grey;
   background-color: inherit;
   border-color: $vuetify-primary;

@@ -3,19 +3,17 @@ import apiLib from '../services/apiLib.js'
 export const moduleTitles = {
   state: {
     // store the data
-    titleGet: [],
-    titlePost: [],
-    titlePut: []
+    titles: []
   },
   mutations: {
     // set the data
     SET_TITLES (state, data) {
-      state.titleGet = data
+      state.titles = data
     }
   },
   actions: {
     // get all data
-    fetchTitlesGet (context) {
+    fetchTitles (context) {
       return apiLib.getData('sysadmin/title').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_TITLES', null)
@@ -24,23 +22,33 @@ export const moduleTitles = {
         }
       })
     },
-    fetchTitlesPost () {
-      return apiLib.postData('sysadmin/title', this.getters.getterTitlePost)
+    async postTitles (context, payload) {
+      if (payload) {
+        if (payload.length === 1) {
+          return apiLib.postData('sysadmin/title', payload).then(
+            context.commit('fetchTitles')
+          )
+        } else if (payload.length >= 1) {
+          payload.forEach(async element => {
+            await apiLib.postData('sysadmin/title', element)
+          })
+          context.commit('fetchTitles')
+        }
+      } else {
+        // IMPLEMENT ERROR CATCHING
+      }
     },
-    fetchTitlesDelete () {
-      return apiLib.deleteData('sysadmin/title/' + this.getters.getterStoreId)
+    deleteTitles (payload) {
+      return apiLib.deleteData('sysadmin/title/', payload)
     },
-    fetchTitlesPut () {
-      return apiLib.updateData('sysadmin/title/' + this.getters.getterStoreId, this.getters.getterTitlePut)
+    updateTitles (payload) {
+      return apiLib.updateData('sysadmin/title/', payload)
     }
   },
   getters: {
     // get specific data from state
-    getterTitlePost: state => {
+    getterTitles: state => {
       return state.titlePost
-    },
-    getterTitlePut: state => {
-      return state.titlePut
     }
   }
 }

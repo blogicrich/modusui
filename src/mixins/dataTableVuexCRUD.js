@@ -27,7 +27,7 @@ export const crudRoutines = {
       // if (this.urls) await this.setMenuItems(this.urls)
     },
     async setMenuItems (urls) {
-      if (urls !== [] || urls !== null) {
+      if (urls.length >= 1 || urls !== null || urls !== undefined) {
         for (var i = 0; i < urls.length; i++) {
           var menuItems = await this.getData(urls[i].url)
           var values = []
@@ -43,7 +43,7 @@ export const crudRoutines = {
     }
   },
   mounted () {
-    this.fetchData('FETCH')
+    // this.fetchData('FETCH')
     // this.getItems(this.readUrl)
   }
 }
