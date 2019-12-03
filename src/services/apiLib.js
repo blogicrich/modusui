@@ -18,6 +18,11 @@ url : String - url tail without prepending forward slash
 data : Object - data object to be sent with request
 log : Boolean - Will send request details to dev tools console
 toast : Boolean - Will show v-snackbar with server response message
+status: Boolean - Will return an object - { 
+    response: response.data, 
+    status: response.status, 
+    statusText: response.statusText
+}
 
 Response Objects:
 
@@ -143,18 +148,27 @@ export default {
 
   // Add (POST) new data
 
-  async postData (url, data, log, toast) {
+  async postData (url, data, log, toast, status) {
     if (data) {
       return axi.post(url, data).then(response => {
         if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
         if (log) logger(response, url, data)
-        return response.data
+        if (status) {
+          return { response: response.data, status: response.status, statusText: response.statusText }
+        } else {
+          return response.data
+        }
       })
         .catch(error => {
           if (error.response) {
+            if (status) {
+              return { status: error.response.status, statusText: error.response.statusText }
+            }
             if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) logger(error.response, url, data)
-            return error.response.statusText + ' ' + error.response.status + '\n'
+            if (log) { 
+              logger(error.response, url, data)
+              return error.response.statusText + ' ' + error.response.status + '\n'
+            } 
           } else if (error.request) {
             console.log(error.request)
           } else {

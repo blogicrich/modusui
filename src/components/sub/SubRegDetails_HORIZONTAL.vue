@@ -20,124 +20,100 @@
       </v-layout>
     </v-layout>
     </v-fade-transition>
+
     <v-fade-transition>
-    <v-stepper>
-      <v-stepper-header>
-        <template v-for="n in steps">
-          <v-stepper-step
-            :key="`${n}-step`"
-            :complete="e1 > n"
-            :step="n"
-          >
-            Step {{ n }}
-          </v-stepper-step>
-          <v-divider
-            v-if="n !== steps"
-            :key="n"
-          ></v-divider>
-        </template>
-      </v-stepper-header>
+    <v-stepper v-model="step">
+      <v-stepper-step step="1">Your account</v-stepper-step>
 
-      <v-stepper-items>
-        <!-- <v-stepper-step step="1" editable>Your account</v-stepper-step> -->
-
-        <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
-          <v-form v-model="stepOne.valid" class="pl-2 pr-2" @submit.prevent>
-            <v-layout column>
-              <v-flex xs12 md4>
-                <v-text-field
-                  label="Username"
-                  hint="A nickname, your real name or something made up"
-                  v-model="stepOne.username"
-                  :rules="stepOne.usernameRules"
-                ></v-text-field>
-                <v-text-field
-                  label="Password"
-                  type="password"
-                  hint="Something no one can guess!"
-                  v-model="stepOne.password"
-                  :rules="stepOne.passwordRules"
-                ></v-text-field>
-                <v-text-field
-                  label="Repeat your password"
-                  type="password"
-                  v-model="stepOne.passwordRepeat"
-                  :rules="stepOne.passwordRepeatRules"
-                ></v-text-field>
-                              <v-btn
-                color="primary"
-                class="ml-0"
-                type="submit"
-                :disabled="!stepOne.valid"
-                @click="step = 2"
-              >Next
-              </v-btn>
-
-              </v-flex>
-            </v-layout>
-          </v-form>
-        </v-stepper-content>
-
-
-  <!-- 
-        <v-stepper-step step="2">Your account details</v-stepper-step>
-        <v-stepper-content step="2">
+      <v-stepper-content step="1">
+        <v-form v-model="stepOne.valid" class="pl-2 pr-2" @submit.prevent>
           <v-layout>
             <v-flex xs12 md4>
               <v-text-field
-                label="Email Address"
-                v-model="stepTwo.email"
-                :rules="stepTwo.emailRules"
+                label="Username"
+                hint="A nickname, your real name or something made up"
+                v-model="stepOne.username"
+                :rules="stepOne.usernameRules"
               ></v-text-field>
               <v-text-field
-                label="Given Name"
-                v-model="stepTwo.givenName"
-                :rules="stepTwo.givenNameRules"
+                label="Password"
+                type="password"
+                hint="Something no one can guess!"
+                v-model="stepOne.password"
+                :rules="stepOne.passwordRules"
               ></v-text-field>
               <v-text-field
-                label="Family Name"
-                v-model="stepTwo.familyName"
-                :rules="stepTwo.familyNameRules"
-              ></v-text-field>
-              <v-text-field
-                label="Saluation (Optional)"
-                v-model="stepTwo.salutation"
-                :rules="stepTwo.salutationRules"
+                label="Repeat your password"
+                type="password"
+                v-model="stepOne.passwordRepeat"
+                :rules="stepOne.passwordRepeatRules"
               ></v-text-field>
             </v-flex>
           </v-layout>
-          <v-btn class="ml-0" @click="step = 1">Go Back</v-btn>
-          <v-btn class="ml-0" color="primary" @click="submitAccountDetails">Create Account</v-btn>
-        </v-stepper-content>
+          <v-btn
+            color="primary"
+            class="ml-0"
+            type="submit"
+            :disabled="!stepOne.valid"
+            @click="step = 2"
+          >Next</v-btn>
+          <router-link to="/login">Already have an account? Click here to log in</router-link>
+        </v-form>
+      </v-stepper-content>
 
-        <v-stepper-step step="3">Configure your connected droplet</v-stepper-step>
-        <v-stepper-content step="3">
-          <v-layout>
-            <v-flex xs12 md4>
-
-            </v-flex>
-          </v-layout>
-          <v-btn class="ml-0" @click="step = 2">Go Back</v-btn>
-          <v-btn class="ml-0" color="primary" @click="submitEdropletConfig">Configure</v-btn>
-        </v-stepper-content>
-
-        <v-stepper-step step="4">Who is going to use this connected droplet?</v-stepper-step>
-        <v-stepper-content step="4">
-          <v-layout>
-            <v-flex xs12 md4>
-
-            </v-flex>
-          </v-layout>
-          <v-btn class="ml-0" @click="step = 3">Go Back</v-btn>
-          <v-btn class="ml-0" color="primary" @click="submitEdropletUsers">Submit Users</v-btn>
-        </v-stepper-content> -->
-      </v-stepper-items>
-      </v-stepper>
-
-    </v-fade-transition>
-                  <v-layout class="mt-4" row fill-height align-center justify-space-around>
-          <router-link class="text-center" to="/login">Already have an account? Click here to log in</router-link>
+      <v-stepper-step step="2">Your account details</v-stepper-step>
+      <v-stepper-content step="2">
+        <v-layout>
+          <v-flex xs12 md4>
+            <v-text-field
+              label="Email Address"
+              v-model="stepTwo.email"
+              :rules="stepTwo.emailRules"
+            ></v-text-field>
+            <v-text-field
+              label="Given Name"
+              v-model="stepTwo.givenName"
+              :rules="stepTwo.givenNameRules"
+            ></v-text-field>
+            <v-text-field
+              label="Family Name"
+              v-model="stepTwo.familyName"
+              :rules="stepTwo.familyNameRules"
+            ></v-text-field>
+            <v-text-field
+              label="Saluation (Optional)"
+              v-model="stepTwo.salutation"
+              :rules="stepTwo.salutationRules"
+            ></v-text-field>
+          </v-flex>
         </v-layout>
+        <v-btn class="ml-0" @click="step = 1">Go Back</v-btn>
+        <v-btn class="ml-0" color="primary" @click="submitAccountDetails">Create Account</v-btn>
+      </v-stepper-content>
+
+      <v-stepper-step step="3">Configure your connected droplet</v-stepper-step>
+      <v-stepper-content step="3">
+        <v-layout>
+          <v-flex xs12 md4>
+
+          </v-flex>
+        </v-layout>
+        <v-btn class="ml-0" @click="step = 2">Go Back</v-btn>
+        <v-btn class="ml-0" color="primary" @click="submitEdropletConfig">Configure</v-btn>
+      </v-stepper-content>
+
+      <v-stepper-step step="4">Who is going to use this connected droplet?</v-stepper-step>
+      <v-stepper-content step="4">
+        <v-layout>
+          <v-flex xs12 md4>
+
+          </v-flex>
+        </v-layout>
+        <v-btn class="ml-0" @click="step = 3">Go Back</v-btn>
+        <v-btn class="ml-0" color="primary" @click="submitEdropletUsers">Submit Users</v-btn>
+      </v-stepper-content>
+    </v-stepper>
+    </v-fade-transition>
   </v-container>
 </template>
 
@@ -155,7 +131,7 @@ export default {
     return {
       macAddress: null,
       step: 1,
-      steps: 4,
+
       stepOne: {
         valid: false,
         username: '',
