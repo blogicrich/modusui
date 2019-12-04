@@ -61,10 +61,12 @@ export default {
       headerIcon: 'notification_important',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Interval Settings Management',
+      // User Select
       multiple: false,
       user: '',
       selectAll: 'Select all',
       searchName: 'Search user..',
+      // Interval Select
       intervalOptions: 'eDroplet Reminder Interval Options',
       advancedOptions: 'Advanced Options (Power saving)',
       data: [

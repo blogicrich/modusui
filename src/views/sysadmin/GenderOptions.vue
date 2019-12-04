@@ -49,7 +49,7 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'ContainerTypes',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable
   },
@@ -119,7 +119,7 @@ export default {
           cellLabel: 'Description',
           menuItems: [],
           validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
         },
         {
@@ -129,7 +129,7 @@ export default {
           cellLabel: 'Target Consumption',
           menuItems: [],
           validators: payload => {
-            return [validation.validateRequired(payload)]
+            return [this.validateRequired(payload)]
           }
         }
       ],
@@ -148,7 +148,7 @@ export default {
           hidden: false,
           editable: true,
           validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
         },
         {
@@ -160,7 +160,7 @@ export default {
           hidden: false,
           editable: true,
           validators: payload => {
-            return [validation.validateRequired(payload)]
+            return [this.validateRequired(payload)]
           }
         }
       ]

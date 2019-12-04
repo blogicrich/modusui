@@ -28,12 +28,13 @@
       :loadingMsg="loadingMsg"
       :loadedMsg="loadedMsg"
       :crudIdKey="crudIdKey"
-      item-key="accountId"
+      item-key="macAddress"
       searchLabel="Search Records..."
       tableTitle="User's eDroplets"
       editDialogTitle="Edit eDroplet Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+      :editRules="editRules"
       @itemsEdited="editItems"
       @itemsCancelled="refreshItems"
     />
@@ -47,7 +48,7 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'EdropletManagement',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable
   },
@@ -62,6 +63,9 @@ export default {
       items: [],
       userLevel: JSON.parse(localStorage.getItem('auth')).level,
       editPerms: { create: false, update: true, delete: false },
+      editRules: payload => {
+        return [this.validateAlphabetical(payload), this.validateRequired(payload)]
+      },
       snackColor: 'primary',
       snackText: '',
       snack: false,
@@ -73,7 +77,7 @@ export default {
       loadingMsg: ' ',
       loadedMsg: ' ',
       updateUrl: '/cliadmin/edropman/',
-      readUrl: '/cliadmin/edropman/131',
+      readUrl: '/cliadmin/edropman/',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
@@ -106,24 +110,24 @@ export default {
           hidden: false,
           editable: true
         },
-        {
-          text: 'Friendly name',
-          align: 'left',
-          sortable: false,
-          value: 'friendlyName',
-          cellType: 'tb',
-          hidden: false,
-          editable: true
-        },
-        {
-          text: 'Status',
-          align: 'left',
-          sortable: false,
-          value: 'status',
-          cellType: 'tb',
-          hidden: false,
-          editable: true
-        },
+        // {
+        //   text: 'Friendly name',
+        //   align: 'left',
+        //   sortable: false,
+        //   value: 'friendlyName',
+        //   cellType: 'tb',
+        //   hidden: false,
+        //   editable: true
+        // },
+        // {
+        //   text: 'Status',
+        //   align: 'left',
+        //   sortable: false,
+        //   value: 'status',
+        //   cellType: 'tb',
+        //   hidden: false,
+        //   editable: true
+        // },
         {
           text: 'Operational status',
           align: 'left',
@@ -153,8 +157,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         },
@@ -166,8 +170,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         },
@@ -181,32 +185,32 @@ export default {
             return []
           }
         },
-        {
-          friendlyName: ' ',
-          cellType: 'tb',
-          attr: 'friendlyName',
-          cellLabel: 'Friendly Name',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          status: ' ',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
+        // {
+        //   friendlyName: ' ',
+        //   cellType: 'tb',
+        //   attr: 'friendlyName',
+        //   cellLabel: 'Friendly Name',
+        //   menuItems: [],
+        //   validators: payload => {
+        //     return [
+        //       this.validateAlphabetical(payload),
+        //       this.validateRequired(payload)
+        //     ]
+        //   }
+        // },
+        // {
+        //   status: ' ',
+        //   cellType: 'tb',
+        //   attr: 'status',
+        //   cellLabel: 'Status',
+        //   menuItems: [],
+        //   validators: payload => {
+        //     return [
+        //       this.validateAlphabetical(payload),
+        //       this.validateRequired(payload)
+        //     ]
+        //   }
+        // },
         {
           operationalStatus: ' ',
           cellType: 'tb',
@@ -215,8 +219,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         },
@@ -228,8 +232,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         }
@@ -239,8 +243,8 @@ export default {
           userId: 0,
           userStatus: '',
           macAddress: '',
-          friendlyName: '',
-          status: '',
+          // friendlyName: '',
+          // status: '',
           operationalStatus: '',
           nightLight: ''
         }
@@ -271,8 +275,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         },
@@ -286,33 +290,33 @@ export default {
             return []
           }
         },
-        {
-          friendlyName: '',
-          cellType: 'tb',
-          attr: 'friendlyName',
-          cellLabel: 'Friendly Name',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
+        // {
+        //   friendlyName: '',
+        //   cellType: 'tb',
+        //   attr: 'friendlyName',
+        //   cellLabel: 'Friendly Name',
+        //   menuItems: [],
+        //   validators: payload => {
+        //     return [
+        //       this.validateAlphabetical(payload),
+        //       this.validateRequired(payload)
+        //     ]
+        //   }
 
-        },
-        {
-          status: '',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
+        // },
+        // {
+        //   status: '',
+        //   cellType: 'tb',
+        //   attr: 'status',
+        //   cellLabel: 'Status',
+        //   menuItems: [],
+        //   validators: payload => {
+        //     return [
+        //       this.validateAlphabetical(payload),
+        //       this.validateRequired(payload)
+        //     ]
+        //   }
+        // },
         {
           operationalStatus: '',
           cellType: 'tb',
@@ -321,8 +325,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         },
@@ -334,8 +338,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         }

@@ -58,6 +58,7 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Personal Details',
       // BaseDataTable
+      readUrl: 'sysadmin/container-type',
       editPerms: { create: false, update: false, delete: false },
       // getUrl: '',
       headers: [

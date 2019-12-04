@@ -51,7 +51,7 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'Conditions',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable,
     BaseUserSelect
@@ -153,8 +153,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         }

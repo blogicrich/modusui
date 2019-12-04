@@ -45,9 +45,10 @@ import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 import apiLib from '@/services/apiLib'
+
 export default {
   name: 'SystemAdmins',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable
   },
@@ -64,10 +65,10 @@ export default {
       errorMsg: '',
       loadingMsg: '',
       loadedMsg: '',
-      delUrl: 'carer/adddrinks/' + this.$store.state.userId,
-      updateUrl: 'carer/adddrinks/' + this.$store.state.userId,
-      readUrl: 'carer/adddrinks/' + this.$store.state.userId,
-      createUrl: 'carer/adddrinks/' + this.$store.state.userId,
+      delUrl: 'carer/adddrinks/21', //+ this.$store.state.userId,
+      updateUrl: 'carer/adddrinks/21', //+ this.$store.state.userId,
+      readUrl: 'carer/adddrinks/21', //+ this.$store.state.userId,
+      createUrl: 'carer/adddrinks/21', //+ this.$store.state.userId,
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
@@ -90,8 +91,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         },
@@ -103,7 +104,7 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateRequired(payload)
+              this.validateRequired(payload)
             ]
           }
         }
@@ -132,8 +133,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         },
@@ -145,8 +146,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateNumber(payload),
-              validation.validateRequired(payload)
+              this.validateNumber(payload),
+              this.validateRequired(payload)
             ]
           }
         }

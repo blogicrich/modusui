@@ -50,14 +50,9 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'SystemAdmins',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable
-  },
-  computed: {
-    items () {
-      return this.getters.getterTitles
-    }
   },
   data () {
     return {
@@ -66,7 +61,7 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Titles',
       // BaseDataTable
-      // items: [],
+      items: [],
       valid: false,
       editPerms: { create: true, update: true, delete: true },
       name: 'name',
@@ -76,10 +71,10 @@ export default {
       errorMsg: '',
       loadingMsg: '',
       loadedMsg: '',
-      // delUrl: 'sysadmin/title',
-      // updateUrl: 'sysadmin/title',
-      // readUrl: 'sysadmin/title',
-      // createUrl: 'sysadmin/title',
+      delUrl: 'sysadmin/title',
+      updateUrl: 'sysadmin/title',
+      readUrl: 'sysadmin/title',
+      createUrl: 'sysadmin/title',
       itemKey: 'titleId',
       crudIdKey: 'titleId',
       primaryColor: 'primary',
@@ -87,7 +82,7 @@ export default {
       icon: 'perm_identity',
       iconAdd: 'add',
       editRules: payload => {
-        return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+        return [this.validateAlphabetical(payload), this.validateRequired(payload)]
       },
       headers: [
         {
@@ -123,7 +118,7 @@ export default {
           cellLabel: 'Abbreviation',
           menuItems: [],
           validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
         },
         {
@@ -133,7 +128,7 @@ export default {
           cellLabel: 'Description',
           menuItems: [],
           validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
         }
       ],
@@ -145,12 +140,15 @@ export default {
   },
   methods: {
     validateItems (selected) {
+    // longDescription: 'To'
+    // shortDescription: 'T'
+    // titleId: 32
       for (let i = 0; i < selected.length; i++) {
         for (const key in selected[i]) {
           if (selected[i].hasOwnProperty(key)) {
             const element = selected[i][key]
             console.log(element)
-            if (validation.validateAlphabetical(validation.validateRequired(element.shortDescription)) && validation.validateAlphabetical(validation.validateRequired(element.longDescription))) {
+            if (this.validateAlphabetical(this.validateRequired(element.shortDescription)) && this.validateAlphabetical(this.validateRequired(element.longDescription))) {
               this.editItems(element)
             } else {
               this.valid = false
@@ -167,7 +165,7 @@ export default {
           cellLabel: 'shortDescription',
           menuItems: this.newItem['shortDescription'].menuItems,
           validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
         },
         {
@@ -176,7 +174,7 @@ export default {
           cellLabel: 'longDescription',
           menuItems: this.newItem['longDescription'].menuItems,
           validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
+            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
         }
       ]
@@ -184,6 +182,10 @@ export default {
         { titleId: 0, shortDescription: '', longDescription: '' }
       ]
     }
+  },
+  mounted () {
+    this.getItems(this.readUrl)
+    console.log(this.items)
   }
 }
 </script>

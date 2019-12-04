@@ -36,9 +36,20 @@ import dataTable from '@/components/base/BaseDataTableComponent'
 import validation from '@/mixins/validation'
 
 export default {
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     dataTable
+  },
+  computed: {
+    userId () {
+      // return this.$store.getters.getterUserId
+    },
+    readUrl () {
+      return 'carer/away/21'
+    },
+    updateUrl () {
+      return 'carer/away/21'
+    }
   },
   data: () => ({
     crudIdKey: 'portalAuthorisedId',
@@ -52,8 +63,8 @@ export default {
     loadingMsg: ' ',
     loadedMsg: ' ',
     legend: 'Away Periods',
-    updateUrl: 'carer/away/21',
-    readUrl: 'carer/away/21',
+    // updateUrl: 'carer/away/',
+    // readUrl: 'carer/away/',
     primaryColor: 'primary',
     secondaryColor: 'primary darken-2',
     headers: [
@@ -103,7 +114,7 @@ export default {
         menuItems: [],
         validators: payload => {
           return [
-            validation.validateNumber(payload)
+            // this.validateNumber(payload)
           ]
         }
       },
@@ -115,8 +126,8 @@ export default {
         menuItems: [],
         validators: payload => {
           return [
-            validation.validateLiters(payload),
-            validation.validateRequired(payload)
+            // this.validateLiters(payload),
+            // this.validateRequired(payload)
           ]
         }
       }
@@ -141,7 +152,7 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateNumber(payload)
+              // this.validateNumber(payload)
             ]
           }
         }
