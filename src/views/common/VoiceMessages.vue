@@ -7,7 +7,7 @@
         :headerText="headerText"
       />
         <!-- <v-spacer></v-spacer> -->
-        <selectComponent
+        <!-- <selectComponent
           v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')"
           slot="search"
           :users="users"
@@ -15,7 +15,7 @@
           :searchName="searchName"
           :multiple="multiple"
           @get-selected-user="getSelectedUser"
-        ></selectComponent>
+        ></selectComponent> -->
     </v-layout>
     <v-layout v-if="apiData.length > 0">
       <v-flex xs12>
@@ -167,6 +167,7 @@ export default {
   },
   mounted () {
     this.getvoiceMessage()
+    this.$store.dispatch('fetchVoiceMessagesDefaults')
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm(

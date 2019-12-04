@@ -243,12 +243,15 @@ export default {
     }
   },
   mounted () {
+    this.$store.dispatch('fetchIntervalOptions')
     if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
       this.getValues()
+      this.$store.dispatch('fetchIntervalOptions')
     } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
       this.getValues().then((response) => {
         this.intervals = response
       })
+      this.$store.dispatch('fetchIntervalOptions')
     }
   },
   beforeRouteLeave (to, from, next) {

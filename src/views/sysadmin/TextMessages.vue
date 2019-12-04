@@ -69,6 +69,7 @@ export default {
   },
   mounted () {
     this.getItems(this.readUrl)
+    this.$store.dispatch('fetchMessages')
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')

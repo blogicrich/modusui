@@ -113,6 +113,7 @@ export default {
   },
   mounted () {
     this.getValues()
+    this.$store.dispatch('fetchHydrationParameters')
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {
