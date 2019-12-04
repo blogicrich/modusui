@@ -144,7 +144,7 @@ export default {
     validAccountAcquired: false,
     duplicateAccount: false
   },
-  data() {
+  data () {
     return {
       sanitizedMacAddress: null,
       step: 1,
@@ -206,34 +206,34 @@ export default {
     }
   },
   methods: {
-    sanitizeMacAddress(macAddress) {
+    sanitizeMacAddress (macAddress) {
       return macAddress
         .split(/-|:/)
         .map(octet => octet.toUpperCase())
         .reduce((address, currentOctet) => address + currentOctet + '-', '')
         .slice(0, -1)
     },
-    acknowledgeAccountError() {
+    acknowledgeAccountError () {
       this.$emit('accountErrorAcknowledged')
       this.step = 1
     },
-    showAlert(message, route) {
+    showAlert (message, route) {
       alert(message)
       this.$router.push(route)
     },
-    submitAccountDetails() {
+    submitAccountDetails () {
       this.$emit('submitAccountDetails', { ...this.stepOne, ...this.stepTwo })
       this.step = 3
     },
-    submitEdropletConfig() {
+    submitEdropletConfig () {
       this.$emit('submitEdropletConfig', this.stepTwo)
       this.step = 4
     },
-    submitEdropletUsers() {
+    submitEdropletUsers () {
       this.$emit('submitEdropletUsers', this.stepThree)
     }
   },
-  mounted() {
+  mounted () {
     if (!this.macAddress || !this.macAddress.match(this.macAddressRegEx)) {
       return this.showAlert('Invalid Connected Droplet Address.', '/error')
     }
@@ -242,12 +242,12 @@ export default {
     this.sanitizedMacAddress = this.sanitizeMacAddress(this.macAddress)
   },
   computed: {
-    titleOptions() {
+    titleOptions () {
       return this.titles.map(title => { return { text: title.longDescription, value: title.titleId } })
     }
   },
   watch: {
-    duplicateAccount(newValue, oldValue) {
+    duplicateAccount (newValue, oldValue) {
       if (newValue) { // If duplicateAccount moves to true mark the current username.
         this.stepOne.duplicateToFix = this.stepOne.username
         this.stepOne.username = ''
