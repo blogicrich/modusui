@@ -1,9 +1,23 @@
 <template>
   <v-container v-if="sanitizedMacAddress" grid-list-lg>
+    <v-dialog v-model="duplicateAccount" width="500">
+      <v-card>
+        <v-card-title primary-title class="headline lighten-2">That username is already in use</v-card-title>
+
+        <v-card-text>Sorry but that username is already in use. Try a different one or append a something to the one you have (e.g. john becomes john1964)</v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="primary" flat @click="acknowledgeAccountError">Got it</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-fade-transition>
       <v-layout class="ma-1" row wrap align-center justify-center>
-        <img class="reg-image" alt src="../../assets/ed_logo.svg" />
-        <img />
+        <v-flex xs12>
+          <v-img contain height="200" :src="require('@/assets/ed_logo.svg')" />
+        </v-flex>
         <v-layout class="ma-4" column align-center justify-space-around>
           <v-flex shrink>
             <h1 v-if="$vuetify.breakpoint.mdAndUp" class="display-2">{{ sanitizedMacAddress }}</h1>
@@ -26,7 +40,7 @@
       <v-stepper v-model="step" vertical>
         <v-stepper-step step="1">Your account</v-stepper-step>
         <v-stepper-content step="1">
-          <v-form v-model="stepOne.valid" class="pl-2 pr-2" @submit.prevent>
+          <v-form v-model="stepOne.valid" class="pl-2 pr-2" ref="accountForm" @submit.prevent>
             <v-layout>
               <v-flex xs12 md4>
                 <v-text-field
@@ -70,7 +84,7 @@
                 v-model="stepTwo.email"
                 :rules="stepTwo.emailRules"
               ></v-text-field>
-              <v-select v-model="stepTwo.titleId" :items="titleOptions" label="Title"/>
+              <v-select v-model="stepTwo.titleId" :items="titleOptions" label="Title" />
               <v-text-field
                 label="Given Name"
                 v-model="stepTwo.givenName"
@@ -126,9 +140,11 @@ export default {
   ],
   props: {
     macAddress: String,
-    titles: Array
+    titles: Array,
+    validAccountAcquired: false,
+    duplicateAccount: false
   },
-  data () {
+  data() {
     return {
       sanitizedMacAddress: null,
       step: 1,
@@ -138,10 +154,12 @@ export default {
         username: '',
         password: '',
         passwordRepeat: '',
+        duplicateToFix: null,
 
         usernameRules: [
           v => v !== '' || 'Username is required',
-          v => v.length <= 128 || 'Username too long'
+          v => v.length <= 128 || 'Username too long',
+          v => v !== this.stepOne.duplicateToFix || 'Username already in use'
         ],
         passwordRules: [
           v => v !== '' || 'A password is required',
@@ -188,30 +206,34 @@ export default {
     }
   },
   methods: {
-    sanitizeMacAddress (macAddress) {
+    sanitizeMacAddress(macAddress) {
       return macAddress
         .split(/-|:/)
         .map(octet => octet.toUpperCase())
         .reduce((address, currentOctet) => address + currentOctet + '-', '')
         .slice(0, -1)
     },
-    showAlert (message, route) {
+    acknowledgeAccountError() {
+      this.$emit('accountErrorAcknowledged')
+      this.step = 1
+    },
+    showAlert(message, route) {
       alert(message)
       this.$router.push(route)
     },
-    submitAccountDetails () {
-      this.$emit('submit-account-details', this.stepOne)
+    submitAccountDetails() {
+      this.$emit('submitAccountDetails', { ...this.stepOne, ...this.stepTwo })
       this.step = 3
     },
-    submitEdropletConfig () {
-      this.$emit('submit-edroplet-config', this.stepTwo)
+    submitEdropletConfig() {
+      this.$emit('submitEdropletConfig', this.stepTwo)
       this.step = 4
     },
-    submitEdropletUsers () {
-      this.$emit('submit-edroplet-users', this.stepThree)
+    submitEdropletUsers() {
+      this.$emit('submitEdropletUsers', this.stepThree)
     }
   },
-  mounted () {
+  mounted() {
     if (!this.macAddress || !this.macAddress.match(this.macAddressRegEx)) {
       return this.showAlert('Invalid Connected Droplet Address.', '/error')
     }
@@ -220,18 +242,23 @@ export default {
     this.sanitizedMacAddress = this.sanitizeMacAddress(this.macAddress)
   },
   computed: {
-    titleOptions () {
+    titleOptions() {
       return this.titles.map(title => { return { text: title.longDescription, value: title.titleId } })
+    }
+  },
+  watch: {
+    duplicateAccount(newValue, oldValue) {
+      if (newValue) { // If duplicateAccount moves to true mark the current username.
+        this.stepOne.duplicateToFix = this.stepOne.username
+        this.stepOne.username = ''
+
+        this.$nextTick(() => {
+          // Abuse nextTick and the fact that we changed the username on the model to force vuetify to re-evaluate the rules.
+          this.stepOne.username = this.stepOne.duplicateToFix
+          this.$refs.form.validate()
+        })
+      }
     }
   }
 }
 </script>
-
-<style scoped lang="scss">
-@import "./public/scss/main.scss";
-.reg-image {
-  height: inherit;
-  padding: 10px;
-  margin: 5px;
-}
-</style>

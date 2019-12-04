@@ -1,7 +1,7 @@
 <template>
   <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
-    <v-fade-transition>
-      <v-layout v-if="isWaitingForResponse" column justify-center align-center>
+    <v-fade-transition v-if="isWaitingForResponse">
+      <v-layout column justify-center align-center>
         <v-progress-circular
           class="ma-2"
           :rotate="180"
@@ -10,16 +10,20 @@
           :color="primaryColor"
           indeterminate
         ></v-progress-circular>
-        <h2 class="headline font-weight-light">Getting info. Please wait...</h2>
+        <h2 class="headline font-weight-light">{{ loadingMessage }}</h2>
       </v-layout>
+    </v-fade-transition>
+    <v-fade-transition v-if="titles" :v-show="!isWaitingForResponse">
       <BasicRegDetailsForm
-        v-else
         :macAddress="query"
         :titles="titles"
-        @submit-account-details="submitAccountDetails"
-        @submit-edroplet-config="submitEdropletConfig"
-        @submit-edroplet-users="submitEdropletUsers"
-      ></BasicRegDetailsForm>
+        :validAccountAcquired="validAccountAcquired"
+        :duplicateAccount="duplicateAccount"
+        @accountErrorAcknowledged="duplicateAccount = false"
+        @submitAccountDetails="submitAccountDetails"
+        @submitEdropletConfig="submitEdropletConfig"
+        @submitEdropletUsers="submitEdropletUsers"
+      />
     </v-fade-transition>
   </v-layout>
 </template>
@@ -39,15 +43,36 @@ export default {
   data: function () {
     return {
       isWaitingForResponse: true,
+      validAccountAcquired: false,
+      duplicateAccount: false,
       msg: '',
       primaryColor: 'primary',
       spinnerSize: '250',
-      spinnerWidth: '15'
+      spinnerWidth: '15',
+      loadingMessage: 'One moment please...'
     }
   },
   methods: {
     submitAccountDetails (details) {
-      console.log('details: ', details)
+      this.loadingMessage = 'Creating new account...'
+      this.validAccountAcquiredd = false
+      this.isWaitingForResponse = true
+
+      this.$store.dispatch('createAccount', details).then(() => {
+        if (this.registerStatus === 200) {
+          this.loadingMessage = 'Logging you in...'
+          this.$store.dispatch('POST_LOGIN', { username: details.username, password: details.password })
+            .then(() => {
+              this.validAccountAcquired = true
+              this.isWaitingForResponse = false
+            })
+        } else if (this.registerStatus === 409) {
+          this.duplicateAccount = true
+          this.isWaitingForResponse = false
+        } else {
+          this.$router.push('/error')
+        }
+      })
     },
     submitEdropletConfig (config) {
       console.log('config: ', config)
@@ -58,7 +83,8 @@ export default {
   },
   computed: {
     ...mapState({
-      titles: state => state.gettingStartedWizard.titles
+      titles: state => state.gettingStartedWizard.titles,
+      registerStatus: state => state.gettingStartedWizard.registerStatus
     })
   },
   mounted () {
