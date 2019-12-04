@@ -23,13 +23,19 @@ export const moduleTextEmailMessages = {
       })
     },
     updateMessages (payload) {
-      return apiLib.updateData('sysadmin/text-messages/', payload)
+      return apiLib.updateData('sysadmin/text-messages', payload)
     }
   },
   getters: {
     // get specific data
     getterMessages: state => {
       return state.messages
+    },
+    getterMessagesSms: state => {
+      return state.messages.filter(e => e.communicationTypeDescription === 'SMS')
+    },
+    getterMessagesEmail: state => {
+      return state.messages.filter(e => e.communicationTypeDescription === 'EMAIL')
     }
   }
 }

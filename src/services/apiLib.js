@@ -215,7 +215,7 @@ export default {
   async updateData (url, data, log, toast) {
     if (data) {
       return axi.put(url, data).then(response => {
-        if (toast) EventBus.$emit('snack-msg', { text: response.statusText || response.data, time: 6000, color: 'success', state: true })
+        if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
         if (log) logger(response, url, data)
         return response.data
       })

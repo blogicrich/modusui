@@ -9,13 +9,13 @@
     <v-tabs-slider color="white"></v-tabs-slider>
         <v-tab v-for="(item, index) in items" :key="index">
         <span>
-                  <v-badge color="red" right v-if="itemIsEmpty(item)">
+      <v-badge color="red" right v-if="itemIsEmpty(item)">
           <span>{{ item.alertTypeDescription + ' - ' + item.communicationTypeDescription }}</span>
         <template v-slot:badge>
           <span>!</span>
         </template>
       </v-badge>
-            <v-badge v-else>
+      <v-badge v-else>
         <span>{{ item.alertTypeDescription + ' - ' + item.communicationTypeDescription }}</span>
       </v-badge>
         </span>

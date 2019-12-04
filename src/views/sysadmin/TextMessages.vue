@@ -47,6 +47,7 @@ export default {
       headerText: 'Text / SMS Messages',
       btns: false,
       items: [],
+      messageTypes: [],
       crudIdKey: 'alertMessagesId',
       infoMsgColor: 'primary',
       loading: true,
@@ -65,6 +66,7 @@ export default {
   methods: {
     edittedItems (data, item) {
       apiLib.updateData(this.updateUrl + '/' + this.items[item].alertMessagesId, data, true, true)
+      this.$store.dispatch('fetchMessages')
     }
   },
   mounted () {
