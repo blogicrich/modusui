@@ -55,7 +55,7 @@ export default {
     },
 
     updateDate (date) {
-      this.selectedDate = date
+      this.selectedDate = this.$moment(date).unix()
       this.updateCharts()
     },
 
