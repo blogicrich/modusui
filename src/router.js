@@ -164,7 +164,7 @@ export default new Router({
     {
       path: '/register',
       name: 'Registration',
-      props: (route) => ({ query: route.query.macAddress }),
+      props: (route) => ({ unsanitizedMacAddress: route.query.macAddress }),
       component: () => import(/* webpackChunkName: "about" */ './views/unregistered/Registration.vue')
     }
   ]

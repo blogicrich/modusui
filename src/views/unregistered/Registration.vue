@@ -1,36 +1,58 @@
 <template>
   <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
-    <v-fade-transition v-if="isWaitingForResponse">
-      <v-layout column justify-center align-center>
-        <v-progress-circular
-          class="ma-2"
-          :rotate="180"
-          :size="spinnerSize"
-          :width="spinnerWidth"
-          :color="primaryColor"
-          indeterminate
-        ></v-progress-circular>
-        <h2 class="headline font-weight-light">{{ loadingMessage }}</h2>
-      </v-layout>
-    </v-fade-transition>
-    <v-fade-transition v-if="titles" :v-show="!isWaitingForResponse">
-      <BasicRegDetailsForm
-        :macAddress="query"
-        :titles="titles"
-        :validAccountAcquired="validAccountAcquired"
-        :duplicateAccount="duplicateAccount"
-        @accountErrorAcknowledged="duplicateAccount = false"
-        @submitAccountDetails="submitAccountDetails"
-        @submitEdropletConfig="submitEdropletConfig"
-        @submitEdropletUsers="submitEdropletUsers"
-      />
-    </v-fade-transition>
+    <v-dialog v-model="dropletAvailabilityError" persistent width="700">
+      <v-card v-if="dropletState === 'BASE_NOT_FOUND'">
+        <v-card-title class="headline lighten-2">This Connected Droplet has not come online yet</v-card-title>
+        <v-card-text>Make sure the batteries are inserted correctly.</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="retry" flat>Try Again</v-btn>
+        </v-card-actions>
+      </v-card>
+
+      <v-card v-if="dropletState === 'BASE_ALREADY_LINKED'">
+        <v-card-title class="headline lighten-2">This Connected Droplet is already in use</v-card-title>
+        <v-card-text>
+          If you know who used this Connected Droplet previously, ask them to unlink it from their account. If this is
+          a new Connected Droplet, contact the people who sold it to you.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn to="/login" flat>OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-layout column justify-center align-center v-if="isWaitingForResponse">
+      <v-progress-circular
+        class="ma-2"
+        :rotate="180"
+        :size="spinnerSize"
+        :width="spinnerWidth"
+        :color="primaryColor"
+        indeterminate
+      ></v-progress-circular>
+      <h2 class="headline font-weight-light">{{ loadingMessage }}</h2>
+    </v-layout>
+    <BasicRegDetailsForm
+      v-if="titles"
+      v-show="!isWaitingForResponse"
+      :macAddress="macAddress"
+      :titles="titles"
+      :validAccountAcquired="validAccountAcquired"
+      :duplicateAccount="duplicateAccount"
+      @accountErrorAcknowledged="duplicateAccount = false"
+      @submitAccountDetails="submitAccountDetails"
+      @submitEdropletConfig="submitEdropletConfig"
+      @submitEdropletUsers="submitEdropletUsers"
+    />
   </v-layout>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import BasicRegDetailsForm from '@/components/sub/SubRegDetails'
+import validation from '@/mixins/validation'
 
 export default {
   name: 'Registration',
@@ -38,21 +60,45 @@ export default {
     BasicRegDetailsForm
   },
   props: {
-    query: String
+    unsanitizedMacAddress: String
   },
   data: function () {
     return {
+      macAddress: null,
       isWaitingForResponse: true,
       validAccountAcquired: false,
       duplicateAccount: false,
+      dropletAvailabilityError: false,
       msg: '',
       primaryColor: 'primary',
       spinnerSize: '250',
       spinnerWidth: '15',
-      loadingMessage: 'One moment please...'
+      loadingMessage: 'Checking Connected Droplet availability'
     }
   },
   methods: {
+    retry () {
+      this.isWaitingForResponse = true
+      this.dropletAvailabilityError = false
+
+      // Cooldown, we don't want the user spamming this check.
+      setTimeout(() => {
+        this.$store.dispatch('checkDropletAvailable', this.macAddress).then(() => {
+          this.isWaitingForResponse = false
+        })
+      }, 2000)
+    },
+    sanitizeMacAddress (macAddress) {
+      return macAddress
+        .split(/-|:/)
+        .map(octet => octet.toUpperCase())
+        .reduce((address, currentOctet) => address + currentOctet + '-', '')
+        .slice(0, -1)
+    },
+    showAlert (message, route) {
+      alert(message)
+      this.$router.push(route)
+    },
     submitAccountDetails (details) {
       this.loadingMessage = 'Creating new account...'
       this.validAccountAcquiredd = false
@@ -75,7 +121,15 @@ export default {
       })
     },
     submitEdropletConfig (config) {
-      console.log('config: ', config)
+      this.isWaitingForResponse = true
+      this.loadingMessage = 'Adding the Connected Droplet to your account...'
+      this.$store.dispatch('linkDroplet', config).then(() => {
+        this.isWaitingForResponse = false
+
+        if (this.linkDropletStatus !== 200) {
+          this.showAlert('Unable to link droplet to account at this time.', '/error')
+        }
+      })
     },
     submitEdropletUsers (users) {
       console.log('users: ', users)
@@ -84,21 +138,43 @@ export default {
   computed: {
     ...mapState({
       titles: state => state.gettingStartedWizard.titles,
-      registerStatus: state => state.gettingStartedWizard.registerStatus
+      registerStatus: state => state.gettingStartedWizard.registerStatus,
+      linkDropletStatus: state => state.gettingStartedWizard.linkDropletStatus,
+      dropletState: state => state.gettingStartedWizard.dropletState
     })
   },
   mounted () {
-    if (!this.query) {
-      this.$router.push('/error')
+    if (!this.unsanitizedMacAddress || !this.unsanitizedMacAddress.match(this.macAddressRegEx)) {
+      return this.showAlert(`Invalid Connected Droplet Address "${this.unsanitizedMacAddress}"`, '/error')
     }
 
+    // Convert from any of the valid MAC address representations to the one we want.
+    this.macAddress = this.sanitizeMacAddress(this.unsanitizedMacAddress)
+
     this.$store.dispatch('getTitles').then(() => {
+    })
+
+    Promise.all([
+      this.$store.dispatch('getTitles'),
+      this.$store.dispatch('checkDropletAvailable', this.macAddress)
+    ]).then(() => {
       this.isWaitingForResponse = false
     })
-  }
+
+    this.$store.commit('SET_WIZARD_ACTIVE_STATE', true)
+  },
+  beforeRouteLeave () {
+    this.$store.commit('SET_WIZARD_ACTIVE_STATE', false)
+  },
+  watch: {
+    dropletState (newState) {
+      if (newState === 'BASE_NOT_FOUND' || newState === 'BASE_ALREADY_LINKED') {
+        this.dropletAvailabilityError = true
+      }
+    }
+  },
+  mixins: [
+    validation
+  ]
 }
 </script>
-
-<style scoped lang="scss">
-@import "./public/scss/main.scss";
-</style>

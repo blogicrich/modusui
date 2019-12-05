@@ -12,7 +12,7 @@
       editDialogTitle="Edit Away Period(s)"
       :secondaryColor="secondaryColor"
       item-key="awayId"
-      :readUrl ="readUrl"
+      :readUrl="readUrl"
       :editPerms="editPerms"
       :addRecordIcon="iconAdd"
       :loading="loading"

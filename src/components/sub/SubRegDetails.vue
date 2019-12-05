@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="sanitizedMacAddress" grid-list-lg>
+  <v-container v-if="macAddress" grid-list-lg>
     <v-dialog v-model="duplicateAccount" width="500">
       <v-card>
         <v-card-title primary-title class="headline lighten-2">That username is already in use</v-card-title>
@@ -20,8 +20,8 @@
         </v-flex>
         <v-layout class="ma-4" column align-center justify-space-around>
           <v-flex shrink>
-            <h1 v-if="$vuetify.breakpoint.mdAndUp" class="display-2">{{ sanitizedMacAddress }}</h1>
-            <h1 v-if="$vuetify.breakpoint.smAndDown" class="display-1">{{ sanitizedMacAddress }}</h1>
+            <h1 v-if="$vuetify.breakpoint.mdAndUp" class="display-2">{{ macAddress }}</h1>
+            <h1 v-if="$vuetify.breakpoint.smAndDown" class="display-1">{{ macAddress }}</h1>
           </v-flex>
           <v-flex shrink>
             <h2
@@ -77,7 +77,7 @@
 
         <v-stepper-step step="2">Your account details</v-stepper-step>
         <v-stepper-content step="2">
-          <v-layout>
+          <v-form v-model="stepTwo.valid" class="pl-2 pr-2" @submit.prevent>
             <v-flex xs12 md4>
               <v-text-field
                 label="Email Address"
@@ -99,29 +99,50 @@
                 label="Saluation (Optional)"
                 v-model="stepTwo.salutation"
                 :rules="stepTwo.salutationRules"
+                :placeholder="`${stepTwo.givenName} ${stepTwo.familyName}`"
               ></v-text-field>
             </v-flex>
-          </v-layout>
-          <v-btn class="ml-0" @click="step = 1">Go Back</v-btn>
-          <v-btn class="ml-0" color="primary" @click="submitAccountDetails">Create Account</v-btn>
+            <v-btn class="ml-0" @click="step = 1">Go Back</v-btn>
+            <v-btn
+              class="ml-0"
+              color="primary"
+              @click="submitAccountDetails"
+              type="submit"
+              :disabled="!stepTwo.valid"
+            >Create Account</v-btn>
+          </v-form>
         </v-stepper-content>
 
         <v-stepper-step step="3">Configure your connected droplet</v-stepper-step>
         <v-stepper-content step="3">
-          <v-layout>
-            <v-flex xs12 md4></v-flex>
-          </v-layout>
-          <v-btn class="ml-0" @click="step = 2">Go Back</v-btn>
-          <v-btn class="ml-0" color="primary" @click="submitEdropletConfig">Configure</v-btn>
+          <v-form v-model="stepThree.valid" class="pl-2 pr-2" @submit.prevent>
+            <v-flex xs12 md4>
+              <v-text-field
+                v-model="stepThree.friendlyName"
+                label="Connected Droplet Name (Optional)"
+                hint="Something that helps you identify this droplet (e.g. Jim's Connected Droplet)"
+                :placeholder="macAddress"
+                counter="45"
+              ></v-text-field>
+              <v-btn
+                class="ml-0"
+                color="primary"
+                type="submit"
+                @click="submitEdropletConfig"
+                :disabled="!stepThree.valid"
+              >Configure</v-btn>
+            </v-flex>
+          </v-form>
         </v-stepper-content>
 
         <v-stepper-step step="4">Who is going to use this connected droplet?</v-stepper-step>
         <v-stepper-content step="4">
-          <v-layout>
-            <v-flex xs12 md4></v-flex>
-          </v-layout>
-          <v-btn class="ml-0" @click="step = 3">Go Back</v-btn>
-          <v-btn class="ml-0" color="primary" @click="submitEdropletUsers">Submit Users</v-btn>
+          <v-form v-model="stepFour.valid" class="pl-2 pr-2" @submit.prevent>
+            <v-flex xs12 md4>
+              <v-btn class="ml-0" @click="step = 3">Go Back</v-btn>
+              <v-btn class="ml-0" color="primary" @click="submitUseDropletSelf">To Dashboard</v-btn>
+            </v-flex>
+          </v-form>
         </v-stepper-content>
       </v-stepper>
     </v-fade-transition>
@@ -132,12 +153,9 @@
 </template>
 
 <script>
-import validation from '@/mixins/validation'
+import validation from '../../mixins/validation'
 
 export default {
-  mixins: [
-    validation
-  ],
   props: {
     macAddress: String,
     titles: Array,
@@ -146,7 +164,6 @@ export default {
   },
   data () {
     return {
-      sanitizedMacAddress: null,
       step: 1,
       steps: 4,
       stepOne: {
@@ -173,6 +190,7 @@ export default {
       },
 
       stepTwo: {
+        valid: false,
         email: '',
         titleId: null,
         givenName: '',
@@ -201,45 +219,38 @@ export default {
       },
 
       stepThree: {
-        config: {}
+        valid: false,
+        friendlyName: '',
+
+        friendlyNameRules: [
+          v => v.length <= 45 || 'Connected droplet name too long'
+        ]
+      },
+
+      stepFour: {
+        valid: false
       }
     }
   },
   methods: {
-    sanitizeMacAddress (macAddress) {
-      return macAddress
-        .split(/-|:/)
-        .map(octet => octet.toUpperCase())
-        .reduce((address, currentOctet) => address + currentOctet + '-', '')
-        .slice(0, -1)
-    },
     acknowledgeAccountError () {
       this.$emit('accountErrorAcknowledged')
       this.step = 1
-    },
-    showAlert (message, route) {
-      alert(message)
-      this.$router.push(route)
     },
     submitAccountDetails () {
       this.$emit('submitAccountDetails', { ...this.stepOne, ...this.stepTwo })
       this.step = 3
     },
     submitEdropletConfig () {
-      this.$emit('submitEdropletConfig', this.stepTwo)
+      this.$emit('submitEdropletConfig', {
+        friendlyName: this.stepThree.friendlyName,
+        macAddress: this.macAddress
+      })
       this.step = 4
     },
-    submitEdropletUsers () {
-      this.$emit('submitEdropletUsers', this.stepThree)
+    submitUseDropletSelf () {
+      this.$emit('submitDropletSelf', this.stepFour)
     }
-  },
-  mounted () {
-    if (!this.macAddress || !this.macAddress.match(this.macAddressRegEx)) {
-      return this.showAlert('Invalid Connected Droplet Address.', '/error')
-    }
-
-    // Convert from any of the valid MAC address representations to the one we want.
-    this.sanitizedMacAddress = this.sanitizeMacAddress(this.macAddress)
   },
   computed: {
     titleOptions () {
@@ -255,10 +266,12 @@ export default {
         this.$nextTick(() => {
           // Abuse nextTick and the fact that we changed the username on the model to force vuetify to re-evaluate the rules.
           this.stepOne.username = this.stepOne.duplicateToFix
-          this.$refs.form.validate()
         })
       }
     }
-  }
+  },
+  mixins: [
+    validation
+  ]
 }
 </script>

@@ -5,20 +5,29 @@
     right: () => swipe('Right'),
     up: () => swipe('Up'),
     down: () => swipe('Down')
-  }">
+  }"
+  >
     <!-- HEADER -->
-    <v-toolbar
-      v-if="authenticated"
-      color="white"
-      app
-      :clipped-left="clipped"
-    >
-      <img v-if="$vuetify.breakpoint.smAndDown" @click="drawerState = true" alt="" src="./assets/ed_logo.svg"><img>
-      <img v-if="$vuetify.breakpoint.mdAndUp" alt="" src="./assets/ed_logo.svg"><img>
+    <v-toolbar v-if="authenticated && !wizardActive" color="white" app :clipped-left="clipped">
+      <img
+        v-if="$vuetify.breakpoint.smAndDown"
+        @click="drawerState = true"
+        alt
+        src="./assets/ed_logo.svg"
+      />
+      <img />
+      <img v-if="$vuetify.breakpoint.mdAndUp" alt src="./assets/ed_logo.svg" />
+      <img />
       <v-spacer></v-spacer>
       <v-layout row fill-height wrap justify-end>
         <v-icon outline medium class="mx-2" color="primary">person_outline</v-icon>
-        <v-chip class="ml-1 mt-3 mb-3" v-for="(level, index) in level" :key="index" color="secondary" text-color="primary">{{ levelDisplay(level) }}</v-chip>
+        <v-chip
+          class="ml-1 mt-3 mb-3"
+          v-for="(level, index) in level"
+          :key="index"
+          color="secondary"
+          text-color="primary"
+        >{{ levelDisplay(level) }}</v-chip>
       </v-layout>
     </v-toolbar>
     <!-- SIDEBAR -->
@@ -104,7 +113,7 @@
     <v-container class="px-0" fluid>
       <v-content>
         <v-slide-y-transition mode="out-in">
-          <router-view class="px-0" @authenticated="setAuthenticated"/>
+          <router-view class="px-0" @authenticated="setAuthenticated" />
         </v-slide-y-transition>
       </v-content>
     </v-container>
@@ -115,7 +124,7 @@
           level.find(level => level === 'SYSTEM ADMINISTRATOR') ||
           level.find(level => level === 'CLIENT ADMINISTRATOR') &&
           !(level.find(level => level === 'CARER')) &&
-          this.authenticated"
+          this.authenticated && !wizardActive"
         :fixed="fixed"
         color="white"
         app
@@ -124,13 +133,7 @@
           <v-layout class="pt-2" row align-center justify-start>
             <span class="ml-3" style="align-center">Version: ALPHA</span>
           </v-layout>
-          <BaseAppNavBtn
-            btnIcon="home"
-            btnColor="primary"
-            route="landing"
-            tip="Home"
-            top
-          />
+          <BaseAppNavBtn btnIcon="home" btnColor="primary" route="landing" tip="Home" top />
           <BaseAppNavBtn
             v-if="level.find(level => level === 'CARER') && this.authenticated"
             btnIcon="dashboard"
@@ -139,31 +142,14 @@
             tip="Dashboard"
             top
           />
-          <BaseAppNavBtn
-            btnIcon="exit_to_app"
-            btnColor="primary"
-            route="/login"
-            tip="Logout"
-            top
-          />
+          <BaseAppNavBtn btnIcon="exit_to_app" btnColor="primary" route="/login" tip="Logout" top />
         </v-layout>
       </v-footer>
     </v-fade-transition>
     <!-- SNACKBAR -->
-    <v-snackbar
-      v-model="snackState"
-      :color="snackColor"
-      :timeout="snackTimeout"
-      bottom
-    >
+    <v-snackbar v-model="snackState" :color="snackColor" :timeout="snackTimeout" bottom>
       {{ snackText }}
-      <v-btn
-        dark
-        flat
-        @click="snackState = false"
-      >
-        Close
-      </v-btn>
+      <v-btn dark flat @click="snackState = false">Close</v-btn>
     </v-snackbar>
   </v-app>
 </template>
@@ -172,6 +158,7 @@
 
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
 import { EventBus } from '@/mixins/eventBus.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'App',
@@ -252,7 +239,7 @@ export default {
           this.$router.push('/landing')
         }
         if (this.level.find(level => level === 'CARER') ||
-        (this.level.find(level => level === 'CARER') && this.level.find(level => level === 'CLIENT ADMINISTRATOR'))) {
+          (this.level.find(level => level === 'CARER') && this.level.find(level => level === 'CLIENT ADMINISTRATOR'))) {
           this.$router.push('/dashboard')
         }
       } else {
@@ -307,7 +294,10 @@ export default {
     },
     isActive: function () {
       return this.$store.getters.isActive
-    }
+    },
+    ...mapState({
+      wizardActive: state => state.gettingStartedWizard.wizardActive
+    })
   },
   watch: {
     swipeDirection: function () {
@@ -348,8 +338,8 @@ export default {
   visibility: hidden;
 }
 img {
-  position:absolute;
-  top:2px;
+  position: absolute;
+  top: 2px;
   left: 12px;
   height: inherit;
   padding: 5px;
