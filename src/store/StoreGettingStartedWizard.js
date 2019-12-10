@@ -6,7 +6,9 @@ export const moduleGettingStartedWizard = {
     titles: null,
     registerStatus: null,
     linkDropletStatus: null,
-    dropletState: null
+    dropletState: null,
+    useDropletSelfStatus: null,
+    useDropletOtherStatus: null
   },
   mutations: {
     SET_REGISTER_STATUS (state, status) {
@@ -23,6 +25,12 @@ export const moduleGettingStartedWizard = {
     },
     SET_WIZARD_ACTIVE_STATE (state, active) {
       state.wizardActive = active
+    },
+    SET_USE_DROPLET_SELF_STATUS (state, status) {
+      state.useDropletSelfStatus = status
+    },
+    SET_USE_DROPLET_OTHER_STATUS (state, status) {
+      state.useDropletOtherStatus = status
     }
   },
   actions: {
@@ -49,6 +57,22 @@ export const moduleGettingStartedWizard = {
       const { status } = await apiLib.postData('cliadmin/wizard/link-new-base-to-account', payload, true, false, true)
 
       commit('SET_LINK_DROPLET_STATUS', status)
+    },
+
+    async useDropletSelf ({ commit }, payload) {
+      commit('SET_USE_DROPLET_SELF_STATUS', null)
+
+      const { status } = await apiLib.postData('cliadmin/wizard/save-self-as-user', payload, true, false, true)
+
+      commit('SET_USE_DROPLET_SELF_STATUS', status)
+    },
+
+    async useDropletOther ({ commit }, payload) {
+      commit('SET_USE_DROPLET_OTHER_STATUS', null)
+
+      const { status } = await apiLib.postData('cliadmin/wizard/save-self-as-carer-for-other-user', payload, true, false, true)
+
+      commit('SET_USE_DROPLET_OTHER_STATUS', status)
     }
   }
 }

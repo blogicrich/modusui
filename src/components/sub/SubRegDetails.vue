@@ -27,11 +27,11 @@
             <h2
               v-if="$vuetify.breakpoint.mdAndUp"
               class="headline font-weight-light"
-            >Lets get you started with your connected droplet</h2>
+            >Lets get you started with your Connected Droplet</h2>
             <h2
               v-if="$vuetify.breakpoint.smAndDown"
               class="font font-weight-thin text-center"
-            >Lets get you started with your connected droplet</h2>
+            >Lets get you started with your Connected Droplet</h2>
           </v-flex>
         </v-layout>
       </v-layout>
@@ -84,23 +84,7 @@
                 v-model="stepTwo.email"
                 :rules="stepTwo.emailRules"
               ></v-text-field>
-              <v-select v-model="stepTwo.titleId" :items="titleOptions" label="Title" />
-              <v-text-field
-                label="Given Name"
-                v-model="stepTwo.givenName"
-                :rules="stepTwo.givenNameRules"
-              ></v-text-field>
-              <v-text-field
-                label="Family Name"
-                v-model="stepTwo.familyName"
-                :rules="stepTwo.familyNameRules"
-              ></v-text-field>
-              <v-text-field
-                label="Saluation (Optional)"
-                v-model="stepTwo.salutation"
-                :rules="stepTwo.salutationRules"
-                :placeholder="`${stepTwo.givenName} ${stepTwo.familyName}`"
-              ></v-text-field>
+              <sub-person-details-fields v-model="stepTwo.personalDetails" :titles="titles" />
             </v-flex>
             <v-btn class="ml-0" @click="step = 1">Go Back</v-btn>
             <v-btn
@@ -113,7 +97,7 @@
           </v-form>
         </v-stepper-content>
 
-        <v-stepper-step step="3">Configure your connected droplet</v-stepper-step>
+        <v-stepper-step step="3">Configure your Connected Droplet</v-stepper-step>
         <v-stepper-content step="3">
           <v-form v-model="stepThree.valid" class="pl-2 pr-2" @submit.prevent>
             <v-flex xs12 md4>
@@ -135,13 +119,153 @@
           </v-form>
         </v-stepper-content>
 
-        <v-stepper-step step="4">Who is going to use this connected droplet?</v-stepper-step>
+        <v-stepper-step step="4">Who is going to use this Connected Droplet?</v-stepper-step>
         <v-stepper-content step="4">
-          <v-form v-model="stepFour.valid" class="pl-2 pr-2" @submit.prevent>
-            <v-flex xs12 md4>
-              <v-btn class="ml-0" @click="step = 3">Go Back</v-btn>
-              <v-btn class="ml-0" color="primary" @click="submitUseDropletSelf">To Dashboard</v-btn>
-            </v-flex>
+          <v-form
+            v-model="stepFour.valid"
+            class="pl-4 pr-2"
+            @submit.prevent
+            @submit="submitDropletUse"
+          >
+            <v-layout row wrap>
+              <v-flex xs12 md8>
+                <v-radio-group v-model="stepFour.dropletUse">
+                  <v-radio value="SELF" label="I want to use this Connected Droplet myself" />
+                  <v-radio
+                    value="OTHER_USER"
+                    label="I want to configure this Connected Droplet for someone else"
+                  />
+                  <v-radio
+                    value="SOMETHING_ELSE"
+                    label="(Leave Connected Droplet unassigned) I want to authorize another person to manage this Connected Droplet for someone else"
+                  />
+                </v-radio-group>
+              </v-flex>
+            </v-layout>
+            <v-layout row rwap v-if="stepFour.dropletUse === 'OTHER_USER'">
+              <v-flex xs12 md6>
+                <sub-person-details-fields :titles="titles" v-model="stepFour.userPersonalDetails" />
+              </v-flex>
+            </v-layout>
+            <v-layout row wrap>
+              <template v-if="['SELF', 'OTHER_USER'].includes(stepFour.dropletUse)">
+                <v-flex xs12 md12>
+                  <sub-carer-details-fields
+                    v-model="stepFour.carerDetails"
+                    :communicationMethods="communicationMethods"
+                    :alertTypes="alertTypes"
+                  />
+                </v-flex>
+                <v-flex xs12 md6>
+                  <v-select
+                    v-model="stepFour.userDetails.genderId"
+                    :items="genderOptions"
+                    :rules="stepFour.userDetails.genderIdRules"
+                    label="Gender"
+                  />
+                </v-flex>
+                <v-flex xs12 md6>
+                  <v-text-field
+                    label="Daily Other Hydration (Optional)"
+                    type="number"
+                    step="0.01"
+                    v-model="stepFour.userDetails.dailyOtherHydrationConsumption"
+                    append-icon="L"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 md6>
+                  <v-menu
+                    ref="wakeUpTimePicker"
+                    v-model="stepFour.userDetails.showWakeUpTimePicker"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="stepFour.userDetails.wakeUpTime"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="stepFour.userDetails.wakeUpTime"
+                        label="Wake up time"
+                        prepend-icon="brightness_5"
+                        readonly
+                        v-on="on"
+                        :rules="stepFour.userDetails.wakeUpTimeRules"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="stepFour.userDetails.showWakeUpTimePicker"
+                      v-model="stepFour.userDetails.wakeUpTime"
+                      full-width
+                      @click:minute="$refs.wakeUpTimePicker.save(stepFour.userDetails.wakeUpTime)"
+                    ></v-time-picker>
+                  </v-menu>
+                </v-flex>
+                <v-flex xs12 md6>
+                  <v-menu
+                    ref="sleepTimePicker"
+                    v-model="stepFour.userDetails.showSleepTimePicker"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="stepFour.userDetails.sleepTime"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="stepFour.userDetails.sleepTime"
+                        label="Sleep time"
+                        prepend-icon="brightness_3"
+                        readonly
+                        v-on="on"
+                        :rules="stepFour.userDetails.sleepTimeRules"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="stepFour.userDetails.showSleepTimePicker"
+                      v-model="stepFour.userDetails.sleepTime"
+                      full-width
+                      @click:minute="$refs.sleepTimePicker.save(stepFour.userDetails.sleepTime)"
+                    ></v-time-picker>
+                  </v-menu>
+                </v-flex>
+                <v-flex xs12 md12>
+                  <v-slider
+                    v-model="stepFour.userDetails.voiceMessageVolume"
+                    append-icon="volume_up"
+                    prepend-icon="volume_down"
+                    hint="Connected Droplet volume"
+                    persistent-hint
+                  ></v-slider>
+                </v-flex>
+              </template>
+            </v-layout>
+
+            <v-btn
+              type="submit"
+              color="primary"
+              v-if="stepFour.dropletUse === 'SELF'"
+              :disabled="!stepFour.valid"
+            >Save configuration</v-btn>
+            <v-btn
+              type="submit"
+              color="primary"
+              v-if="stepFour.dropletUse === 'OTHER_USER'"
+              :disabled="!stepFour.valid"
+            >Save configuration for other user</v-btn>
+            <v-btn
+              type="submit"
+              color="primary"
+              v-if="stepFour.dropletUse === 'SOMETHING_ELSE'"
+            >To Dashboard</v-btn>
           </v-form>
         </v-stepper-content>
       </v-stepper>
@@ -154,13 +278,18 @@
 
 <script>
 import validation from '../../mixins/validation'
+import SubPersonDetailsFields from './SubPersonDetailsFields'
+import SubCarerDetailsFields from './SubCarerDetailsFields'
 
 export default {
   props: {
     macAddress: String,
     titles: Array,
-    validAccountAcquired: false,
-    duplicateAccount: false
+    genders: Array,
+    validAccountAcquired: Boolean,
+    duplicateAccount: Boolean,
+    communicationMethods: Array,
+    alertTypes: Array
   },
   data () {
     return {
@@ -192,29 +321,17 @@ export default {
       stepTwo: {
         valid: false,
         email: '',
-        titleId: null,
-        givenName: '',
-        familyName: '',
-        salutation: '',
+        personalDetails: {
+          titleId: null,
+          givenName: '',
+          familyName: '',
+          salutation: ''
+        },
 
         emailRules: [
           v => v !== '' || 'An email address is required',
           v => this.emailRegEx.test(v) || 'Invalid email address',
           v => v.length <= 256 || 'Email address too long'
-        ],
-
-        givenNameRules: [
-          v => v !== '' || 'Your given name is required',
-          v => v.length <= 128 || 'Given name is too long'
-        ],
-
-        familyNameRules: [
-          v => v !== '' || 'Your family name is required',
-          v => v.length <= 128 || 'Family name is too long'
-        ],
-
-        salutationRules: [
-          v => v.length <= 128 || 'Salutation is too long'
         ]
       },
 
@@ -228,7 +345,39 @@ export default {
       },
 
       stepFour: {
-        valid: false
+        valid: false,
+        dropletUse: null,
+        userDetails: {
+          genderId: null,
+          wakeUpTime: '7:00',
+          showWakeUpTimePicker: false,
+          sleepTime: '22:00',
+          showSleepTimePicker: false,
+          voiceMessageVolume: 75,
+          dailyOtherHydrationConsumption: 0,
+
+          genderIdRules: [
+            v => v !== null || 'Gender is required'
+          ],
+
+          wakeUpTimeRules: [
+            v => v !== null || 'Wake up time is required'
+          ],
+
+          sleepTimeRules: [
+            v => v !== null || 'Sleep time is required'
+          ]
+        },
+        userPersonalDetails: {
+          titleId: null,
+          givenName: '',
+          familyName: '',
+          salutation: ''
+        },
+        carerDetails: {
+          communicationMethodId: null,
+          alertTypeIds: null
+        }
       }
     }
   },
@@ -238,7 +387,12 @@ export default {
       this.step = 1
     },
     submitAccountDetails () {
-      this.$emit('submitAccountDetails', { ...this.stepOne, ...this.stepTwo })
+      this.$emit('submitAccountDetails', {
+        username: this.stepOne.username,
+        password: this.stepOne.password,
+        email: this.stepTwo.email,
+        ...this.stepTwo.personalDetails
+      })
       this.step = 3
     },
     submitEdropletConfig () {
@@ -248,13 +402,13 @@ export default {
       })
       this.step = 4
     },
-    submitUseDropletSelf () {
-      this.$emit('submitDropletSelf', this.stepFour)
+    submitDropletUse () {
+      this.$emit('submitDropletUse', this.stepFour)
     }
   },
   computed: {
-    titleOptions () {
-      return this.titles.map(title => { return { text: title.longDescription, value: title.titleId } })
+    genderOptions () {
+      return this.genders.map(gender => { return { text: gender.description, value: gender.genderId } })
     }
   },
   watch: {
@@ -272,6 +426,10 @@ export default {
   },
   mixins: [
     validation
-  ]
+  ],
+  components: {
+    SubPersonDetailsFields,
+    SubCarerDetailsFields
+  }
 }
 </script>

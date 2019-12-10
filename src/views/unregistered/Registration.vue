@@ -39,12 +39,15 @@
       v-show="!isWaitingForResponse"
       :macAddress="macAddress"
       :titles="titles"
+      :genders="genders"
+      :communicationMethods="communicationMethods"
+      :alertTypes="alertTypes"
       :validAccountAcquired="validAccountAcquired"
       :duplicateAccount="duplicateAccount"
       @accountErrorAcknowledged="duplicateAccount = false"
       @submitAccountDetails="submitAccountDetails"
       @submitEdropletConfig="submitEdropletConfig"
-      @submitEdropletUsers="submitEdropletUsers"
+      @submitDropletUse="submitDropletUse"
     />
   </v-layout>
 </template>
@@ -124,15 +127,54 @@ export default {
       this.isWaitingForResponse = true
       this.loadingMessage = 'Adding the Connected Droplet to your account...'
       this.$store.dispatch('linkDroplet', config).then(() => {
-        this.isWaitingForResponse = false
-
         if (this.linkDropletStatus !== 200) {
-          this.showAlert('Unable to link droplet to account at this time.', '/error')
+          this.isWaitingForResponse = false
+          return this.showAlert('Unable to link droplet to account at this time.', '/error')
         }
+
+        this.loadingMessage = 'Preparing next step...'
+        this.$store.dispatch('fetchWizardOptions').then(() => {
+          this.isWaitingForResponse = false
+        })
       })
     },
-    submitEdropletUsers (users) {
-      console.log('users: ', users)
+    submitDropletUse (data) {
+      if (data.dropletUse === 'SOMETHING_ELSE') {
+        return this.$router.replace('/landing')
+      }
+
+      this.loadingMessage = 'Saving your configuration...'
+      this.isWaitingForResponse = true
+
+      const sleepTime = this.convertTimeToSecondsFromMidnight(data.userDetails.sleepTime)
+      const wakeUpTime = this.convertTimeToSecondsFromMidnight(data.userDetails.wakeUpTime)
+
+      if (data.dropletUse === 'SELF') {
+        this.$store.dispatch('useDropletSelf', {
+          ...data.userDetails,
+          ...data.carerDetails,
+          wakeUpTime,
+          sleepTime,
+          macAddress: this.macAddress
+        }).then(() => {
+          this.$router.replace('/dashboard')
+        })
+      } else {
+        this.$store.dispatch('useDropletOther', {
+          ...data.userPersonalDetails,
+          ...data.userDetails,
+          ...data.carerDetails,
+          wakeUpTime,
+          sleepTime,
+          macAddress: this.macAddress
+        }).then(() => {
+          this.$router.replace('/dashboard')
+        })
+      }
+    },
+    convertTimeToSecondsFromMidnight (time) {
+      const startOfDay = this.$moment().startOf('day')
+      return this.$moment(time, 'HH:mm').diff(startOfDay, 'seconds')
     }
   },
   computed: {
@@ -140,7 +182,10 @@ export default {
       titles: state => state.gettingStartedWizard.titles,
       registerStatus: state => state.gettingStartedWizard.registerStatus,
       linkDropletStatus: state => state.gettingStartedWizard.linkDropletStatus,
-      dropletState: state => state.gettingStartedWizard.dropletState
+      dropletState: state => state.gettingStartedWizard.dropletState,
+      genders: state => state.wizard.genders,
+      communicationMethods: state => state.wizard.communicationMethods,
+      alertTypes: state => state.wizard.alertTypes
     })
   },
   mounted () {
@@ -163,8 +208,10 @@ export default {
 
     this.$store.commit('SET_WIZARD_ACTIVE_STATE', true)
   },
-  beforeRouteLeave () {
+  beforeRouteLeave (from, to, next) {
+    console.log('Wizard incactive.')
     this.$store.commit('SET_WIZARD_ACTIVE_STATE', false)
+    next()
   },
   watch: {
     dropletState (newState) {
