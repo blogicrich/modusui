@@ -55,7 +55,7 @@ let url = function () {
       // val = 'https://droplet.lemonstall.com/api/'
       return val
     case 'production':
-      val = 'http://3.9.170.202/api/'
+      val = 'https://droplet.lemonstall.com/api/'
       return val
     default:
       val = 'https://droplet.lemonstall.com/api/'
