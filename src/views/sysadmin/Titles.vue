@@ -134,15 +134,11 @@ export default {
       ],
       defaultItem: [
         { titleId: 0, shortDescription: '', longDescription: '' }
-      ],
-      urls: []
+      ]
     }
   },
   methods: {
     validateItems (selected) {
-    // longDescription: 'To'
-    // shortDescription: 'T'
-    // titleId: 32
       for (let i = 0; i < selected.length; i++) {
         for (const key in selected[i]) {
           if (selected[i].hasOwnProperty(key)) {
@@ -157,13 +153,13 @@ export default {
         }
       }
     },
-    resetItem () {
+    async resetItem () {
       this.newItem = [
         {
           shortDescription: '',
           cellType: 'tb',
           cellLabel: 'shortDescription',
-          menuItems: this.newItem['shortDescription'].menuItems,
+          // menuItems: this.newItem['shortDescription'].menuItems,
           validators: payload => {
             return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
@@ -172,7 +168,7 @@ export default {
           longDescription: '',
           cellType: 'tb',
           cellLabel: 'longDescription',
-          menuItems: this.newItem['longDescription'].menuItems,
+          // menuItems: this.newItem['longDescription'].menuItems,
           validators: payload => {
             return [this.validateAlphabetical(payload), this.validateRequired(payload)]
           }
@@ -185,7 +181,6 @@ export default {
   },
   mounted () {
     this.getItems(this.readUrl)
-    console.log(this.items)
   }
 }
 </script>

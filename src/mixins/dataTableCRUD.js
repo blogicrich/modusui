@@ -40,25 +40,24 @@ export const crudRoutines = {
 
     async editItems (items) {
       for (var i = 0; i < items.length; i++) {
-        var defaultItem = this.defaultItem
-        for (var j = 0; j < defaultItem.length; j++) {
-          Object.keys(defaultItem[j]).forEach(function (key) {
-            if (items[i][key]) defaultItem[j][key] = items[i][key]
-            console.log('Looping Inner: ', key, defaultItem[j], items[i][key])
+        var editedItem = {}
+        var thatDefaultItem = this.defaultItem
+        for (var j = 0; j < thatDefaultItem.length; j++) {
+          editedItem = Object.assign({}, thatDefaultItem[j])
+          Object.keys(thatDefaultItem[j]).forEach(function (key) {
+            if (items[i][key]) editedItem[key] = items[i][key]
+            // console.log('Looping Inner: ', key, thatDefaultItem[j], items[i][key], editedItem[key])
           })
-          console.log('Update Item: ', this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
-          apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
-            .then(response => {})
+          // console.log('Update Item: ', thatDefaultItem[j], this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem)
+          apiLib.updateData(this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem, false, true)
+            .then(() => {})
             .catch(error => {
               console.log(error)
             })
             .finally()
         }
       }
-      // if (this.newItem) {
-      //   this.resetItem()
-      // }
-      this.getItems(this.readUrl)
+      this.refreshItems()
     },
 
     async getItems (url) {
@@ -92,8 +91,8 @@ export const crudRoutines = {
 
     async refreshItems () {
       await this.getItems(this.readUrl)
-      this.resetItem()
-      // if (this.urls) await this.setMenuItems(this.urls)
+      await this.resetItem()
+      if (this.urls) await this.setMenuItems(this.urls)
     },
 
     async setMenuItems (urls) {
