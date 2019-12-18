@@ -8,6 +8,7 @@
         @refresh="updateCharts"
         @dateChange="updateDate"
         @userChange="updateUser"
+        :selectedUser="selectedUser"
         :usersLoaded="usersLoaded"
         :hourLoaded="hourLoaded"
         :dayLoaded="dayLoaded"
@@ -55,7 +56,7 @@ export default {
     },
 
     updateDate (date) {
-      this.selectedDate = this.$moment(date).unix()
+      this.selectedDate = this.$moment.utc(date).unix()
       this.updateCharts()
     },
 
@@ -70,7 +71,7 @@ export default {
 
       if (this.dashboardUsers && this.dashboardUsers.length !== 0) {
         this.usersLoaded = true
-        this.updateUser(this.dashboardUsers[0].userId)
+        this.updateUser(this.dashboardUsers[0])
         this.updateCharts()
       } else {
         this.usersError = true
@@ -96,7 +97,7 @@ export default {
       this.hourLoaded = false
       this.hourError = false
 
-      await this.$store.dispatch('fetchDashboardHourGet', { userId: this.selectedUser, date: this.selectedDate })
+      await this.$store.dispatch('fetchDashboardHourGet', { userId: this.selectedUser.userId, date: this.selectedDate })
 
       if (this.$store.state.dashboardHour.dashboardHourGet) {
         let hourStore = this.$store.state.dashboardHour.dashboardHourGet
@@ -115,7 +116,7 @@ export default {
       this.dayLoaded = false
       this.dayError = false
 
-      await this.$store.dispatch('fetchDashboardDayGet', { userId: this.selectedUser, date: this.selectedDate })
+      await this.$store.dispatch('fetchDashboardDayGet', { userId: this.selectedUser.userId, date: this.selectedDate })
 
       if (this.$store.state.dashboardDay.dashboardDayGet) {
         this.dashboardDay = this.$store.state.dashboardDay.dashboardDayGet
@@ -129,7 +130,7 @@ export default {
       this.weekLoaded = false
       this.weekError = false
 
-      await this.$store.dispatch('fetchDashboardWeekGet', { userId: this.selectedUser, date: this.selectedDate })
+      await this.$store.dispatch('fetchDashboardWeekGet', { userId: this.selectedUser.userId, date: this.selectedDate })
 
       if (this.$store.state.dashboardWeek.dashboardWeekGet) {
         this.dashboardWeek = this.$store.state.dashboardWeek
