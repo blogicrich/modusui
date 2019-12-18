@@ -111,7 +111,6 @@ export default {
   data () {
     return {
       search: '',
-      clickedUser: [],
       dialogToggle: false,
       dialogSettings: false,
       dialogComment: false,
@@ -156,7 +155,8 @@ export default {
     dropletDetail: Array,
     commentIcon: String,
     maxCharac: String,
-    commentData: Object
+    commentData: Object,
+    clickedUser: Object
   },
   computed: {
     filteredName () {
@@ -171,7 +171,6 @@ export default {
   },
   methods: {
     clickedPerson (item) {
-      this.clickedUser = item
       this.$emit('userSelected', item)
     },
     userSettings (item) {

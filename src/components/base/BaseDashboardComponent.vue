@@ -42,6 +42,7 @@
               :primaryColor="primaryColor"
               :usersIcon="usersIcon"
               :alertIcon="alertIcon"
+              :clickedUser="selectedUser"
               :btnIcon="btnIcon"
               :alertColor="alertColors"
               :commentIcon="commentIcon"
@@ -157,7 +158,8 @@ export default {
     'usersError',
     'dayError',
     'hourError',
-    'weekError'
+    'weekError',
+    'selectedUser'
   ],
   computed: {
     breakpoint () {
