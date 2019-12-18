@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <v-layout column>
     <BaseViewHeader
       v-if="this.$vuetify.breakpoint.mdAndDown"
       :headerIcon="headerIcon"
@@ -26,20 +25,43 @@
       :loadedMsg="loadedMsg"
       item-key="titleId"
       searchLabel="Search Records..."
-      tableTitle="Titles"
+      tableTitle="Title Records"
       newDialogTitle="Add a New Title"
       editDialogTitle="Edit Titles"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
 
-      :editRules="editRules"
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
       @itemsCancelled="getItems(readUrl)"
-    />
-    </v-layout>
-
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
@@ -62,7 +84,6 @@ export default {
       headerText: 'Titles',
       // BaseDataTable
       items: [],
-      valid: false,
       editPerms: { create: true, update: true, delete: true },
       name: 'name',
       loading: true,
@@ -81,9 +102,6 @@ export default {
       secondaryColor: 'primary darken-2',
       icon: 'perm_identity',
       iconAdd: 'add',
-      editRules: payload => {
-        return [this.validateAlphabetical(payload), this.validateRequired(payload)]
-      },
       headers: [
         {
           text: 'Title',
@@ -116,20 +134,36 @@ export default {
           cellType: 'tb',
           attr: 'shortDescription',
           cellLabel: 'Abbreviation',
-          menuItems: [],
-          validators: payload => {
-            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
-          }
-        },
+          // menuItems: [],
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
+          },
         {
           longDescription: '',
           cellType: 'tb',
           attr: 'longDescription',
           cellLabel: 'Description',
-          menuItems: [],
-          validators: payload => {
-            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
-          }
+          // menuItems: [],
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         }
       ],
       defaultItem: [
@@ -138,45 +172,49 @@ export default {
     }
   },
   methods: {
-    validateItems (selected) {
-      for (let i = 0; i < selected.length; i++) {
-        for (const key in selected[i]) {
-          if (selected[i].hasOwnProperty(key)) {
-            const element = selected[i][key]
-            console.log(element)
-            if (this.validateAlphabetical(this.validateRequired(element.shortDescription)) && this.validateAlphabetical(this.validateRequired(element.longDescription))) {
-              this.editItems(element)
-            } else {
-              this.valid = false
-            }
-          }
-        }
-      }
+    validateItems (items) {
+      console.log(items)
     },
-    async resetItem () {
+    resetItem () {
       this.newItem = [
         {
           shortDescription: '',
           cellType: 'tb',
           cellLabel: 'shortDescription',
-          // menuItems: this.newItem['shortDescription'].menuItems,
-          validators: payload => {
-            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
-          }
+          // menuItems: [],
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         },
         {
           longDescription: '',
           cellType: 'tb',
           cellLabel: 'longDescription',
-          // menuItems: this.newItem['longDescription'].menuItems,
-          validators: payload => {
-            return [this.validateAlphabetical(payload), this.validateRequired(payload)]
-          }
+          // menuItems: [],
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         }
       ]
-      this.defaultItem = [
-        { titleId: 0, shortDescription: '', longDescription: '' }
-      ]
+      // this.defaultItem = [
+      //   { titleId: 0, shortDescription: '', longDescription: '' }
+      // ]
     }
   },
   mounted () {

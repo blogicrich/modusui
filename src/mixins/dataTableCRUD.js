@@ -3,30 +3,32 @@ import apiLib from '@/services/apiLib.js'
 export const crudRoutines = {
   methods: {
     async addItem (item) {
+      // console.log('gfjkhgjkfdhgfdjkghjkfshjkgs', item)
       var row = {}
       for (var i = 0; i < item.length; i++) {
         Object.keys(item[i]).forEach(function (key) {
-          // console.log(item[i].sync)
-          if (key === 'sync') row[item[i].attr] = item[i].sync
+          row[item[i].attr] = item[i][item[i].attr]
         })
       }
-      // console.log('data: ', row)
-      await apiLib.postData(this.createUrl, row, true, true).then(response => {
-        return response
+      await apiLib.postData(this.createUrl, row, true, true).then(() => {
+        for (var i = 0; i < item.length; i++) {
+          Object.keys(item[i]).forEach(function (key) {
+            // Return newItem values to null
+            item[i][item[i].attr] = null
+          })
+        }
       })
         .catch(error => {
           console.error(error)
         })
-      this.refreshItems()
+      row = {}
+      this.getItems(this.readUrl)
     },
 
     async deleteItem (items) {
       for (var i = 0; i < items.length; i++) {
         let index = this.items.indexOf(items[i])
         let id = (items[i][this.crudIdKey])
-        // console.log(items[i], this.crudIdKey, this.delUrl, id)
-        // console.log('id: ', id)
-        // console.log(this.delUrl, + '/' + items[i][this.crudIdKey])
         await apiLib.deleteData(this.delUrl + '/' + id, true, true)
           .then(response => {
             this.items.splice(index, 1)
@@ -35,7 +37,7 @@ export const crudRoutines = {
             console.error(error)
           })
       }
-      this.refreshItems()
+      this.getItems(this.readUrl)
     },
 
     async editItems (items) {
@@ -57,7 +59,7 @@ export const crudRoutines = {
             .finally()
         }
       }
-      this.refreshItems()
+      this.getItems(this.readUrl)
     },
 
     async getItems (url) {
@@ -90,8 +92,9 @@ export const crudRoutines = {
     },
 
     async refreshItems () {
-      await this.getItems(this.readUrl)
-      await this.resetItem()
+      this.getItems(this.readUrl).then(
+        await this.resetItem()
+      )
       if (this.urls) await this.setMenuItems(this.urls)
     },
 

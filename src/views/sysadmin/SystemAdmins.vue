@@ -30,12 +30,38 @@
       editDialogTitle="Edit Administrator Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      :editRules="editRules"
+
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
       @itemsCancelled="getItems(readUrl)"
-    />
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
@@ -57,8 +83,8 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'System Administrators',
       crudIdKey: 'portalAuthorisedId',
+      // BaseDataTable
       items: [],
-      editRules: () => [],
       editPerms: { create: true, update: true, delete: true },
       loading: true,
       loaded: false,
@@ -155,11 +181,17 @@ export default {
           displayVal: 'shortDescription',
           returnVal: 'titleId',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           givenName: ' ',
@@ -167,12 +199,17 @@ export default {
           attr: 'givenName',
           cellLabel: 'Given Name',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           familyName: ' ',
@@ -180,12 +217,17 @@ export default {
           attr: 'familyName',
           cellLabel: 'Family Name',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           corporateIdentification: 0,
@@ -193,12 +235,17 @@ export default {
           attr: 'corporateIdentification',
           cellLabel: 'Company',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           salutation: '',
@@ -206,12 +253,17 @@ export default {
           attr: 'salutation',
           cellLabel: 'Salutation',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           username: ' ',
@@ -219,12 +271,17 @@ export default {
           attr: 'username',
           cellLabel: 'Username',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           password: ' ',
@@ -232,11 +289,17 @@ export default {
           attr: 'password',
           cellLabel: 'Password',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         }
       ],
       defaultItem: [
@@ -264,12 +327,17 @@ export default {
           displayVal: 'shortDescription',
           returnVal: 'titleId',
           menuItems: this.newItem['titleId'].menuItems,
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           givenName: ' ',
@@ -277,12 +345,17 @@ export default {
           attr: 'givenName',
           cellLabel: 'Given Name',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           familyName: ' ',
@@ -290,12 +363,17 @@ export default {
           attr: 'familyName',
           cellLabel: 'Family Name',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           corporateIdentification: 0,
@@ -303,12 +381,17 @@ export default {
           attr: 'corporateIdentification',
           cellLabel: 'Company',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           salutation: ' ',
@@ -316,12 +399,17 @@ export default {
           attr: 'salutation',
           cellLabel: 'Family Name',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           username: ' ',
@@ -329,12 +417,17 @@ export default {
           attr: 'username',
           cellLabel: 'Username',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
           password: ' ',
@@ -342,40 +435,34 @@ export default {
           attr: 'password',
           cellLabel: 'Password',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         }
       ]
-      this.defaultItem = [
-        {
-          titleId: 0,
-          portalAuthorisedId: 0,
-          givenName: '',
-          familyName: '',
-          corporateIdentification: '',
-          username: '',
-          password: ''
-        }
-      ]
-    },
-    async setData () {
-      await this.getItems('sysadmin/sysadmin')
-      for (let i = 0; i < this.items.length; i++) {
-        for (let item in this.items[i]) {
-          if (item === null) {
-            Object.defineProperty(this.items[i], 'salutation', {
-              value: ' '
-            })
-          }
-        }
-      }
+      // this.defaultItem = [
+      //   {
+      //     titleId: 0,
+      //     portalAuthorisedId: 0,
+      //     givenName: '',
+      //     familyName: '',
+      //     corporateIdentification: '',
+      //     username: '',
+      //     password: ''
+      //   }
+      // ]
     }
   },
   mounted () {
-    this.setData()
+    this.getItems(this.readUrl)
   }
 }
 </script>

@@ -30,12 +30,38 @@
       editDialogTitle="Edit Condition Type Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      :editRules="editRules"
+
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
-    />
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
@@ -58,7 +84,6 @@ export default {
       headerText: 'Conditions Options',
       // BaseDataTable
       items: [],
-      editRules: payload => [],
       crudIdKey: 'conditionsId',
       editPerms: { create: true, update: true, delete: true },
       loading: true,
@@ -111,30 +136,40 @@ export default {
           attr: 'description',
           cellLabel: 'Description',
           menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         },
         {
-          // status: '',
-          // cellType: 'tb',
-          // attr: 'status',
-          // cellLabel: 'Status',
-          // menuItems: [],
-          // validators: payload => {
-          //   return [
-          //     this.validateAlphabetical(payload),
-          //     this.validateRequired(payload)
-          //   ]
-          // }
+          status: '',
+          cellType: 'tb',
+          attr: 'status',
+          cellLabel: 'Status',
+          menuItems: [],
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         }
       ],
-      // defaultItem: [{ conditionsId: 0, description: ' ', status: ' ' }]
-      defaultItem: [{ conditionsId: 0, description: ' ', status: ' ' }]
-
+      defaultItem: [
+        { conditionsId: 0, description: ' ', status: ' ' }
+      ]
     }
   },
   methods: {
@@ -145,33 +180,42 @@ export default {
           cellType: 'tb',
           attr: 'description',
           cellLabel: 'Description',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          // menuItems: [],
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
+        },
+        {
+          status: '',
+          cellType: 'tb',
+          attr: 'status',
+          cellLabel: 'Status',
+          // menuItems: [],
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ],
         }
-        // {
-        //   status: '',
-        //   cellType: 'tb',
-        //   attr: 'status',
-        //   cellLabel: 'Status',
-        //   menuItems: [],
-        //   validators: payload => {
-        //     return [
-        //       this.validateAlphabetical(payload),
-        //       this.validateRequired(payload)
-        //     ]
-        //   }
-        // }
       ]
       // this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]
-      this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]
     }
   },
-  created () {
+  mounted () {
     this.getItems(this.readUrl)
   }
 }

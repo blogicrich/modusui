@@ -7,7 +7,8 @@ export default {
       timeRegEx: /(2[0-3]|[01]?[0-9]):([0-5]?[0-9])/,
       phoneRegEx: /[0-9]/,
       emailRegEx: /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/,
-      macAddressRegEx: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
+      macAddressRegEx: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
+      twoDpRegEx: /^\d+(\.\d{1,2})?$/
     }
   },
   methods: {
@@ -34,6 +35,13 @@ export default {
         return this.alphaNumericRegEx.test(payload)
       } else {
         return false
+      }
+    },
+    validateDp: function (payload) {
+      if (this.validateNumber(payload)) {
+        return this.twoDpRegEx.test(payload)
+      } else {
+        return 'Provide number to two max of 2 decimal places'
       }
     },
     validateLiters: function (payload) {
