@@ -60,7 +60,7 @@ export default {
     },
 
     updateUser (selectedUser) {
-      this.selectedUser = selectedUser
+      this.selectedUser = selectedUser.userId
       this.updateCharts()
     },
 
@@ -70,7 +70,7 @@ export default {
 
       if (this.dashboardUsers && this.dashboardUsers.length !== 0) {
         this.usersLoaded = true
-        this.updateUser(this.dashboardUsers[0].userId)
+        this.updateUser(this.dashboardUsers[0])
         this.updateCharts()
       } else {
         this.usersError = true
