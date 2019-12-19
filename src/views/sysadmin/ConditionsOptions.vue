@@ -146,7 +146,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           status: '',
@@ -164,7 +164,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ],
       defaultItem: [
@@ -191,7 +191,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           status: '',
@@ -209,7 +209,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ]
       // this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]

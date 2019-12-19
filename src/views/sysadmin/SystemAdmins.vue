@@ -191,7 +191,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           givenName: ' ',
@@ -209,7 +209,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           familyName: ' ',
@@ -227,7 +227,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           corporateIdentification: 0,
@@ -245,7 +245,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           salutation: '',
@@ -263,7 +263,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           username: ' ',
@@ -281,7 +281,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           password: ' ',
@@ -299,7 +299,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ],
       defaultItem: [
@@ -337,7 +337,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           givenName: ' ',
@@ -355,7 +355,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           familyName: ' ',
@@ -373,7 +373,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           corporateIdentification: 0,
@@ -391,7 +391,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           salutation: ' ',
@@ -409,7 +409,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           username: ' ',
@@ -427,7 +427,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           password: ' ',
@@ -445,7 +445,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ]
       // this.defaultItem = [

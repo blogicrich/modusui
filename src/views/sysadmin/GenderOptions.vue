@@ -145,7 +145,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           volume: '',
@@ -162,7 +162,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ],
       defaultItem: [
@@ -191,7 +191,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           text: 'Target Consumption',
@@ -211,7 +211,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ]
     }

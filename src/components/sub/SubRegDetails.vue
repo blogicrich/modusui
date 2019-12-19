@@ -43,25 +43,10 @@
           <v-form v-model="stepOne.valid" class="pl-2 pr-2" ref="accountForm" @submit.prevent>
             <v-layout>
               <v-flex xs12 md4>
-                <v-text-field
-                  label="Username"
-                  hint="A nickname, your real name or something made up"
-                  v-model="stepOne.username"
-                  :rules="stepOne.usernameRules"
-                ></v-text-field>
-                <v-text-field
-                  label="Password"
-                  type="password"
-                  hint="Something no one can guess!"
-                  v-model="stepOne.password"
-                  :rules="stepOne.passwordRules"
-                ></v-text-field>
-                <v-text-field
-                  label="Repeat your password"
-                  type="password"
-                  v-model="stepOne.passwordRepeat"
-                  :rules="stepOne.passwordRepeatRules"
-                ></v-text-field>
+                <sub-new-account-fields
+                  v-model="stepOne.accountDetails"
+                  :duplicateToFix="stepOne.duplicateToFix"
+                />
               </v-flex>
             </v-layout>
             <v-btn
@@ -149,102 +134,13 @@
             </v-layout>
             <v-layout row wrap>
               <template v-if="['SELF', 'OTHER_USER'].includes(stepFour.dropletUse)">
-                <v-flex xs12 md12>
+                <v-flex xs12 md6>
                   <sub-carer-details-fields
                     v-model="stepFour.carerDetails"
                     :communicationMethods="communicationMethods"
                     :alertTypes="alertTypes"
                   />
-                </v-flex>
-                <v-flex xs12 md6>
-                  <v-select
-                    v-model="stepFour.userDetails.genderId"
-                    :items="genderOptions"
-                    :rules="stepFour.userDetails.genderIdRules"
-                    label="Gender"
-                  />
-                </v-flex>
-                <v-flex xs12 md6>
-                  <v-text-field
-                    label="Daily Other Hydration (Optional)"
-                    type="number"
-                    step="0.01"
-                    v-model="stepFour.userDetails.dailyOtherHydrationConsumption"
-                    append-icon="L"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6>
-                  <v-menu
-                    ref="wakeUpTimePicker"
-                    v-model="stepFour.userDetails.showWakeUpTimePicker"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    :return-value.sync="stepFour.userDetails.wakeUpTime"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="stepFour.userDetails.wakeUpTime"
-                        label="Wake up time"
-                        prepend-icon="brightness_5"
-                        readonly
-                        v-on="on"
-                        :rules="stepFour.userDetails.wakeUpTimeRules"
-                      ></v-text-field>
-                    </template>
-                    <v-time-picker
-                      v-if="stepFour.userDetails.showWakeUpTimePicker"
-                      v-model="stepFour.userDetails.wakeUpTime"
-                      full-width
-                      @click:minute="$refs.wakeUpTimePicker.save(stepFour.userDetails.wakeUpTime)"
-                    ></v-time-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12 md6>
-                  <v-menu
-                    ref="sleepTimePicker"
-                    v-model="stepFour.userDetails.showSleepTimePicker"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    :return-value.sync="stepFour.userDetails.sleepTime"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="stepFour.userDetails.sleepTime"
-                        label="Sleep time"
-                        prepend-icon="brightness_3"
-                        readonly
-                        v-on="on"
-                        :rules="stepFour.userDetails.sleepTimeRules"
-                      ></v-text-field>
-                    </template>
-                    <v-time-picker
-                      v-if="stepFour.userDetails.showSleepTimePicker"
-                      v-model="stepFour.userDetails.sleepTime"
-                      full-width
-                      @click:minute="$refs.sleepTimePicker.save(stepFour.userDetails.sleepTime)"
-                    ></v-time-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12 md12>
-                  <v-slider
-                    v-model="stepFour.userDetails.voiceMessageVolume"
-                    append-icon="volume_up"
-                    prepend-icon="volume_down"
-                    hint="Connected Droplet volume"
-                    persistent-hint
-                  ></v-slider>
+                  <sub-user-details-fields v-model="stepFour.userDetails" :genders="genders" />
                 </v-flex>
               </template>
             </v-layout>
@@ -280,6 +176,8 @@
 import validation from '../../mixins/validation'
 import SubPersonDetailsFields from './SubPersonDetailsFields'
 import SubCarerDetailsFields from './SubCarerDetailsFields'
+import SubNewAccountFields from './SubNewAccountFields'
+import SubUserDetailsFields from './SubUserDetailsFields'
 
 export default {
   props: {
@@ -297,25 +195,11 @@ export default {
       steps: 4,
       stepOne: {
         valid: false,
-        username: '',
-        password: '',
-        passwordRepeat: '',
         duplicateToFix: null,
-
-        usernameRules: [
-          v => v !== '' || 'Username is required',
-          v => v.length <= 128 || 'Username too long',
-          v => v !== this.stepOne.duplicateToFix || 'Username already in use'
-        ],
-        passwordRules: [
-          v => v !== '' || 'A password is required',
-          v => v.length >= 8 || 'This password is too short',
-          v => v.length <= 72 || 'This password is too long'
-        ],
-        passwordRepeatRules: [
-          v => v !== '' || 'Please repeat your password',
-          v => v === this.stepOne.password || 'Passwords do not match'
-        ]
+        accountDetails: {
+          username: '',
+          password: ''
+        }
       },
 
       stepTwo: {
@@ -350,23 +234,9 @@ export default {
         userDetails: {
           genderId: null,
           wakeUpTime: '7:00',
-          showWakeUpTimePicker: false,
           sleepTime: '22:00',
-          showSleepTimePicker: false,
           voiceMessageVolume: 75,
-          dailyOtherHydrationConsumption: 0,
-
-          genderIdRules: [
-            v => v !== null || 'Gender is required'
-          ],
-
-          wakeUpTimeRules: [
-            v => v !== null || 'Wake up time is required'
-          ],
-
-          sleepTimeRules: [
-            v => v !== null || 'Sleep time is required'
-          ]
+          dailyOtherHydrationConsumption: 0
         },
         userPersonalDetails: {
           titleId: null,
@@ -388,9 +258,8 @@ export default {
     },
     submitAccountDetails () {
       this.$emit('submitAccountDetails', {
-        username: this.stepOne.username,
-        password: this.stepOne.password,
         email: this.stepTwo.email,
+        ...this.stepOne.accountDetails,
         ...this.stepTwo.personalDetails
       })
       this.step = 3
@@ -406,21 +275,10 @@ export default {
       this.$emit('submitDropletUse', this.stepFour)
     }
   },
-  computed: {
-    genderOptions () {
-      return this.genders.map(gender => { return { text: gender.description, value: gender.genderId } })
-    }
-  },
   watch: {
     duplicateAccount (newValue, oldValue) {
       if (newValue) { // If duplicateAccount moves to true mark the current username.
-        this.stepOne.duplicateToFix = this.stepOne.username
-        this.stepOne.username = ''
-
-        this.$nextTick(() => {
-          // Abuse nextTick and the fact that we changed the username on the model to force vuetify to re-evaluate the rules.
-          this.stepOne.username = this.stepOne.duplicateToFix
-        })
+        this.stepOne.duplicateToFix = this.stepOne.accountDetails.username
       }
     }
   },
@@ -429,7 +287,9 @@ export default {
   ],
   components: {
     SubPersonDetailsFields,
-    SubCarerDetailsFields
+    SubCarerDetailsFields,
+    SubNewAccountFields,
+    SubUserDetailsFields
   }
 }
 </script>

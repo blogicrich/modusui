@@ -217,7 +217,7 @@
                 <v-container>
                   <v-layout row>
                     <v-flex v-for="(item, key) in newItem" :key="key">
-                      <slot 
+                      <slot
                         name="newSlot"
                         v-if="item.cellType === 'tb'"
                         :item="item"
@@ -270,7 +270,7 @@
                 <v-container>
                   <v-layout v-for="(item, index) in selected" :key="index">
                     <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attribute => attribute.attr === key)">
-                      <slot 
+                      <slot
                         name="editSlot"
                         v-if="inputType(item, key, 'tb')"
                         :item="item"
@@ -578,7 +578,7 @@
                 <v-container>
                   <v-layout row wrap justify-space-around>
                     <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
-                      <slot 
+                      <slot
                         name="newSlot"
                         v-if="item.cellType === 'tb'"
                         :item="item"
@@ -641,7 +641,7 @@
                       </v-btn>
                     </v-layout>
                     <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attribute => attribute.attr === key)">
-                      <slot 
+                      <slot
                         name="editSlot"
                         v-if="inputType(item, key, 'tb')"
                         :item="item"
@@ -753,7 +753,7 @@ export default {
     recordIcon: String,
     addRecordIcon: String,
     addBtnTitle: String,
-    editPerms: Object,
+    editPerms: Object
   },
   methods: {
     pages () {

@@ -145,8 +145,8 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
-          },
+          ]
+        },
         {
           longDescription: '',
           cellType: 'tb',
@@ -163,7 +163,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ],
       defaultItem: [

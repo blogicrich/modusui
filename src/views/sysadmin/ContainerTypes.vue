@@ -30,7 +30,7 @@
       editDialogTitle="Edit Container Type Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      
+
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
@@ -146,7 +146,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           volume: '',
@@ -164,7 +164,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ],
       defaultItem: [
@@ -191,7 +191,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         },
         {
           volume: '',
@@ -209,7 +209,7 @@ export default {
                 return 'Alphabetical characters only'
               }
             }
-          ],
+          ]
         }
       ]
       // this.defaultItem = [
