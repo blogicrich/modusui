@@ -45,6 +45,7 @@ error.message :
 import axios from 'axios'
 import { EventBus } from '@/mixins/eventBus.js'
 import { moduleEdropletApp } from '@/store/StoreEdropletApp'
+import store from '@/store'
 
 let url = function () {
   let val = ''
@@ -83,8 +84,18 @@ axi.interceptors.request.use((config) => {
   return Promise.reject(error)
 })
 
-// Utils
+// Logout when the API either forbids us to take a certain action or outright says our credentials are invalid.
+axi.interceptors.response.use((response) => {
+  return response // Don't do anything upon success
+}, (error) => {
+  if ([401, 403].includes(error.response.status)) {
+    store.dispatch('LOGOUT')
+  }
 
+  return error
+})
+
+// Utils
 var logger = function (responseObj, url, data) {
   if (data) console.log('data: ', data)
   console.log('URL: ', url)

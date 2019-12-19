@@ -3,18 +3,18 @@ import apiLib from '../services/apiLib.js'
 export const moduleEdropletApp = {
   state: {
     // Login
-    isActive: false,
-    authenticated: false,
-    deptPersonsId: null,
-    level: [],
-    portalAuthorisedId: null,
+    isActive: deserialize('isActive'),
+    authenticated: deserialize('authenticated', false),
+    deptPersonsId: deserialize('deptPersonsId'),
+    level: deserialize('level', []),
+    portalAuthorisedId: deserialize('portalAuthorisedId'),
     authDataLoading: false,
-    token: '',
+    token: deserialize('token'),
     // Dashboard
     userDataLoading: false,
     storeId: null,
     userId: null,
-    carerId: null,
+    carerId: deserialize('carerId'),
     accountHolderId: null,
     deviceMessageTypeId: null,
     messageNo: null,
@@ -28,27 +28,35 @@ export const moduleEdropletApp = {
       state.authDataLoading = data
     },
     SET_AUTHENTICATION_STATE (state, data) {
+      serialize('authenticated', data)
       state.authenticated = data
     },
     SET_CARER_ID (state, data) {
+      serialize('carerId', data)
       state.carerId = data
     },
     SET_ACCOUNT_HOLDER_ID (state, data) {
+      serialize('accountHolderId', data)
       state.accountHolderId = data
     },
     SET_DEPT_PERSON_ID (state, data) {
+      serialize('deptPersonsId', data)
       state.deptPersonsId = data
     },
     SET_PORTAL_AUTH_ID (state, data) {
+      serialize('portalAuthorisedId', data)
       state.portalAuthorisedId = data
     },
     SET_ACTIVE (state, data) {
+      serialize('isActive', data)
       state.isActive = data
     },
     SET_LEVEL (state, data) {
+      serialize('level', data)
       state.level = data
     },
     SET_TOKEN (state, data) {
+      serialize('token', data)
       state.token = data
     }
   },
@@ -85,6 +93,7 @@ export const moduleEdropletApp = {
       context.commit('SET_TOKEN', null)
       context.commit('SET_LOAD_STATUS', false)
       context.commit('SET_ACTIVE', false)
+      localStorage.clear()
     }
   },
   getters: {
@@ -108,4 +117,12 @@ export const moduleEdropletApp = {
     getterConditionId: state => state.conditionId,
     getterDayReportId: state => state.dayReportId
   }
+}
+
+function serialize (key, value) {
+  localStorage.setItem(key, JSON.stringify(value))
+}
+
+function deserialize (key, defaultValue = null) {
+  return JSON.parse(localStorage.getItem(key)) || defaultValue
 }

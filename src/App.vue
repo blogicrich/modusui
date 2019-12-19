@@ -307,7 +307,7 @@ export default {
       }
     },
     authenticated: function () {
-      if (this.authenticated === null || this.authenticated === false || this.authenticated === undefined) {
+      if (!this.authenticated) {
         this.logout()
         this.$router.push('/login')
       } else {
@@ -316,7 +316,7 @@ export default {
     }
   },
   mounted () {
-    if (this.authenticated === null || this.authenticated === undefined || this.authenticated === false) {
+    if (!this.authenticated) {
       this.logout()
     }
     EventBus.$on('snack-msg', data => {
