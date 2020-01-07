@@ -8,7 +8,7 @@
         hasDivider
       />
         <v-spacer></v-spacer>
-        <selectComponent
+        <!-- <selectComponent
           v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')"
           slot="search"
           :users="users"
@@ -16,7 +16,7 @@
           :searchName="searchName"
           :multiple="multiple"
           @get-selected-user="getSelectedUser"
-        ></selectComponent>
+        ></selectComponent> -->
     </v-layout>
     <v-container v-if="intervals.length > 0">
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
@@ -141,7 +141,7 @@ export default {
       // user: JSON.parse(localStorage.getItem('auth')).level,
       sysadminReadUrl: 'sysadmin/interval-options',
       sysadminWriteUrl: 'sysadmin/interval-options',
-      cliadminReadUrl: 'cliadmin/intervalsettings/81/80/2',
+      cliadminReadUrl: 'cliadmin/intervalsettings/',
       cliadminWriteUrl: 'intervalupdate',
       newDefaultValue: false,
       editedItems: [],

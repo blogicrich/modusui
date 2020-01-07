@@ -48,7 +48,7 @@
       >
   <!-- Table: Headers -->
     <template slot="headers" slot-scope="props">
-      <th>
+      <th v-if="editPerms.create || editPerms.update || editPerms.delete">
         <v-checkbox
           :input-value="props.all"
           :indeterminate="props.indeterminate"
@@ -79,7 +79,7 @@
   <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <tr>
-        <td>
+        <td v-if="editPerms.create || editPerms.update || editPerms.delete">
           <v-checkbox
             v-model="props.selected"
           ></v-checkbox>

@@ -52,6 +52,11 @@ export default {
   components: {
     BaseDataTable
   },
+  computed: {
+    user: function () {
+      return this.$store.getters.level
+    }
+  },
   data () {
     return {
       // BaseViewHeader
@@ -61,8 +66,7 @@ export default {
       // BaseDataTable
       crudIdKey: 'identifier',
       items: [],
-      userLevel: JSON.parse(localStorage.getItem('auth')).level,
-      editPerms: { create: false, update: true, delete: false },
+      editPerms: { create: false, update: false, delete: false },
       editRules: payload => {
         return [this.validateAlphabetical(payload), this.validateRequired(payload)]
       },

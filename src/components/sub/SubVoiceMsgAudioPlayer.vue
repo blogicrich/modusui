@@ -23,10 +23,9 @@
             <v-radio @change="showSaveInterval = false" color="primary" v-for="radio in radioConfig" :key="radio.label" :label="radio.label" :value="radio.value" class="radio"></v-radio>
             <!-- <v-btn v-if="showSaveInterval" color="primary" @click="saveInterval()">Save changes</v-btn> -->
           </v-radio-group>
-                      <v-btn :disabled="showSaveInterval" fab color="primary" @click="saveInterval()">
-                        <v-icon >save</v-icon>
-                      </v-btn>
-          
+          <v-btn :disabled="showSaveInterval" fab color="primary" @click="saveInterval()">
+            <v-icon >save</v-icon>
+          </v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -46,7 +45,6 @@ export default {
   data () {
     return {
       showSaveFile: false,
-      showSaveInterval: true,
       updateSysAdminUrl: 'sysadmin/voice-message/',
       file: ''
     }
@@ -65,8 +63,12 @@ export default {
       apiLib.updateData(this.updateSysAdminUrl + this.data.voiceMessagesId, data, true, true)
       this.showSaveFile = false
     },
-    saveInterval () {
-      // this.showSaveInterval = false
+    saveInterval (values) {
+      console.log(values)
+      console.log(data)
+    },
+    showSaveInterval () {
+      return false
     }
   }
 }
