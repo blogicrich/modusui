@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mx-4" grid-list-md text-xs-center>
+  <v-container>
     <v-layout row align-center fill-height>
       <BaseViewHeader
         :headerIcon="headerIcon"
@@ -9,7 +9,7 @@
       />
         <v-spacer></v-spacer>
         <selectComponent
-          v-if="user.find(level => level === 'SYSTEM ADMINISTRATOR')"
+          v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')"
           slot="search"
           :users="users"
           :selectAll="selectAll"
@@ -28,9 +28,9 @@
       <v-layout row wrap fill-height justify-space-between>
         <v-flex xs12 lg6>
           <BaseRadioOptions
-            @radio-option-changed="setNewValue"
+            @radio-option-changed="setNewUpdateObject"
             :radioConfig="intervals[0].blueLightFlashingInterval"
-            :defaultValue="0"
+            :defaultValue="intervals[0].blueLightFlashingInterval.find(val => val.default === true).time"
             :groupHeader="drinkGroupHeader"
             :groupDescription="drinkRadioDescription"
             :radioHeader="drinkRadioHeader"
@@ -40,10 +40,10 @@
         </v-flex>
         <v-flex xs12 lg6>
           <BaseRadioOptions
-            @radio-option-changed="setNewValue"
+            @radio-option-changed="setNewUpdateObject"
             :radioConfig="intervals[0].spokenReminder"
             :groupHeader="voiceGroupHeader"
-            :defaultValue="0"
+            :defaultValue="intervals[0].spokenReminder.find(val => val.default === true).time"
             :groupDescription="voiceRadioDescription"
             :radioHeader="voiceRadioHeader"
             :height="height"
@@ -60,9 +60,9 @@
     <v-layout row wrap fill-height justify-space-between>
       <v-flex xs12 lg6>
         <BaseRadioOptions
-          @radio-option-changed="setNewValue"
+          @radio-option-changed="setNewUpdateObject"
           :radioConfig="intervals[0].wakeUpInterval"
-          :defaultValue="0"
+          :defaultValue="intervals[0].wakeUpInterval.find(val => val.default === true).time"
           :groupHeader="wakeUpGroupHeader"
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
@@ -72,9 +72,9 @@
       </v-flex>
       <v-flex xs12 lg6>
         <BaseRadioOptions
-          @radio-option-changed="setNewValue"
+          @radio-option-changed="setNewUpdateObject"
           :radioConfig="intervals[0].buServerInterval"
-          :defaultValue="0"
+          :defaultValue="intervals[0].buServerInterval.find(val => val.default === true).time"
           :groupHeader="commsGroupHeader"
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
@@ -115,6 +115,17 @@ export default {
     SubPageNavButton,
     selectComponent
   },
+  computed: {
+    user: function () {
+      return this.$store.getters.level
+    },
+    height () {
+      var cardHeight = 0
+      if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
+      if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
+      return cardHeight
+    }
+  },
   data () {
     return {
       // BaseViewHeader
@@ -127,13 +138,14 @@ export default {
       selectAll: 'Select all',
       searchName: 'Search user..',
       users: [],
-      userLevel: JSON.parse(localStorage.getItem('auth')).level,
+      // user: JSON.parse(localStorage.getItem('auth')).level,
       sysadminReadUrl: 'sysadmin/interval-options',
       sysadminWriteUrl: 'sysadmin/interval-options',
       cliadminReadUrl: 'cliadmin/intervalsettings/81/80/2',
       cliadminWriteUrl: 'intervalupdate',
       newDefaultValue: false,
       editedItems: [],
+      updateObj: {},
       // intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
       intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
       drinkGroupHeader: 'Blue light flashing interval options',
@@ -150,17 +162,6 @@ export default {
       commsRadioHeader: 'Time interval in minutes'
     }
   },
-  computed: {
-    user: function () {
-      return this.$store.getters.level
-    },
-    height () {
-      var cardHeight = 0
-      if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
-      if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
-      return cardHeight
-    }
-  },
   methods: {
     getSelectedUser (user) {
       apiLib.getData(this.cliadminReadUrl, true).then(response => {
@@ -168,13 +169,13 @@ export default {
       })
     },
     getValues () {
-      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+      if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
         apiLib.getData(this.cliadminReadUrl, true).then((response) => response)
         apiLib.getData('cliadmin/users', true).then(response => {
           this.users = response
         })
       }
-      if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+      if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         let arr = apiLib.getData(this.sysadminReadUrl).then((response) => {
           console.log(response)
           return response
@@ -182,76 +183,50 @@ export default {
         return arr
       }
     },
-    // Sets the default radio button value following getValues
-    async setValues (key) {
-      for (let i = 0; i < this.intervals.length; i++) {
-        const element = this.intervals[i]['key']
-        for (const item in element) {
-          if (element.hasOwnProperty(item)) {
-            console.log(item)
-          }
-        }
+    // Sets the new value of the API update object
+    setUpdateObject () {
+      this.updateObj = {
+        blueLightFlashingIntervalId: this.intervals[0].blueLightFlashingInterval.find(e => e.default === true).blueLightFlashingIntervalId,
+        buServerIntervalId: this.intervals[0].buServerInterval.find(e => e.default === true).buServerIntervalId,
+        spokenReminderId: this.intervals[0].spokenReminder.find(e => e.default === true).spokenReminderId,
+        wakeUpIntervalId: this.intervals[0].wakeUpInterval.find(e => e.default === true).wakeUpIntervalId
       }
     },
     // Sets the new value of the radio group and appends to editedItems
-    setNewValue (obj) {
+    setNewUpdateObject (obj) {
+      const key = Object.keys(obj.items[obj.index])[0]
+      console.log('set value - obj: ', obj)
       if (obj.defaultValue === obj.newValue) {
         this.newDefaultValue = false
       } else {
         this.newDefaultValue = true
       }
-      for (var i = 0; i < this.intervalIds.length; i++) {
-        if (obj.items[obj.index].hasOwnProperty(this.intervalIds[i])) {
-          let type = ''
-          let id = obj.items[obj.index][this.intervalIds[i]]
-
-          switch (this.intervalIds[i]) {
-            case 'blueLightFlashingIntervalId':
-              type = 'bluelight'
-              break
-            case 'wakeUpIntervalId':
-              type = 'wakeup'
-              break
-            case 'spokenReminderId':
-              type = 'voice'
-              break
-            case 'buServerIntervalId':
-              type = 'communication'
-              break
-            default:
-              type = 'error'
-          }
-          for (var j = 0; j < this.editedItems.length; j++) {
-            if (this.editedItems[j].type === type) this.editedItems.splice(j - 1, 1)
-          }
-          this.editedItems.push({ id: id, type: type })
-        }
-      }
+      this.updateObj[key] = obj.items[obj.index][key]
+      // console.log(obj.items[obj.index])
+      // console.log(Object.keys(obj.items[obj.index])[0])
+      // console.log(this.updateObj)
     },
     // Posts update requests
     async save () {
-      for (var i = 0; i < this.editedItems.length; i++) {
-        if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-          await apiLib.postData(this.cliadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i], true)
-        } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-          await apiLib.postData(this.sysadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i], true)
-        }
+      // if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
+      //   await apiLib.updateData(this.cliadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i], true, true)
+      // }
+      if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+        await apiLib.updateData(this.sysadminWriteUrl, this.updateObj, true, true)
+        this.getValues()
+        this.newDefaultValue = false
       }
-      await this.getValues()
-      this.newDefaultValue = false
-      this.editedItems = []
     }
   },
   mounted () {
-    this.$store.dispatch('fetchIntervalOptions')
-    if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
+    if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
       this.getValues()
-      this.$store.dispatch('fetchIntervalOptions')
-    } else if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+    } else if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
       this.getValues().then((response) => {
         this.intervals = response
+        this.setUpdateObject()
+        console.log('intervals: ', this.intervals, this.updateObj)
       })
-      this.$store.dispatch('fetchIntervalOptions')
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -263,6 +238,7 @@ export default {
         next(false)
       }
     } else {
+      this.$store.dispatch('fetchIntervalOptions')
       next()
     }
   }
