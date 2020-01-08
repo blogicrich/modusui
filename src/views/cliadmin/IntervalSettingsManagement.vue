@@ -9,7 +9,7 @@
         hasDivider
       />
       <v-spacer></v-spacer>
-      <selectComponent
+      <!-- <selectComponent
         slot="search"
         v-if="userPerms"
         :users="users"
@@ -17,15 +17,15 @@
         :searchName="searchName"
         :multiple="multiple"
         @get-selected-user="getSelectedUser"
-      ></selectComponent>
+      ></selectComponent> -->
   </v-layout>
   <v-layout column>
-    <baseSelect
+    <!-- <baseSelect
       :users="users"
       :selectAll="selectAll"
       :searchName="searchName"
       @get-selected-user="getSelectedUser"
-    ></baseSelect>
+    ></baseSelect> -->
     <subAlertCard
       :dataBox="dataBox1"
       :radioText="radioText"
@@ -43,7 +43,7 @@
       <v-icon slot="btnSlot" large>expand_more</v-icon>
     </subAlertCard>
   </v-layout>
-<v-container>
+</v-container>
 </template>
 
 <script>
@@ -51,6 +51,7 @@ import subAlertCard from '@/components/sub/subIntervalSettingsComponent.vue'
 import baseSelect from '@/components/base/BaseUserSelectComponent.vue'
 
 export default {
+  name: 'IntervalManagement',
   components: {
     subAlertCard,
     baseSelect
@@ -82,6 +83,16 @@ export default {
         { settingText: 'Wake Up interval', cardText: 'Time between Wake up and first eDroplet/portal Communications of the day.' },
         { settingText: 'Communication interval', cardText: 'Time interval between eDroplet/portal communications.' }
       ]
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    const answer = window.confirm(
+      'Do you really want to leave? You will loose all unsaved changes!'
+    )
+    if (answer) {
+      next()
+    } else {
+      next(false)
     }
   }
 }

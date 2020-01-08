@@ -139,14 +139,14 @@
           </v-layout>
           <BaseLinkComponent
             routerTitle= "Voice Message Management"
-            link="/voicemessages"
+            link="/voicemsgmanagement"
             tooltipText="Upload and set custom voice messages for your eDroplets"
             icon="record_voice_over"
             colorIcon="#006480"
           />
           <BaseLinkComponent
             routerTitle= "Interval Settings Management"
-            link="/intervaloptions"
+            link="/intervalmanagement"
             tooltipText="Set the reminder and Communication intervals for your eDroplets"
             icon="notification_important"
             colorIcon="#006480"

@@ -58,7 +58,7 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Personal Details',
       // BaseDataTable
-      readUrl: 'sysadmin/container-type',
+      readUrl: 'cliadmin/personnelsettings' + this.$store.state.eDropletApp.carerId,
       editPerms: { create: false, update: false, delete: false },
       // getUrl: '',
       headers: [
@@ -125,6 +125,7 @@ export default {
     })
   },
   mounted () {
+    console.log('fjkdjgkjkg: ', this.$store.state.eDropletApp.carerId)
     const parameters = this.$route.query
     console.log('params: ', parameters)
   }

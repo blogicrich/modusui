@@ -20,7 +20,7 @@
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
       :addRecordIcon="iconAdd"
-      addBtnTitle="New Condition"
+      addBtnTitle="New eDroplet"
       :loading="loading"
       :loaded="loaded"
       :error="error"
@@ -34,14 +34,43 @@
       editDialogTitle="Edit eDroplet Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      :editRules="editRules"
+
+      @newItem="addItem"
       @itemsEdited="editItems"
-      @itemsCancelled="refreshItems"
-    />
+      @deleteSelected="deleteItem"
+      @itemsCancelled="getItems(readUrl)"
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
 <script>
+
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
@@ -64,16 +93,9 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'eDroplet Management',
       // BaseDataTable
-      crudIdKey: 'identifier',
+      crudIdKey: 'baseId',
       items: [],
-      editPerms: { create: false, update: false, delete: false },
-      editRules: payload => {
-        return [this.validateAlphabetical(payload), this.validateRequired(payload)]
-      },
-      snackColor: 'primary',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
+      editPerms: { create: false, update: true, delete: false },
       loading: true,
       loaded: false,
       error: false,
@@ -88,25 +110,43 @@ export default {
       iconAdd: 'build',
       headers: [
         {
-          text: 'Identifier',
+          text: 'Base Identifier',
           align: 'left',
           sortable: false,
-          value: 'userId',
+          value: 'baseId',
           cellType: 'tb',
           hidden: true,
           editable: false
         },
         {
-          text: 'User Status',
+          text: 'Visual Identifier',
           align: 'left',
           sortable: false,
-          value: 'userStatus',
-          cellType: 'md',
+          value: 'visualId',
+          cellType: 'tb',
           hidden: true,
           editable: false
         },
         {
-          text: 'mac address',
+          text: 'Registration Date',
+          align: 'left',
+          sortable: false,
+          value: 'dateFirstRegistered',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Status Identifier',
+          align: 'left',
+          sortable: false,
+          value: 'statusId',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Mac Address',
           align: 'left',
           sortable: false,
           value: 'macAddress',
@@ -114,26 +154,44 @@ export default {
           hidden: false,
           editable: true
         },
-        // {
-        //   text: 'Friendly name',
-        //   align: 'left',
-        //   sortable: false,
-        //   value: 'friendlyName',
-        //   cellType: 'tb',
-        //   hidden: false,
-        //   editable: true
-        // },
-        // {
-        //   text: 'Status',
-        //   align: 'left',
-        //   sortable: false,
-        //   value: 'status',
-        //   cellType: 'tb',
-        //   hidden: false,
-        //   editable: true
-        // },
         {
-          text: 'Operational status',
+          text: 'Friendly name',
+          align: 'left',
+          sortable: false,
+          value: 'friendlyName',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        },
+        {
+          text: 'Base Mode Identifier',
+          align: 'left',
+          sortable: false,
+          value: 'baseModeId',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Base Comms Identifier',
+          align: 'left',
+          sortable: false,
+          value: 'baseCommsId',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Comms Status',
+          align: 'left',
+          sortable: false,
+          value: 'commsStatus',
+          cellType: 'md',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Operational Status',
           align: 'left',
           sortable: false,
           value: 'operationalStatus',
@@ -152,211 +210,26 @@ export default {
         }
       ],
       newItem: [
-        // { identifier: 0, cellType: 'md', attr: 'identifier', cellLabel: 'id', menuItems: [], validators: [] },
         {
-          userId: 0,
+          friendlyName: '',
           cellType: 'tb',
-          attr: 'userId',
-          cellLabel: 'Identifier',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          userStatus: ' ',
-          cellType: 'tb',
-          attr: 'userStatus',
-          cellLabel: 'User Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          macAddress: ' ',
-          cellType: 'tb',
-          attr: 'macAddress',
-          cellLabel: 'mac address',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
-        },
-        // {
-        //   friendlyName: ' ',
-        //   cellType: 'tb',
-        //   attr: 'friendlyName',
-        //   cellLabel: 'Friendly Name',
-        //   menuItems: [],
-        //   validators: payload => {
-        //     return [
-        //       this.validateAlphabetical(payload),
-        //       this.validateRequired(payload)
-        //     ]
-        //   }
-        // },
-        // {
-        //   status: ' ',
-        //   cellType: 'tb',
-        //   attr: 'status',
-        //   cellLabel: 'Status',
-        //   menuItems: [],
-        //   validators: payload => {
-        //     return [
-        //       this.validateAlphabetical(payload),
-        //       this.validateRequired(payload)
-        //     ]
-        //   }
-        // },
-        {
-          operationalStatus: ' ',
-          cellType: 'tb',
-          attr: 'operationalStatus',
-          cellLabel: 'Operational status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          nightLight: ' ',
-          cellType: 'tb',
-          attr: 'nightLight',
-          cellLabel: 'Night Light',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          attr: 'friendlyName',
+          cellLabel: 'Friendly Name'
         }
       ],
       defaultItem: [
         {
-          userId: 0,
-          userStatus: '',
-          macAddress: '',
-          // friendlyName: '',
-          // status: '',
-          operationalStatus: '',
-          nightLight: ''
+          friendlyName: '',
         }
       ]
-      // urls: [
-      //   { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }
-      // ]
     }
   },
   methods: {
     resetItem () {
-      this.newItem = [
-        {
-          userId: 0,
-          cellType: 'tb',
-          attr: 'userId',
-          cellLabel: 'Identifier',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
-        },
-        {
-          userStatus: '',
-          cellType: 'tb',
-          attr: 'userStatus',
-          cellLabel: 'User Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          macAddress: '',
-          cellType: 'tb',
-          attr: 'macAddress',
-          cellLabel: 'mac address',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
-        },
-        // {
-        //   friendlyName: '',
-        //   cellType: 'tb',
-        //   attr: 'friendlyName',
-        //   cellLabel: 'Friendly Name',
-        //   menuItems: [],
-        //   validators: payload => {
-        //     return [
-        //       this.validateAlphabetical(payload),
-        //       this.validateRequired(payload)
-        //     ]
-        //   }
-
-        // },
-        // {
-        //   status: '',
-        //   cellType: 'tb',
-        //   attr: 'status',
-        //   cellLabel: 'Status',
-        //   menuItems: [],
-        //   validators: payload => {
-        //     return [
-        //       this.validateAlphabetical(payload),
-        //       this.validateRequired(payload)
-        //     ]
-        //   }
-        // },
-        {
-          operationalStatus: '',
-          cellType: 'tb',
-          attr: 'operationalStatus',
-          cellLabel: 'Operational status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          nightLight: '',
-          cellType: 'tb',
-          attr: 'nightLight',
-          cellLabel: 'Night Light',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
-        }
-      ]
+      // eslint-disable-next-line no-unused-expressions
       this.defaultItem = [
         {
-          userId: 0,
-          userStatus: '',
-          macAddress: '',
-          friendlyName: '',
-          status: '',
-          operationalStatus: '',
-          nightLight: ''
+          friendlyName: ''
         }
       ]
     }

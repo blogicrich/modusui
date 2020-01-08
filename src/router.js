@@ -36,19 +36,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "landing" */ './views/common/Landing.vue')
     },
     {
-      path: '/intervaloptions',
-      name: 'IntervalOptions',
-      component: () => import(/* webpackChunkName: "interval-options" */ './views/common/IntervalOptions.vue')
-    },
-    {
       path: '/passwordreset',
       name: 'PasswordReset',
       component: () => import(/* webpackChunkName: "password-reset" */ './views/common/ForgotPassword.vue')
-    },
-    {
-      path: '/voicemessages',
-      name: 'VoiceMessages',
-      component: () => import(/* webpackChunkName: "voice-messages" */ './views/common/VoiceMessages.vue')
     },
 
     // Carer routes
@@ -111,9 +101,19 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/EdropManagement.vue')
     },
     {
+      path: '/intervalmanagement',
+      name: 'IntervalManagement',
+      component: () => import(/* webpackChunkName: "interval-options" */ './views/cliadmin/IntervalSettingsManagement.vue')
+    },
+    {
       path: '/careralertsettings',
       name: 'CarerAlertSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
+    },
+    {
+      path: '/voicemsgmanagement',
+      name: 'VoiceMessageManagement',
+      component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/VoiceMessageManagement.vue')
     },
 
     // Sysadmin routes
@@ -147,6 +147,16 @@ export default new Router({
       path: '/textmessages',
       name: 'TextMessages',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/TextMessages.vue')
+    },
+    {
+      path: '/intervaloptions',
+      name: 'IntervalOptions',
+      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/IntervalOptions.vue')
+    },
+    {
+      path: '/voicemessages',
+      name: 'VoiceMessageViewComponent',
+      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/VoiceMessages.vue')
     },
     {
       path: '/defaultintervals',

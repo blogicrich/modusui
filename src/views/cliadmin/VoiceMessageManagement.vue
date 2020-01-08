@@ -72,7 +72,7 @@ import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
 
 export default {
-  name: 'VoiceMessageViewComponent',
+  name: 'VoiceMessageManagement',
   components: {
     selectComponent,
     SubVoiceMsgAudioPlayer
@@ -99,9 +99,6 @@ export default {
       searchName: 'Search user..',
       editedItems: [],
       users: [],
-      // user: JSON.parse(localStorage.getItem('auth')).level,
-      sysadminReadUrl: 'sysadmin/voice-messages',
-      sysadminWriteUrl: 'sysadmin/voice-message',
       cliadminReadUrl: 'cliadmin/voicemessage/',
       cliadminWriteUrl: 'cliadmin/voicemessage/',
       newDefaultValue: false,
@@ -129,49 +126,13 @@ export default {
     }
   },
   methods: {
-    setTypes () {
-      for (let i = 0; i < this.apiData.length; i++) {
-        let voiceMessageType = this.apiData[i].voiceMessagedescription
-        let voiceMessage = this.apiData[i]
-        if (voiceMessageType.includes('Reminder')) {
-          this.reminders.push(voiceMessage)
-        } else if (voiceMessageType.includes('Praise')) {
-          this.praises.push(voiceMessage)
-        } else if (voiceMessageType.includes('Instruct')) {
-          this.instructs.push(voiceMessage)
-        }
-      }
-    },
-    getSelectedUser (user) {
-      apiLib.getData(this.cliadminReadUrl + user, true, true).then(response => {
-        this.apiData = response
-      })
-    },
     async getvoiceMessage () {
-      if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        apiLib.getData('cliadmin/users', true, true).then(response => {
-          this.users = response
-        })
-      }
-      if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-        await this.$store.dispatch('fetchVoiceMessagesDefaults')
-        // console.log('voice defaults: ', this.$store.state.voiceMessages.voiceMessagesDefaults)
-        this.setTypes()
-        // if (this.$store.state.voiceMessages.voiceMessagesDefaults) {
-          // let voiceMessageDefaultStore = this.$store.state.voiceMessages.voiceMessagesDefaults
-          // for (let i = 0; i < voiceMessageDefaultStore.length; i++) {
-            // for (let j = 0; j < voiceMessageDefaultStore[i].length; j++) {
-              // this.apiData.push(voiceMessageDefaultStore[i])
-            // }
-          // }
-        // }
-        // console.log('api data: ', this.apiData)
-      }
-      // this.setTypes()
+      // apiLib.getData(this.cliadminReadUrl + user, true, true).then(response => {
+      //   this.apiData = response
+      // })
     }
   },
   mounted () {
-    this.$store.dispatch('fetchVoiceMessagesDefaults')
     this.getvoiceMessage()
   },
   beforeRouteLeave (to, from, next) {
