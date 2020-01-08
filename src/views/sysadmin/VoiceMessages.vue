@@ -158,12 +158,12 @@ export default {
         // console.log('voice defaults: ', this.$store.state.voiceMessages.voiceMessagesDefaults)
         this.setTypes()
         // if (this.$store.state.voiceMessages.voiceMessagesDefaults) {
-          // let voiceMessageDefaultStore = this.$store.state.voiceMessages.voiceMessagesDefaults
-          // for (let i = 0; i < voiceMessageDefaultStore.length; i++) {
-            // for (let j = 0; j < voiceMessageDefaultStore[i].length; j++) {
-              // this.apiData.push(voiceMessageDefaultStore[i])
-            // }
-          // }
+        // let voiceMessageDefaultStore = this.$store.state.voiceMessages.voiceMessagesDefaults
+        // for (let i = 0; i < voiceMessageDefaultStore.length; i++) {
+        // for (let j = 0; j < voiceMessageDefaultStore[i].length; j++) {
+        // this.apiData.push(voiceMessageDefaultStore[i])
+        // }
+        // }
         // }
         // console.log('api data: ', this.apiData)
       }
