@@ -7,16 +7,7 @@
         :headerText="headerText"
         hasDivider
       />
-        <v-spacer></v-spacer>
-        <!-- <selectComponent
-          v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')"
-          slot="search"
-          :users="users"
-          :selectAll="selectAll"
-          :searchName="searchName"
-          :multiple="multiple"
-          @get-selected-user="getSelectedUser"
-        ></selectComponent> -->
+      <v-spacer></v-spacer>
     </v-layout>
     <v-container v-if="intervals.length > 0">
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
@@ -137,17 +128,10 @@ export default {
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
-      users: [],
-      // user: JSON.parse(localStorage.getItem('auth')).level,
       sysadminReadUrl: 'sysadmin/interval-options',
       sysadminWriteUrl: 'sysadmin/interval-options',
-      cliadminReadUrl: 'cliadmin/intervalsettings/',
-      cliadminWriteUrl: 'intervalupdate',
       newDefaultValue: false,
-      editedItems: [],
       updateObj: {},
-      // intervalTypes: ['/bluelight', '/wakeup', '/voice', '/communication'],
-      intervalIds: ['blueLightFlashingIntervalId', 'spokenReminderId', 'wakeUpIntervalId', 'buServerIntervalId'],
       drinkGroupHeader: 'Blue light flashing interval options',
       drinkRadioDescription: 'Time between drink reminders - (Blue light flashing)',
       drinkRadioHeader: 'Please select an option from the following:',
@@ -163,36 +147,16 @@ export default {
     }
   },
   methods: {
-    getSelectedUser (user) {
-      apiLib.getData(this.cliadminReadUrl, true).then(response => {
-        this.intervals = response
-      })
-    },
-    getValues () {
-      if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        apiLib.getData(this.cliadminReadUrl, true).then((response) => response)
-        apiLib.getData('cliadmin/users', true).then(response => {
-          this.users = response
-        })
-      }
-      if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-        let arr = apiLib.getData(this.sysadminReadUrl).then((response) => {
-          console.log(response)
-          return response
-        })
-        return arr
-      }
-    },
     // Sets the new value of the API update object
-    setUpdateObject () {
+    setUpdateObject (intervals) {
       this.updateObj = {
-        blueLightFlashingIntervalId: this.intervals[0].blueLightFlashingInterval.find(e => e.default === true).blueLightFlashingIntervalId,
-        buServerIntervalId: this.intervals[0].buServerInterval.find(e => e.default === true).buServerIntervalId,
-        spokenReminderId: this.intervals[0].spokenReminder.find(e => e.default === true).spokenReminderId,
-        wakeUpIntervalId: this.intervals[0].wakeUpInterval.find(e => e.default === true).wakeUpIntervalId
+        blueLightFlashingIntervalId: intervals[0].blueLightFlashingInterval.find(e => e.default === true).blueLightFlashingIntervalId,
+        buServerIntervalId: intervals[0].buServerInterval.find(e => e.default === true).buServerIntervalId,
+        spokenReminderId: intervals[0].spokenReminder.find(e => e.default === true).spokenReminderId,
+        wakeUpIntervalId: intervals[0].wakeUpInterval.find(e => e.default === true).wakeUpIntervalId
       }
     },
-    // Sets the new value of the radio group and appends to editedItems
+    // Sets the new value of the radio group and appends to updateObject
     setNewUpdateObject (obj) {
       const key = Object.keys(obj.items[obj.index])[0]
       console.log('set value - obj: ', obj)
@@ -200,34 +164,27 @@ export default {
         this.newDefaultValue = false
       } else {
         this.newDefaultValue = true
+        this.updateObj[key] = obj.items[obj.index][key]
       }
-      this.updateObj[key] = obj.items[obj.index][key]
+      
       // console.log(obj.items[obj.index])
       // console.log(Object.keys(obj.items[obj.index])[0])
       // console.log(this.updateObj)
     },
     // Posts update requests
-    async save () {
-      // if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
-      //   await apiLib.updateData(this.cliadminWriteUrl + '/' + this.editedItems[i].id, this.editedItems[i], true, true)
-      // }
-      if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-        await apiLib.updateData(this.sysadminWriteUrl, this.updateObj, true, true)
-        this.getValues()
-        this.newDefaultValue = false
-      }
+    save () {
+      apiLib.updateData(this.sysadminWriteUrl, this.updateObj, true, true).then(() => {
+        apiLib.getData(this.sysadminReadUrl)
+      })
+      this.newDefaultValue = false
     }
   },
   mounted () {
-    if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
-      this.getValues()
-    } else if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-      this.getValues().then((response) => {
-        this.intervals = response
-        this.setUpdateObject()
-        console.log('intervals: ', this.intervals, this.updateObj)
-      })
-    }
+    apiLib.getData(this.sysadminReadUrl).then((response) => {
+      this.intervals = response
+      this.setUpdateObject(this.intervals)
+      // console.log('intervals: ', this.intervals, this.updateObj)
+    })
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {
@@ -238,7 +195,6 @@ export default {
         next(false)
       }
     } else {
-      this.$store.dispatch('fetchIntervalOptions')
       next()
     }
   }
