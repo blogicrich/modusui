@@ -13,7 +13,7 @@ export const moduleEdropletApp = {
     // Dashboard
     userDataLoading: false,
     storeId: null,
-    userId: null,
+    selectedUser: deserialize('selectedUser'),
     carerId: deserialize('carerId'),
     accountHolderId: null,
     deviceMessageTypeId: null,
@@ -58,6 +58,10 @@ export const moduleEdropletApp = {
     SET_TOKEN (state, data) {
       serialize('token', data)
       state.token = data
+    },
+    SET_SELECTED_USER (state, user) {
+      serialize('selectedUser', user)
+      state.selectedUser = user
     }
   },
   actions: {

@@ -22,6 +22,7 @@
 
 <script>
 import dashboardComponent from '@/components/base/BaseDashboardComponent'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -30,7 +31,6 @@ export default {
   data () {
     return {
       selectedDate: null,
-      selectedUser: null,
       dashboardDay: {},
       dashboardHour: [],
       dashboardUsers: [],
@@ -61,7 +61,7 @@ export default {
     },
 
     updateUser (selectedUser) {
-      this.selectedUser = selectedUser
+      this.$store.commit('SET_SELECTED_USER', selectedUser)
       this.updateCharts()
     },
 
@@ -145,6 +145,11 @@ export default {
     this.setUsers()
     // FIXME: Comments are broken, uses hardcoded IDs
     // this.setComment()
+  },
+  computed: {
+    ...mapState({
+      selectedUser: state => state.eDropletApp.selectedUser
+    })
   }
 }
 </script>
