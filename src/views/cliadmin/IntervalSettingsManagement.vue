@@ -9,7 +9,7 @@
       />
       <v-spacer></v-spacer>
     </v-layout>
-    <v-container v-if="intervals.length > 0">
+    <v-container v-if="intervals">
     <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
     <v-divider
       class="mx-1"
@@ -20,8 +20,8 @@
         <v-flex xs12 lg6>
           <BaseRadioOptions
             @radio-option-changed="setNewUpdateObject"
-            :radioConfig="intervals[0].blueLightFlashingInterval"
-            :defaultValue="intervals[0].blueLightFlashingInterval.find(val => val.default === true).time"
+            :radioConfig="intervals.blueLightFlashingIntervals"
+            :defaultValue="setDefaultValue('blueLightFlashingIntervals', 'blueLightFlashingIntervalId')"
             :groupHeader="drinkGroupHeader"
             :groupDescription="drinkRadioDescription"
             :radioHeader="drinkRadioHeader"
@@ -32,9 +32,9 @@
         <v-flex xs12 lg6>
           <BaseRadioOptions
             @radio-option-changed="setNewUpdateObject"
-            :radioConfig="intervals[0].spokenReminder"
+            :radioConfig="intervals.voiceReminderIntervals"
             :groupHeader="voiceGroupHeader"
-            :defaultValue="intervals[0].spokenReminder.find(val => val.default === true).time"
+            :defaultValue="setDefaultValue('voiceReminderIntervals', 'spokenReminderId')"
             :groupDescription="voiceRadioDescription"
             :radioHeader="voiceRadioHeader"
             :height="height"
@@ -52,8 +52,8 @@
       <v-flex xs12 lg6>
         <BaseRadioOptions
           @radio-option-changed="setNewUpdateObject"
-          :radioConfig="intervals[0].wakeUpInterval"
-          :defaultValue="intervals[0].wakeUpInterval.find(val => val.default === true).time"
+          :radioConfig="intervals.wakeUpIntervals"
+          :defaultValue="setDefaultValue('wakeUpIntervals', 'wakeUpIntervalId')"
           :groupHeader="wakeUpGroupHeader"
           :groupDescription="wakeUpRadioDescription"
           :radioHeader="wakeUpRadioHeader"
@@ -64,8 +64,8 @@
       <v-flex xs12 lg6>
         <BaseRadioOptions
           @radio-option-changed="setNewUpdateObject"
-          :radioConfig="intervals[0].buServerInterval"
-          :defaultValue="intervals[0].buServerInterval.find(val => val.default === true).time"
+          :radioConfig="intervals.buServerIntervals"
+          :defaultValue="setDefaultValue('buServerIntervals', 'buServerIntervalId')"
           :groupHeader="commsGroupHeader"
           :groupDescription="commsRadioDescription"
           :radioHeader="commsRadioHeader"
@@ -108,7 +108,7 @@ export default {
   },
   computed: {
     user: function () {
-      return this.$store.getters.level
+      return this.$store.state.eDropletApp.selectedUser.userId
     },
     height () {
       var cardHeight = 0
@@ -124,12 +124,12 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Interval Settings Management',
       // BaseUserSelect
-      intervals: [],
+      intervals: null,
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
-      cliadminReadUrl: 'cliadmin/intervalsettings',
-      cliadminWriteUrl: 'cliaadmin/intervalsettings',
+      cliadminReadUrl: 'cliadmin/interval-settings/',
+      cliadminWriteUrl: 'cliadmin/interval-settings/',
       newDefaultValue: false,
       updateObj: {},
       drinkGroupHeader: 'Blue light flashing interval options',
@@ -148,13 +148,22 @@ export default {
   },
   methods: {
     // Sets the new value of the API update object
+    setDefaultValue (key, parameter) {
+      const id = this.intervals.currentSettings[parameter]
+      const time = this.intervals[key].find(values => values[parameter] === id)
+      const values = this.intervals[key]
+      console.log(id, time, values)
+      console.log(id)
+      return time
+    },
     setUpdateObject (intervals) {
       this.updateObj = {
-        blueLightFlashingIntervalId: intervals[0].blueLightFlashingInterval.find(e => e.default === true).blueLightFlashingIntervalId,
-        buServerIntervalId: intervals[0].buServerInterval.find(e => e.default === true).buServerIntervalId,
-        spokenReminderId: intervals[0].spokenReminder.find(e => e.default === true).spokenReminderId,
-        wakeUpIntervalId: intervals[0].wakeUpInterval.find(e => e.default === true).wakeUpIntervalId
+        blueLightFlashingIntervalId: intervals.blueLightFlashingIntervals.find(e => e.default === true).blueLightFlashingIntervalId,
+        buServerIntervalId: intervals.buServerIntervals.find(e => e.default === true).buServerIntervalId,
+        voiceReminderIntervalId: intervals.voiceReminderIntervals.find(e => e.default === true).spokenReminderId,
+        wakeUpIntervalId: intervals.wakeUpIntervals.find(e => e.default === true).wakeUpIntervalId
       }
+      // console.log(this.updateObj)
     },
     // Sets the new value of the radio group and appends to updateObject
     setNewUpdateObject (obj) {
@@ -173,17 +182,16 @@ export default {
     },
     // Posts update requests
     save () {
-      apiLib.updateData(this.cliadminWriteUrl, this.updateObj, true, true).then(() => {
-        apiLib.getData(this.cliadminReadUrl)
+      apiLib.updateData(this.cliadminWriteUrl + this.user, this.updateObj, true, true).then(() => {
+        apiLib.getData(this.cliadminReadUrl + this.user)
       })
       this.newDefaultValue = false
     }
   },
   mounted () {
-    apiLib.getData(this.cliadminReadUrl).then((response) => {
+    apiLib.getData(this.cliadminReadUrl + this.user).then((response) => {
       this.intervals = response
-      this.setUpdateObject(this.intervals)
-      // console.log('intervals: ', this.intervals, this.updateObj)
+      this.setUpdateObject(response)
     })
   },
   beforeRouteLeave (to, from, next) {
