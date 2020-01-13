@@ -158,6 +158,13 @@
             icon="priority_high"
             colorIcon="#006480"
           />
+          <BaseLinkComponent
+            routerTitle= "Sleep and Wake Times"
+            link="/sleepwaketimes"
+            tooltipText="Set the sleep and wake up time of your edroplet"
+            icon="access_alarm"
+            colorIcon="#006480"
+          />
         </v-flex>
         <v-flex sm6 lg3>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
