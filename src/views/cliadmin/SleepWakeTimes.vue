@@ -1,6 +1,6 @@
 <template lang="html">
   <v-container>
-    <v-layout row align-center fill-height>
+     <v-layout row align-center fill-height>
       <BaseViewHeader
         class="mb-2"
         :headerIcon="headerIcon"
@@ -10,43 +10,78 @@
       />
       <v-spacer></v-spacer>
     </v-layout>
-    <v-layout row align-center fill-height
-    <v-icon></v-icon>
-      <h2 class="ml-4 pg-subheader text-primary">eDroplet Wake Up Time</h2>
-      <!-- <v-divider
-        class="mx-1"
-        color="#00a1cd"
-        >
-      </v-divider> -->
-    </v-layout>
-
-    <v-time-picker
-      v-model="time"
+    <v-menu
+      ref="wakeUpTimePicker"
+      v-model="showWakeUpTimePicker"
+      :close-on-content-click="false"
+      :nudge-right="60"
+      :return-value.sync="wakeUpTime"
+      lazy
+      transition="scale-transition"
+      offset-y
       full-width
-      landscape
-      type="month"
-      class="mt-3 mx-4"
-    ></v-time-picker>
-    <h2 class="ml-4 pg-subheader text-primary">eDroplet Sleep Time</h2>
-    <v-time-picker
-      v-model="time"
+      max-width="290px"
+      min-width="290px"
+    >
+      <template v-slot:activator="{ on }">
+        <v-text-field
+          class="mx-3"
+          v-model="wakeUpTime"
+          label="Wake up time"
+          prepend-icon="brightness_5"
+          readonly
+          v-on="on"
+          :rules="wakeUpTimeRules"
+          @change="change"
+        ></v-text-field>
+      </template>
+      <v-time-picker
+        v-if="showWakeUpTimePicker"
+        v-model="wakeUpTime"
+        full-width
+        @click:minute="$refs.wakeUpTimePicker.save(wakeUpTime)"
+      ></v-time-picker>
+    </v-menu>
+    <v-menu
+      ref="sleepTimePicker"
+      v-model="showSleepTimePicker"
+      :close-on-content-click="false"
+      :nudge-right="40"
+      :return-value.sync="sleepTime"
+      lazy
+      transition="scale-transition"
+      offset-y
       full-width
-      landscape
-      type="month"
-      class="mt-3 mb-3 mx-4"
-    ></v-time-picker>
-    <!-- <v-divider class="ma-2" color="#00a1cd"></v-divider> -->
+      max-width="290px"
+      min-width="290px"
+    >
+      <template v-slot:activator="{ on }">
+        <v-text-field
+          class="mx-3"
+          v-model="sleepTime"
+          label="Sleep time"
+          prepend-icon="brightness_3"
+          readonly
+          v-on="on"
+          :rules="sleepTimeRules"
+          @change="change"
+        ></v-text-field>
+      </template>
+      <v-time-picker
+        v-if="showSleepTimePicker"
+        v-model="sleepTime"
+        full-width
+        @click:minute="$refs.sleepTimePicker.save(sleepTime)"
+      ></v-time-picker>
+    </v-menu>
   </v-container>
 </template>
 
 <script>
 
-import apiLib from '@/services/apiLib'
+// import apiLib from '@/services/apiLib'
 
 export default {
-  components: {
-    // subAlertCard
-  },
   computed: {
     user: function () {
       return this.$store.state.eDropletApp.selectedUser.userId
@@ -57,9 +92,28 @@ export default {
       // BaseViewHeader
       headerIcon: 'local_drink',
       iconColor: this.$vuetify.theme.primary,
-      headerText: 'Sleep and Wake Times',
-      time: '',
+      headerText: 'Sleep and Wake up Times',
+      // Wake up time pickers
+      showWakeUpTimePicker: false,
+      wakeUpTime: '07:00',
+      wakeUpTimeRules: [
+        v => v !== null || 'Sleep time is required'
+      ],
+      // Sleep time pickers
+      sleepTime: '22:00',
+      showSleepTimePicker: false,
+      sleepTimeRules: [
+        v => v !== null || 'Sleep time is required'
+      ],
     }
+  },
+  methods: {
+    change () {
+      this.$emit('input', {
+        wakeUpTime: this.wakeUpTime,
+        sleepTime: this.sleepTime,
+      })
+    },
   },
   mounted () {
 
