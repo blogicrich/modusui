@@ -1,8 +1,9 @@
 import apiLib from '../services/apiLib.js'
-import Vue from 'vue'
+import moment from 'moment'
 
 export const moduleWakeSleepTimes = {
   state: {
+
     defaultTimes: {},
     times: {}
   },
@@ -12,10 +13,10 @@ export const moduleWakeSleepTimes = {
       state.times = data
     },
     UPDATE_WAKEUPTIME (state, data) {
-      state.times.wakeUpTime = data
+      state.times.wakeUpTime = convertTimeToHourMin(data)
     },
     UPDATE_SLEEPTIME (state, data) {
-      state.times.sleepTime = data
+      state.times.sleepTime = convertTimeToHourMin(data)
     },
     SET_DEFAULTVALUES (state, data) {
       state.times = data
@@ -52,4 +53,9 @@ export const moduleWakeSleepTimes = {
     getterDefaultSleepTime: state => state.defaultTimes.sleepTime,
     getterDefaultWakeUpTime: state => state.defaultTimes.wakeUpTime
   }
+}
+
+function convertTimeToHourMin (secondsFromMidnight) {
+
+  return secondsFromMidnight
 }

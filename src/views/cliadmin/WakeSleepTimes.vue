@@ -15,7 +15,7 @@
       v-model="showWakeUpTimePicker"
       :close-on-content-click="false"
       :nudge-right="60"
-      :return-value.sync="wakeUpTime"
+      :return-value="wakeUpTime"
       lazy
       transition="scale-transition"
       offset-y
@@ -47,7 +47,7 @@
       v-model="showSleepTimePicker"
       :close-on-content-click="false"
       :nudge-right="40"
-      :return-value.sync="sleepTime"
+      :return-value="sleepTime"
       lazy
       transition="scale-transition"
       offset-y
@@ -77,7 +77,7 @@
     <v-layout row justify-center align-center>
       <v-fade-transition>
         <v-btn
-        v-if="timeValueChanged"
+        v-show="timeValueChanged"
         class="root-nav-btn"
         @click="save"
         color="primary"
@@ -108,7 +108,8 @@ export default {
         return this.$store.state.wakeSleepTimes.times.wakeUpTime
       },
       set (newValue) {
-        this.$store.commit('UPDATE_WAKEUPTIME', newValue)
+        const value = this.convertTimeToSecondsFromMidnight(newValue)
+        this.$store.commit('UPDATE_WAKEUPTIME', value)
       }
     },
     sleepTime: {
@@ -117,7 +118,8 @@ export default {
         return this.$store.state.wakeSleepTimes.times.sleepTime
       },
       set (newValue) {
-        this.$store.commit('UPDATE_SLEEPTIME', newValue)
+        const value = this.convertTimeToSecondsFromMidnight(newValue)
+        this.$store.commit('UPDATE_SLEEPTIME', value)
       }
     }
   },
@@ -143,15 +145,15 @@ export default {
   },
   methods: {
     change () {
-      if (this.defaultWakeUpTIme !== this.wakeUpTime || this.defaultSleepTIme !== this.sleepTime) {
-        this.timeValueChanged = false
-      } else {
+      console.log('defaultWakeTime: ', this.defaultWakeUpTime)
+      if (this.defaultWakeUpTime !== this.wakeUpTime || this.defaultSleepTime !== this.sleepTime) {
         this.timeValueChanged = true
+      } else {
+        this.timeValueChanged = false
       }
-      // console.log(this.convertTimeToSecondsFromMidnight(this.wakeUpTime), this.convertTimeToSecondsFromMidnight(this.sleepTime))
     },
     save () {
-      console.log(this.convertTimeToSecondsFromMidnight(this.wakeUpTime), this.convertTimeToSecondsFromMidnight(this.sleepTime))
+      this.$store.dispatch('updateSleepWakeTimes')
     },
     convertTimeToSecondsFromMidnight (time) {
       const startOfDay = this.$moment().startOf('day')

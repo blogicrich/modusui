@@ -135,7 +135,7 @@
               color="white"
               >local_drink
             </v-icon>
-            <h2 class="ma-1 text-white">eDroplet Settings</h2>
+            <h2 class="ma-1 text-white">User Settings</h2>
           </v-layout>
           <BaseLinkComponent
             routerTitle= "Voice Message Management"
@@ -161,7 +161,7 @@
           <BaseLinkComponent
             routerTitle= "Sleep and Wake Times"
             link="/wakesleeptimes"
-            tooltipText="Set the sleep and wake up time of your edroplet"
+            tooltipText="Set sleep and wake up time"
             icon="access_alarm"
             colorIcon="#006480"
           />
@@ -239,7 +239,7 @@ export default {
       redirecting: false,
       headerIcon: 'settings',
       iconColor: this.$vuetify.theme.primary,
-      headerText: 'eDroplet Client Administration'
+      headerText: 'eDroplet System Administration'
     }
   },
   computed: {
