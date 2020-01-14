@@ -160,7 +160,7 @@
           />
           <BaseLinkComponent
             routerTitle= "Sleep and Wake Times"
-            link="/sleepwaketimes"
+            link="/wakesleeptimes"
             tooltipText="Set the sleep and wake up time of your edroplet"
             icon="access_alarm"
             colorIcon="#006480"

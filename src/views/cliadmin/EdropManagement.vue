@@ -102,7 +102,7 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      updateUrl: '/cliadmin/edropman/',
+      updateUrl: '/cliadmin/edropman',
       readUrl: '/cliadmin/edropman/',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',

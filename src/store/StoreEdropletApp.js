@@ -113,6 +113,7 @@ export const moduleEdropletApp = {
     // Dashboard getters
     getterStoreId: state => state.storeId,
     getterUserId: state => state.userId,
+    getterSelectedUser: state => state.selectedUser,
     getterCarerId: state => state.carerId,
     getterAccountHolderId: state => state.accountHolderId,
     getterDeviceMessageTypeId: state => state.deviceMessageTypeId,

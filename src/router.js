@@ -111,9 +111,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
     },
     {
-      path: '/sleepwaketimes',
-      name: 'SleepWakeTimes',
-      component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/SleepWakeTimes.vue')
+      path: '/wakesleeptimes',
+      name: 'WakeSleepTimes',
+      component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/WakeSleepTimes.vue')
     },
     {
       path: '/voicemsgmanagement',

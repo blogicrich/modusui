@@ -9,7 +9,7 @@
         hasDivider
       />
       <v-spacer></v-spacer>
-    </v-layout>
+    </v-layout v-if="wakeUpTime && sleepTime">
     <v-menu
       ref="wakeUpTimePicker"
       v-model="showWakeUpTimePicker"
@@ -79,12 +79,26 @@
 
 <script>
 
-// import apiLib from '@/services/apiLib'
-
 export default {
+  name: 'WakeSleepTimes',
   computed: {
-    user: function () {
-      return this.$store.state.eDropletApp.selectedUser.userId
+    wakeUpTime: {
+      get () {
+        console.log(this.$store.state.wakeSleepTimes.times.wakeUpTime)
+        return this.$store.state.wakeSleepTimes.times.wakeUpTime
+      },
+      set (newValue) {
+        this.$store.commit('UPDATE_WAKEUPTIME', newValue)
+      }
+    },
+    sleepTime: {
+      get () {
+        console.log(this.$store.state.wakeSleepTimes.times.sleepTime)
+        return this.$store.state.wakeSleepTimes.times.sleepTime
+      },
+      set (newValue) {
+        this.$store.commit('UPDATE_SLEEPTIME', newValue)      
+      }
     },
   },
   data () {
@@ -95,12 +109,12 @@ export default {
       headerText: 'Sleep and Wake up Times',
       // Wake up time pickers
       showWakeUpTimePicker: false,
-      wakeUpTime: '07:00',
+      // wakeUpTime: '07:00',
       wakeUpTimeRules: [
         v => v !== null || 'Sleep time is required'
       ],
       // Sleep time pickers
-      sleepTime: '22:00',
+      // sleepTime: '22:00',
       showSleepTimePicker: false,
       sleepTimeRules: [
         v => v !== null || 'Sleep time is required'
@@ -109,14 +123,15 @@ export default {
   },
   methods: {
     change () {
-      this.$emit('input', {
-        wakeUpTime: this.wakeUpTime,
-        sleepTime: this.sleepTime,
-      })
+      // console.log(this.convertTimeToSecondsFromMidnight(this.wakeUpTime), this.convertTimeToSecondsFromMidnight(this.sleepTime))
     },
+    convertTimeToSecondsFromMidnight (time) {
+      const startOfDay = this.$moment().startOf('day')
+      return this.$moment(time, 'HH:mm').diff(startOfDay, 'seconds')
+    }
   },
-  mounted () {
-
+  mounted() {
+    this.$store.dispatch('fetchWakeSleepTimes')
   },
 }
 </script>
