@@ -74,6 +74,20 @@
         @click:minute="$refs.sleepTimePicker.save(sleepTime)"
       ></v-time-picker>
     </v-menu>
+    <v-layout row justify-center align-center>
+      <v-fade-transition>
+        <v-btn
+        v-if="timeValueChanged"
+        class="root-nav-btn"
+        @click="save"
+        color="primary"
+        large
+        >Save
+        <v-icon class="ma-1">save</v-icon>
+      </v-btn>
+    </v-fade-transition>
+
+    </v-layout>
   </v-container>
 </template>
 
@@ -82,6 +96,12 @@
 export default {
   name: 'WakeSleepTimes',
   computed: {
+    defaultWakeUpTIme () {
+      return this.$store.getters.getterDefaultWakeUpTime
+    },
+    defaultSleepTime () {
+      return this.$store.getters.getterDefaultSleepTime
+    },
     wakeUpTime: {
       get () {
         console.log(this.$store.state.wakeSleepTimes.times.wakeUpTime)
@@ -109,21 +129,29 @@ export default {
       headerText: 'Sleep and Wake up Times',
       // Wake up time pickers
       showWakeUpTimePicker: false,
-      // wakeUpTime: '07:00',
       wakeUpTimeRules: [
         v => v !== null || 'Sleep time is required'
       ],
       // Sleep time pickers
-      // sleepTime: '22:00',
       showSleepTimePicker: false,
       sleepTimeRules: [
         v => v !== null || 'Sleep time is required'
       ],
+      // Render boolean
+      timeValueChanged: false
     }
   },
   methods: {
     change () {
+      if (this.defaultWakeUpTIme !== this.wakeUpTime || this.defaultSleepTIme !== this.sleepTime) {
+        this.timeValueChanged = false
+      } else {
+        this.timeValueChanged = true
+      }
       // console.log(this.convertTimeToSecondsFromMidnight(this.wakeUpTime), this.convertTimeToSecondsFromMidnight(this.sleepTime))
+    },
+    save () {
+      console.log(this.convertTimeToSecondsFromMidnight(this.wakeUpTime), this.convertTimeToSecondsFromMidnight(this.sleepTime))
     },
     convertTimeToSecondsFromMidnight (time) {
       const startOfDay = this.$moment().startOf('day')
@@ -133,6 +161,7 @@ export default {
   mounted() {
     this.$store.dispatch('fetchWakeSleepTimes')
   },
+
 }
 </script>
 
