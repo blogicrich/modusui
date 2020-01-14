@@ -1,6 +1,6 @@
 <template lang="html">
   <v-container>
-     <v-layout row align-center fill-height>
+     <v-layout v-if="wakeUpTime && sleepTime" row align-center fill-height>
       <BaseViewHeader
         class="mb-2"
         :headerIcon="headerIcon"
@@ -9,7 +9,7 @@
         hasDivider
       />
       <v-spacer></v-spacer>
-    </v-layout v-if="wakeUpTime && sleepTime">
+      </v-layout>
     <v-menu
       ref="wakeUpTimePicker"
       v-model="showWakeUpTimePicker"
@@ -56,17 +56,17 @@
       min-width="290px"
     >
       <template v-slot:activator="{ on }">
-        <v-text-field
-          class="mx-3"
-          v-model="sleepTime"
-          label="Sleep time"
-          prepend-icon="brightness_3"
-          readonly
-          v-on="on"
-          :rules="sleepTimeRules"
-          @change="change"
-        ></v-text-field>
-      </template>
+  <v-text-field
+    class="mx-3"
+    v-model="sleepTime"
+    label="Sleep time"
+    prepend-icon="brightness_3"
+    readonly
+    v-on="on"
+    :rules="sleepTimeRules"
+    @change="change"
+  ></v-text-field>
+</template>
       <v-time-picker
         v-if="showSleepTimePicker"
         v-model="sleepTime"
@@ -92,11 +92,10 @@
 </template>
 
 <script>
-
 export default {
   name: 'WakeSleepTimes',
   computed: {
-    defaultWakeUpTIme () {
+    defaultWakeUpTime () {
       return this.$store.getters.getterDefaultWakeUpTime
     },
     defaultSleepTime () {
@@ -108,8 +107,7 @@ export default {
         return this.$store.state.wakeSleepTimes.times.wakeUpTime
       },
       set (newValue) {
-        const value = this.convertTimeToSecondsFromMidnight(newValue)
-        this.$store.commit('UPDATE_WAKEUPTIME', value)
+        this.$store.commit('UPDATE_WAKEUPTIME', newValue)
       }
     },
     sleepTime: {
@@ -118,8 +116,7 @@ export default {
         return this.$store.state.wakeSleepTimes.times.sleepTime
       },
       set (newValue) {
-        const value = this.convertTimeToSecondsFromMidnight(newValue)
-        this.$store.commit('UPDATE_SLEEPTIME', value)
+        this.$store.commit('UPDATE_SLEEPTIME', newValue)
       }
     }
   },
@@ -145,7 +142,6 @@ export default {
   },
   methods: {
     change () {
-      console.log('defaultWakeTime: ', this.defaultWakeUpTime)
       if (this.defaultWakeUpTime !== this.wakeUpTime || this.defaultSleepTime !== this.sleepTime) {
         this.timeValueChanged = true
       } else {
@@ -153,11 +149,9 @@ export default {
       }
     },
     save () {
-      this.$store.dispatch('updateSleepWakeTimes')
-    },
-    convertTimeToSecondsFromMidnight (time) {
-      const startOfDay = this.$moment().startOf('day')
-      return this.$moment(time, 'HH:mm').diff(startOfDay, 'seconds')
+      this.$store.dispatch('updateSleepWakeTimes').then(() => {
+        this.$store.dispatch('fetchWakeSleepTimes')
+      })
     }
   },
   mounted () {
