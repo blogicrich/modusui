@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import apiLib from '@/services/apiLib'
 import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import SubVoiceMsgAudioPlayer from '@/components/sub/SubVoiceMsgAudioPlayer.vue'
 

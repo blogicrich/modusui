@@ -3,7 +3,6 @@ import moment from 'moment'
 
 export const moduleWakeSleepTimes = {
   state: {
-
     defaultTimes: {},
     times: {}
   },
@@ -13,10 +12,10 @@ export const moduleWakeSleepTimes = {
       state.times = data
     },
     UPDATE_WAKEUPTIME (state, data) {
-      state.times.wakeUpTime = convertTimeToHourMin(data)
+      state.times.wakeUpTime = data
     },
     UPDATE_SLEEPTIME (state, data) {
-      state.times.sleepTime = convertTimeToHourMin(data)
+      state.times.sleepTime = data
     },
     SET_DEFAULTVALUES (state, data) {
       state.times = data
@@ -31,22 +30,23 @@ export const moduleWakeSleepTimes = {
           commit('SET_WAKESLEEPTIME', {})
           commit('SET_DEFAULTVALUES', {})
         } else {
-          commit('SET_WAKESLEEPTIME', response)
-          commit('SET_DEFAULTVALUES', response)
+          commit('SET_WAKESLEEPTIME', {
+            wakeUpTime: convertTimeToHourMin(response.wakeUpTime),
+            sleepTime: convertTimeToHourMin(response.sleepTime)
+          })
+          commit('SET_DEFAULTVALUES', {
+            wakeUpTime: convertTimeToHourMin(response.wakeUpTime),
+            sleepTime: convertTimeToHourMin(response.sleepTime)
+          })
         }
       })
     },
-    updateSleepWakeTimes ({ commit, rootGetters, state }) {
-      const user = rootGetters.getterSelectedUser.userId
-      apiLib.updateData('cliadmin/wake-sleep-time/' + user, state.times, true, true).then((response) => {
-        if (typeof response === 'undefined') {
-          commit('SET_WAKESLEEPTIME', {})
-          commit('SET_DEFAULTVALUES', {})
-        } else {
-          commit('SET_WAKESLEEPTIME', response)
-          commit('SET_DEFAULTVALUES', response)
-        }
-      })
+    async updateSleepWakeTimes ({ commit, rootGetters, state }) {
+      const userId = rootGetters.getterSelectedUser.userId
+      await apiLib.updateData('cliadmin/wake-sleep-time/' + userId, {
+        wakeUpTime: convertTimeToSecondsFromMidnight(state.times.wakeUpTime),
+        sleepTime: convertTimeToSecondsFromMidnight(state.times.sleepTime)
+      }, true, true)
     }
   },
   getters: {
@@ -56,6 +56,10 @@ export const moduleWakeSleepTimes = {
 }
 
 function convertTimeToHourMin (secondsFromMidnight) {
+  return moment().startOf('day').add(secondsFromMidnight, 'seconds').format('HH:mm')
+}
 
-  return secondsFromMidnight
+function convertTimeToSecondsFromMidnight (time) {
+  const startOfDay = moment().startOf('day')
+  return moment(time, 'HH:mm').diff(startOfDay, 'seconds')
 }
