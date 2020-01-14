@@ -61,6 +61,6 @@ export default {
   .bg {
     width: 60%;
     border-radius: 12px;
-    background-image: linear-gradient(red, green, $vuetify-primary, green, red,);
+    background-image: linear-gradient(#C14242, #3FBF3F, $vuetify-primary, #3FBF3F,#C14242,);
   }
 </style>

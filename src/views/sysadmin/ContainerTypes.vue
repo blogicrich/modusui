@@ -157,13 +157,6 @@ export default {
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
-            value => {
-              if (this.alphabeticalRegEx.test(value)) {
-                return true
-              } else {
-                return 'Alphabetical characters only'
-              }
-            }
           ]
         }
       ],
@@ -201,14 +194,7 @@ export default {
           menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
-            value => {
-              if (this.alphabeticalRegEx.test(value)) {
-                return true
-              } else {
-                return 'Alphabetical characters only'
-              }
-            }
+            value => value.length <= 20 || 'Max 20 characters'
           ]
         }
       ]

@@ -154,14 +154,7 @@ export default {
           cellLabel: 'Target Consumption',
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
-            value => {
-              if (this.alphabeticalRegEx.test(value)) {
-                return true
-              } else {
-                return 'Alphabetical characters only'
-              }
-            }
+            value => value.length <= 20 || 'Max 20 characters'
           ]
         }
       ],
@@ -203,14 +196,7 @@ export default {
           editable: true,
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
-            value => {
-              if (this.alphabeticalRegEx.test(value)) {
-                return true
-              } else {
-                return 'Alphabetical characters only'
-              }
-            }
+            value => value.length <= 20 || 'Max 20 characters'
           ]
         }
       ]
