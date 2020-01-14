@@ -1,14 +1,16 @@
 <template>
   <v-container fluid>
-    <v-layout row fill-height align-center justify-end wrap>
+    <v-layout row fill-height justify-center>
       <BaseViewHeader
+        v-if="userText"
         class="mx-2 mb-4"
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
+        showChips
+        :chipsText="userText"
       />
-      <v-spacer></v-spacer>
     </v-layout>
     <BaseDataTable
       class="mx-4"
@@ -83,7 +85,11 @@ export default {
   },
   computed: {
     user: function () {
-      return this.$store.getters.level
+      return this.$store.getters.getterSelectedUser
+    },
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
     }
   },
   data () {

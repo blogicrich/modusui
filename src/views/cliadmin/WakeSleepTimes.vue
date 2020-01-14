@@ -7,6 +7,8 @@
         :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
+        showChips
+        :chipsText="userText"
       />
       <v-spacer></v-spacer>
     </v-layout v-if="wakeUpTime && sleepTime">
@@ -121,6 +123,10 @@ export default {
         const value = this.convertTimeToSecondsFromMidnight(newValue)
         this.$store.commit('UPDATE_SLEEPTIME', value)
       }
+    },
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
     }
   },
   data () {

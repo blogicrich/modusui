@@ -6,6 +6,8 @@
         :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
+        showChips
+        :chipsText="userText"
       />
       <v-spacer></v-spacer>
     </v-layout>
@@ -127,6 +129,10 @@ export default {
       if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
       if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
       return cardHeight
+    },
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
     }
   },
   data () {

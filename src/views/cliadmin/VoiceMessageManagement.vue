@@ -5,6 +5,8 @@
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
+        showChips
+        :chipsText="userText"
       />
         <!-- <v-spacer></v-spacer> -->
         <!-- <selectComponent
@@ -78,8 +80,9 @@ export default {
     SubVoiceMsgAudioPlayer
   },
   computed: {
-    user: function () {
-      return this.$store.getters.level
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
     },
     apiData: function () {
       return this.$store.state.voiceMessages.voiceMessagesDefaults

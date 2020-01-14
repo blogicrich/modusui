@@ -7,6 +7,8 @@
         :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
+        showChips
+        :chipsText="userText"
       />
     </v-layout>
     <BaseDataTable
@@ -55,6 +57,12 @@ export default {
   components: {
     BaseDataTable,
     BaseUserSelect
+  },
+  computed: {
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
+    }
   },
   data () {
     return {

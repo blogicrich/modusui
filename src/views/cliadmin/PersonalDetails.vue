@@ -6,6 +6,8 @@
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
+        showChips
+        :chipsText="userText"
       />
       <v-flex x12>
         <data-table
@@ -49,6 +51,10 @@ export default {
       } else {
         return ''
       }
+    },
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
     }
   },
   data () {
