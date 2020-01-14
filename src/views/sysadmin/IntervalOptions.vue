@@ -166,7 +166,7 @@ export default {
         this.newDefaultValue = true
         this.updateObj[key] = obj.items[obj.index][key]
       }
-      
+
       // console.log(obj.items[obj.index])
       // console.log(Object.keys(obj.items[obj.index])[0])
       // console.log(this.updateObj)
@@ -188,7 +188,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     if (this.newDefaultValue === true) {
-      let answer = window.confirm('Do you really want to leave? You will loose all unsaved changes!')
+      let answer = window.confirm('Do you really want to leave? You will loseall unsaved changes!')
       if (answer) {
         next()
       } else {

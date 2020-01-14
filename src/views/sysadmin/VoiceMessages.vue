@@ -176,7 +176,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm(
-      'Do you really want to leave? You will loose all unsaved changes!'
+      'Do you really want to leave? You will loseall unsaved changes!'
     )
     if (answer) {
       next()

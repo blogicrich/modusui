@@ -117,9 +117,9 @@ export default {
         return this.$store.state.wakeSleepTimes.times.sleepTime
       },
       set (newValue) {
-        this.$store.commit('UPDATE_SLEEPTIME', newValue)      
+        this.$store.commit('UPDATE_SLEEPTIME', newValue)
       }
-    },
+    }
   },
   data () {
     return {
@@ -158,9 +158,9 @@ export default {
       return this.$moment(time, 'HH:mm').diff(startOfDay, 'seconds')
     }
   },
-  mounted() {
+  mounted () {
     this.$store.dispatch('fetchWakeSleepTimes')
-  },
+  }
 
 }
 </script>
