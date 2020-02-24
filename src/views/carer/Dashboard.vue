@@ -1,23 +1,23 @@
 <template>
-    <dashboard-component
-        :dashboardUsers="dashboardUsers"
-        :dashboardComment="dashboardComment"
-        :dashboardDay="dashboardDay"
-        :dashboardHour="dashboardHour"
-        :dashboardWeek="dashboardWeek"
-        @refresh="updateCharts"
-        @dateChange="updateDate"
-        @userChange="updateUser"
-        :selectedUser="selectedUser"
-        :usersLoaded="usersLoaded"
-        :hourLoaded="hourLoaded"
-        :dayLoaded="dayLoaded"
-        :weekLoaded="weekLoaded"
-        :usersError="usersError"
-        :hourError="hourError"
-        :dayError="dayError"
-        :weekError="weekError"
-    />
+  <dashboard-component
+    :dashboardUsers="dashboardUsers"
+    :dashboardComment="dashboardComment"
+    :dashboardDay="dashboardDay"
+    :dashboardHour="dashboardHour"
+    :dashboardWeek="dashboardWeek"
+    @refresh="updateCharts"
+    @dateChange="updateDate"
+    @userChange="updateUser"
+    :selectedUser="selectedUser"
+    :usersLoaded="usersLoaded"
+    :hourLoaded="hourLoaded"
+    :dayLoaded="dayLoaded"
+    :weekLoaded="weekLoaded"
+    :usersError="usersError"
+    :hourError="hourError"
+    :dayError="dayError"
+    :weekError="weekError"
+  />
 </template>
 
 <script>
@@ -99,12 +99,15 @@ export default {
 
       await this.$store.dispatch('fetchDashboardHourGet', { userId: this.selectedUser.userId, date: this.selectedDate })
 
-      if (this.$store.state.dashboardHour.dashboardHourGet) {
-        let hourStore = this.$store.state.dashboardHour.dashboardHourGet
-        for (let index = 0; index < hourStore.length; index++) {
-          this.dashboardHour[index] =
-            parseFloat(hourStore[index].volumeConsumedViaOther) +
-            parseFloat(hourStore[index].volumeConsumedViaEDroplet)
+      const hourStore = this.$store.state.dashboardHour.dashboardHourGet
+      if (hourStore) {
+        for (let i = 0; hourStore.length > i; i++) {
+          this.dashboardHour[i] = {
+            label: hourStore[i].hour,
+            value:
+              parseFloat(hourStore[i].volumeConsumedViaOther) +
+              parseFloat(hourStore[i].volumeConsumedViaEDroplet)
+          }
         }
         this.hourLoaded = true
       } else {
@@ -118,8 +121,28 @@ export default {
 
       await this.$store.dispatch('fetchDashboardDayGet', { userId: this.selectedUser.userId, date: this.selectedDate })
 
-      if (this.$store.state.dashboardDay.dashboardDayGet) {
-        this.dashboardDay = this.$store.state.dashboardDay.dashboardDayGet
+      const [dashboardDay] = this.$store.state.dashboardDay.dashboardDayGet || []
+      if (dashboardDay) {
+        const consumed = parseFloat(dashboardDay.volumeConsumedViaEDroplet) + parseFloat(dashboardDay.volumeConsumedViaOther)
+        const target = parseFloat(dashboardDay.hydrationTarget)
+
+        let remaining = target - consumed
+        let overHydrated = 0
+
+        if (remaining < 0) {
+          overHydrated = Math.abs(remaining)
+          remaining = 0
+        }
+
+        const hydrated = consumed - overHydrated
+
+        this.dashboardDay = {
+          hydrated,
+          target,
+          remaining,
+          overHydrated,
+          consumed
+        }
         this.dayLoaded = true
       } else {
         this.dayError = true
@@ -132,9 +155,36 @@ export default {
 
       await this.$store.dispatch('fetchDashboardWeekGet', { userId: this.selectedUser.userId, date: this.selectedDate })
 
-      if (this.$store.state.dashboardWeek.dashboardWeekGet) {
-        this.dashboardWeek = this.$store.state.dashboardWeek
-          .dashboardWeekGet
+      const dashboardWeek = this.$store.state.dashboardWeek.dashboardWeekGet
+      if (dashboardWeek) {
+        const dataPoints = dashboardWeek.map(weekDayData =>
+          (weekDayData.volumeConsumedViaEDroplet && weekDayData.volumeConsumedViaOther)
+            ? (parseFloat(weekDayData.volumeConsumedViaEDroplet) + parseFloat(weekDayData.volumeConsumedViaOther))
+            : null
+        )
+
+        const filteredDataPoints = dataPoints.filter(
+          weekDataPoint => weekDataPoint !== null
+        ) // Exclude null from average calculation.
+
+        const sum = filteredDataPoints.reduce(
+          (total, currentValue) => total + currentValue,
+          0
+        )
+
+        let average
+
+        if (filteredDataPoints.length > 0) {
+          average = sum / filteredDataPoints.length
+        } else {
+          average = 0
+        }
+
+        this.dashboardWeek = {
+          dataPoints,
+          average
+        }
+
         this.weekLoaded = true
       } else {
         this.weekError = true

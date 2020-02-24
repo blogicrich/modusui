@@ -156,7 +156,7 @@ export default {
           menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
+            value => value.length <= 20 || 'Max 20 characters'
           ]
         }
       ],

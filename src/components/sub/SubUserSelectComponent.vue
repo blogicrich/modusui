@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <v-layout column>
     <v-container fill-height align-center justify-center>
       <v-flex xs5 grow>
@@ -30,69 +30,6 @@
         <v-btn flat fab slot="thirdRightSlot" @click="userSettings(item)"><v-icon :color="primaryColor" medium>{{ btnIcon }}</v-icon></v-btn>
       </baseDropletuser>
     </v-container>
-    <v-dialog
-      v-model="dialogToggle"
-      :width="dialogWidth"
-      persistent>
-      <v-card>
-        <v-layout v-if="dialogComment" column>
-          <v-layout>
-            <v-card-title><h2>{{ titleAddComment }}</h2></v-card-title>
-          </v-layout>
-          <v-container>
-            <v-textarea auto-grow :counter="maxCharac" :rules="commentRules" label="Enter Comment Text" v-model="commentText"></v-textarea>
-          </v-container>
-          <v-layout justify-space-around>
-            <v-card-actions>
-              <v-btn :color="primaryColor" flat @click="deleteComment(commentData.dayReportId)">Delete</v-btn>
-              <v-btn :color="primaryColor" flat @click="clearComment">Clear</v-btn>
-              <v-btn :color="primaryColor" flat @click="saveComment">Save</v-btn>
-              <v-btn :color="primaryColor" flat @click="cancelComment">Cancel</v-btn>
-            </v-card-actions>
-          </v-layout>
-        </v-layout>
-        <v-layout v-if="dialogSettings" column>
-          <v-layout>
-          <v-card-title><h2>{{ titleSettings }}</h2></v-card-title>
-          </v-layout>
-          <v-container>
-          <BaseDataTable
-            :headers="headers"
-            :items="items"
-            :editPerms="editPerms"
-            :primaryColor="primaryColor"
-            :secondaryColor="secondaryColor"
-            :recordIcon="icon"
-            :addRecordIcon="iconAdd"
-            addBtnTitle="New Administrator"
-            :loading="loading"
-            :loaded="loaded"
-            :error="error"
-            :errorMsg="errorMsg"
-            :loadingMsg="loadingMsg"
-            :loadedMsg="loadedMsg"
-            item-key="username"
-            searchLabel="Search Records..."
-            tableTitle="Assigned eDroplet Bases"
-            newDialogTitle="Add a New Administrator Record"
-            editDialogTitle="Edit Administrator Records"
-            delDialogTitle="Confirm deletetion of selected items?"
-            msgDel="Are you sure you want to delete the selected items?"
-            :editRules="editRules"
-            @newItem="addItem"
-            @itemsEdited="editItems"
-            @deleteSelected="deleteItem"
-            @itemsCancelled="refreshItems"
-          />
-          </v-container>
-          <v-layout justify-center>
-            <v-card-actions>
-              <v-btn :color="primaryColor" flat @click="closeSetting">Close</v-btn>
-            </v-card-actions>
-          </v-layout>
-        </v-layout>
-      </v-card>
-    </v-dialog>
   </v-layout>
 </template>
 
