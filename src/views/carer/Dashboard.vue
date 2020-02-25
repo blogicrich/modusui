@@ -1,7 +1,6 @@
 <template>
   <dashboard-component
     :dashboardUsers="dashboardUsers"
-    :dashboardComment="dashboardComment"
     :dashboardDay="dashboardDay"
     :dashboardHour="dashboardHour"
     :dashboardWeek="dashboardWeek"
@@ -34,7 +33,6 @@ export default {
       dashboardDay: {},
       dashboardHour: [],
       dashboardUsers: [],
-      dashboardComment: [],
       dashboardWeek: [],
       usersLoaded: false,
       dayLoaded: false,
@@ -78,18 +76,6 @@ export default {
         this.hourError = true
         this.weekError = true
         this.dayError = true
-      }
-    },
-
-    async setComment () {
-      await this.$store.dispatch('fetchDashboardCommentGet')
-
-      if (this.$store.state.DashboardComment.dashboardCommentGet) {
-        let commentStore = this.$store.state.DashboardComment
-          .dashboardCommentGet
-        for (let index = 0; index < commentStore.length; index++) {
-          this.dashboardComment.push(commentStore[index])
-        }
       }
     },
 
@@ -193,8 +179,6 @@ export default {
   },
   mounted () {
     this.setUsers()
-    // FIXME: Comments are broken, uses hardcoded IDs
-    // this.setComment()
   },
   computed: {
     ...mapState({

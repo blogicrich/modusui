@@ -44,24 +44,13 @@
           <v-alert :value="true" type="info" v-else>Hourly data is not available at this time.</v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
-          <v-card class="userSelect" v-if="!usersError">
-            <baseDropletuser
+          <v-card v-if="!usersError">
+            <sub-user-select
               v-if="usersLoaded"
               @userSelected="$emit('userChange', $event)"
-              userHeader="eDroplet Users"
               :users="dashboardUsers"
-              :searchName="searchName"
-              :primaryColor="primaryColor"
-              :usersIcon="usersIcon"
-              :alertIcon="alertIcon"
-              :clickedUser="selectedUser"
-              :btnIcon="btnIcon"
-              :alertColor="alertColors"
-              :commentIcon="commentIcon"
-              :maxCharac="'50'"
-              :commentData="commentData"
-              @commentText="saveComment"
-            ></baseDropletuser>
+              :selectedUser="selectedUser"
+            ></sub-user-select>
             <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
           </v-card>
           <v-alert :value="true" type="error" v-else>An error occurred while loading users.</v-alert>
@@ -104,16 +93,15 @@
 </template>
 
 <script>
-import baseDropletuser from '@/components/sub/SubUserSelectComponent'
+import SubUserSelect from '@/components/sub/SubUserSelectComponent'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import apiLib from '@/services/apiLib'
 import SubHourlyHydrationChart from '@/components/sub/SubHourlyHydrationChart'
 import SubHydrationDayChart from '@/components/sub/SubHydrationDayChart'
 import SubWeeklyHydrationChart from '@/components/sub/SubWeeklyHydrationChart'
 
 export default {
   components: {
-    baseDropletuser,
+    SubUserSelect,
     SubHourlyHydrationChart,
     SubHydrationDayChart,
     SubWeeklyHydrationChart
@@ -175,23 +163,8 @@ export default {
   },
   mounted () {
     this.date = this.$moment().format('YYYY-MM-DD')
-    this.getComment()
   },
   methods: {
-    getComment () {
-      apiLib.getData(this.readUrl, true, true).then(response => {
-        this.commentData = response[0]
-      })
-    },
-
-    saveComment (newComment) {
-      const data = {
-        comment: newComment,
-        carerId: 12
-      }
-      apiLib.updateData(this.updateUrl, data, true, true)
-    },
-
     addDay () {
       this.date = this.$moment(this.date, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD')
     },
@@ -229,14 +202,6 @@ export default {
   },
   data () {
     return {
-      commentData: '',
-      searchName: 'Search user..',
-      usersIcon: 'person',
-      alertIcon: 'report_problem',
-      commentIcon: 'comment',
-      btnIcon: 'settings',
-      primaryColor: 'primary',
-      alertColor: [],
       menu: false,
       date: '',
       maxDate: this.$moment().format('YYYY-MM-DD'),
@@ -257,10 +222,7 @@ export default {
 .chart {
   display: inline;
 }
-.userSelect {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+
 .v-container {
   padding-top: 0;
   margin-top: 0;
