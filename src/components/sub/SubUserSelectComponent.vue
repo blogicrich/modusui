@@ -33,7 +33,7 @@
 
         <v-list-tile-action>
           <v-icon
-            :title="`This user is ${user.hydrationStatus.description.toLowerCase()}`"
+            :title="getStatus(user)"
             :color="getColour(user)"
           >{{ getMood(user) }}</v-icon>
         </v-list-tile-action>
@@ -72,12 +72,28 @@ export default {
       return user.salutation || `${user.givenName} ${user.familyName}`
     },
 
+    getStatus (user) {
+      if (user.hydrationStatus && user.hydrationStatus.description) {
+        return `This user is ${user.hydrationStatus.description.toLowerCase()}`
+      } else {
+        return 'Hydration status unknown'
+      }
+    },
+
     getMood (user) {
-      return user.hydrationStatus.description === 'Hydrated' ? 'mood' : 'mood_bad'
+      if (user.hydrationStatus && user.hydrationStatus.description) {
+        return user.hydrationStatus.description === 'Hydrated' ? 'mood' : 'mood_bad'
+      } else {
+        return 'mood'
+      }
     },
 
     getColour (user) {
-      return this.colourMapping[user.hydrationStatus.RAG]
+      if (user.hydrationStatus && user.hydrationStatus.RAG) {
+        return this.colourMapping[user.hydrationStatus.RAG]
+      } else {
+        return '#bec5b0'
+      }
     }
   }
 }

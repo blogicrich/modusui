@@ -4,7 +4,7 @@
     :dashboardDay="dashboardDay"
     :dashboardHour="dashboardHour"
     :dashboardWeek="dashboardWeek"
-    @refresh="updateCharts"
+    @refresh="setUsers"
     @dateChange="updateDate"
     @userChange="updateUser"
     :selectedUser="selectedUser"
@@ -63,13 +63,28 @@ export default {
       this.updateCharts()
     },
 
+    resetLoadingState () {
+      this.usersLoaded = false
+      this.usersError = false
+      this.hourLoaded = false
+      this.hourError = false
+      this.dayLoaded = false
+      this.dayError = false
+      this.weekLoaded = false
+      this.weekError = false
+    },
+
     async setUsers () {
+      this.resetLoadingState()
       await this.$store.dispatch('fetchDashboardUsersGet')
       this.dashboardUsers = this.$store.state.dashboardUsers.dashboardUsersGet
 
       if (this.dashboardUsers && this.dashboardUsers.length !== 0) {
         this.usersLoaded = true
-        this.updateUser(this.dashboardUsers[0])
+
+        const selectedUser = this.dashboardUsers.find(user => user.userId === this.selectedUser.userId)
+
+        this.updateUser(selectedUser || this.dashboardUsers[0])
         this.updateCharts()
       } else {
         this.usersError = true
