@@ -82,9 +82,14 @@ export default {
       if (this.dashboardUsers && this.dashboardUsers.length !== 0) {
         this.usersLoaded = true
 
-        const selectedUser = this.dashboardUsers.find(user => user.userId === this.selectedUser.userId)
+        let selectedUser
+        if (this.selectedUser) {
+          selectedUser = this.dashboardUsers.find(user => user.userId === this.selectedUser.userId)
+        } else {
+          selectedUser = this.dashboardUsers[0]
+        }
 
-        this.updateUser(selectedUser || this.dashboardUsers[0])
+        this.updateUser(selectedUser)
         this.updateCharts()
       } else {
         this.usersError = true
