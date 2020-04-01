@@ -5,7 +5,7 @@ export const moduleHydrationParameters = {
     // store the data
     hydrationParams: [],
     endOfDayHydrationParams: [],
-    startOfDayHydrationParams []
+    startOfDayHydrationParams: []
   },
   mutations: {
     // set the data
