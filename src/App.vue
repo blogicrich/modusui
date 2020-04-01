@@ -5,27 +5,36 @@
     right: () => swipe('Right'),
     up: () => swipe('Up'),
     down: () => swipe('Down')
-  }">
+  }"
+  >
     <!-- HEADER -->
-    <v-toolbar
-      v-if="authenticated.state"
-      color="white"
-      app
-      :clipped-left="clipped"
-    >
-      <img v-if="$vuetify.breakpoint.smAndDown" @click="drawerState = true" alt="" src="./assets/ed_logo.svg"><img>
-      <img v-if="$vuetify.breakpoint.mdAndUp" alt="" src="./assets/ed_logo.svg"><img>
+    <v-toolbar v-if="authenticated && !wizardActive" color="white" app :clipped-left="clipped">
+      <img
+        v-if="$vuetify.breakpoint.smAndDown"
+        @click="drawerState = true"
+        alt
+        src="./assets/ed_logo.svg"
+      />
+      <img />
+      <img v-if="$vuetify.breakpoint.mdAndUp" alt src="./assets/ed_logo.svg" />
+      <img />
       <v-spacer></v-spacer>
       <v-layout row fill-height wrap justify-end>
         <v-icon outline medium class="mx-2" color="primary">person_outline</v-icon>
-        <v-chip class="ml-1 mt-3 mb-3" v-for="(level, index) in user" :key="index" color="secondary" text-color="primary">{{ levelDisplay(level) }}</v-chip>
+        <v-chip
+          class="ml-1 mt-3 mb-3"
+          v-for="(level, index) in level"
+          :key="index"
+          color="secondary"
+          text-color="primary"
+        >{{ levelDisplay(level) }}</v-chip>
       </v-layout>
     </v-toolbar>
     <!-- SIDEBAR -->
     <transition-group name="navBtns">
       <!-- FOR MD AND UP -->
       <v-navigation-drawer
-        v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.mdAndUp"
+        v-if="level.find(level => level === 'CARER') && authenticated && $vuetify.breakpoint.mdAndUp"
         key="bp-lg"
         class="primary"
         mini-variant
@@ -37,7 +46,7 @@
       >
         <v-layout column fill-height align-center justify-space-between>
           <BaseAppNavBtn
-            v-if="user.find(level => level === 'CARER') && user.find(level => level === 'CLIENT ADMINISTRATOR')"
+            v-if="level.find(level => level === 'CARER') && level.find(level => level === 'CLIENT ADMINISTRATOR')"
             my-3
             right
             btnIcon="settings"
@@ -62,7 +71,7 @@
       <!-- FOR SM AND DOWN -->
       <v-navigation-drawer
         v-model="drawerState"
-        v-if="user.find(level => level === 'CARER') && authenticated.state && $vuetify.breakpoint.smAndDown"
+        v-if="level.find(level => level === 'CARER') && authenticated && $vuetify.breakpoint.smAndDown"
         key="bp-sm"
         class="primary"
         disable-route-watcher
@@ -75,7 +84,7 @@
       >
         <v-layout column fill-height align-start justify-start>
           <BaseAppNavBtn
-            v-if="user.find(level => level === 'CARER') && user.find(level => level === 'CLIENT ADMINISTRATOR')"
+            v-if="level.find(level => level === 'CARER') && level.find(level => level === 'CLIENT ADMINISTRATOR')"
             my-3
             right
             btnIcon="settings"
@@ -104,7 +113,7 @@
     <v-container class="px-0" fluid>
       <v-content>
         <v-slide-y-transition mode="out-in">
-          <router-view class="px-0" @authenticated="setAuthenticated"/>
+          <router-view class="px-0" @authenticated="setAuthenticated" />
         </v-slide-y-transition>
       </v-content>
     </v-container>
@@ -112,10 +121,10 @@
     <v-fade-transition>
       <v-footer
         v-if="
-          user.find(level => level === 'SYSTEM ADMINISTRATOR') ||
-          user.find(level => level === 'CLIENT ADMINISTRATOR') &&
-          !(user.find(level => level === 'CARER')) &&
-          this.authenticated.state"
+          level.find(level => level === 'SYSTEM ADMINISTRATOR') ||
+          level.find(level => level === 'CLIENT ADMINISTRATOR') &&
+          !(level.find(level => level === 'CARER')) &&
+          this.authenticated && !wizardActive"
         :fixed="fixed"
         color="white"
         app
@@ -124,57 +133,32 @@
           <v-layout class="pt-2" row align-center justify-start>
             <span class="ml-3" style="align-center">Version: ALPHA</span>
           </v-layout>
+          <BaseAppNavBtn btnIcon="home" btnColor="primary" route="landing" tip="Home" top />
           <BaseAppNavBtn
-            btnIcon="home"
-            btnColor="primary"
-            route="landing"
-            tip="Home"
-            top
-          />
-          <BaseAppNavBtn
-            v-if="user.find(level => level === 'CARER') && this.authenticated.state"
+            v-if="level.find(level => level === 'CARER') && this.authenticated"
             btnIcon="dashboard"
             btnColor="primary"
             route="dashboard"
             tip="Dashboard"
             top
           />
-          <BaseAppNavBtn
-            btnIcon="exit_to_app"
-            btnColor="primary"
-            route="/"
-            tip="Logout"
-            top
-          />
+          <BaseAppNavBtn btnIcon="exit_to_app" btnColor="primary" route="/login" tip="Logout" top />
         </v-layout>
       </v-footer>
     </v-fade-transition>
     <!-- SNACKBAR -->
-    <v-snackbar
-      v-model="snackState"
-      :color="snackColor"
-      :timeout="snackTimeout"
-      bottom
-    >
+    <v-snackbar v-model="snackState" :color="snackColor" :timeout="snackTimeout" bottom>
       {{ snackText }}
-      <v-btn
-        dark
-        flat
-        @click="snackState = false"
-      >
-        Close
-      </v-btn>
+      <v-btn dark flat @click="snackState = false">Close</v-btn>
     </v-snackbar>
   </v-app>
 </template>
 
 <script>
-/* eslint-disable */
+
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
 import { EventBus } from '@/mixins/eventBus.js'
-import { setTimeout } from 'timers'
-import { log, isArray } from 'util';
-
+import { mapState } from 'vuex'
 
 export default {
   name: 'App',
@@ -190,9 +174,7 @@ export default {
       snackText: '',
       snackColor: '',
       snackTimeout: 0,
-      authenticated: {},
-      appNavConfig: {footer: true, sideMenu: true, header: true},
-      navFooter: '',
+      appNavConfig: { footer: true, sideMenu: true, header: true },
       items: [
         {
           title: 'Dashboard',
@@ -207,7 +189,7 @@ export default {
           btnIcon: 'date_range',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'consumptioncalender',
+          route: 'consumptioncalendar',
           tip: 'View consumption'
         },
         {
@@ -244,8 +226,7 @@ export default {
         }
       ],
       clipped: true,
-      fixed: false,
-      user: [],
+      fixed: false
     }
   },
   methods: {
@@ -253,19 +234,17 @@ export default {
       this.swipeDirection = direction
     },
     setAuthenticated (newStatus) {
-      localStorage.auth = JSON.stringify(newStatus)
-      this.authenticated = newStatus
-      if (this.authenticated.level) {
-        this.user = this.authenticated.level
-        if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR') || this.user.find(level => level === 'CLIENT ADMINISTRATOR') && newStatus.token) {
-          this.navFooter = true
+      if (this.level) {
+        if (this.level.find(level => level === 'SYSTEM ADMINISTRATOR') || this.level.find(level => level === 'CLIENT ADMINISTRATOR')) {
           this.$router.push('/landing')
         }
-        if (this.user.find(level => level === 'CARER') || 
-        (this.user.find(level => level === 'CARER') && this.user.find(level => level === 'CLIENT ADMINISTRATOR')) && newStatus.token) {
-          this.navFooter = false
+        if (this.level.find(level => level === 'CARER') ||
+          (this.level.find(level => level === 'CARER') && this.level.find(level => level === 'CLIENT ADMINISTRATOR'))) {
           this.$router.push('/dashboard')
         }
+      } else {
+        this.$store.dispatch('LOGOUT')
+        this.$router.push('/login')
       }
     },
     showSnack (eventPayload) {
@@ -275,8 +254,7 @@ export default {
       this.snackState = eventPayload.state
     },
     logout () {
-      localStorage.removeItem('auth')
-      this.$router.push('/login')
+      this.$store.dispatch('LOGOUT')
     },
     home () {
       this.$router.push('/landing')
@@ -285,7 +263,7 @@ export default {
       if (this.$vuetify.breakpoint.mdAndUp) {
         return level
       } else if (this.$vuetify.breakpoint.smAndDown) {
-        if(level.includes('CARER')) {
+        if (level.includes('CARER')) {
           return 'CARER'
         } else if (level.includes('CLIENT ADMINISTRATOR')) {
           return 'CLI ADMIN'
@@ -293,19 +271,33 @@ export default {
           return 'SYS ADMIN'
         }
       }
-    },
-
+    }
   },
   computed: {
     userLevel () {
       const greeting = 'LOGGED IN AS: '
       let concatUser = ''
-      for (let i = 0; i < this.user.length; i++) {
-        const element = String(this.user[i])
+      for (let i = 0; i < this.level; i++) {
+        const element = String(this.level[i])
         concatUser = concatUser + element + ' '
       }
       return greeting + concatUser
     },
+    authenticated: function () {
+      return this.$store.getters.authenticated
+    },
+    level: function () {
+      return this.$store.getters.level
+    },
+    loadStatus: function () {
+      return this.$store.getters.authDataLoading
+    },
+    isActive: function () {
+      return this.$store.getters.isActive
+    },
+    ...mapState({
+      wizardActive: state => state.gettingStartedWizard.wizardActive
+    })
   },
   watch: {
     swipeDirection: function () {
@@ -315,12 +307,16 @@ export default {
       }
     },
     authenticated: function () {
-      console.log('Auth changed: ', this.authenticated)
-      if (this.authenticated.state === null) this.logout()
-    },
+      if (!this.authenticated) {
+        this.logout()
+        this.$router.push('/login')
+      } else {
+        console.log('Still Authenticated: ', this.authenticated)
+      }
+    }
   },
   mounted () {
-    if (this.authenticated.state === null || this.authenticated.state === undefined) {
+    if (!this.authenticated) {
       this.logout()
     }
     EventBus.$on('snack-msg', data => {
@@ -329,7 +325,6 @@ export default {
   },
   destroyed () {
     EventBus.$off('snack-msg')
-    // userLevel = null
   }
 }
 </script>
@@ -343,8 +338,8 @@ export default {
   visibility: hidden;
 }
 img {
-  position:absolute;
-  top:2px;
+  position: absolute;
+  top: 2px;
   left: 12px;
   height: inherit;
   padding: 5px;

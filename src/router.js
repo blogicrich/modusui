@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// eslint-disable-next-line
-import Login from './views/common/Login.vue'
 
 Vue.use(Router)
 
@@ -25,71 +23,64 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/Login.vue')
-      // redirect: { name: 'Login' }
+      component: () => import(/* webpackChunkName: "login" */ './views/common/Login.vue')
+    },
+    {
+      path: '/error',
+      name: 'Error',
+      component: () => import(/* webpackChunkName: "about" */ './views/common/Error.vue')
     },
     {
       path: '/landing',
       name: 'Landing',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/Landing.vue')
-    },
-    {
-      path: '/intervaloptions',
-      name: 'IntervalOptions',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/IntervalOptions.vue')
+      component: () => import(/* webpackChunkName: "landing" */ './views/common/Landing.vue')
     },
     {
       path: '/passwordreset',
       name: 'PasswordReset',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/ForgotPassword.vue')
-    },
-    {
-      path: '/voicemessages',
-      name: 'VoiceMessages',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/VoiceMessages.vue')
+      component: () => import(/* webpackChunkName: "password-reset" */ './views/common/ForgotPassword.vue')
     },
 
     // Carer routes
-
     {
       path: '/additionaldrinks',
       name: 'AdditionalDrinks',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/AdditionalDrinks.vue')
+      component: () => import(/* webpackChunkName: "additional-drinks" */ './views/carer/AdditionalDrinks.vue')
     },
     {
       path: '/alerts',
       name: 'Alerts',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Alerts.vue')
+      component: () => import(/* webpackChunkName: "alerts" */ './views/carer/Alerts.vue')
     },
     {
       path: '/away',
       name: 'Away',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Away.vue')
+      component: () => import(/* webpackChunkName: "away" */ './views/carer/Away.vue')
     },
     {
       path: '/userconditions',
       name: 'UserConditions',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/UserConditions.vue')
+      component: () => import(/* webpackChunkName: "user-conditions" */ './views/carer/UserConditions.vue')
     },
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Dashboard.vue')
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/carer/Dashboard.vue')
     },
     {
       path: '/reports',
       name: 'Reports',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/Reports.vue')
+      component: () => import(/* webpackChunkName: "reports" */ './views/carer/Reports.vue')
     },
     {
       path: '/settingsreports',
       name: 'SettingsReports',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/SettingsReports.vue')
+      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/SettingsReports.vue')
     },
     {
-      path: '/consumptioncalender',
-      name: 'ConsumptionCalender',
-      component: () => import(/* webpackChunkName: "about" */ './views/carer/ConsumptionCalendar.vue')
+      path: '/consumptioncalendar',
+      name: 'ConsumptionCalendar',
+      component: () => import(/* webpackChunkName: "consumption-calendar" */ './views/carer/ConsumptionCalendar.vue')
     },
 
     // Cliadmin routes
@@ -110,9 +101,24 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/EdropManagement.vue')
     },
     {
+      path: '/intervalmanagement',
+      name: 'IntervalManagement',
+      component: () => import(/* webpackChunkName: "interval-options" */ './views/cliadmin/IntervalSettingsManagement.vue')
+    },
+    {
       path: '/careralertsettings',
       name: 'CarerAlertSettings',
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
+    },
+    {
+      path: '/wakesleeptimes',
+      name: 'WakeSleepTimes',
+      component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/WakeSleepTimes.vue')
+    },
+    {
+      path: '/voicemsgmanagement',
+      name: 'VoiceMessageManagement',
+      component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/VoiceMessageManagement.vue')
     },
 
     // Sysadmin routes
@@ -148,6 +154,16 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/TextMessages.vue')
     },
     {
+      path: '/intervaloptions',
+      name: 'IntervalOptions',
+      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/IntervalOptions.vue')
+    },
+    {
+      path: '/voicemessages',
+      name: 'VoiceMessageViewComponent',
+      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/VoiceMessages.vue')
+    },
+    {
       path: '/defaultintervals',
       name: 'DefaultIntervals',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
@@ -156,6 +172,15 @@ export default new Router({
       path: '/titles',
       name: 'Titles',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
+    },
+
+    // Unregistered users and ByteSnap Landing Page
+
+    {
+      path: '/register',
+      name: 'Registration',
+      props: (route) => ({ unsanitizedMacAddress: route.query.macAddress }),
+      component: () => import(/* webpackChunkName: "about" */ './views/unregistered/Registration.vue')
     }
   ]
 })

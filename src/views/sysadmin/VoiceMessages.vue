@@ -7,17 +7,17 @@
         :headerText="headerText"
       />
         <!-- <v-spacer></v-spacer> -->
-        <selectComponent
-          v-if="userPerms"
+        <!-- <selectComponent
+          v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')"
           slot="search"
           :users="users"
           :selectAll="selectAll"
           :searchName="searchName"
           :multiple="multiple"
           @get-selected-user="getSelectedUser"
-        ></selectComponent>
+        ></selectComponent> -->
     </v-layout>
-    <v-layout v-if="apiData.length > 0">
+    <v-layout v-if="apiData">
       <v-flex xs12>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>
@@ -60,9 +60,9 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-layout row align-center fill-height v-else>
-      <v-alert :value="true" type="error" >No data found.</v-alert>
-    </v-layout>
+    <!-- <v-layout row align-center fill-height v-else> -->
+      <!-- <v-alert :value="true" type="error" >No data found.</v-alert> -->
+    <!-- </v-layout> -->
   </v-container>
 </template>
 
@@ -77,6 +77,14 @@ export default {
     selectComponent,
     SubVoiceMsgAudioPlayer
   },
+  computed: {
+    user: function () {
+      return this.$store.getters.level
+    },
+    apiData: function () {
+      return this.$store.state.voiceMessages.voiceMessagesDefaults
+    }
+  },
   data () {
     return {
       // BaseViewHeader
@@ -89,10 +97,9 @@ export default {
       multiple: false,
       selectAll: 'Select all',
       searchName: 'Search user..',
-      apiData: [],
       editedItems: [],
       users: [],
-      userLevel: JSON.parse(localStorage.getItem('auth')).level,
+      // user: JSON.parse(localStorage.getItem('auth')).level,
       sysadminReadUrl: 'sysadmin/voice-messages',
       sysadminWriteUrl: 'sysadmin/voice-message',
       cliadminReadUrl: 'cliadmin/voicemessage/',
@@ -121,15 +128,6 @@ export default {
       msgRadioHeader: 'Time interval in minutes:'
     }
   },
-  computed: {
-    userPerms () {
-      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        return true
-      } else {
-        return false
-      }
-    }
-  },
   methods: {
     setTypes () {
       for (let i = 0; i < this.apiData.length; i++) {
@@ -150,31 +148,35 @@ export default {
       })
     },
     async getvoiceMessage () {
-      if (this.userLevel.find(level => level === 'CLIENT ADMINISTRATOR')) {
-        apiLib.getData('cliadmin/users', true, true).then(response => {
+      if (this.user.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        apiLib.getData(this.cliadminReadUrl, true, true).then(response => {
           this.users = response
         })
       }
-      if (this.userLevel.find(level => level === 'SYSTEM ADMINISTRATOR')) {
-        await this.$store.dispatch('fetchVoiceMessagesDefaultsGet')
-        if (this.$store.state.voiceMessages.voiceMessagesDefaultsGet) {
-          let voiceMessageDefaultStore = await this.$store.state.voiceMessages.voiceMessagesDefaultsGet
-          for (let i = 0; i < voiceMessageDefaultStore.length; i++) {
-            for (let j = 0; j < voiceMessageDefaultStore[i].length; j++) {
-              this.apiData.push(voiceMessageDefaultStore[i][j])
-            }
-          }
-        }
+      if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
+        await this.$store.dispatch('fetchVoiceMessagesDefaults')
+        // console.log('voice defaults: ', this.$store.state.voiceMessages.voiceMessagesDefaults)
+        this.setTypes()
+        // if (this.$store.state.voiceMessages.voiceMessagesDefaults) {
+        // let voiceMessageDefaultStore = this.$store.state.voiceMessages.voiceMessagesDefaults
+        // for (let i = 0; i < voiceMessageDefaultStore.length; i++) {
+        // for (let j = 0; j < voiceMessageDefaultStore[i].length; j++) {
+        // this.apiData.push(voiceMessageDefaultStore[i])
+        // }
+        // }
+        // }
+        // console.log('api data: ', this.apiData)
       }
-      this.setTypes()
+      // this.setTypes()
     }
   },
   mounted () {
+    this.$store.dispatch('fetchVoiceMessagesDefaults')
     this.getvoiceMessage()
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm(
-      'Do you really want to leave? You will loose all unsaved changes!'
+      'Do you really want to leave? You will loseall unsaved changes!'
     )
     if (answer) {
       next()

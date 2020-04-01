@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <BaseViewHeader
+      v-if="this.$vuetify.breakpoint.mdAndDown"
       :headerIcon="headerIcon"
       :iconColor="iconColor"
       :headerText="headerText"
@@ -29,16 +30,38 @@
       editDialogTitle="Edit Gender Option Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      :editRules="editRules"
+
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
-      @itemsCancelled="refreshItems"
-    />
-    <v-snackbar v-model="snack" bottom :timeout="timeout" :color="snackColor">
-      {{ snackText }}
-      <v-btn flat @click="snack = false">Close</v-btn>
-    </v-snackbar>
+      @itemsCancelled="getItems(readUrl)"
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
@@ -49,7 +72,7 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'ContainerTypes',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable
   },
@@ -63,11 +86,6 @@ export default {
       items: [],
       editPerms: { create: true, update: true, delete: true },
       crudIdKey: 'genderId',
-      snackColor: '',
-      editRules: payload => [],
-      snackText: '',
-      snack: false,
-      timeout: 6000,
       loading: true,
       loaded: false,
       error: false,
@@ -90,7 +108,7 @@ export default {
           value: 'genderId',
           cellType: 'tb',
           hidden: true,
-          editable: true
+          editable: false
         },
         {
           text: 'Description',
@@ -117,23 +135,32 @@ export default {
           cellType: 'tb',
           attr: 'description',
           cellLabel: 'Description',
-          menuItems: [],
-          validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         },
         {
           volume: '',
           cellType: 'tb',
           attr: 'targetConsumption',
           cellLabel: 'Target Consumption',
-          menuItems: [],
-          validators: payload => {
-            return [validation.validateRequired(payload)]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters'
+          ]
         }
       ],
-      defaultItem: [{ genderId: 0, description: '', targetConsumption: 0 }]
+      defaultItem: [
+        { genderId: 0, description: '', targetConsumption: 0 }
+      ]
     }
   },
   methods: {
@@ -147,9 +174,17 @@ export default {
           cellType: 'tb',
           hidden: false,
           editable: true,
-          validators: payload => {
-            return [validation.validateAlphabetical(payload), validation.validateRequired(payload)]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         },
         {
           text: 'Target Consumption',
@@ -159,20 +194,15 @@ export default {
           cellType: 'tb',
           hidden: false,
           editable: true,
-          validators: payload => {
-            return [validation.validateRequired(payload)]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters'
+          ]
         }
       ]
-      this.defaultItem = [
-        { genderId: 0, description: '', targetConsumption: 0 }
-      ]
-    },
-    notify (items) {
-      this.showSnack(items.snackText, items.snackColor)
     }
   },
-  created () {
+  mounted () {
     this.getItems(this.readUrl)
   }
 }

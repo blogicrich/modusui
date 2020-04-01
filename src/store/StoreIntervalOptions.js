@@ -3,8 +3,7 @@ import apiLib from '../services/apiLib.js'
 export const moduleIntervalOptions = {
   state: {
     // store the data
-    intervalOptionsGet: [],
-    intervalOptionsPut: []
+    intervalOptions: []
   },
   mutations: {
     // set the data
@@ -14,7 +13,7 @@ export const moduleIntervalOptions = {
   },
   actions: {
     // get all data
-    fetchIntervalOptionsGet (context) {
+    fetchIntervalOptions (context) {
       return apiLib.getData('sysadmin/interval-options').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_INTERVALOPTIONS', null)
@@ -23,14 +22,14 @@ export const moduleIntervalOptions = {
         }
       })
     },
-    fetchIntervalOptionsPut () {
-      return apiLib.updateData('sysadmin/interval-options/' + this.getters.getterStoreId, this.getters.getterIntervalOptionsPut)
+    postIntervalOptions (payload) {
+      return apiLib.updateData('sysadmin/interval-options/', payload)
     }
   },
   getters: {
     // get specific data
     getterIntervalOptionsPut: state => {
-      return state.intervalOptionsPut
+      return state.intervalOptions
     }
   }
 }

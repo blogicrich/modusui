@@ -48,7 +48,7 @@
       >
   <!-- Table: Headers -->
     <template slot="headers" slot-scope="props">
-      <th>
+      <th v-if="editPerms.create || editPerms.update || editPerms.delete">
         <v-checkbox
           :input-value="props.all"
           :indeterminate="props.indeterminate"
@@ -79,7 +79,7 @@
   <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <tr>
-        <td>
+        <td v-if="editPerms.create || editPerms.update || editPerms.delete">
           <v-checkbox
             v-model="props.selected"
           ></v-checkbox>
@@ -91,38 +91,7 @@
           :key="header.text"
           :color="primaryColor"
         >
-          <!-- <v-edit-dialog
-             :return-value.sync="props.item[header.value]"
-             lazy
-             large
-             permanent
-             persistent
-             @save="msgSave"
-             @cancel="msgCancel"
-             @close="msgClose"
-           > -->
-           <div>{{ props.item[header.value] }}</div>
-           <!-- <div slot="input" class="my-3 title">{{ header.text }}</div>
-             <v-text-field
-               v-if="header.cellType == 'tb'"
-               slot="input"
-               v-model="props.item[header.value]"
-               label="Edit"
-               single-line
-               counter
-             ></v-text-field>
-             <v-select
-               v-else-if="header.cellType === 'md'"
-               slot="input"
-               class="ma-1"
-               v-model="props.item[header.value]"
-               :items="menuItems"
-               :label="header.text"
-               :color="primaryColor"
-               large
-               outline
-             ></v-select>
-         </v-edit-dialog> -->
+          <div>{{ props.item[header.value] }}</div>
         </td>
       </tr>
     </template>
@@ -248,15 +217,21 @@
                 <v-container>
                   <v-layout row>
                     <v-flex v-for="(item, key) in newItem" :key="key">
-                      <v-text-field
+                      <slot
+                        name="newSlot"
+                        v-if="item.cellType === 'tb'"
+                        :item="item"
+                        :itemKey="key"
+                      />
+                      <!-- <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
                         :label="item.cellLabel"
                         v-model="newItem[key].sync"
                         :color="primaryColor"
                         outline
-                        :rules="item.validators(newItem[key].sync)"
-                      ></v-text-field>
+                        @change="validate(key, item[key])"
+                      ></v-text-field> -->
 
                       <v-select
                         v-else-if="item.cellType === 'md'"
@@ -295,17 +270,24 @@
                 <v-container>
                   <v-layout v-for="(item, index) in selected" :key="index">
                     <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attribute => attribute.attr === key)">
-                      <v-text-field
+                      <slot
+                        name="editSlot"
+                        v-if="inputType(item, key, 'tb')"
+                        :item="item"
+                        :itemKey="key"
+                        :property="property"
+                      />
+                      <!-- <v-text-field
                         v-if="inputType(item, key, 'tb')"
                         class="ma-1"
                         :label="getCellLabel(item, key, index)"
                         v-model="item[key]"
                         :color="primaryColor"
-                        :rules="editRules(item[key])"
+                        @change="validate(key, item[key])"
                         outline
                         required
                       >{{ item[key].value }}
-                      </v-text-field>
+                      </v-text-field> -->
                       <v-select
                         v-if="inputType(item, key, 'md')"
                         class="ma-1"
@@ -596,16 +578,22 @@
                 <v-container>
                   <v-layout row wrap justify-space-around>
                     <v-flex v-for="(item, key) in newItem" :key="key" xs12 md6>
-                      <v-text-field
+                      <slot
+                        name="newSlot"
+                        v-if="item.cellType === 'tb'"
+                        :item="item"
+                        :itemKey="key"
+                      />
+                      <!-- <v-text-field
                         v-if="item.cellType === 'tb'"
                         class="ma-1"
                         :label="item.cellLabel"
                         v-model="newItem[key].sync"
                         :color="primaryColor"
                         outline
-                        :rules="item.validators(newItem[key].sync)"
+                        @change="validate(key, item[key])"
                         required
-                      ></v-text-field>
+                      ></v-text-field> -->
                       <v-select
                         v-else-if="item.cellType === 'md'"
                         class="ma-1"
@@ -653,17 +641,24 @@
                       </v-btn>
                     </v-layout>
                     <v-flex v-for="(property, key) in item" :key="key" v-show="newItem.find(attribute => attribute.attr === key)">
-                      <v-text-field
+                      <slot
+                        name="editSlot"
+                        v-if="inputType(item, key, 'tb')"
+                        :item="item"
+                        :itemKey="key"
+                        :property="property"
+                      />
+                      <!-- <v-text-field
                         v-if="inputType(item, key, 'tb')"
                         class="ma-1"
                         :label="getCellLabel(item, key, index)"
                         v-model="item[key]"
                         :color="primaryColor"
                         outline
-                        :rules="editRules(item[key])"
+                        @change="validate(key, item[key])"
                         required
                       >{{ item[key].value }}
-                      </v-text-field>
+                      </v-text-field> -->
                       <v-select
                         v-if="inputType(item, key, 'md')"
                         class="ma-1"
@@ -683,7 +678,7 @@
                   </v-layout>
                 </v-container>
               </v-card-text>
-              <v-card-actions colum>
+              <v-card-actions column>
                 <v-layout row wrap>
                   <v-spacer></v-spacer>
                   <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
@@ -758,9 +753,7 @@ export default {
     recordIcon: String,
     addRecordIcon: String,
     addBtnTitle: String,
-    editPerms: Object,
-    validators: Function,
-    editRules: Function
+    editPerms: Object
   },
   methods: {
     pages () {
@@ -784,7 +777,7 @@ export default {
       this.newDialog = false
       this.delDialog = false
       this.selected = []
-      this.$emit('itemsCancelled')//, { snackText: 'Items Cancelled', snackColor: 'error' })
+      this.$emit('itemsCancelled')
     },
     decrement (index) {
       if (this.selected[index] && this.selected[index - 1]) {
@@ -802,6 +795,10 @@ export default {
       for (var i = 0; i < this.newItem.length; i++) {
         if (this.newItem[i].attr === key) return this.newItem[i].cellLabel
       }
+    },
+    validate (key, value) {
+      this.$emit('validate', { key: key, value: value })
+      // console.log('fjkdfjkkjfkjrwkjgrkekwjlge:  ', { key: key, value: value })
     },
     increment (index) {
       if (this.selected[index] && this.selected[index + 1]) {
@@ -839,6 +836,7 @@ export default {
     },
     save () {
       if (this.$refs.newForm.validate()) {
+        console.log(this.newItem)
         this.$emit('newItem', this.newItem)
         this.close()
       }
@@ -846,9 +844,7 @@ export default {
     saveChanges () {
       if (this.$refs.editForm.validate()) {
         this.$emit('itemsEdited', this.selected)
-        console.log('this.selected: ', this.selected)
         this.close()
-        this.selected = []
       }
     }
   }

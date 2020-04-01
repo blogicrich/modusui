@@ -14,11 +14,12 @@ export const moduleEDropMan = {
   actions: {
     // get all data
     fetchEDropmanGet (context) {
-      apiLib.getData('cliadmin/edropman/' + this.getters.getterAccountHolderId).then((response) => {
+      apiLib.getData('cliadmin/edropman', true, true).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_EDROPMAN', null)
+          context.commit('SET_EDROPMAN', [])
         } else {
-          context.commit('SET_EDROPMAN', response.data)
+          console.log(response)
+          context.commit('SET_EDROPMAN', response)
         }
       })
     },
@@ -27,6 +28,7 @@ export const moduleEDropMan = {
     }
   },
   getters: {
-    getterEDropManPut: state => state.edropmanPut
+    getterEDropManPut: state => state.edropmanPut,
+    getterEdroplets: state => state.edropmanGet
   }
 }

@@ -4,15 +4,25 @@
       <v-layout align-start justify-space-around row wrap>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-select
+            v-if="titles"
             label="Title"
             :items="titles"
             v-model="selectedTitle"
             :rules="rule"
+            return-object
+            item-value="titleId"
+            item-text="longDescription"
             @change="validate()"
           ></v-select>
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
-          <v-text-field label="AKA" :rules="rule" v-model="aka" required @input="validate()"></v-text-field>
+          <v-text-field
+            label="AKA"
+            :rules="rule"
+            v-model="aka"
+            required
+            @input="validate()"
+          ></v-text-field>
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
@@ -38,7 +48,6 @@
 </template>
 
 <script>
-import apiLib from '@/services/apiLib'
 
 export default {
   data () {
@@ -48,10 +57,16 @@ export default {
       familyName: '',
       valid: true,
       selectedTitle: '',
-      titles: [],
       rule: [
         v => !!v || 'This field is required'
       ]
+    }
+  },
+  computed: {
+    titles () {
+      let data = this.$store.getters.getterWizardTitles
+      console.log(this.$store.getters.getterWizardTitles)
+      return data
     }
   },
   methods: {
@@ -62,14 +77,6 @@ export default {
         this.$emit('onvalidation', false)
       }
     }
-  },
-  mounted () {
-    apiLib.getData('register').then((response) => {
-      for (let i = 0; i < response[1].length; i++) {
-        const element = response[1][i].longDescription
-        this.titles.push(element)
-      }
-    })
   }
 }
 </script>

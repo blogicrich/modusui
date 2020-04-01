@@ -2,151 +2,127 @@
   <div>
     <v-layout row align-center justify-center prepend-icon="event">
       <v-icon large>event</v-icon>
-      <v-icon @click="subDate()" large>keyboard_arrow_left</v-icon>
+      <v-icon @click="subtractDay()" large title="Decrease date by one day">keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
-        <v-text-field slot="activator" v-model="date" readonly></v-text-field>
-        <v-date-picker color="primary" color-header="primary" v-model="date" no-title scrollable>
+        <v-text-field slot="activator" :value="formattedDate" readonly title="Pick a date"></v-text-field>
+        <v-date-picker
+          color="primary"
+          color-header="primary"
+          v-model="date"
+          :max="maxDate"
+          no-title
+          scrollable
+        >
           <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
           <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
         </v-date-picker>
       </v-menu>
-      <v-icon @click="addDate()" large>keyboard_arrow_right</v-icon>
+      <v-icon
+        @click="addDay()"
+        large
+        :disabled="date === maxDate"
+        title="Increase date by one day"
+      >keyboard_arrow_right</v-icon>
+      <v-icon
+        @click="refresh()"
+        large
+        :disabled="!refreshEnabled"
+        title="Check for new data"
+      >refresh</v-icon>
     </v-layout>
     <v-container fluid grid-list-md d-flex>
       <v-layout fill-height wrap>
-        <v-flex d-flex xs12 sm12 md5 lg5 xl5 v-if="breakpoint">
-          <v-card class="userSelect">
-            <baseDropletuser
-              v-if="usersLoaded"
-              @userSelected="$emit('onchangedate', '', $data)"
-              userHeader="eDroplet Users"
-              :users="dashboardUsers"
-              :searchName="searchName"
-              :primaryColor="primaryColor"
-              :usersIcon="usersIcon"
-              :alertIcon="alertIcon"
-              :btnIcon="btnIcon"
-              :alertColor="alertColors"
-              :commentIcon="commentIcon"
-              :commentData="commentData"
-              :maxCharac="'50'"
-            ></baseDropletuser>
+        <v-flex xs12 sm12 md8 lg8 xl8>
+          <v-card dark v-if="!hourError">
+            <sub-hourly-hydration-chart
+              v-if="hourLoaded"
+              :chartData="dashboardHour"
+              :chartTitle="hourChartTitle"
+            ></sub-hourly-hydration-chart>
+            <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
           </v-card>
-        </v-flex>
-        <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Line')">
-          <v-card dark v-if="!hourLoaded">
-            <charts
-              class="chart"
-              :chartType="'Line'"
-              :lineChartData="lineChartData"
-              :update="update"
-            />
-          </v-card>
-            <v-alert :value="true" type="error" v-else>
-              Hydration snapshot not found. The base may not have communicated yet.
-          </v-alert>
+          <v-alert :value="true" type="info" v-else>Hourly data is not available at this time.</v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
-          <v-card class="userSelect" v-if="usersLoaded">
-            <baseDropletuser
-              @userSelected="$emit('onchangedate', '', $data)"
-              userHeader="eDroplet Users"
+          <v-card v-if="!usersError">
+            <sub-user-select
+              v-if="usersLoaded"
+              @userSelected="$emit('userChange', $event)"
               :users="dashboardUsers"
-              :searchName="searchName"
-              :primaryColor="primaryColor"
-              :usersIcon="usersIcon"
-              :alertIcon="alertIcon"
-              :btnIcon="btnIcon"
-              :alertColor="alertColors"
-              :commentIcon="commentIcon"
-              :maxCharac="'50'"
-              :commentData="commentData"
-              @commentText="saveComment(...arguments)"
-            ></baseDropletuser>
+              :selectedUser="selectedUser"
+            ></sub-user-select>
+            <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
           </v-card>
-          <v-alert :value="true" type="error" v-else>
-            Hydration snapshot not found. The base may not have communicated yet.
-          </v-alert>
+          <v-alert :value="true" type="error" v-else>An error occurred while loading users.</v-alert>
         </v-flex>
         <v-flex d-flex xs12 sm12 md12 lg12 xl12>
           <v-layout row wrap>
-            <v-flex xs12 sm12 md8 lg8 xl8 @click="openDialog('Bar')">
-              <v-card dark v-if="!weekLoaded">
-                <charts
-
-                  class="chart"
-                  :update="update"
-                  :chartType="'Bar'"
-                  :barChartData="barChartData"
+            <v-flex xs12 sm12 md8 lg8 xl8>
+              <v-card dark v-if="!weekError">
+                <sub-weekly-hydration-chart
+                  v-if="weekLoaded"
+                  :chartData="dashboardWeek.dataPoints"
+                  class="pb-4"
+                  :chartTitle="weekChartTitle"
                 />
-
+                <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
               </v-card>
-                            <v-alert :value="true" type="error" v-else>
-                  Hydration snapshot not found. The base may not have communicated yet.
-                </v-alert>
+              <v-alert :value="true" type="info" v-else>Weekly data is not available at this time.</v-alert>
             </v-flex>
-            <v-flex xs12 sm12 md4 lg4 xl4 @click="openDialog('Doughnut')">
-              <v-card dark v-if="!dayLoaded">
-                <charts
-                  class="chart"
-                  :update="update"
-                  :chartType="'Doughnut'"
-                  :doughnutChartData="doughnutChartData"
+            <v-flex xs12 sm12 md4 lg4 xl4>
+              <v-card dark v-if="!dayError">
+                <sub-hydration-day-chart
+                  v-if="dayLoaded"
+                  class="pb-4"
+                  :chartTitle="dayChartTitle"
+                  :chartData="dashboardDay"
                 />
+                <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
               </v-card>
-                <v-alert :value="true" type="error" v-else>
-                  Hydration snapshot not found. The base may not have communicated yet.
-                </v-alert>
+              <v-alert
+                :value="true"
+                type="info"
+                v-else
+              >Daily hydration data is not available at this time.</v-alert>
             </v-flex>
           </v-layout>
         </v-flex>
       </v-layout>
     </v-container>
-
-    <v-dialog v-model="lineDialog">
-      <v-flex xs12 sm12 md12 lg12 xl12>
-        <v-card dark>
-          <charts class="chart" :chartType="'Line'" :lineChartData="lineChartData"/>
-          <v-card-actions>
-            <v-btn color="primary" flat="flat" @click="lineDialog = false">Close</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </v-dialog>
-
-    <v-dialog v-model="doughnutDialog" max-width="750px">
-      <v-card dark>
-        <charts class="chart" :chartType="'Doughnut'" :doughnutChartData="doughnutChartData"/>
-        <v-card-actions>
-          <v-btn color="primary" flat="flat" @click="doughnutDialog = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="barDialog">
-      <v-card dark>
-        <charts class="chart" :chartType="'Bar'" :barChartData="barChartData"/>
-        <v-card-actions>
-          <v-btn color="primary" flat="flat" @click="barDialog = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script>
-import charts from '@/components/base/BaseChartComponent'
-import baseDropletuser from '@/components/sub/SubUserSelectComponent'
+import SubUserSelect from '@/components/sub/SubUserSelectComponent'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import apiLib from '@/services/apiLib'
+import SubHourlyHydrationChart from '@/components/sub/SubHourlyHydrationChart'
+import SubHydrationDayChart from '@/components/sub/SubHydrationDayChart'
+import SubWeeklyHydrationChart from '@/components/sub/SubWeeklyHydrationChart'
 
 export default {
   components: {
-    charts,
-    baseDropletuser
+    SubUserSelect,
+    SubHourlyHydrationChart,
+    SubHydrationDayChart,
+    SubWeeklyHydrationChart
   },
   mixins: [crudRoutines],
-  props: ['dashboardUsers', 'dashboardComment', 'dashboardHour', 'dashboardDay', 'dashboardWeek', 'usersLoaded', 'dayLoaded', 'hourLoaded', 'weekLoaded'],
+  props: [
+    'dashboardUsers',
+    'dashboardComment',
+    'dashboardHour',
+    'dashboardDay',
+    'dashboardWeek',
+    'usersLoaded',
+    'dayLoaded',
+    'hourLoaded',
+    'weekLoaded',
+    'usersError',
+    'dayError',
+    'hourError',
+    'weekError',
+    'selectedUser'
+  ],
   computed: {
     breakpoint () {
       switch (this.$vuetify.breakpoint.name) {
@@ -158,47 +134,56 @@ export default {
           return false
       }
     },
+
     alertColors () {
       this.setAlertColors()
       return this.alertColor
+    },
+
+    formattedDate () {
+      return this.$moment(this.date).format('L')
+    },
+
+    hourChartTitle () {
+      return `Activity on: ${this.formatDate(this.date)}`
+    },
+
+    dayChartTitle () {
+      return `Daily hydration status: ${this.dashboardDay.consumed.toFixed(2)}L/${this.dashboardDay.target.toFixed(2)}L`
+    },
+
+    weekChartTitle () {
+      return `Weekly summary (${this.dashboardWeek.average.toFixed(2)} litres per day on average)`
     }
   },
   watch: {
-    date: function () {
-      this.dateChanged()
-    },
-    hourLoaded: function () {
-      this.updateLine()
-    },
-    dayLoaded: function () {
-      this.updateDoughnut()
-    },
-    weekLoaded: function () {
-      this.updateBar()
+    date () {
+      this.$emit('dateChange', this.date)
     }
   },
   mounted () {
-    setTimeout(() => {
-      this.dateChanged()
-    }, 200)
-    this.getComment()
+    this.date = this.$moment().format('YYYY-MM-DD')
   },
   methods: {
-    getComment () {
-      apiLib.getData(this.readUrl, true, true).then(response => {
-        this.commentData = response[0]
-        console.log(response[0])
-      })
+    addDay () {
+      this.date = this.$moment(this.date, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD')
     },
-    saveComment (newComment) {
-      const data = {
-        comment: newComment,
-        carerId: 12
-      }
-      apiLib.updateData(this.updateUrl, data, true, true)
+
+    subtractDay () {
+      this.date = this.$moment(this.date).subtract(1, 'day').format('YYYY-MM-DD')
     },
+
+    refresh () {
+      this.$emit('refresh')
+      this.refreshEnabled = false
+
+      setTimeout(() => {
+        this.refreshEnabled = true
+      }, this.refreshCooldown)
+    },
+
     setAlertColors () {
-      for (var i = 0; i < this.dashboardUsers.length; i++) {
+      for (let i = 0; i < this.dashboardUsers.length; i++) {
         if (this.dashboardUsers[i].alertType === 'hydrated') {
           this.alertColor.push('green')
         } else if (this.dashboardUsers[i].alertType === 'dehydrated') {
@@ -210,192 +195,18 @@ export default {
         }
       }
     },
+
     formatDate (date) {
-      var monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ]
-
-      var day = date.getDate()
-      var monthIndex = date.getMonth()
-      var year = date.getFullYear()
-
-      return day + ' ' + monthNames[monthIndex] + ' ' + year
-    },
-    dateChanged: function () {
-      this.$emit('ondatechange', this.SelectedUnixTime)
-      this.updateLine()
-      this.updateBar()
-      this.updateDoughnut()
-      this.update = true
-      setTimeout(() => {
-        this.update = false
-      }, 100)
-    },
-    updateLine: function () {
-      this.lineChartData.title = 'Activity on: ' + this.formatDate(new Date(this.date))
-      // this.lineChartData.dataLineOne = [1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 1.0, 1.2, 0.8, 1.3, 0.2, 0.3, 0, 0.1, 0.4, 0.8, 0.9, 0.5, 1.2]
-
-      if (this.dashboardHour.length === 24) {
-        this.lineChartData.dataLineOne = this.dashboardHour
-      }
-    },
-    updateBar: async function () {
-      let weekArr = []
-      let elementCount = 0
-      // this.barChartData.dataBarOne = [2.5, 1.8, 1.5, 1.3, 1.0, 1.6, 1.9]
-      // this.barChartData.title = 'Weekly summary ' + 1.6 + 'L average'
-      if (this.dashboardWeek.length === 7) {
-        for (let i = 0; i < this.dashboardWeek.length; i++) {
-          const element = this.dashboardWeek[i]
-          weekArr.push(parseFloat(element.aggregatedHyration))
-          if (weekArr[i] >= 0) {
-            elementCount = elementCount + weekArr[i]
-          }
-        }
-        this.barChartData.dataBarOne = weekArr
-        this.weeklyAverage = Math.floor((elementCount / 7) * 100) / 100
-        this.barChartData.title = 'Weekly summary ' + this.weeklyAverage + 'L average'
-      }
-    },
-    updateDoughnut: async function () {
-      // this.doughnutChartData.dataDoughnut[0] = 1.2
-      // this.doughnutChartData.dataDoughnut[1] = 0.8
-      // this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + 1.2 + 'L / ' + 0.8 + 'L'
-      if (this.dashboardDay.length === 1) {
-        this.doughnutChartData.dataDoughnut[0] = parseFloat(this.dashboardDay[0].aggregatedHyration)
-        this.doughnutChartData.dataDoughnut[1] = parseInt(parseFloat(this.dashboardDay[0].hydrationTarget) - parseFloat(this.dashboardDay[0].aggregatedHyration))
-        this.doughnutChartData.title = 'Hydration on ' + this.formatDate(new Date(this.date)) + ': ' + parseFloat(this.dashboardDay[0].aggregatedHyration) + 'L / ' + parseInt(this.dashboardDay[0].hydrationTarget) + 'L'
-      }
-    },
-    addDate: function () {
-      let dateNow = new Date(this.date)
-      this.date = dateNow.setDate(new Date(dateNow.getDate() + 1))
-      this.date = dateNow.toISOString().substr(0, 10)
-      this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
-    },
-    subDate: function () {
-      let dateNow = new Date(this.date)
-      this.date = dateNow.setDate(new Date(dateNow.getDate() - 1))
-      this.date = dateNow.toISOString().substr(0, 10)
-      this.SelectedUnixTime = Math.round(new Date(this.date).getTime() / 1000)
-    },
-    openDialog: function (charType) {
-      switch (charType) {
-        case 'Line':
-          if (this.hourLoaded === true) {
-            this.lineDialog = true
-            let lineComp = this.$children[8].$children[0].$children[0]
-              .$children[0].$children[0].$children[0]
-            setTimeout(() => {
-              lineComp.renderChart(lineComp.chartData, lineComp.options)
-            }, 200)
-          }
-          break
-        case 'Bar':
-          if (this.weekLoaded === true) {
-            this.barDialog = true
-            let barComp = this.$children[10].$children[0].$children[0]
-              .$children[0].$children[0].$children[0]
-            setTimeout(() => {
-              barComp.renderChart(barComp.chartData, barComp.options)
-            }, 200)
-          }
-          break
-        case 'Doughnut':
-          if (this.dayLoaded === true) {
-            this.doughnutDialog = true
-            let doughnutComp = this.$children[9].$children[0].$children[0]
-              .$children[0].$children[0].$children[0]
-            setTimeout(() => {
-              doughnutComp.renderChart(
-                doughnutComp.chartData,
-                doughnutComp.options
-              )
-            }, 200)
-          }
-          break
-      }
+      return this.$moment(date).format('LL')
     }
   },
   data () {
     return {
-      commentData: '',
-      updateUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
-      readUrl: 'carer/dashboard-comment/' + 21 + '/' + 1557917441,
-      weeklyAverage: 0,
-      update: false,
-      searchName: 'Search user..',
-      usersIcon: 'person',
-      alertIcon: 'report_problem',
-      commentIcon: 'comment',
-      btnIcon: 'settings',
-      primaryColor: 'primary',
-      lineDialog: false,
-      barDialog: false,
-      doughnutDialog: false,
-      alertColor: [],
       menu: false,
-      date: new Date().toISOString().substr(0, 10),
-      lineChartData: {
-        labels: ['09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00', '22:00 - 23:00', '23:00 - 00:00', '00:00 - 01:00', '01:00 - 02:00', '02:00 - 03:00', '03:00 - 04:00', '04:00 - 05:00', '05:00 - 06:00', '06:00 - 07:00', '07:00 - 08:00', '08:00 - 09:00'],
-
-        labelLineOne: 'Consumed',
-        dataLineOne: [],
-        borderColorLineOne: 'rgba(54, 162, 235, 1)',
-        backgroundColorLineOne: 'rgba(54, 162, 235, 0.2)',
-        borderWidthLineOne: 2,
-
-        labelLineTwo: 'Target hydration',
-        dataLineTwo: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        borderColorLineTwo: 'rgba(102, 141, 62, 1)',
-        borderWidthLineTwo: 2,
-
-        labelLineThree: 'Target hydration (conditional)',
-        dataLineThree: [1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5],
-        borderColorLineThree: 'rgba(255, 159, 64, 1)',
-        borderWidthLineThree: 2,
-        title: 'Activity on: ' + this.formatDate(new Date(this.date))
-      },
-      barChartData: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-
-        labelBarOne: 'Consumed',
-        dataBarOne: [],
-        borderColorBarOne: 'rgba(54, 162, 235, 1)',
-        backgroundColorBarOne: 'rgba(54, 162, 235, 0.2)',
-        borderWidthBarOne: 2,
-
-        labelLineOne: 'Target hydration (conditional)',
-        dataLineOne: [1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2],
-        borderColorLineOne: 'rgba(255, 159, 64, 1)',
-        borderWidthLineOne: 2,
-
-        labelLineTwo: 'Target hydration',
-        dataLineTwo: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-        borderColorLineTwo: 'rgba(102, 141, 62, 1)',
-        borderWidthLineTwo: 2,
-        title: 'Weekly summary ' + this.weeklyAverage + 'L average'
-      },
-      doughnutChartData: {
-        labels: ['Consumed', 'Remaining'],
-        dataDoughnut: [],
-        borderColorDoughnut: 'rgba(255, 255, 255, 1)',
-        backgroundColorDoughnut: ['#00A1CD', 'rgba(200, 200, 200)'],
-        borderWidthDoughnut: 2,
-        cutoutPercentageDoughnut: 65,
-        title: 'Hydration for ' + this.formatDate(new Date(this.date))
-      }
+      date: '',
+      maxDate: this.$moment().format('YYYY-MM-DD'),
+      refreshEnabled: true,
+      refreshCooldown: 2000
     }
   }
 }
@@ -411,13 +222,9 @@ export default {
 .chart {
   display: inline;
 }
-.userSelect {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+
 .v-container {
   padding-top: 0;
   margin-top: 0;
 }
-
 </style>

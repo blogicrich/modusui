@@ -7,6 +7,8 @@
         :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
+        showChips
+        :chipsText="userText"
       />
     </v-layout>
     <BaseDataTable
@@ -51,10 +53,16 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'Conditions',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable,
     BaseUserSelect
+  },
+  computed: {
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
+    }
   },
   data () {
     return {
@@ -153,8 +161,8 @@ export default {
           menuItems: [],
           validators: payload => {
             return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
+              this.validateAlphabetical(payload),
+              this.validateRequired(payload)
             ]
           }
         }

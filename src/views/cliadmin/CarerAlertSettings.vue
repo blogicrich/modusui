@@ -7,10 +7,11 @@
         :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
+        showChips
+        :chipsText="userText"
       />
       <v-spacer></v-spacer>
     </v-layout>
-    <v-divider class="ma-2" color="#00a1cd"></v-divider>
     <subAlertCard
       :carerName="carerName"
       :users="users"
@@ -35,6 +36,12 @@ export default {
         this.alertTypes = response
       }
     })
+  },
+  computed: {
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
+    }
   },
   data () {
     return {

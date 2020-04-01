@@ -30,12 +30,38 @@
       editDialogTitle="Edit Container Type Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      :editRules="editRules"
+
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
-    />
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
@@ -46,7 +72,7 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'ContainerTypes',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable
   },
@@ -74,9 +100,6 @@ export default {
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
       iconAdd: 'add',
-      editRules: payload => {
-        return []
-      },
       headers: [
         {
           text: 'containerTypeId',
@@ -113,12 +136,17 @@ export default {
           attr: 'description',
           cellLabel: 'Description',
           menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         },
         {
           volume: '',
@@ -126,15 +154,15 @@ export default {
           attr: 'volume',
           cellLabel: 'Volume',
           menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateLiters(payload),
-              validation.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters'
+          ]
         }
       ],
-      defaultItem: [{ containerTypeId: 0, description: ' ', volume: 0 }]
+      defaultItem: [
+        { containerTypeId: 0, description: ' ', volume: 0 }
+      ]
     }
   },
   methods: {
@@ -146,12 +174,17 @@ export default {
           attr: 'description',
           cellLabel: 'Description',
           menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         },
         {
           volume: '',
@@ -159,15 +192,15 @@ export default {
           attr: 'volume',
           cellLabel: 'Volume',
           menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateLiters(payload),
-              validation.validateRequired(payload)
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters'
+          ]
         }
       ]
-      this.defaultItem = [{ containerTypeId: 0, description: ' ', volume: 0 }]
+      // this.defaultItem = [
+      //   { containerTypeId: 0, description: ' ', volume: 0 }
+      // ]
     }
   },
   mounted () {

@@ -135,18 +135,18 @@
               color="white"
               >local_drink
             </v-icon>
-            <h2 class="ma-1 text-white">eDroplet Settings</h2>
+            <h2 class="ma-1 text-white">User Settings</h2>
           </v-layout>
           <BaseLinkComponent
             routerTitle= "Voice Message Management"
-            link="/voicemessages"
+            link="/voicemsgmanagement"
             tooltipText="Upload and set custom voice messages for your eDroplets"
             icon="record_voice_over"
             colorIcon="#006480"
           />
           <BaseLinkComponent
             routerTitle= "Interval Settings Management"
-            link="/intervaloptions"
+            link="/intervalmanagement"
             tooltipText="Set the reminder and Communication intervals for your eDroplets"
             icon="notification_important"
             colorIcon="#006480"
@@ -156,6 +156,13 @@
             link="/conditions"
             tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
             icon="priority_high"
+            colorIcon="#006480"
+          />
+          <BaseLinkComponent
+            routerTitle= "Sleep and Wake Times"
+            link="/wakesleeptimes"
+            tooltipText="Set sleep and wake up time"
+            icon="access_alarm"
             colorIcon="#006480"
           />
         </v-flex>
@@ -229,15 +236,16 @@ export default {
   },
   data () {
     return {
-      user: '',
       redirecting: false,
       headerIcon: 'settings',
       iconColor: this.$vuetify.theme.primary,
-      headerText: 'eDroplet Client Administration'
+      headerText: 'eDroplet System Administration'
     }
   },
-  created () {
-    this.user = JSON.parse(localStorage.auth).level
+  computed: {
+    user: function () {
+      return this.$store.getters.level
+    }
   }
 }
 </script>

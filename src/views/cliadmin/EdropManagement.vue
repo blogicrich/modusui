@@ -1,14 +1,16 @@
 <template>
   <v-container fluid>
-    <v-layout row fill-height align-center justify-end wrap>
+    <v-layout row fill-height justify-center>
       <BaseViewHeader
+        v-if="userText"
         class="mx-2 mb-4"
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
+        showChips
+        :chipsText="userText"
       />
-      <v-spacer></v-spacer>
     </v-layout>
     <BaseDataTable
       class="mx-4"
@@ -20,7 +22,7 @@
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
       :addRecordIcon="iconAdd"
-      addBtnTitle="New Condition"
+      addBtnTitle="New eDroplet"
       :loading="loading"
       :loaded="loaded"
       :error="error"
@@ -28,28 +30,67 @@
       :loadingMsg="loadingMsg"
       :loadedMsg="loadedMsg"
       :crudIdKey="crudIdKey"
-      item-key="accountId"
+      item-key="macAddress"
       searchLabel="Search Records..."
       tableTitle="User's eDroplets"
       editDialogTitle="Edit eDroplet Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
+
+      @newItem="addItem"
       @itemsEdited="editItems"
-      @itemsCancelled="refreshItems"
-    />
+      @deleteSelected="deleteItem"
+      @itemsCancelled="getItems(readUrl)"
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
 <script>
+
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'EdropletManagement',
-  mixins: [crudRoutines],
+  mixins: [crudRoutines, validation],
   components: {
     BaseDataTable
+  },
+  computed: {
+    user: function () {
+      return this.$store.getters.getterSelectedUser
+    },
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
+    }
   },
   data () {
     return {
@@ -58,47 +99,60 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'eDroplet Management',
       // BaseDataTable
-      crudIdKey: 'identifier',
+      crudIdKey: 'baseId',
       items: [],
-      userLevel: JSON.parse(localStorage.getItem('auth')).level,
       editPerms: { create: false, update: true, delete: false },
-      snackColor: 'primary',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
       loading: true,
       loaded: false,
       error: false,
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      updateUrl: '/cliadmin/edropman/',
-      readUrl: '/cliadmin/edropman/131',
+      updateUrl: '/cliadmin/edropman',
+      readUrl: '/cliadmin/edropman/',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_drink',
       iconAdd: 'build',
       headers: [
         {
-          text: 'Identifier',
+          text: 'Base Identifier',
           align: 'left',
           sortable: false,
-          value: 'userId',
+          value: 'baseId',
           cellType: 'tb',
           hidden: true,
           editable: false
         },
         {
-          text: 'User Status',
+          text: 'Visual Identifier',
           align: 'left',
           sortable: false,
-          value: 'userStatus',
-          cellType: 'md',
+          value: 'visualId',
+          cellType: 'tb',
           hidden: true,
           editable: false
         },
         {
-          text: 'mac address',
+          text: 'Registration Date',
+          align: 'left',
+          sortable: false,
+          value: 'dateFirstRegistered',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Status Identifier',
+          align: 'left',
+          sortable: false,
+          value: 'statusId',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Mac Address',
           align: 'left',
           sortable: false,
           value: 'macAddress',
@@ -116,16 +170,34 @@ export default {
           editable: true
         },
         {
-          text: 'Status',
+          text: 'Base Mode Identifier',
           align: 'left',
           sortable: false,
-          value: 'status',
+          value: 'baseModeId',
           cellType: 'tb',
-          hidden: false,
-          editable: true
+          hidden: true,
+          editable: false
         },
         {
-          text: 'Operational status',
+          text: 'Base Comms Identifier',
+          align: 'left',
+          sortable: false,
+          value: 'baseCommsId',
+          cellType: 'tb',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Comms Status',
+          align: 'left',
+          sortable: false,
+          value: 'commsStatus',
+          cellType: 'md',
+          hidden: true,
+          editable: false
+        },
+        {
+          text: 'Operational Status',
           align: 'left',
           sortable: false,
           value: 'operationalStatus',
@@ -144,211 +216,26 @@ export default {
         }
       ],
       newItem: [
-        // { identifier: 0, cellType: 'md', attr: 'identifier', cellLabel: 'id', menuItems: [], validators: [] },
         {
-          userId: 0,
-          cellType: 'tb',
-          attr: 'userId',
-          cellLabel: 'Identifier',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          userStatus: ' ',
-          cellType: 'tb',
-          attr: 'userStatus',
-          cellLabel: 'User Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          macAddress: ' ',
-          cellType: 'tb',
-          attr: 'macAddress',
-          cellLabel: 'mac address',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
-        },
-        {
-          friendlyName: ' ',
+          friendlyName: '',
           cellType: 'tb',
           attr: 'friendlyName',
-          cellLabel: 'Friendly Name',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          status: ' ',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          operationalStatus: ' ',
-          cellType: 'tb',
-          attr: 'operationalStatus',
-          cellLabel: 'Operational status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          nightLight: ' ',
-          cellType: 'tb',
-          attr: 'nightLight',
-          cellLabel: 'Night Light',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
+          cellLabel: 'Friendly Name'
         }
       ],
       defaultItem: [
         {
-          userId: 0,
-          userStatus: '',
-          macAddress: '',
-          friendlyName: '',
-          status: '',
-          operationalStatus: '',
-          nightLight: ''
+          friendlyName: ''
         }
       ]
-      // urls: [
-      //   { url: 'sysadmin/title', attr: 'titleId', key: 'titleId' }
-      // ]
     }
   },
   methods: {
     resetItem () {
-      this.newItem = [
-        {
-          userId: 0,
-          cellType: 'tb',
-          attr: 'userId',
-          cellLabel: 'Identifier',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
-        },
-        {
-          userStatus: '',
-          cellType: 'tb',
-          attr: 'userStatus',
-          cellLabel: 'User Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          macAddress: '',
-          cellType: 'tb',
-          attr: 'macAddress',
-          cellLabel: 'mac address',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
-        },
-        {
-          friendlyName: '',
-          cellType: 'tb',
-          attr: 'friendlyName',
-          cellLabel: 'Friendly Name',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-
-        },
-        {
-          status: '',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          operationalStatus: '',
-          cellType: 'tb',
-          attr: 'operationalStatus',
-          cellLabel: 'Operational status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        },
-        {
-          nightLight: '',
-          cellType: 'tb',
-          attr: 'nightLight',
-          cellLabel: 'Night Light',
-          menuItems: [],
-          validators: payload => {
-            return [
-              validation.validateAlphabetical(payload),
-              validation.validateRequired(payload)
-            ]
-          }
-        }
-      ]
+      // eslint-disable-next-line no-unused-expressions
       this.defaultItem = [
         {
-          userId: 0,
-          userStatus: '',
-          macAddress: '',
-          friendlyName: '',
-          status: '',
-          operationalStatus: '',
-          nightLight: ''
+          friendlyName: ''
         }
       ]
     }

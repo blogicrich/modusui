@@ -4,14 +4,41 @@
       <v-layout v-if="$vuetify.breakpoint.lgAndUp" row fill-height align-center justify-start>
         <v-icon class="ml-1 mr-2" large :color="iconColor">{{ headerIcon }}</v-icon>
         <h1 class="my-0 pg-header text-primary">{{ headerText }}</h1>
+        <v-spacer></v-spacer>
+        <v-layout v-if="showChips" row align-center justify-end>
+          <v-icon outline medium class="mx-2" color="primary">person</v-icon>
+          <v-chip
+            class="ml-1 mt-3 mb-3"
+            color="secondary"
+            text-color="primary"
+          >{{ chipsText }}</v-chip>
+        </v-layout>
       </v-layout>
       <v-layout v-if="$vuetify.breakpoint.md" row fill-height align-center justify-start>
         <v-icon class="ml-1 mr-2" large :color="iconColor">{{ headerIcon }}</v-icon>
         <h2 class="my-0 pg-header text-primary">{{ headerText }}</h2>
+        <v-spacer></v-spacer>
+        <v-layout v-if="showChips" row align-center justify-end>
+          <v-icon outline medium class="mx-2" color="primary">person</v-icon>
+          <v-chip
+            class="ml-1 mt-3 mb-3"
+            color="secondary"
+            text-color="primary"
+          >{{ chipsText }}</v-chip>
+        </v-layout>
       </v-layout>
       <v-layout v-if="$vuetify.breakpoint.smAndDown" row fill-height align-center justify-start>
         <v-icon class="ml-1 mr-2" medium :color="iconColor">{{ headerIcon }}</v-icon>
-        <h2 class="my-0 text-primary">{{ headerText }}</h2>
+        <h4 class="my-0 text-primary">{{ headerText }}</h4>
+        <v-spacer></v-spacer>
+        <v-layout v-if="showChips" row align-center justify-end>
+          <v-icon outline small class="mx-2" color="primary">person</v-icon>
+          <v-chip
+            class="ml-1 mt-3 mb-3"
+            color="secondary"
+            text-color="primary"
+          >{{ chipsText }}</v-chip>
+        </v-layout>
       </v-layout>
       <v-spacer></v-spacer>
       <v-layout row fill-height align-end justify-end>
@@ -21,9 +48,7 @@
         <v-flex align-center justify-end>
           <slot name="filter"></slot>
         </v-flex>
-
       </v-layout>
-
     </v-layout>
   <v-divider class="mt-4" v-if="hasDivider" :color="iconColor"></v-divider>
   </v-container>
@@ -41,7 +66,9 @@ export default {
     headerIcon: String,
     iconColor: String,
     headerText: String,
-    hasDivider: Boolean
+    hasDivider: Boolean,
+    chipsText: String,
+    showChips: Boolean
   }
 }
 </script>

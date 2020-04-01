@@ -2,7 +2,8 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardUsers = {
   state: {
-    dashboardUsersGet: []
+    dashboardUsersGet: [],
+    selectedUser: null
   },
   mutations: {
     SET_DASHBOARDUSERS (state, data) {
@@ -11,13 +12,13 @@ export const moduleDashboardUsers = {
   },
   actions: {
     async fetchDashboardUsersGet (context) {
-      await apiLib.getData('carer/dashboard-users/', false, true).then((response) => {
-        if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_DASHBOARDUSERS', null)
-        } else {
-          context.commit('SET_DASHBOARDUSERS', response)
-        }
-      })
+      const response = await apiLib.getData('carer/dashboard-users/', false, false)
+
+      if (typeof response === 'object') {
+        context.commit('SET_DASHBOARDUSERS', response)
+      } else {
+        context.commit('SET_DASHBOARDUSERS', null)
+      }
     }
   }
 }

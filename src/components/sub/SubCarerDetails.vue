@@ -40,6 +40,8 @@
             chips
             label="Alert Messages"
             multiple
+            item-text="description"
+            item-value="alertTypeId"
           ></v-select>
         </v-flex>
       </v-layout>
@@ -52,6 +54,8 @@
             chips
             label="Alert Messages"
             multiple
+            item-text="description"
+            item-value="alertTypeId"
           ></v-select>
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
@@ -83,7 +87,7 @@
       </v-layout>
 
       <v-flex d-flex xs12 sm12 md6 lg6 xl6>
-        <v-radio-group v-model="row" row>
+        <v-radio-group v-model="row" :mandatory="false" row>
           <v-radio v-model="email" label="Email" :value="email"></v-radio>
           <v-radio v-model="sms" label="SMS" :value="sms"></v-radio>
         </v-radio-group>
@@ -98,22 +102,19 @@ import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 
 export default {
   mixins: [crudRoutines],
-
   data () {
     return {
       isAdmin: false,
       isCarer: true,
-      row: null,
+      row: 'email',
       username: '',
       phoneNumber: '',
       emailAddress: '',
       valid: true,
-      email: false,
-      sms: true,
-      alerts: [],
+      email: true,
+      sms: false,
       rule: [v => !!v || 'This field is required'],
-      alertTypes: [],
-      selectedAlertTypes: ['Dehydrated', 'Still Dehydrated', 'No Drink', 'Rehydrated', 'Low Battery']
+      selectedAlertTypes: []
     }
   },
   watch: {
@@ -125,6 +126,9 @@ export default {
     }
   },
   computed: {
+    alertTypes () {
+      return this.$store.getters.getterWizardAlertTypes
+    },
     breakpoint () {
       return this.$vuetify.breakpoint.smAndDown
     }
@@ -136,19 +140,7 @@ export default {
       } else {
         this.$emit('onvalidation', false)
       }
-    },
-    async setAlerts () {
-      await this.$store.dispatch('fetchWizardGet')
-      if (this.$store.state.wizard.wizardGet) {
-        let alertStore = await this.$store.state.wizard.wizardGet[2]
-        for (let index = 0; index < alertStore.length; index++) {
-          this.alertTypes.push(alertStore[index])
-        }
-      }
     }
-  },
-  mounted () {
-    this.setAlerts()
   }
 }
 </script>

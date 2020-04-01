@@ -6,6 +6,8 @@
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
+        showChips
+        :chipsText="userText"
       />
       <v-flex x12>
         <data-table
@@ -42,16 +44,29 @@ export default {
     DataTable,
     WizardComponent
   },
-
+  computed: {
+    carerId () {
+      if (this.$store.getters.getterCarerId !== null || this.$store.getters.getterCarerId !== undefined) {
+        return this.$store.getters.carerId
+      } else {
+        return ''
+      }
+    },
+    userText: function () {
+      let val = this.$store.getters.getterSelectedUser.givenName
+      return val
+    }
+  },
   data () {
     return {
       // BaseViewHeader
       headerIcon: 'person',
       iconColor: this.$vuetify.theme.primary,
-      headerText: 'Person Details',
+      headerText: 'Personal Details',
       // BaseDataTable
+      readUrl: 'cliadmin/personnelsettings' + this.$store.state.eDropletApp.carerId,
       editPerms: { create: false, update: false, delete: false },
-      getUrl: '/register',
+      // getUrl: '',
       headers: [
         {
           hidden: false,
@@ -105,17 +120,20 @@ export default {
     }
   },
   methods: {
-    formItems () {
-      for (let i = 0; i < this.items[1].length; i++) {
-        const element = this.items[1][i]
-        this.title.push(element)
-      }
+    async getWizardInfo () {
+      await this.$store.dispatch('fetchWizardOptions')
+      await this.$store.dispatch('fetchEDropmanGet')
     }
   },
   created () {
     this.getItems(this.getUrl).then(() => {
-      this.formItems()
+      this.getWizardInfo()
     })
+  },
+  mounted () {
+    console.log('fjkdjgkjkg: ', this.$store.state.eDropletApp.carerId)
+    const parameters = this.$route.query
+    console.log('params: ', parameters)
   }
 }
 </script>

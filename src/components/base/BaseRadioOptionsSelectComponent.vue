@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout justify-space-around fill-height>
+    <v-layout row align-center fill-height expand>
       <v-flex xs12 md12 lg12>
         <v-card v-if="$vuetify.breakpoint.smAndUp" class="ma-0 pa-3" color="Blue" :height="height">
           <h3 class="subheader text-left"> {{ groupHeader }} </h3>

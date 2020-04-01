@@ -2,31 +2,19 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleIntervalSettings = {
   state: {
-    intervalSettingsPut: [],
-    intervalSettingsGet: []
+    intervalSettings: null
   },
   mutations: {
-    // set the data
-    SET_INTERVALSETTINGS (state, data) {
-      state.intervalSettingsGet = data
+    SET_INTERVAL_SETTINGS (state, data) {
+      state.intervalSettings = data
     }
   },
   actions: {
-    // get all data
-    fetchIntervalSettingsGet (context) {
-      apiLib.getData('intervalsettings/' + this.getters.getterUserId + '/' + this.getters.getterDeviceMessageTypeId + '/' + this.getters.getterMessageNo).then((response) => {
-        if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_INTERVALSETTINGS', null)
-        } else {
-          context.commit('SET_INTERVALSETTINGS', response.data)
-        }
-      })
+    async fetchIntervalSettings ({ commit, rootState }) {
+      commit('SET_INTERVAL_SETTINGS', await apiLib.getData('/cliadmin/interval-settings/' + rootState.eDropletApp.selectedUser.userId))
     },
-    fetchIntervalSettingsPut () {
-      return apiLib.updateData('cliadmin/interval-management/' + this.getters.getterUserId, this.getters.getterIntervalSettingsPut)
+    async updateIntervalSettings ({ commit, rootState }, payload) {
+      await apiLib.updateData('/cliadmin/interval-settings/' + rootState.eDropletApp.selectedUser.userId, payload, false, true)
     }
-  },
-  getters: {
-    getterIntervalSettingsPut: state => state.intervalSettingsPut
   }
 }

@@ -1,241 +1,118 @@
-<template lang="html">
+<template>
   <v-layout column>
     <v-container fill-height align-center justify-center>
       <v-flex xs5 grow>
         <v-layout fluid fill-height align-center justify-start>
           <v-icon large color="primary">group</v-icon>
-          <h2 class="table-header">{{ userHeader }}</h2>
+          <h2 class="table-header">Connected Droplet Users</h2>
         </v-layout>
       </v-flex>
       <v-flex xs7 shrink>
         <v-layout fill-height align-center justify-start>
           <v-icon>search</v-icon>
-          <input type="text" class="searchbar" v-model="search" v-bind:placeholder="searchName"/>
+          <input type="text" class="searchbar" v-model="search" placeholder="Search user" />
         </v-layout>
       </v-flex>
     </v-container>
-    <v-container fluid v-for="(item, index) in filteredName" fill-height v-bind:class="{ 'userSelect': getClass(item.userId) }" class="userHoverSelect" :value="item.userId" :key="item.userId" @click="clickedPerson(item)">
-      <baseDropletuser
-        :primaryColor="primaryColor"
-        :userHeader="userHeader"
-        :searchName="searchName"
-        :usersIcon="usersIcon"
+    <v-list two-line subheader class="userList">
+      <v-list-tile
+        avatar
+        v-for="user in searchResults"
+        :key="user.userId"
+        @click="userSelected(user)"
+        :class="user.userId === selectedUser.userId ? 'selectedUser' : ''"
       >
-        <v-icon slot="leftSlot" large :color="primaryColor">{{ usersIcon }}</v-icon>
-        <v-chip slot="middleFirstNameSlot" color="secondary" text-color="primary">{{ item.givenName }} {{ item.familyName }}</v-chip>
-        <span slot="middleSecondNameSlot" :class="alertColor[index] + '--text'">{{ item.hydrationValue }}  {{ item.calculatedTargetConsumption }}</span>
-        <span slot="middleThirdNameSlot">{{ item.lastComm }}</span>
-        <v-btn flat fab slot="firstRightSlot" to="/alerts"><v-icon medium :color="alertColor[index]">{{ alertIcon }}</v-icon></v-btn>
-        <v-btn flat fab slot="secondRightSlot" @click="addComment(item)"><v-icon :color="primaryColor">{{ commentIcon }}</v-icon></v-btn>
-        <v-btn flat fab slot="thirdRightSlot" @click="userSettings(item)"><v-icon :color="primaryColor" medium>{{ btnIcon }}</v-icon></v-btn>
-      </baseDropletuser>
-    </v-container>
-    <v-dialog
-      v-model="dialogToggle"
-      :width="dialogWidth"
-      persistent>
-      <v-card>
-        <v-layout v-if="dialogComment" column>
-          <v-layout>
-            <v-card-title><h2>{{ titleAddComment }}</h2></v-card-title>
-          </v-layout>
-          <v-container>
-            <v-textarea auto-grow :counter="maxCharac" :rules="commentRules" label="Enter Comment Text" v-model="commentText"></v-textarea>
-          </v-container>
-          <v-layout justify-space-around>
-            <v-card-actions>
-              <v-btn :color="primaryColor" flat @click="deleteComment(commentData.dayReportId)">Delete</v-btn>
-              <v-btn :color="primaryColor" flat @click="clearComment">Clear</v-btn>
-              <v-btn :color="primaryColor" flat @click="saveComment">Save</v-btn>
-              <v-btn :color="primaryColor" flat @click="cancelComment">Cancel</v-btn>
-            </v-card-actions>
-          </v-layout>
-        </v-layout>
-        <v-layout v-if="dialogSettings" column>
-          <v-layout>
-          <v-card-title><h2>{{ titleSettings }}</h2></v-card-title>
-          </v-layout>
-          <v-container>
-          <BaseDataTable
-            :headers="headers"
-            :items="items"
-            :editPerms="editPerms"
-            :primaryColor="primaryColor"
-            :secondaryColor="secondaryColor"
-            :recordIcon="icon"
-            :addRecordIcon="iconAdd"
-            addBtnTitle="New Administrator"
-            :loading="loading"
-            :loaded="loaded"
-            :error="error"
-            :errorMsg="errorMsg"
-            :loadingMsg="loadingMsg"
-            :loadedMsg="loadedMsg"
-            item-key="username"
-            searchLabel="Search Records..."
-            tableTitle="Assigned eDroplet Bases"
-            newDialogTitle="Add a New Administrator Record"
-            editDialogTitle="Edit Administrator Records"
-            delDialogTitle="Confirm deletetion of selected items?"
-            msgDel="Are you sure you want to delete the selected items?"
-            :editRules="editRules"
-            @newItem="addItem"
-            @itemsEdited="editItems"
-            @deleteSelected="deleteItem"
-            @itemsCancelled="refreshItems"
-          />
-          </v-container>
-          <v-layout justify-center>
-            <v-card-actions>
-              <v-btn :color="primaryColor" flat @click="closeSetting">Close</v-btn>
-            </v-card-actions>
-          </v-layout>
-        </v-layout>
-      </v-card>
-    </v-dialog>
+        <v-list-tile-avatar>
+          <v-icon large color="primary">person</v-icon>
+        </v-list-tile-avatar>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ getDisplayName(user) }}</v-list-tile-title>
+          <v-list-tile-sub-title>{{ user.comments || 'No comments'}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+
+        <v-list-tile-action>
+          <v-icon
+            :title="getStatus(user)"
+            :color="getColour(user)"
+          >{{ getMood(user) }}</v-icon>
+        </v-list-tile-action>
+      </v-list-tile>
+    </v-list>
   </v-layout>
 </template>
 
 <script>
-import baseDropletuser from '@/components/base/baseDropletuserComponent.vue'
-import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
-import apiLib from '@/services/apiLib'
-
 export default {
-  components: {
-    baseDropletuser,
-    BaseDataTable
-  },
-  mixins: [crudRoutines],
   data () {
     return {
       search: '',
-      clickedUser: [],
-      dialogToggle: false,
-      dialogSettings: false,
-      dialogComment: false,
-      dialogWidth: '',
-      commentText: this.commentData.comment,
-      commentSavedText: '',
-      commentRules: [
-        v => v.length <= this.maxCharac || 'Name must be less than ' + this.maxCharac + ' characters'
-      ],
-      items: [],
-      editRules: payload => [],
-      editPerms: { create: false, update: false, delete: false },
-      loading: true,
-      loaded: false,
-      error: false,
-      errorMsg: ' ',
-      loadingMsg: ' ',
-      loadedMsg: ' ',
-      readUrl: 'carer/bases/' + this.$store.state.userId,
-      secondaryColor: 'primary darken-2',
-      icon: 'local_drink',
-      iconAdd: 'person_add',
-      headers: [
-        { text: 'Mac Adress', align: 'left', sortable: false, value: 'macAddress', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Friendly Name', align: 'left', sortable: false, value: 'friendlyName', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Status', align: 'left', sortable: false, value: 'operationalStatus', cellType: 'tb', hidden: false, editable: true },
-        { text: 'Last Communicated', align: 'left', sortable: false, value: 'lastCommunicated', cellType: 'tb', hidden: false, editable: true }
-      ]
+      colourMapping: {
+        'Green': '#00e676',
+        'Amber': '#ffc400',
+        'Red': '#ff1744'
+      }
     }
   },
   props: {
-    userHeader: String,
-    primaryColor: String,
     users: Array,
-    btnIcon: String,
-    alertIcon: String,
-    usersIcon: String,
-    searchName: String,
-    alertColor: Array,
-    titleAddComment: String,
-    titleSettings: String,
-    dropletDetail: Array,
-    commentIcon: String,
-    maxCharac: String,
-    commentData: Object
+    selectedUser: Object
   },
   computed: {
-    filteredName () {
-      return this.users.filter((user) => {
-        const upperCaseGiv = user.givenName.toLowerCase()
-        const upperCaseFam = user.familyName.toLowerCase()
-        const upperCase = upperCaseGiv + ' ' + upperCaseFam
-        const searchUppercase = this.search.toLowerCase()
-        return upperCase.match(searchUppercase)
-      })
+    searchResults () {
+      return this.users.filter((user) => this.getDisplayName(user).toLowerCase().match(this.search.toLowerCase()))
     }
   },
   methods: {
-    clickedPerson (item) {
-      this.clickedUser = item
+    userSelected (item) {
       this.$emit('userSelected', item)
     },
-    userSettings (item) {
-      this.$emit('userSelected', item)
-      this.dialogWidth = 'auto'
-      this.dialogToggle = true
-      this.dialogSettings = true
+
+    getDisplayName (user) {
+      return user.salutation || `${user.givenName} ${user.familyName}`
     },
-    closeSetting () {
-      this.dialogToggle = false
-      this.dialogSettings = false
-    },
-    addComment (item) {
-      this.dialogWidth = '500'
-      this.dialogToggle = true
-      this.dialogComment = true
-      this.$emit('userSelected', item)
-    },
-    saveComment () {
-      if (this.commentText.length < this.maxCharac) {
-        this.commentSavedText = this.commentText
-        this.dialogToggle = false
-        this.dialogComment = false
-        this.$emit('commentText', this.commentSavedText)
+
+    getStatus (user) {
+      if (user.hydrationStatus && user.hydrationStatus.description) {
+        return `This user is ${user.hydrationStatus.description.toLowerCase()}`
+      } else {
+        return 'Hydration status unknown'
       }
     },
-    clearComment () {
-      this.commentText = ''
+
+    getMood (user) {
+      if (user.hydrationStatus && user.hydrationStatus.description) {
+        return user.hydrationStatus.description === 'Hydrated' ? 'mood' : 'mood_bad'
+      } else {
+        return 'mood'
+      }
     },
-    cancelComment () {
-      this.dialogToggle = false
-      this.dialogComment = false
-    },
-    deleteComment (dayReportId) {
-      this.commentText = ''
-      this.commentSavedText = ''
-      this.dialogToggle = false
-      this.dialogComment = false
-      apiLib.deleteData('carer/dashboard-comment/' + dayReportId, true, true)
-    },
-    getClass (property) {
-      if (this.clickedUser.userId === property) {
-        return true
+
+    getColour (user) {
+      if (user.hydrationStatus && user.hydrationStatus.RAG) {
+        return this.colourMapping[user.hydrationStatus.RAG]
+      } else {
+        return '#bec5b0'
       }
     }
-  },
-  mounted () {
-    this.getItems(this.readUrl)
   }
 }
 </script>
 
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
-  .userSelect {
-    background-color:$table-row-hover;
-    cursor: pointer;
-  }
-  .userHoverSelect:hover {
-    background-color:$table-row-hover;
-    cursor: pointer;
-  }
-  .searchbar {
-    width: -webkit-fill-available;
-    border-bottom: 1px solid $vuetify-primary;
-  }
+@import "./public/scss/main.scss";
+
+.searchbar {
+  border-bottom: 1px solid $vuetify-primary;
+}
+
+.selectedUser {
+  background-color: $table-row-hover;
+}
+
+.userList {
+  margin-top: -32px;
+  max-height: 268px;
+  overflow-y: auto;
+}
 </style>

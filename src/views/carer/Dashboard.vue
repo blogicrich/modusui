@@ -1,20 +1,27 @@
 <template>
   <dashboard-component
     :dashboardUsers="dashboardUsers"
-    :dashboardComment="dashboardComment"
     :dashboardDay="dashboardDay"
     :dashboardHour="dashboardHour"
     :dashboardWeek="dashboardWeek"
-    @ondatechange="updateCharts(...arguments)"
+    @refresh="setUsers"
+    @dateChange="updateDate"
+    @userChange="updateUser"
+    :selectedUser="selectedUser"
     :usersLoaded="usersLoaded"
     :hourLoaded="hourLoaded"
     :dayLoaded="dayLoaded"
     :weekLoaded="weekLoaded"
+    :usersError="usersError"
+    :hourError="hourError"
+    :dayError="dayError"
+    :weekError="weekError"
   />
 </template>
 
 <script>
 import dashboardComponent from '@/components/base/BaseDashboardComponent'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -22,86 +29,181 @@ export default {
   },
   data () {
     return {
+      selectedDate: null,
       dashboardDay: {},
       dashboardHour: [],
       dashboardUsers: [],
-      dashboardComment: [],
       dashboardWeek: [],
       usersLoaded: false,
       dayLoaded: false,
       hourLoaded: false,
-      weekLoaded: false
+      weekLoaded: false,
+      usersError: false,
+      dayError: false,
+      hourError: false,
+      weekError: false
     }
   },
   methods: {
-    updateCharts (SelectedUnixTime) {
-      this.setHour(SelectedUnixTime)
-      this.setDay()
-      this.setWeek(SelectedUnixTime)
+    updateCharts () {
+      if (this.selectedUser && this.selectedDate) {
+        this.setHour()
+        this.setDay()
+        this.setWeek()
+      }
     },
+
+    updateDate (date) {
+      this.selectedDate = this.$moment.utc(date).unix()
+      this.updateCharts()
+    },
+
+    updateUser (selectedUser) {
+      this.$store.commit('SET_SELECTED_USER', selectedUser)
+      this.updateCharts()
+    },
+
+    resetLoadingState () {
+      this.usersLoaded = false
+      this.usersError = false
+      this.hourLoaded = false
+      this.hourError = false
+      this.dayLoaded = false
+      this.dayError = false
+      this.weekLoaded = false
+      this.weekError = false
+    },
+
     async setUsers () {
+      this.resetLoadingState()
       await this.$store.dispatch('fetchDashboardUsersGet')
-      if (this.$store.state.dashboardUsers.dashboardUsersGet) {
-        this.dashboardUsers = await this.$store.state.dashboardUsers.dashboardUsersGet
+      this.dashboardUsers = this.$store.state.dashboardUsers.dashboardUsersGet
+
+      if (this.dashboardUsers && this.dashboardUsers.length !== 0) {
         this.usersLoaded = true
-      } else {
-        this.usersLoaded = false
-      }
-    },
-    async setComment () {
-      await this.$store.dispatch('fetchDashboardCommentGet')
-      if (this.$store.state.DashboardComment.dashboardCommentGet) {
-        let commentStore = await this.$store.state.DashboardComment.dashboardCommentGet
-        for (let index = 0; index < commentStore.length; index++) {
-          this.dashboardComment.push(commentStore[index])
+
+        let selectedUser
+        if (this.selectedUser) {
+          selectedUser = this.dashboardUsers.find(user => user.userId === this.selectedUser.userId)
+        } else {
+          selectedUser = this.dashboardUsers[0]
         }
+
+        this.updateUser(selectedUser)
+        this.updateCharts()
+      } else {
+        this.usersError = true
+        this.hourError = true
+        this.weekError = true
+        this.dayError = true
       }
     },
-    async setHour (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
-      this.$store.state.userId = 21
-      this.$store.state.date = SelectedUnixTime
-      await this.$store.dispatch('fetchDashboardHourGet')
-      if (this.$store.state.dashboardHour.dashboardHourGet.length === 24) {
-        let hourStore = await this.$store.state.dashboardHour.dashboardHourGet
-        for (let index = 0; index < hourStore.length; index++) {
-          this.dashboardHour[index] = parseFloat(hourStore[index].volumeConsumedByViaOther) + parseFloat(hourStore[index].volumeConsumedViaEDroplet)
+
+    async setHour () {
+      this.hourLoaded = false
+      this.hourError = false
+
+      await this.$store.dispatch('fetchDashboardHourGet', { userId: this.selectedUser.userId, date: this.selectedDate })
+
+      const hourStore = this.$store.state.dashboardHour.dashboardHourGet
+      if (hourStore) {
+        for (let i = 0; hourStore.length > i; i++) {
+          this.dashboardHour[i] = {
+            label: hourStore[i].hour,
+            value:
+              parseFloat(hourStore[i].volumeConsumedViaOther) +
+              parseFloat(hourStore[i].volumeConsumedViaEDroplet)
+          }
         }
         this.hourLoaded = true
       } else {
-        this.hourLoaded = false
+        this.hourError = true
       }
     },
-    async setDay (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
-      this.$store.state.userId = 21
-      this.$store.state.date = SelectedUnixTime
-      await this.$store.dispatch('fetchDashboardDayGet')
-      if (this.$store.state.dashboardDay.dashboardDayGet.length === 1) {
-        this.dashboardDay = await this.$store.state.dashboardDay.dashboardDayGet
+
+    async setDay () {
+      this.dayLoaded = false
+      this.dayError = false
+
+      await this.$store.dispatch('fetchDashboardDayGet', { userId: this.selectedUser.userId, date: this.selectedDate })
+
+      const [dashboardDay] = this.$store.state.dashboardDay.dashboardDayGet || []
+      if (dashboardDay) {
+        const consumed = parseFloat(dashboardDay.volumeConsumedViaEDroplet) + parseFloat(dashboardDay.volumeConsumedViaOther)
+        const target = parseFloat(dashboardDay.hydrationTarget)
+
+        let remaining = target - consumed
+        let overHydrated = 0
+
+        if (remaining < 0) {
+          overHydrated = Math.abs(remaining)
+          remaining = 0
+        }
+
+        const hydrated = consumed - overHydrated
+
+        this.dashboardDay = {
+          hydrated,
+          target,
+          remaining,
+          overHydrated,
+          consumed
+        }
         this.dayLoaded = true
       } else {
-        this.dayLoaded = false
+        this.dayError = true
       }
     },
-    async setWeek (SelectedUnixTime = Math.round(new Date().getTime() / 1000)) {
-      this.$store.state.userId = 21
-      this.$store.state.date = SelectedUnixTime
-      await this.$store.dispatch('fetchDashboardWeekGet')
-      if (this.$store.state.dashboardWeek.dashboardWeekGet.length === 7) {
-        for (let i = 0; i < this.$store.state.dashboardWeek.dashboardWeekGet.length; i++) {
-          const element = this.$store.state.dashboardWeek.dashboardWeekGet[i]
-          if (element.length < 0) {
-            this.dashboardWeek = await this.$store.state.dashboardWeek.dashboardWeekGet
-            this.weekLoaded = true
-          } else {
-            this.weekLoaded = false
-          }
+
+    async setWeek () {
+      this.weekLoaded = false
+      this.weekError = false
+
+      await this.$store.dispatch('fetchDashboardWeekGet', { userId: this.selectedUser.userId, date: this.selectedDate })
+
+      const dashboardWeek = this.$store.state.dashboardWeek.dashboardWeekGet
+      if (dashboardWeek) {
+        const dataPoints = dashboardWeek.map(weekDayData =>
+          (weekDayData.volumeConsumedViaEDroplet && weekDayData.volumeConsumedViaOther)
+            ? (parseFloat(weekDayData.volumeConsumedViaEDroplet) + parseFloat(weekDayData.volumeConsumedViaOther))
+            : null
+        )
+
+        const filteredDataPoints = dataPoints.filter(
+          weekDataPoint => weekDataPoint !== null
+        ) // Exclude null from average calculation.
+
+        const sum = filteredDataPoints.reduce(
+          (total, currentValue) => total + currentValue,
+          0
+        )
+
+        let average
+
+        if (filteredDataPoints.length > 0) {
+          average = sum / filteredDataPoints.length
+        } else {
+          average = 0
         }
+
+        this.dashboardWeek = {
+          dataPoints,
+          average
+        }
+
+        this.weekLoaded = true
+      } else {
+        this.weekError = true
       }
     }
   },
   mounted () {
     this.setUsers()
-    this.setComment()
+  },
+  computed: {
+    ...mapState({
+      selectedUser: state => state.eDropletApp.selectedUser
+    })
   }
 }
 </script>

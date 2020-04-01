@@ -3,30 +3,32 @@ import apiLib from '@/services/apiLib.js'
 export const crudRoutines = {
   methods: {
     async addItem (item) {
+      // console.log('gfjkhgjkfdhgfdjkghjkfshjkgs', item)
       var row = {}
       for (var i = 0; i < item.length; i++) {
         Object.keys(item[i]).forEach(function (key) {
-          // console.log(item[i].sync)
-          if (key === 'sync') row[item[i].attr] = item[i].sync
+          row[item[i].attr] = item[i][item[i].attr]
         })
       }
-      // console.log('data: ', row)
-      await apiLib.postData(this.createUrl, row, true, true).then(response => {
-        return response
+      await apiLib.postData(this.createUrl, row, true, true).then(() => {
+        for (var i = 0; i < item.length; i++) {
+          Object.keys(item[i]).forEach(function (key) {
+            // Return newItem values to null
+            item[i][item[i].attr] = null
+          })
+        }
       })
         .catch(error => {
           console.error(error)
         })
-      this.refreshItems()
+      row = {}
+      this.getItems(this.readUrl)
     },
 
     async deleteItem (items) {
       for (var i = 0; i < items.length; i++) {
         let index = this.items.indexOf(items[i])
         let id = (items[i][this.crudIdKey])
-        // console.log(items[i], this.crudIdKey, this.delUrl, id)
-        // console.log('id: ', id)
-        // console.log(this.delUrl, + '/' + items[i][this.crudIdKey])
         await apiLib.deleteData(this.delUrl + '/' + id, true, true)
           .then(response => {
             this.items.splice(index, 1)
@@ -35,29 +37,28 @@ export const crudRoutines = {
             console.error(error)
           })
       }
-      this.refreshItems()
+      this.getItems(this.readUrl)
     },
 
     async editItems (items) {
       for (var i = 0; i < items.length; i++) {
-        var defaultItem = this.defaultItem
-        for (var j = 0; j < defaultItem.length; j++) {
-          Object.keys(defaultItem[j]).forEach(function (key) {
-            if (items[i][key]) defaultItem[j][key] = items[i][key]
-            console.log('Looping Inner: ', key, defaultItem[j], items[i][key])
+        var editedItem = {}
+        var thatDefaultItem = this.defaultItem
+        for (var j = 0; j < thatDefaultItem.length; j++) {
+          editedItem = Object.assign({}, thatDefaultItem[j])
+          Object.keys(thatDefaultItem[j]).forEach(function (key) {
+            if (items[i][key]) editedItem[key] = items[i][key]
+            // console.log('Looping Inner: ', key, thatDefaultItem[j], items[i][key], editedItem[key])
           })
-          console.log('Update Item: ', this.defaultItem[j], this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j])
-          apiLib.updateData(this.updateUrl + '/' + defaultItem[j][this.crudIdKey], defaultItem[j], true, true)
-            .then(response => {})
+          // console.log('Update Item: ', thatDefaultItem[j], this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem)
+          apiLib.updateData(this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem, false, true)
+            .then(() => {})
             .catch(error => {
               console.log(error)
             })
             .finally()
         }
       }
-      // if (this.newItem) {
-      //   this.resetItem()
-      // }
       this.getItems(this.readUrl)
     },
 
@@ -91,9 +92,10 @@ export const crudRoutines = {
     },
 
     async refreshItems () {
-      await this.getItems(this.readUrl)
-      this.resetItem()
-      // if (this.urls) await this.setMenuItems(this.urls)
+      this.getItems(this.readUrl).then(
+        await this.resetItem()
+      )
+      if (this.urls) await this.setMenuItems(this.urls)
     },
 
     async setMenuItems (urls) {

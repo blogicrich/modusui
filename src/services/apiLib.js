@@ -18,6 +18,11 @@ url : String - url tail without prepending forward slash
 data : Object - data object to be sent with request
 log : Boolean - Will send request details to dev tools console
 toast : Boolean - Will show v-snackbar with server response message
+status: Boolean - Will return an object - {
+    response: response.data,
+    status: response.status,
+    statusText: response.statusText
+}
 
 Response Objects:
 
@@ -39,35 +44,25 @@ error.message :
 
 import axios from 'axios'
 import { EventBus } from '@/mixins/eventBus.js'
+import { moduleEdropletApp } from '@/store/StoreEdropletApp'
+import store from '@/store'
 
 let url = function () {
   let val = ''
   switch (process.env.NODE_ENV) {
     case 'development':
-      val = 'http://127.0.0.1:3000/'
+      // val = 'http://127.0.0.1:3000/'
+      // val = 'http://3.9.170.202/api/'
+      val = 'https://droplet.lemonstall.com/api/'
       return val
     case 'production':
-      val = 'https://edroplet.ndevr.co.uk:3000/'
+      val = 'https://droplet.lemonstall.com/api/'
       return val
     default:
-      val = 'http://127.0.0.1:3000/'
+      val = 'https://droplet.lemonstall.com/api/'
       break
   }
   return val
-}
-
-let setToken = function () {
-  try {
-    if (localStorage.getItem('auth') !== null) {
-      axios.defaults.headers.common['authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('auth')).token
-    } else {
-      delete axios.defaults.headers.common['authorization']
-      axios.defaults.headers.common['Content-Type'] = 'application/json'
-    }
-  } catch (error) {
-    console.log(error)
-    return 'none'
-  }
 }
 
 let axi = axios.create({
@@ -75,14 +70,32 @@ let axi = axios.create({
   timeout: 10000
 })
 
-axi.interceptors.response.use(function (response) {
-  return response
+axi.interceptors.request.use((config) => {
+  // Do something before request is sent
+  if (moduleEdropletApp.getters.token) {
+    config.headers.common['authorization'] = 'Bearer ' + moduleEdropletApp.state.token
+  } else {
+    delete config.headers.common['authorization']
+    axios.defaults.headers.common['Content-Type'] = { 'Accept ': 'application/json' }
+  }
+  return config
 }, function (error) {
+  // Do something with request error
   return Promise.reject(error)
 })
 
-// Utils
+// Logout when the API either forbids us to take a certain action or outright says our credentials are invalid.
+axi.interceptors.response.use((response) => {
+  return response // Don't do anything upon success
+}, (error) => {
+  if ([401, 403].includes(error.response.status)) {
+    store.dispatch('LOGOUT')
+  }
 
+  return error
+})
+
+// Utils
 var logger = function (responseObj, url, data) {
   if (data) console.log('data: ', data)
   console.log('URL: ', url)
@@ -94,9 +107,7 @@ var logger = function (responseObj, url, data) {
 }
 
 export default {
-
   async deleteData (url, log, toast) {
-    await setToken()
     return axi.delete(url).then(response => {
       if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
       if (log) logger(response, url)
@@ -124,7 +135,6 @@ export default {
   // Get data
 
   async getData (url, log, toast) {
-    await setToken()
     return axi.get(url).then(response => {
       // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
       if (log) logger(response, url)
@@ -149,19 +159,27 @@ export default {
 
   // Add (POST) new data
 
-  async postData (url, data, log, toast) {
-    await setToken()
+  async postData (url, data, log, toast, status) {
     if (data) {
       return axi.post(url, data).then(response => {
         if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
         if (log) logger(response, url, data)
-        return response.data
+        if (status) {
+          return { response: response.data, status: response.status, statusText: response.statusText }
+        } else {
+          return response.data
+        }
       })
         .catch(error => {
           if (error.response) {
+            if (status) {
+              return { status: error.response.status, statusText: error.response.statusText }
+            }
             if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) logger(error.response, url, data)
-            return error.response.statusText + ' ' + error.response.status + '\n'
+            if (log) {
+              logger(error.response, url, data)
+              return error.response.statusText + ' ' + error.response.status + '\n'
+            }
           } else if (error.request) {
             console.log(error.request)
           } else {
@@ -179,7 +197,6 @@ export default {
   // Post Auth
 
   async postAuth (url, data, log, toast) {
-    await setToken()
     if (data) {
       return axi.post(url, data).then(response => {
         // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
@@ -207,10 +224,9 @@ export default {
   // Update (PUT) data
 
   async updateData (url, data, log, toast) {
-    await setToken()
     if (data) {
       return axi.put(url, data).then(response => {
-        if (toast) EventBus.$emit('snack-msg', { text: response.statusText || response.data, time: 6000, color: 'success', state: true })
+        if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
         if (log) logger(response, url, data)
         return response.data
       })
