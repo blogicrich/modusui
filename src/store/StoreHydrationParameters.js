@@ -3,7 +3,9 @@ import apiLib from '../services/apiLib.js'
 export const moduleHydrationParameters = {
   state: {
     // store the data
-    hydrationParameters: []
+    hydrationParams: [],
+    endOfDayHydrationParams: [],
+    startOfDayHydrationParams: []
   },
   mutations: {
     // set the data
