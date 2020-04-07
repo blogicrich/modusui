@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
-    <v-layout class="py-0" column justify-center>
+    <v-layout class="mx-0 py-0" column justify-center>
       <v-layout v-if="$vuetify.breakpoint.lgAndUp" row fill-height align-center justify-start>
         <v-icon class="ml-1 mr-2" large :color="iconColor">{{ headerIcon }}</v-icon>
-        <h1 class="my-0 pg-header text-primary">{{ headerText }}</h1>
+        <h1 class="my-3 pg-header text-primary">{{ headerText }}</h1>
         <v-spacer></v-spacer>
         <v-layout v-if="showChips" row align-center justify-end>
           <v-icon outline medium class="mx-2" color="primary">person</v-icon>
@@ -14,9 +14,9 @@
           >{{ chipsText }}</v-chip>
         </v-layout>
       </v-layout>
-      <v-layout v-if="$vuetify.breakpoint.md" row fill-height align-center justify-start>
-        <v-icon class="ml-1 mr-2" large :color="iconColor">{{ headerIcon }}</v-icon>
-        <h2 class="my-0 pg-header text-primary">{{ headerText }}</h2>
+      <v-layout v-if="$vuetify.breakpoint.mdOnly" row fill-height align-center justify-start>
+        <v-icon class="ml-1 mr-2" medium :color="iconColor">{{ headerIcon }}</v-icon>
+        <h2 class="my-0 text-primary">{{ headerText }}</h2>
         <v-spacer></v-spacer>
         <v-layout v-if="showChips" row align-center justify-end>
           <v-icon outline medium class="mx-2" color="primary">person</v-icon>
@@ -28,8 +28,8 @@
         </v-layout>
       </v-layout>
       <v-layout v-if="$vuetify.breakpoint.smAndDown" row fill-height align-center justify-start>
-        <v-icon class="ml-1 mr-2" medium :color="iconColor">{{ headerIcon }}</v-icon>
-        <h4 class="my-0 text-primary">{{ headerText }}</h4>
+        <v-icon class="ml-1 mr-2" small :color="iconColor">{{ headerIcon }}</v-icon>
+        <h3 class="my-0 text-primary">{{ headerText }}</h3>
         <v-spacer></v-spacer>
         <v-layout v-if="showChips" row align-center justify-end>
           <v-icon outline small class="mx-2" color="primary">person</v-icon>
@@ -50,7 +50,7 @@
         </v-flex>
       </v-layout>
     </v-layout>
-  <v-divider class="mt-4" v-if="hasDivider" :color="iconColor"></v-divider>
+  <v-divider class="mx-2 mt-4" v-if="hasDivider" :color="iconColor"></v-divider>
   </v-container>
 </template>
 

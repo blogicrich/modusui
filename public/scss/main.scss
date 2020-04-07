@@ -11,6 +11,15 @@ $dark-blue-grey: rgba(#4d504f, 1);
 $white: rgba(#ffffff, 1);
 
 //  Headers
+.boundaryField input::-webkit-outer-spin-button,
+.boundaryField input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+// .boundaryField [type=number] {
+//   -moz-appearance: textfield;
+// }
 
 .app-header {
   margin: 1vw;
@@ -74,7 +83,14 @@ $white: rgba(#ffffff, 1);
 .text-secondary {
   color: $vuetify-accent;
 }
+//  Borders
 
+.border-primary {
+  border-radius: 1vw;
+  border-width: 2px;
+  border-color: $vuetify-primary;
+  border-style: solid;
+}
 //  Buttons
 
 .std-btn {

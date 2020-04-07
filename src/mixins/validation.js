@@ -3,9 +3,12 @@ export default {
     return {
       alphabeticalRegEx: /^[A-z ]{0,}$/,
       alphaNumericRegEx: /^[A-z0-9 ]{0,}$/,
+      numericalRegEx: /^[0-9]+$/,
       litersRegEx: /[0-9 .,]/g,
       timeRegEx: /(2[0-3]|[01]?[0-9]):([0-5]?[0-9])/,
+      percentRegEx: /^[1-9][0-9]?$|^100$/,
       phoneRegEx: /[0-9]/,
+      requiredRegEx: /(.|\s)*\S(.|\s)*/,
       emailRegEx: /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/,
       macAddressRegEx: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
       twoDpRegEx: /^\d+(\.\d{1,2})?$/

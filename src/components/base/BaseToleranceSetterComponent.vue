@@ -1,34 +1,64 @@
 <template>
   <v-container fluid>
-    <v-layout class="ma-2" row fill-height justify-space-between>
-      <v-card class="elevation-8 bg">
-      <v-container
-        fluid
-        grid-list-lg
-      >
-        <v-layout>
-          <v-flex xs12>
-          </v-flex>
-        </v-layout>
-      </v-container>
-      </v-card>
-      <v-layout class="ma-2" v-for="(tolerance, index) in tolerances" :key="index" column fill-height justify-space-around>
+
+    <!-- DESKTOP VIEW -->
+
+    <v-layout v-if="$vuetify.breakpoint.smAndUp" grid-list row fill-height align-center justify-center>
+      <v-flex xs8>
+        <h2 class="pg-subheader text-primary">{{ fieldLabel }}</h2>
+      </v-flex>
         <v-text-field
-          v-for="(level, key) in tolerance" :key="key"
+          :color="color"
           class="ma-2 mx-4"
-          :label="key"
           suffix="%"
-          :placeholder="key"
-          prepend-icon="local_drink"
+          :placeholder="fieldLabel"
           required
-          type="number"
-          :rules="[v => v <= 100 || 'Value cannot be higher than 100%', v => v >= 0 || 'Value cannot be lower than 0%']"
-          v-model="tolerances[index][key]"
-          @input="$emit('tolerance-changed', {level:level, value:tolerance[level]} )"
+          :rules="rules"
+          :value="fieldValue"
+          @input="valueChanged"
           box
-          >{{ level }}
+          single-line
+          outline
+          rounded
+          >{{ fieldValue }}
         </v-text-field>
-      </v-layout>
+        <v-btn class="mx-0" icon flat color="primary" @click="incrementBtnPressed">
+          <v-icon>add</v-icon>
+        </v-btn>
+        <v-btn class="ma-0" icon flat color="primary" @click="decrementBtnPressed">
+          <v-icon>remove</v-icon>
+        </v-btn>
+    </v-layout>
+
+    <!-- MOBILE VIEW SM AND DOWN -->
+
+    <v-layout class="pa-1"  v-if="$vuetify.breakpoint.xsOnly" grid-list row align-center justify-center>
+      <v-flex class="mx-2">
+        <v-text-field
+          :color="color"
+          :label="fieldLabel"
+          suffix="%"
+          :placeholder="fieldLabel"
+          required
+          :rules="rules"
+          :value="fieldValue"
+          @input="valueChanged"
+          box
+          outline
+          rounded
+          >{{ fieldValue }}
+        </v-text-field>
+      </v-flex>
+      <v-flex shrink>
+        <v-layout column fill-height align-center justify-center>
+        <v-btn class="mx-0" icon flat color="primary" @click="incrementBtnPressed">
+          <v-icon>add</v-icon>
+        </v-btn>
+        <v-btn class="ma-0" icon flat color="primary" @click="decrementBtnPressed">
+          <v-icon>remove</v-icon>
+        </v-btn>
+        </v-layout>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -37,30 +67,32 @@
 
 export default {
   name: 'BaseToleranceSetter',
-  data () {
-    return {
-      tols: ''
-    }
-  },
   props: {
-    tolerances: Array
+    color: String,
+    fieldId: Number,
+    fieldLabel: String,
+    fieldValue: Number,
+    period: String,
+    rules: Array
   },
   methods: {
-    levelChanged () {
-      // console.log(this.tolerances)
+    incrementBtnPressed () {
+      this.$emit('increment', { id: this.fieldId, timePeriod: this.period })
+    },
+    decrementBtnPressed () {
+      this.$emit('decrement', { id: this.fieldId, timePeriod: this.period })
+    },
+    valueChanged (e) {
+      this.$emit('field-value-changed', { value: e, id: this.fieldId })
     }
   },
   mounted () {
-    console.log('fjhdkshfkdjfhkjdsahkj: ', this.tolerances)
-  }
+
 }
+}
+
 </script>
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
-  .bg {
-    width: 60%;
-    border-radius: 12px;
-    background-image: linear-gradient(#C14242, #3FBF3F, $vuetify-primary, #3FBF3F,#C14242,);
-  }
 </style>

@@ -131,7 +131,8 @@
       >
         <v-layout row fill height align-space-between justify-space-between>
           <v-layout class="pt-2" row align-center justify-start>
-            <span class="ml-3" style="align-center">Version: ALPHA</span>
+            <span class="ml-3" style="align-center">v: alpha</span>
+            <p v-if="$vuetify.breakpoint.lgAndUp" class="ml-3 caption" style="align-center">Version: ALPHA</p>
           </v-layout>
           <BaseAppNavBtn btnIcon="home" btnColor="primary" route="landing" tip="Home" top />
           <BaseAppNavBtn
