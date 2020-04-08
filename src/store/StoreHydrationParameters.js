@@ -48,10 +48,14 @@ export const moduleHydrationParameters = {
     },
     UPDATE_HYDRATION_PARAM (state, data) {
       Object.keys(state).forEach(function (key) {
-        if (state[key].lowerHydrationBoundaryId === data.id) {
+        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'start') {
+          console.log(data.timePeriod === 'start')
           state[key].lowerBoundaryPercentHydratedStart = data.value
           state.defaultHydrationParamsChanged = true
-        } else {
+        }
+        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'end') {
+          console.log(data.timePeriod === 'end')
+          state[key].lowerBoundaryPercentHydratedEnd = data.value
           state.defaultHydrationParamsChanged = true
         }
       })

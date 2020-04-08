@@ -83,7 +83,7 @@ export default {
       this.$emit('decrement', { id: this.fieldId, timePeriod: this.period })
     },
     valueChanged (e) {
-      this.$emit('field-value-changed', { value: e, id: this.fieldId })
+      this.$emit('field-value-changed', { value: e, id: this.fieldId, timePeriod: this.period })
     }
   },
   mounted () {

@@ -28,6 +28,7 @@
             :fieldId="dehydratedId"
             period="start"
             :rules="startOfDayValidation.dehydrated"
+            @field-value-changed="boundaryChanged"
             @increment="increment"
             @decrement="decrement"
           />
@@ -242,8 +243,7 @@ export default {
             }
           },
           v => v < 100 || 'Value must be less than 100%',
-          v => v >= 0 || 'Value cannot be lower than 0%',
-          v => v <= this.dehydratedBoundaryStart || 'Must be less than deHydrated'
+          v => v < this.dehydratedBoundaryStart || 'Must be less than dehydrated'
         ],
         overHydrated: [
           v => {
@@ -309,7 +309,7 @@ export default {
           },
           v => v < 100 || 'Value must be less than 100%',
           v => v >= 0 || 'Value cannot be lower than 0%',
-          v => v <= this.dehydratedBoundaryEnd || 'Must be less than deHydrated'
+          v => v < this.dehydratedBoundaryEnd || 'Must be less than deHydrated'
         ],
         overHydrated: [
           v => {
@@ -354,7 +354,7 @@ export default {
       defaultValuesChanged: state => state.hydrationOptions.defaultHydrationParamsChanged,
       paramsLoading: state => state.hydrationOptions.hydrationParamsLoading,
       // Dehydrated
-      dehydratedBoundaryStart: state => Number(state.hydrationOptions.dehydrated.lowerBoundaryPercentHydratedStart),
+      dehydratedBoundaryStart: state => state.hydrationOptions.dehydrated.lowerBoundaryPercentHydratedStart,
       dehydratedBoundaryEnd: state => state.hydrationOptions.dehydrated.lowerBoundaryPercentHydratedEnd,
       dehydratedId: state => state.hydrationOptions.dehydrated.lowerHydrationBoundaryId,
       // Hydrated
@@ -374,6 +374,7 @@ export default {
   methods: {
     boundaryChanged (e) {
       this.$store.commit('UPDATE_HYDRATION_PARAM', e)
+      console.log(this.dehydratedBoundaryStart, e)
     },
     decrement (e) {
       this.$store.commit('DECREMENT_PARAM', e)
