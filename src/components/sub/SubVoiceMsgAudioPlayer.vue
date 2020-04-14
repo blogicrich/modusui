@@ -16,18 +16,6 @@
           <BaseAudioPlayer class="vuetify-audio" :file="data.audioFile"></BaseAudioPlayer>
         </v-layout>
       </v-flex>
-      <v-flex xl4 md4 lg4 sm12 xs12>
-        <v-layout row warp align-center justify-center>
-            <v-radio-group class="radio-group" :value="value" :mandatory="false" :row="this.$vuetify.breakpoint.name !== 'xs'" :column="this.$vuetify.breakpoint.name === 'xs'">
-            <h3 slot="label" class="text-intervals mr-3 my-1" >Message Interval in Minutes:</h3>
-            <v-radio @change="showSaveInterval = false" color="primary" v-for="radio in radioConfig" :key="radio.label" :label="radio.label" :value="radio.value" class="radio"></v-radio>
-            <!-- <v-btn v-if="showSaveInterval" color="primary" @click="saveInterval()">Save changes</v-btn> -->
-          </v-radio-group>
-          <v-btn :disabled="showSaveInterval" fab color="primary" @click="saveInterval()">
-            <v-icon >save</v-icon>
-          </v-btn>
-        </v-layout>
-      </v-flex>
     </v-layout>
     <!-- <v-divider color="#f2f4f4"></v-divider> -->
   </v-container>

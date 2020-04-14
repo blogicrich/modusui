@@ -1,67 +1,44 @@
 <template>
   <v-container>
-    <v-layout row align-center fill-height expand>
-      <v-flex xs12 md12 lg12>
-        <v-card v-if="$vuetify.breakpoint.smAndUp" class="ma-0 pa-3" color="Blue" :height="height">
-          <h3 class="subheader text-left"> {{ groupHeader }} </h3>
-          <v-divider
-            class="ma-2"
-            color="#00a1cd">
-          </v-divider>
-            <v-flex xs12 md12 lg12>
-              <p class="text-left"> {{ groupDescription }} </p>
-              <h3 class="subheader text-left"> {{ radioHeader }}</h3>
-              <v-spacer></v-spacer>
-              <v-radio-group
-                class="mx-3 my-2"
-                v-model="newValue"
-                :mandatory="false"
-                color="primary"
-                row
-              >
-                <v-radio
-                  class="ma-2"
-                  color="primary"
-                  v-for="(radio, index) in radioConfig"
-                  :key="radio.time"
-                  :label="String(radio.time) + suffix"
-                  :value="radio.time"
-                  @change="$emit('radio-option-changed', { items: radioConfig, index: index, newValue:radio.time, defaultValue:defaultValue } )"
-                  >
-                </v-radio>
-            </v-radio-group>
-          </v-flex>
-        </v-card>
-        <v-card v-if="$vuetify.breakpoint.xsOnly" class="ma-0 pa-3" color="white" :height="height">
-          <h3 class="subheader text-left"> {{ groupHeader }} </h3>
-          <v-divider
-            class="ma-2"
-            color="#00a1cd">
-          </v-divider>
-            <v-flex xs12 md12 lg12>
-              <p class="text-left"> {{ groupDescription }} </p>
-              <h3 class="subheader text-left"> {{ radioHeader }}</h3>
-              <v-spacer></v-spacer>
-              <v-radio-group
-                class="mx-3 my-2"
-                v-model="newValue"
-                :mandatory="false"
-                color="primary"
-                row
-              >
-                <v-radio
-                  class="ma-2"
-                  color="primary"
-                  v-for="(radio, index) in radioConfig"
-                  :key="radio.time"
-                  :label="String(radio.time) + suffix"
-                  :value="radio.time"
-                  @change="$emit('radio-option-changed', { items: radioConfig, index: index , newValue:newValue, defaultValue:defaultValue } )"
-                  >
-                </v-radio>
-            </v-radio-group>
-          </v-flex>
-        </v-card>
+    <v-layout row fill-height align-center justify-center>
+      <v-flex :class="$vuetify.breakpoint.smAndDown ? 'border-primary pa-2' : 'border-primary pa-4'" xs12>
+        <h2 v-if="$vuetify.breakpoint.mdAndUp" class="text-center text-primary ma-1"> {{ groupHeader }} </h2>
+        <h3 v-if="$vuetify.breakpoint.smAndDown" class="text-center text-primary ma-1"> {{ groupHeader }} </h3>
+        <p class="text-left my-2"> {{ groupDescription }} </p>
+        <h4 class="text-left text-primary"> {{ radioHeader }}</h4>
+        <v-radio-group
+          v-if="$vuetify.breakpoint.lgAndUp"
+          v-model="newValue"
+          :mandatory="false"
+          color="primary"
+          row
+        >
+          <v-radio
+            color="primary"
+            v-for="(radio, index) in radioConfig"
+            :key="radio.time"
+            :label="String(radio.time) + suffix"
+            :value="radio.time"
+            @change="$emit('radio-option-changed', { items: radioConfig, index: index, newValue:radio.time, defaultValue:defaultValue } )"
+            >
+          </v-radio>
+        </v-radio-group>
+        <v-radio-group
+          v-if="$vuetify.breakpoint.mdAndDown"
+          v-model="newValue"
+          :mandatory="false"
+          color="primary"
+        >
+          <v-radio
+            color="primary"
+            v-for="(radio, index) in radioConfig"
+            :key="radio.time"
+            :label="String(radio.time) + suffix"
+            :value="radio.time"
+            @change="$emit('radio-option-changed', { items: radioConfig, index: index, newValue:radio.time, defaultValue:defaultValue } )"
+            >
+          </v-radio>
+        </v-radio-group>
       </v-flex>
     </v-layout>
   </v-container>
@@ -71,7 +48,6 @@
 
 export default {
   name: 'BaseRadioOptionsSelectComponent',
-
   props: {
     radioConfig: Array,
     defaultValue: Number,
@@ -84,11 +60,9 @@ export default {
   },
   computed: {
     newValue: {
-      // getter
       get () {
         return this.defaultValue
       },
-      // setter
       set (newValue) {
         return newValue
       }

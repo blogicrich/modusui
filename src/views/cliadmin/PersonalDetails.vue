@@ -1,14 +1,26 @@
 <template>
   <v-container>
     <v-layout column>
+    <v-layout row fill-height justify-center>
       <BaseViewHeader
+        v-if="!userText"
         class="mx-2 mb-4"
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
+        hasDivider
+      />
+      <BaseViewHeader
+        v-if="userText"
+        class="mx-2 mb-4"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+        hasDivider
         showChips
         :chipsText="userText"
       />
+    </v-layout>
       <v-flex x12>
         <data-table
           :editPerms="editPerms"
@@ -52,9 +64,15 @@ export default {
         return ''
       }
     },
+    user: function () {
+      return this.$store.getters.getterSelectedUser
+    },
     userText: function () {
-      let val = this.$store.getters.getterSelectedUser.givenName
-      return val
+      if (this.$store.getters.getterSelectedUser !== null) {
+        return this.$store.getters.getterSelectedUser.givenName
+      } else {
+        return ''
+      }
     }
   },
   data () {

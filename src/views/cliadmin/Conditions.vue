@@ -1,8 +1,17 @@
 <template>
   <v-container fluid>
-    <v-layout row fill-height align-center justify-end wrap>
+    <v-layout row fill-height justify-center>
       <BaseViewHeader
-        class="mx-4 mb-4"
+        v-if="!userText"
+        class="mx-2 mb-4"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+        hasDivider
+      />
+      <BaseViewHeader
+        v-if="userText"
+        class="mx-2 mb-4"
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
@@ -47,7 +56,6 @@
 
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 
@@ -55,13 +63,18 @@ export default {
   name: 'Conditions',
   mixins: [crudRoutines, validation],
   components: {
-    BaseDataTable,
-    BaseUserSelect
+    BaseDataTable
   },
   computed: {
+    user: function () {
+      return this.$store.getters.getterSelectedUser
+    },
     userText: function () {
-      let val = this.$store.getters.getterSelectedUser.givenName
-      return val
+      if (this.$store.getters.getterSelectedUser !== null) {
+        return this.$store.getters.getterSelectedUser.givenName
+      } else {
+        return ''
+      }
     }
   },
   data () {
@@ -242,8 +255,9 @@ export default {
       ]
     }
   },
-  async mounted () {
+  mounted () {
     this.getItems(this.readUrl)
+    console.log(this.$store.state.userId)
   }
 }
 

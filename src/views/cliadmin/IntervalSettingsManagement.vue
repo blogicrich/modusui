@@ -1,7 +1,17 @@
 <template>
   <v-container>
-    <v-layout row align-center fill-height>
+    <v-layout row fill-height justify-center>
       <BaseViewHeader
+        v-if="!userText"
+        class="mx-2 mb-4"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+        hasDivider
+      />
+      <BaseViewHeader
+        v-if="userText"
+        class="mx-2 mb-4"
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
@@ -9,7 +19,6 @@
         showChips
         :chipsText="userText"
       />
-      <v-spacer></v-spacer>
     </v-layout>
     <v-container v-if="intervalSettings">
       <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
@@ -40,34 +49,6 @@
           />
         </v-flex>
       </v-layout>
-      <h2 class="pg-subheader text-primary">eDroplet Comms Interval Options</h2>
-      <v-divider class="mx-2" color="#00a1cd"></v-divider>
-      <v-layout row wrap fill-height justify-space-between>
-        <v-flex xs12 lg6>
-          <BaseRadioOptions
-            @radio-option-changed="onChange"
-            :radioConfig="intervalSettings.wakeUpIntervals"
-            :defaultValue="selectedWakeUpInterval.time"
-            :groupHeader="wakeUpGroupHeader"
-            :groupDescription="wakeUpRadioDescription"
-            :radioHeader="wakeUpRadioHeader"
-            :height="height"
-            suffix=" mins"
-          />
-        </v-flex>
-        <v-flex xs12 lg6>
-          <BaseRadioOptions
-            @radio-option-changed="onChange"
-            :radioConfig="intervalSettings.buServerIntervals"
-            :defaultValue="selectedBuServerInterval.time"
-            :groupHeader="commsGroupHeader"
-            :groupDescription="commsRadioDescription"
-            :radioHeader="commsRadioHeader"
-            :height="height"
-            suffix=" mins"
-          />
-        </v-flex>
-      </v-layout>
       <v-layout row justify-center align-center>
         <v-fade-transition>
           <v-btn v-if="!intervalsPristine" class="root-nav-btn" @click="save" color="primary" large>
@@ -84,15 +65,13 @@
 
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
-import selectComponent from '@/components/base/BaseUserSelectComponent.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'IntervalSettingsManagement',
   components: {
     BaseRadioOptions,
-    SubPageNavButton,
-    selectComponent
+    SubPageNavButton
   },
   computed: {
     ...mapState({
@@ -123,16 +102,21 @@ export default {
         interval => interval.spokenReminderId === this.selectedIntervals.spokenReminderId
       )
     },
-
     height () {
       var cardHeight = 0
       if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
       if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
       return cardHeight
     },
+    user: function () {
+      return this.$store.getters.getterSelectedUser
+    },
     userText: function () {
-      let val = this.$store.getters.getterSelectedUser.givenName
-      return val
+      if (this.$store.getters.getterSelectedUser !== null) {
+        return this.$store.getters.getterSelectedUser.givenName
+      } else {
+        return ''
+      }
     }
   },
   data () {

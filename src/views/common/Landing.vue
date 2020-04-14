@@ -1,5 +1,4 @@
 <template>
-  <keep-alive>
   <v-container fluid>
     <v-layout row fill-height align-start justify-center>
     <BaseViewHeader
@@ -108,7 +107,7 @@
       </v-flex>
     </v-layout>
     <v-layout v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')" row wrap align-start justify-start class="landing-cli-admin">
-        <v-flex sm6 lg3>
+        <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
             <v-icon
               class="ma-1"
@@ -127,7 +126,7 @@
           />
 
         </v-flex>
-        <v-flex sm6 lg3>
+        <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
             <v-icon
               class="ma-1"
@@ -137,13 +136,6 @@
             </v-icon>
             <h2 class="ma-1 text-white">User Settings</h2>
           </v-layout>
-          <BaseLinkComponent
-            routerTitle= "Voice Message Management"
-            link="/voicemsgmanagement"
-            tooltipText="Upload and set custom voice messages for your eDroplets"
-            icon="record_voice_over"
-            colorIcon="#006480"
-          />
           <BaseLinkComponent
             routerTitle= "Interval Settings Management"
             link="/intervalmanagement"
@@ -166,7 +158,7 @@
             colorIcon="#006480"
           />
         </v-flex>
-        <v-flex sm6 lg3>
+        <v-flex sm6 lg4>
           <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
             <v-icon
               class="ma-1"
@@ -176,13 +168,6 @@
             </v-icon>
             <h2 class="ma-1 text-white">eDroplet Management</h2>
           </v-layout>
-          <!-- <BaseLinkComponent
-            routerTitle= "Personnel Settings"
-            link="/personnelsettings"
-            tooltipText="Set the desired Alert notifications for designated Carers"
-            icon="notifications_active"
-            colorIcon="#006480"
-          /> -->
           <BaseLinkComponent
             routerTitle= "eDroplet Management"
             link="/edropletmanagement"
@@ -191,34 +176,8 @@
             colorIcon="#006480"
           />
         </v-flex>
-        <v-flex sm6 lg3>
-          <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
-            <v-icon
-              class="ma-1"
-              medium
-              color="white"
-              >supervisor_account
-            </v-icon>
-            <h2 class="ma-1 text-white">Carer Settings</h2>
-          </v-layout>
-          <!-- <BaseLinkComponent
-            routerTitle= "Personnel Settings"
-            link="/personnelsettings"
-            tooltipText="Set the desired Alert notifications for designated Carers"
-            icon="notifications_active"
-            colorIcon="#006480"
-          /> -->
-          <BaseLinkComponent
-            routerTitle= "Carer / Alert Settings"
-            link="/careralertsettings"
-            tooltipText="Manage alert settings"
-            icon="local_drink"
-            colorIcon="#006480"
-          />
-        </v-flex>
       </v-layout>
     </v-container>
-    </keep-alive>
   </template>
 
 <script>

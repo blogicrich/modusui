@@ -106,19 +106,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "interval-options" */ './views/cliadmin/IntervalSettingsManagement.vue')
     },
     {
-      path: '/careralertsettings',
-      name: 'CarerAlertSettings',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/CarerAlertSettings.vue')
-    },
-    {
       path: '/wakesleeptimes',
       name: 'WakeSleepTimes',
       component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/WakeSleepTimes.vue')
-    },
-    {
-      path: '/voicemsgmanagement',
-      name: 'VoiceMessageManagement',
-      component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/VoiceMessageManagement.vue')
     },
 
     // Sysadmin routes
@@ -162,11 +152,6 @@ export default new Router({
       path: '/voicemessages',
       name: 'VoiceMessageViewComponent',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/VoiceMessages.vue')
-    },
-    {
-      path: '/defaultintervals',
-      name: 'DefaultIntervals',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
     },
     {
       path: '/titles',

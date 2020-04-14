@@ -1,8 +1,17 @@
 <template lang="html">
   <v-container>
-     <v-layout v-if="wakeUpTime && sleepTime" row align-center fill-height>
+    <v-layout row fill-height justify-center>
       <BaseViewHeader
-        class="mb-2"
+        v-if="!userText"
+        class="mx-2 mb-4"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+        hasDivider
+      />
+      <BaseViewHeader
+        v-if="userText"
+        class="mx-2 mb-4"
         :headerIcon="headerIcon"
         :iconColor="iconColor"
         :headerText="headerText"
@@ -10,8 +19,7 @@
         showChips
         :chipsText="userText"
       />
-      <v-spacer></v-spacer>
-      </v-layout>
+    </v-layout>
     <v-menu
       ref="wakeUpTimePicker"
       v-model="showWakeUpTimePicker"
@@ -105,7 +113,6 @@ export default {
     },
     wakeUpTime: {
       get () {
-        console.log(this.$store.state.wakeSleepTimes.times.wakeUpTime)
         return this.$store.state.wakeSleepTimes.times.wakeUpTime
       },
       set (newValue) {
@@ -114,17 +121,22 @@ export default {
     },
     sleepTime: {
       get () {
-        console.log(this.$store.state.wakeSleepTimes.times.sleepTime)
         return this.$store.state.wakeSleepTimes.times.sleepTime
       },
       set (newValue) {
         this.$store.commit('UPDATE_SLEEPTIME', newValue)
       }
     },
+    user: function () {
+      return this.$store.getters.getterSelectedUser
+    },
     userText: function () {
-      let val = this.$store.getters.getterSelectedUser.givenName
-      return val
-    }
+      if (this.$store.getters.getterSelectedUser !== null) {
+        return this.$store.getters.getterSelectedUser.givenName
+      } else {
+        return ''
+      }
+    },
   },
   data () {
     return {
