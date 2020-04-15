@@ -3,14 +3,17 @@ import apiLib from '@/services/apiLib.js'
 export const crudRoutines = {
   methods: {
     async addItem (item) {
-      // console.log('gfjkhgjkfdhgfdjkghjkfshjkgs', item)
+      console.log('gfjkhgjkfdhgfdjkghjkfshjkgs', item)
       var row = {}
       for (var i = 0; i < item.length; i++) {
+        if (item[i].sync) item[i][item[i].attr] = item[i].sync[item[i].attr]
         Object.keys(item[i]).forEach(function (key) {
           row[item[i].attr] = item[i][item[i].attr]
+          console.log(row[item[i].attr], item[i][item[i].attr])
         })
       }
       await apiLib.postData(this.createUrl, row, true, true).then(() => {
+        console.log(row)
         for (var i = 0; i < item.length; i++) {
           Object.keys(item[i]).forEach(function (key) {
             // Return newItem values to null

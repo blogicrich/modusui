@@ -82,7 +82,6 @@ export default {
       headerIcon: 'persons',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'System Administrators',
-      crudIdKey: 'portalAuthorisedId',
       // BaseDataTable
       items: [],
       editPerms: { create: true, update: true, delete: true },
@@ -96,6 +95,7 @@ export default {
       updateUrl: 'sysadmin/sysadmin',
       readUrl: 'sysadmin/sysadmin',
       createUrl: 'sysadmin/sysadmin',
+      crudIdKey: 'portalAuthorisedId',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'person',
@@ -180,25 +180,25 @@ export default {
           cellLabel: 'Title',
           displayVal: 'shortDescription',
           returnVal: 'titleId',
-          menuItems: [],
-          validators: [
-            value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
-            value => {
-              if (this.alphabeticalRegEx.test(value)) {
-                return true
-              } else {
-                return 'Alphabetical characters only'
-              }
-            }
-          ]
+          // menuItems: []
+          // validators: [
+          //   value => !!value || 'Required.',
+          //   value => value.length <= 20 || 'Max 20 characters',
+          //   value => {
+          //     if (this.alphabeticalRegEx.test(value)) {
+          //       return true
+          //     } else {
+          //       return 'Alphabetical characters only'
+          //     }
+          //   }
+          // ]
         },
         {
           givenName: ' ',
           cellType: 'tb',
           attr: 'givenName',
           cellLabel: 'Given Name',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -216,7 +216,7 @@ export default {
           cellType: 'tb',
           attr: 'familyName',
           cellLabel: 'Family Name',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -234,7 +234,7 @@ export default {
           cellType: 'tb',
           attr: 'corporateIdentification',
           cellLabel: 'Company',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -252,7 +252,7 @@ export default {
           cellType: 'tb',
           attr: 'salutation',
           cellLabel: 'Salutation',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -270,7 +270,7 @@ export default {
           cellType: 'tb',
           attr: 'username',
           cellLabel: 'Username',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -288,7 +288,7 @@ export default {
           cellType: 'tb',
           attr: 'password',
           cellLabel: 'Password',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -344,7 +344,7 @@ export default {
           cellType: 'tb',
           attr: 'givenName',
           cellLabel: 'Given Name',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -362,7 +362,7 @@ export default {
           cellType: 'tb',
           attr: 'familyName',
           cellLabel: 'Family Name',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -380,7 +380,7 @@ export default {
           cellType: 'tb',
           attr: 'corporateIdentification',
           cellLabel: 'Company',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -398,7 +398,7 @@ export default {
           cellType: 'tb',
           attr: 'salutation',
           cellLabel: 'Family Name',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -416,7 +416,7 @@ export default {
           cellType: 'tb',
           attr: 'username',
           cellLabel: 'Username',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
@@ -434,7 +434,7 @@ export default {
           cellType: 'tb',
           attr: 'password',
           cellLabel: 'Password',
-          menuItems: [],
+          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
             value => value.length <= 20 || 'Max 20 characters',
