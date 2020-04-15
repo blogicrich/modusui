@@ -3,7 +3,7 @@ import apiLib from '@/services/apiLib.js'
 export const crudRoutines = {
   methods: {
     async addItem (item) {
-      console.log('gfjkhgjkfdhgfdjkghjkfshjkgs', item)
+      // console.log('gfjkhgjkfdhgfdjkghjkfshjkgs', item)
       var row = {}
       for (var i = 0; i < item.length; i++) {
         if (item[i].sync) item[i][item[i].attr] = item[i].sync[item[i].attr]
@@ -103,17 +103,30 @@ export const crudRoutines = {
 
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {
+        let menuItems = []
+        let values = []
+        // console.log(urls)
         for (var i = 0; i < urls.length; i++) {
-          var menuItems = await apiLib.getData(urls[i].url, true, true)
-          var values = []
-          for (var j = 0; j < menuItems.length; j++) {
-            let val = menuItems[j]
-            // console.log('menuItem: ', val)
-            // values.push(menuItems[j][urls[i].key])
-            values.push(val)
+          if (urls[i].url) {
+            menuItems = await apiLib.getData(urls[i].url, true, true)
+            for (var j = 0; j < menuItems.length; j++) {
+              let val = menuItems[j]
+              // console.log('menuItem url: ', val)
+              // values.push(menuItems[j][urls[i].key])
+              values.push(val)
+            }
           }
-          for (var k = 0; k < this.newItem.length; k++) {
-            if (this.newItem[k].attr === urls[i].attr) { this.newItem[k].menuItems = values }
+          if (urls[i].ref) {
+            menuItems = urls[i].ref
+            for (var k = 0; k < menuItems.length; k++) {
+              let val = menuItems[k]
+              // console.log('menuItem ref: ', val)
+              // values.push(menuItems[j][urls[i].key])
+              values.push(val)
+            }
+          }
+          for (var l = 0; l < this.newItem.length; l++) {
+            if (this.newItem[l].attr === urls[i].attr) { this.newItem[l].menuItems = values }
           }
         }
       }

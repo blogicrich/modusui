@@ -63,17 +63,20 @@
         ></v-text-field>
       </template>
       <template v-slot:editSlot="{ item, itemKey, property }">
-        <v-text-field
-          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
-          v-model="item[itemKey]"
-          class="ma-1"
-          :color="primaryColor"
-          outline
-          required
-          validata-on-blur
-          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
-        >{{ property }}
-        </v-text-field>
+        <v-layout row align-center justify-start>
+          <h2 class="ma-1 text-primary" >{{ item['macAddress'] + ' : ' }}</h2>
+          <v-text-field
+            :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+            v-model="item[itemKey]"
+            class="ma-1"
+            :color="primaryColor"
+            outline
+            required
+            validata-on-blur
+            :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+          >{{ property }}
+          </v-text-field>
+        </v-layout>
       </template>
     </BaseDataTable>
   </v-container>
@@ -92,6 +95,13 @@ export default {
     BaseDataTable
   },
   computed: {
+    urls: function () {
+      return [{ 
+        ref: [{ statusId: 1, status: 'Live' }, { statusId: 0, status: 'Inactive' }],
+        attr: 'operationalStatus',
+        key: 'statusId'
+      }]
+    },
     user: function () {
       return this.$store.getters.getterSelectedUser
     },
@@ -212,7 +222,7 @@ export default {
           align: 'left',
           sortable: false,
           value: 'operationalStatus',
-          cellType: 'tb',
+          cellType: 'md',
           hidden: false,
           editable: true
         },
@@ -222,21 +232,38 @@ export default {
           sortable: false,
           value: 'nightLight',
           cellType: 'tb',
-          hidden: false,
+          hidden: true,
           editable: true
         }
       ],
       newItem: [
+        // {
+        //   baseId: '',
+        //   cellType: 'tb',
+        //   attr: 'baseId',
+        //   cellLabel: 'Friendly Name'
+        // },
         {
           friendlyName: '',
           cellType: 'tb',
           attr: 'friendlyName',
           cellLabel: 'Friendly Name'
+        },
+        {
+          operationalStatus: '',
+          cellType: 'md',
+          attr: 'operationalStatus',
+          cellLabel: 'Operational Status',
+          displayVal: 'status',
+          returnVal: 'status'
+          // menuItems: []
         }
       ],
       defaultItem: [
-        {
-          friendlyName: ''
+        { 
+          baseId: 0,
+          friendlyName: '',
+          operationalStatus: ''
         }
       ]
     }
@@ -244,15 +271,35 @@ export default {
   methods: {
     resetItem () {
       // eslint-disable-next-line no-unused-expressions
-      this.defaultItem = [
+      this.newItem = [
+        // {
+        //   baseId: '',
+        //   cellType: 'tb',
+        //   attr: 'baseId',
+        //   cellLabel: 'Friendly Name'
+        // },
         {
-          friendlyName: ''
+          friendlyName: '',
+          cellType: 'tb',
+          attr: 'friendlyName',
+          cellLabel: 'Friendly Name'
+        },
+        {
+          operationalStatus: '',
+          cellType: 'md',
+          attr: 'operationalStatus',
+          cellLabel: 'Operational Status',
+          displayVal: 'status',
+          returnVal: 'status',
+          menuItems: []
         }
       ]
     }
   },
   mounted () {
     this.getItems(this.readUrl)
+    // console.log(this.$store.state.accountHolderId)
+    // console.log(this.newItem)
   }
 }
 

@@ -298,8 +298,8 @@
                         :color="primaryColor"
                         outline
                         required
-                        :item-value="newItem.find(attribute => attribute).returnVal"
-                        :item-text="newItem.find(attribute => attribute).displayVal">
+                        :item-value="newItem.find(attribute => attribute.attr === key).returnVal"
+                        :item-text="newItem.find(attribute => attribute.attr === key).displayVal">
                       </v-select>
                     </v-flex>
                   </v-layout>
@@ -670,9 +670,8 @@
                         outline
                         required
                         return-object
-                        :item-value="newItem.find(attribute => attribute).returnVal"
-                        :item-text="newItem.find(attribute => attribute).displayVal"
-                        >
+                        :item-value="newItem.find(attribute => attribute.attr === key).returnVal"
+                        :item-text="newItem.find(attribute => attribute.attr === key).displayVal">                        >
                       </v-select>
                     </v-flex>
                   </v-layout>

@@ -179,7 +179,7 @@ export default {
           attr: 'titleId',
           cellLabel: 'Title',
           displayVal: 'shortDescription',
-          returnVal: 'titleId',
+          returnVal: 'titleId'
           // menuItems: []
           // validators: [
           //   value => !!value || 'Required.',
