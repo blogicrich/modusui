@@ -45,12 +45,38 @@
       editDialogTitle="Edit Condition Records"
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
-      :editRules="editRules"
+
       @newItem="addItem"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
-      @itemsCancelled="refreshItems"
-    />
+      @itemsCancelled="getItems(readUrl)"
+    >
+      <template v-slot:newSlot="{ item, itemKey }">
+        <v-text-field
+          class="ma-1"
+          :label="item.cellLabel"
+          v-model="item[item.attr]"
+          :color="primaryColor"
+          outline
+          required
+          validate-on-blur
+          :rules="newItem[itemKey].validators"
+        ></v-text-field>
+      </template>
+      <template v-slot:editSlot="{ item, itemKey, property }">
+        <v-text-field
+          :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
+          v-model="item[itemKey]"
+          class="ma-1"
+          :color="primaryColor"
+          outline
+          required
+          validata-on-blur
+          :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
+        >{{ property }}
+        </v-text-field>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
@@ -83,15 +109,10 @@ export default {
       headerIcon: 'local_pharmacy',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'User Conditions',
-      editRules: () => [],
-      userPerms: true,
+      // BaseDataTable
       editPerms: { create: true, update: true, delete: true },
       crudIdKey: 'conditionsId',
       items: [],
-      snackColor: 'primary',
-      snackText: '',
-      snack: false,
-      timeout: 6000,
       loading: true,
       loaded: false,
       error: false,
@@ -99,7 +120,7 @@ export default {
       loadingMsg: ' ',
       loadedMsg: ' ',
       delUrl: '/cliadmin/conditions/' + this.$store.state.userId,
-      updateUrl: '/cliadmin/conditions',
+      updateUrl: '/cliadmin/conditions' + this.$store.state.userId,
       readUrl: '/cliadmin/conditions/' + this.$store.state.userId,
       createUrl: '/cliadmin/conditions',
       primaryColor: 'primary',
@@ -137,56 +158,77 @@ export default {
       ],
       newItem: [
         {
+          description: '',
+          cellType: 'tb',
+          attr: 'description',
+          cellLabel: 'Description',
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
+        },
+        {
           comments: '',
           cellType: 'tb',
           attr: 'comments',
           cellLabel: 'Comments',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         },
         {
-          startdate: '',
+          volume: '',
           cellType: 'tb',
-          attr: 'startdate',
-          cellLabel: 'Start Date',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
+          attr: 'volume',
+          cellLabel: 'Volume',
+          validators: [
+            value => !!value || 'Required.',
+            // value => value.length <= 20 || 'Max 20 characters',
+            // value => {
+            //   if (this.alphabeticalRegEx.test(value)) {
+            //     return true
+            //   } else {
+            //     return 'Alphabetical characters only'
+            //   }
+            // }
+          ]
         },
-        {
-          enddate: '',
-          cellType: 'tb',
-          attr: 'enddate',
-          cellLabel: 'End Date',
-          menuItems: [],
-          validators: payload => {
-            return []
-          }
-        },
+        // {
+        //   startdate: '',
+        //   cellType: 'tb',
+        //   attr: 'startdate',
+        //   cellLabel: 'Start Date'
+        // },
+        // {
+        //   enddate: '',
+        //   cellType: 'tb',
+        //   attr: 'enddate',
+        //   cellLabel: 'End Date'
+        // },
         {
           status: '',
           cellType: 'tb',
           attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-              this.validateAlphabetical(payload),
-              this.validateRequired(payload)
-            ]
-          }
+          cellLabel: 'Status'
         }
       ],
       defaultItem: [
         {
-          // userId: Joi.number().integer().min(1).required(),
-          // conditionId: Joi.number().integer().min(1).required(),
-          // comment: Joi.string().min(1).max(45).optional(),
-          // adjustment: Joi.string().min(1).max(45).optional(),
-          // typeOfAdjustment: Joi.string().min(1).max(45).optional()
           conditionsId: 0,
           userId: 0,
           comments: '',
@@ -199,48 +241,74 @@ export default {
     resetItem () {
       this.newItem = [
         {
+          description: '',
+          cellType: 'tb',
+          attr: 'description',
+          cellLabel: 'Description',
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
+        },
+        {
           comments: '',
           cellType: 'tb',
           attr: 'comments',
           cellLabel: 'Comments',
           menuItems: [],
-          validators: payload => {
-            return [
-            ]
-          }
+          validators: [
+            value => !!value || 'Required.',
+            value => value.length <= 20 || 'Max 20 characters',
+            value => {
+              if (this.alphabeticalRegEx.test(value)) {
+                return true
+              } else {
+                return 'Alphabetical characters only'
+              }
+            }
+          ]
         },
         {
-          startdate: '',
+          volume: '',
           cellType: 'tb',
-          attr: 'startdate',
-          cellLabel: 'Start Date',
-          menuItems: [],
-          validators: payload => {
-            return [
-            ]
-          }
+          attr: 'volume',
+          cellLabel: 'Volume',
+          validators: [
+            value => !!value || 'Required.',
+            // value => value.length <= 20 || 'Max 20 characters',
+            // value => {
+            //   if (this.alphabeticalRegEx.test(value)) {
+            //     return true
+            //   } else {
+            //     return 'Alphabetical characters only'
+            //   }
+            // }
+          ]
         },
-        {
-          enddate: '',
-          cellType: 'tb',
-          attr: 'enddate',
-          cellLabel: 'End Date',
-          menuItems: [],
-          validators: payload => {
-            return [
-            ]
-          }
-        },
+        // {
+        //   startdate: '',
+        //   cellType: 'tb',
+        //   attr: 'startdate',
+        //   cellLabel: 'Start Date'
+        // },
+        // {
+        //   enddate: '',
+        //   cellType: 'tb',
+        //   attr: 'enddate',
+        //   cellLabel: 'End Date'
+        // },
         {
           status: '',
           cellType: 'tb',
           attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: payload => {
-            return [
-            ]
-          }
+          cellLabel: 'Status'
         }
       ]
       this.defaultItem = [
@@ -257,7 +325,6 @@ export default {
   },
   mounted () {
     this.getItems(this.readUrl)
-    console.log(this.$store.state.userId)
   }
 }
 
