@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <v-layout row align-center justify-center prepend-icon="event">
+  <v-container fluid>
+    <!-- DATE PICKER -->
+    <v-layout align-center justify-center prepend-icon="event">
       <v-icon large>event</v-icon>
       <v-icon @click="subtractDay()" large title="Decrease date by one day">keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
@@ -30,9 +31,11 @@
         title="Check for new data"
       >refresh</v-icon>
     </v-layout>
-    <v-container fluid grid-list-md d-flex>
-      <v-layout fill-height wrap>
-        <v-flex xs12 sm12 md8 lg8 xl8>
+    <!-- DASHBOARD CONTENT -->
+    <v-container class="app-container" fluid grid-list-md>
+      <!-- ROW-1 -->
+      <v-layout v-bind="binding">
+        <v-flex xs12 md8 order-md1 order-xs2>
           <v-card dark v-if="!hourError">
             <sub-hourly-hydration-chart
               v-if="hourLoaded"
@@ -43,7 +46,7 @@
           </v-card>
           <v-alert :value="true" type="info" v-else>Hourly data is not available at this time.</v-alert>
         </v-flex>
-        <v-flex d-flex xs12 sm12 md4 lg4 xl4 v-if="!breakpoint">
+        <v-flex xs12 md4 order-md2 order-xs1>
           <v-card v-if="!usersError">
             <sub-user-select
               v-if="usersLoaded"
@@ -55,41 +58,40 @@
           </v-card>
           <v-alert :value="true" type="error" v-else>An error occurred while loading users.</v-alert>
         </v-flex>
-        <v-flex d-flex xs12 sm12 md12 lg12 xl12>
-          <v-layout row wrap>
-            <v-flex xs12 sm12 md8 lg8 xl8>
-              <v-card dark v-if="!weekError">
-                <sub-weekly-hydration-chart
-                  v-if="weekLoaded"
-                  :chartData="dashboardWeek.dataPoints"
-                  class="pb-4"
-                  :chartTitle="weekChartTitle"
-                />
-                <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
-              </v-card>
-              <v-alert :value="true" type="info" v-else>Weekly data is not available at this time.</v-alert>
-            </v-flex>
-            <v-flex xs12 sm12 md4 lg4 xl4>
-              <v-card dark v-if="!dayError">
-                <sub-hydration-day-chart
-                  v-if="dayLoaded"
-                  class="pb-4"
-                  :chartTitle="dayChartTitle"
-                  :chartData="dashboardDay"
-                />
-                <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
-              </v-card>
-              <v-alert
-                :value="true"
-                type="info"
-                v-else
-              >Daily hydration data is not available at this time.</v-alert>
-            </v-flex>
-          </v-layout>
+      </v-layout>
+      <!-- ROW-2 -->
+      <v-layout v-bind="binding">
+        <v-flex xs12 md8 order-xs1>
+          <v-card dark v-if="!weekError">
+            <sub-weekly-hydration-chart
+              v-if="weekLoaded"
+              :chartData="dashboardWeek.dataPoints"
+              class="pb-4"
+              :chartTitle="weekChartTitle"
+            />
+            <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
+          </v-card>
+          <v-alert :value="true" type="info" v-else>Weekly data is not available at this time.</v-alert>
+        </v-flex>
+        <v-flex xs12 md4 order-xs2>
+          <v-card dark v-if="!dayError">
+            <sub-hydration-day-chart
+              v-if="dayLoaded"
+              class="pb-4"
+              :chartTitle="dayChartTitle"
+              :chartData="dashboardDay"
+            />
+            <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
+          </v-card>
+          <v-alert
+            :value="true"
+            type="info"
+            v-else
+          >Daily hydration data is not available at this time.</v-alert>
         </v-flex>
       </v-layout>
     </v-container>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -124,17 +126,20 @@ export default {
     'selectedUser'
   ],
   computed: {
-    breakpoint () {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return true
-        case 'sm':
-          return true
-        default:
-          return false
+    binding () {
+      const binding = {}
+      if (this.$vuetify.breakpoint.smAndDown) {
+        binding.column = true
+        binding.row = false
+        binding.fillHeight = false
       }
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        binding.column = false
+        binding.row = true
+        binding.fillHeight = true
+      }
+      return binding
     },
-
     alertColors () {
       this.setAlertColors()
       return this.alertColor
@@ -214,6 +219,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "./public/scss/main.scss";
+
 .v-card {
   color: black;
   background-color: $white;
@@ -223,8 +229,4 @@ export default {
   display: inline;
 }
 
-.v-container {
-  padding-top: 0;
-  margin-top: 0;
-}
 </style>

@@ -1,22 +1,24 @@
 <template>
-  <v-layout column>
-    <v-container fill-height align-center justify-center>
-      <v-flex xs5 grow>
-        <v-layout fluid fill-height align-center justify-start>
+  <v-container class="pa-0 ma-0" fluid>
+    <v-layout class="mx-1" v-bind="binding">
+      <v-flex xs12 lg6>
+        <v-layout class="mx-2" v-if="$vuetify.breakpoint.lgAndUp" row fill-height align-center justify-start>
           <v-icon large color="primary">group</v-icon>
-          <h2 class="table-header">Connected Droplet Users</h2>
+          <h2 class="text-primary ml-2">Connected eDroplet Users</h2>
+        </v-layout>
+        <v-layout v-if="$vuetify.breakpoint.mdAndDown" row fill-height align-center justify-center>
+          <v-icon class="mx-1" medium color="primary">group</v-icon>
+          <h2 class="text-primary">Connected Droplet Users</h2>
         </v-layout>
       </v-flex>
-      <v-flex xs7 shrink>
-        <v-layout fill-height align-center justify-start>
-          <v-icon>search</v-icon>
-          <input type="text" class="searchbar" v-model="search" placeholder="Search user" />
-        </v-layout>
+      <v-flex xs12 lg6>
+        <v-text-field class="ma-1" v-model="search" prepend-icon="search"></v-text-field>
       </v-flex>
-    </v-container>
-    <v-list two-line subheader class="userList">
+    </v-layout>
+    <v-list two-line subheader class="ma-0 pa-0 userList">
       <v-list-tile
         avatar
+        dense
         v-for="user in searchResults"
         :key="user.userId"
         @click="userSelected(user)"
@@ -39,7 +41,7 @@
         </v-list-tile-action>
       </v-list-tile>
     </v-list>
-  </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -59,6 +61,24 @@ export default {
     selectedUser: Object
   },
   computed: {
+    binding () {
+      const binding = {}
+      if (this.$vuetify.breakpoint.mdAndDown) {
+        binding.column = true
+        binding.row = false
+        binding.fillHeight = false
+        binding.alignCenter = true
+        binding.justifySpaceBetween = false
+      }
+      if (this.$vuetify.breakpoint.lgAndUp) {
+        binding.column = false
+        binding.row = true
+        binding.fillHeight = true
+        binding.alignCenter = true
+        binding.justifySpaceBetween = true
+      }
+      return binding
+    },
     searchResults () {
       return this.users.filter((user) => this.getDisplayName(user).toLowerCase().match(this.search.toLowerCase()))
     }
@@ -102,17 +122,11 @@ export default {
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
 
-.searchbar {
-  border-bottom: 1px solid $vuetify-primary;
-}
-
 .selectedUser {
   background-color: $table-row-hover;
 }
 
 .userList {
-  margin-top: -32px;
-  max-height: 268px;
   overflow-y: auto;
 }
 </style>
