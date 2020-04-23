@@ -6,7 +6,6 @@
         v-if="!userText"
         class="mx-2 mb-2"
         :headerIcon="headerIcon"
-        :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
       />
@@ -14,14 +13,17 @@
         v-if="userText"
         class="mx-2 mb-2"
         :headerIcon="headerIcon"
-        :iconColor="iconColor"
         :headerText="headerText"
         hasDivider
         showChips
         :chipsText="userText"
       />
       <!-- Date selection form -->
-      <v-form ref="dateSelectForm" class="ma-4">
+      <v-form
+        ref="dateSelectForm"
+        class="ma-4"
+        lazy-validation
+      >
         <v-layout v-bind="binding">
           <!-- Start date menu picker -->
           <v-menu
@@ -38,14 +40,15 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="startDate"
-                label="Start date:"
+                :value="startDateFormattedValue"
+                label="Start Date"
                 prepend-icon="event"
                 readonly
+                :rules="[startDateValidation]"
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="startDate" no-title scrollable>
+            <v-date-picker show current :max="endDateMax" v-model="startDate" no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="startDateMenu = false">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.startDateMenu.save(startDate)">OK</v-btn>
@@ -66,20 +69,21 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="endDate"
-                label="End date:"
+                :value="endDateFormattedValue"
+                label="End Date"
                 prepend-icon="event"
                 readonly
+                :rules="[endDateValidation]"
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="endDate" no-title scrollable>
+            <v-date-picker show current :max="endDateMax" v-model="endDate" no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="endDateMenu = false">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.endDateMenu.save(endDate)">OK</v-btn>
             </v-date-picker>
           </v-menu>
-          <v-btn color="primary" @click="refreshData(endDate, startDate)">Refresh</v-btn>
+          <v-btn :disabled="startDate > endDate || endDate < startDate" color="primary" @click="refreshData(endDate, startDate)">Refresh</v-btn>
         </v-layout>
       </v-form>
       <!-- Data table -->
@@ -112,6 +116,7 @@
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import dataTable from '@/components/base/BaseDataTableComponent'
+import moment from 'moment'
 
 export default {
   mixins: [crudRoutines],
@@ -139,6 +144,15 @@ export default {
       }
       return binding
     },
+    endDateFormattedValue () {
+      return this.endDate ? moment(this.endDate).format('dddd, MMMM Do YYYY') : ''
+    },
+    readUrl () {
+      return 'carer/away/'
+    },
+    startDateFormattedValue () {
+      return this.startDate ? moment(this.startDate).format('dddd, MMMM Do YYYY') : ''
+    },
     user: function () {
       console.log(this.$store.getters.getterSelectedUser)
       return this.$store.getters.getterSelectedUser
@@ -149,22 +163,19 @@ export default {
       } else {
         return ''
       }
-    },
-    readUrl () {
-      return 'carer/away/21'
     }
   },
   data: () => ({
     // BaseHeader
     headerIcon: 'calendar_today',
-    iconColor: 'primary',
     headerText: 'Away Periods',
-    // Start date picker
-    startDate: new Date().toISOString().substr(0, 10),
-    startDateMenu: false,
     // End date picker
     endDate: new Date().toISOString().substr(0, 10),
+    endDateMax: new Date().toISOString().substr(0, 10),
     endDateMenu: false,
+    // Start date picker
+    startDate: new Date(Date.now() - (7 * 86400000)).toISOString().substr(0, 10),
+    startDateMenu: false,
     // BaseDataTable
     items: [],
     iconAdd: 'person_add',
@@ -218,16 +229,35 @@ export default {
     ]
   }),
   methods: {
+    endDateValidation () {
+      if (this.endDate >= this.startDate) {
+        return true
+      } else {
+        return 'Select a date after the "Start Date".'
+      }
+    },
+    startDateValidation () {
+      if (this.startDate <= this.endDate) {
+        return true
+      } else {
+        return 'Select a date before the "End Date".'
+      }
+    },
     refreshData () {
-      console.log(this.startDate, this.endDate)
-      // TO BE IMPLEMENTED:
-      // 1. Validatate form data
-      // 2. Convert date format to BE requirements
-      // 3. Update table with new data 
+      const unixEndDate = new Date(this.endDate).getTime() / 1000
+      const unixStartDate = new Date(this.startDate).getTime() / 1000
+
+      if (this.$refs.dateSelectForm.validate()) {
+        this.getItems(this.readUrl + this.user.userId + '/' + unixStartDate + '/' + unixEndDate)
+      } else {
+        this.errorMsg = 'Please check selected date range.'
+        this.loaded = false
+        this.error = true
+      }
     }
   },
   mounted () {
-    this.getItems(this.readUrl)
+    this.getItems(this.readUrl + this.user.userId + '/' + new Date(this.startDate).getTime() / 1000 + '/' + new Date(this.endDate).getTime() / 1000)
   }
 }
 </script>

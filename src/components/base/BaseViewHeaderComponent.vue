@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-layout class="mx-0 py-0" column justify-center>
       <v-layout v-if="$vuetify.breakpoint.lgAndUp" row fill-height align-center justify-start>
-        <v-icon class="ml-1 mr-2" large :color="iconColor">{{ headerIcon }}</v-icon>
+        <v-icon class="ml-1 mr-2" large :color="$vuetify.theme.primary">{{ headerIcon }}</v-icon>
         <h1 class="my-3 pg-header text-primary">{{ headerText }}</h1>
         <v-spacer></v-spacer>
         <v-layout v-if="showChips" row align-center justify-end>
@@ -15,7 +15,7 @@
         </v-layout>
       </v-layout>
       <v-layout v-if="$vuetify.breakpoint.mdOnly" row fill-height align-center justify-start>
-        <v-icon class="ml-1 mr-2" medium :color="iconColor">{{ headerIcon }}</v-icon>
+        <v-icon class="ml-1 mr-2" medium :color="$vuetify.theme.primary">{{ headerIcon }}</v-icon>
         <h2 class="my-0 text-primary">{{ headerText }}</h2>
         <v-spacer></v-spacer>
         <v-layout v-if="showChips" row align-center justify-end>
@@ -28,7 +28,7 @@
         </v-layout>
       </v-layout>
       <v-layout v-if="$vuetify.breakpoint.smAndDown" row fill-height align-center justify-start>
-        <v-icon class="ml-1 mr-2" small :color="iconColor">{{ headerIcon }}</v-icon>
+        <v-icon class="ml-1 mr-2" small :color="$vuetify.theme.primary">{{ headerIcon }}</v-icon>
         <h3 class="my-0 text-primary">{{ headerText }}</h3>
         <v-spacer></v-spacer>
         <v-layout v-if="showChips" row align-center justify-end>
@@ -50,7 +50,7 @@
         </v-flex>
       </v-layout>
     </v-layout>
-  <v-divider class="mx-2 mt-4" v-if="hasDivider" :color="iconColor"></v-divider>
+  <v-divider class="mx-2 mt-4" v-if="hasDivider" :color="$vuetify.theme.primary"></v-divider>
   </v-container>
 </template>
 
@@ -64,7 +64,6 @@ export default {
   },
   props: {
     headerIcon: String,
-    iconColor: String,
     headerText: String,
     hasDivider: Boolean,
     chipsText: String,

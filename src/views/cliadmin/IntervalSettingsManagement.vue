@@ -21,8 +21,6 @@
       />
     </v-layout>
     <v-container v-if="intervalSettings">
-      <h2 class="pg-subheader text-primary">eDroplet Reminder Interval Options</h2>
-      <v-divider class="mx-1" color="#00a1cd"></v-divider>
       <v-layout row wrap fill-height justify-space-between>
         <v-flex xs12 lg6>
           <BaseRadioOptions

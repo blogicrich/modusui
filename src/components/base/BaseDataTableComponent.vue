@@ -345,8 +345,9 @@
       </v-layout>
     </div>
   <!-- BREAKPOINT MDANDDOWN / MOBILE -->
-    <v-container v-if="this.$vuetify.breakpoint.mdAndDown" fluid>
+    <v-container v-if="this.$vuetify.breakpoint.mdAndDown " fluid>
       <v-speed-dial
+        v-if="editPerms.create || editPerms.update || editPerms.delete"
         v-model="fab"
         class="table-fab ma-0"
         fixed
@@ -443,7 +444,7 @@
       >
   <!-- Table: Headers -->
     <template slot="headers" slot-scope="props">
-      <th>
+      <th v-if="editPerms.create || editPerms.update || editPerms.delete">
         <v-checkbox
           :input-value="props.all"
           :indeterminate="props.indeterminate"
