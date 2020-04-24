@@ -1,4 +1,5 @@
 <template>
+<!-- <keep-alive> -->
   <v-container fluid>
     <!-- DATE PICKER -->
     <v-layout align-center justify-center prepend-icon="event">
@@ -24,12 +25,6 @@
         :disabled="date === maxDate"
         title="Increase date by one day"
       >keyboard_arrow_right</v-icon>
-      <v-icon
-        @click="refresh()"
-        large
-        :disabled="!refreshEnabled"
-        title="Check for new data"
-      >refresh</v-icon>
     </v-layout>
     <!-- DASHBOARD CONTENT -->
     <v-container class="app-container" fluid grid-list-md>
@@ -37,12 +32,40 @@
       <v-layout v-bind="binding">
         <v-flex xs12 md8 order-md1 order-xs2>
           <v-card dark v-if="!hourError">
-            <sub-hourly-hydration-chart
-              v-if="hourLoaded"
+            <v-layout row fill-height align-center justify-end>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="text-white mt-2 mr-2"
+                    color="primary"
+                    v-on="on"
+                  >Chart Type
+                    <v-icon class="mr-1" v-if="hourlyChartType === 'Line Chart'" medium right>show_chart</v-icon>
+                    <v-icon class="mr-1" v-if="hourlyChartType === 'Bar Chart'" medium right>bar_chart</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-tile
+                    v-for="(item, index) in hourlyChartTypes"
+                    :key="index"
+                    @click="setChartType(item.type)"
+                  >
+                    <v-list-tile-title>{{ item.type }}</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
+            </v-layout>
+            <SubHourlyHydrationLineChart
+              v-if="hourLoaded && hourlyChartType === 'Line Chart'"
               :chartData="dashboardHour"
               :chartTitle="hourChartTitle"
-            ></sub-hourly-hydration-chart>
-            <v-progress-circular v-else indeterminate color="primary" class="ma-2"></v-progress-circular>
+            />
+            <SubHourlyHydrationBarChart
+              v-if="hourLoaded && hourlyChartType === 'Bar Chart'"
+              :chartData="dashboardHour"
+              :chartTitle="hourChartTitle"
+            />
+            <v-progress-circular v-if="hourError" indeterminate color="primary" class="ma-2"></v-progress-circular>
           </v-card>
           <v-alert :value="true" type="info" v-else>Hourly data is not available at this time.</v-alert>
         </v-flex>
@@ -63,7 +86,7 @@
       <v-layout v-bind="binding">
         <v-flex xs12 md8 order-xs1>
           <v-card dark v-if="!weekError">
-            <sub-weekly-hydration-chart
+            <SubWeeklyHydrationBarChart
               v-if="weekLoaded"
               :chartData="dashboardWeek.dataPoints"
               class="pb-4"
@@ -75,7 +98,7 @@
         </v-flex>
         <v-flex xs12 md4 order-xs2>
           <v-card dark v-if="!dayError">
-            <sub-hydration-day-chart
+            <SubHydrationDayPieChart
               v-if="dayLoaded"
               class="pb-4"
               :chartTitle="dayChartTitle"
@@ -92,21 +115,24 @@
       </v-layout>
     </v-container>
   </v-container>
+  <!-- </keep-alive> -->
 </template>
 
 <script>
 import SubUserSelect from '@/components/sub/SubUserSelectComponent'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import SubHourlyHydrationChart from '@/components/sub/SubHourlyHydrationChart'
-import SubHydrationDayChart from '@/components/sub/SubHydrationDayChart'
-import SubWeeklyHydrationChart from '@/components/sub/SubWeeklyHydrationChart'
+import SubHourlyHydrationLineChart from '@/components/sub/SubHourlyHydrationLineChart'
+import SubHourlyHydrationBarChart from '@/components/sub/SubHourlyHydrationBarChart'
+import SubHydrationDayPieChart from '@/components/sub/SubHydrationDayPieChart'
+import SubWeeklyHydrationBarChart from '@/components/sub/SubWeeklyHydrationBarChart'
 
 export default {
   components: {
     SubUserSelect,
-    SubHourlyHydrationChart,
-    SubHydrationDayChart,
-    SubWeeklyHydrationChart
+    SubHourlyHydrationLineChart,
+    SubHourlyHydrationBarChart,
+    SubHydrationDayPieChart,
+    SubWeeklyHydrationBarChart
   },
   mixins: [crudRoutines],
   props: [
@@ -123,6 +149,7 @@ export default {
     'dayError',
     'hourError',
     'weekError',
+    'refreshRate',
     'selectedUser'
   ],
   computed: {
@@ -168,6 +195,10 @@ export default {
   },
   mounted () {
     this.date = this.$moment().format('YYYY-MM-DD')
+    setInterval(() => {
+      this.$emit('refresh')
+      console.log('DBCOMP')
+    }, this.refreshRate)
   },
   methods: {
     addDay () {
@@ -177,16 +208,6 @@ export default {
     subtractDay () {
       this.date = this.$moment(this.date).subtract(1, 'day').format('YYYY-MM-DD')
     },
-
-    refresh () {
-      this.$emit('refresh')
-      this.refreshEnabled = false
-
-      setTimeout(() => {
-        this.refreshEnabled = true
-      }, this.refreshCooldown)
-    },
-
     setAlertColors () {
       for (let i = 0; i < this.dashboardUsers.length; i++) {
         if (this.dashboardUsers[i].alertType === 'hydrated') {
@@ -200,18 +221,26 @@ export default {
         }
       }
     },
-
+    setChartType (event) {
+      this.hourlyChartType = event
+    },
     formatDate (date) {
       return this.$moment(date).format('LL')
     }
   },
   data () {
     return {
-      menu: false,
       date: '',
+      isHourlyBarChart: true,
+      isHourlyLineChart: false,
+      hourlyChartType: 'Bar Chart',
+      hourlyChartTypes: [
+        { type: 'Bar Chart' },
+        { type: 'Line Chart' }
+      ],
+      menu: false,
       maxDate: this.$moment().format('YYYY-MM-DD'),
-      refreshEnabled: true,
-      refreshCooldown: 2000
+      refreshEnabled: true
     }
   }
 }
@@ -228,5 +257,4 @@ export default {
 .chart {
   display: inline;
 }
-
 </style>

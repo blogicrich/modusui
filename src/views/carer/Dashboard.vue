@@ -1,22 +1,25 @@
 <template>
-  <dashboard-component
-    :dashboardUsers="dashboardUsers"
-    :dashboardDay="dashboardDay"
-    :dashboardHour="dashboardHour"
-    :dashboardWeek="dashboardWeek"
-    @refresh="setUsers"
-    @dateChange="updateDate"
-    @userChange="updateUser"
-    :selectedUser="selectedUser"
-    :usersLoaded="usersLoaded"
-    :hourLoaded="hourLoaded"
-    :dayLoaded="dayLoaded"
-    :weekLoaded="weekLoaded"
-    :usersError="usersError"
-    :hourError="hourError"
-    :dayError="dayError"
-    :weekError="weekError"
-  />
+  <keep-alive>
+    <dashboard-component
+      :dashboardUsers="dashboardUsers"
+      :dashboardDay="dashboardDay"
+      :dashboardHour="dashboardHour"
+      :dashboardWeek="dashboardWeek"
+      :refreshRate="refreshRate"
+      @refresh="updateCharts"
+      @dateChange="updateDate"
+      @userChange="updateUser"
+      :selectedUser="selectedUser"
+      :usersLoaded="usersLoaded"
+      :hourLoaded="hourLoaded"
+      :dayLoaded="dayLoaded"
+      :weekLoaded="weekLoaded"
+      :usersError="usersError"
+      :hourError="hourError"
+      :dayError="dayError"
+      :weekError="weekError"
+    />
+  </keep-alive>
 </template>
 
 <script>
@@ -41,6 +44,7 @@ export default {
       usersError: false,
       dayError: false,
       hourError: false,
+      refreshRate: 60000,
       weekError: false
     }
   },
