@@ -11,11 +11,10 @@
       <BaseViewHeader
         v-if="userText"
         class="mx-2 mb-4"
+        :chipsText="userText"
         :headerIcon="headerIcon"
         :headerText="headerText"
         hasDivider
-        showChips
-        :chipsText="userText"
       />
     </v-layout>
     <BaseDataTable

@@ -16,18 +16,28 @@
         src="./assets/ed_logo.svg"
       />
       <img />
-      <img v-if="$vuetify.breakpoint.mdAndUp" alt src="./assets/ed_logo.svg" />
-      <img />
+      <img v-if="$vuetify.breakpoint.mdAndUp" alt src="./assets/ed_logo.svg" /><img />
       <v-spacer></v-spacer>
-      <v-layout row fill-height wrap justify-end>
-        <v-icon outline medium class="mx-2" color="primary">person_outline</v-icon>
+      <v-layout row fill-height wrap align-center justify-end>
+        <v-icon v-if="$vuetify.breakpoint.mdAndUp" outline medium class="mx-2" color="primary">person_outline</v-icon>
+        <v-icon v-if="$vuetify.breakpoint.smAndDown" outline small class="mx-1" color="primary">person_outline</v-icon>
         <v-chip
-          class="ml-1 mt-3 mb-3"
+          v-show="$vuetify.breakpoint.mdAndUp"
           v-for="(level, index) in level"
-          :key="index"
+          :key="'md' + index"
           color="secondary"
           text-color="primary"
-        >{{ levelDisplay(level) }}</v-chip>
+        >{{ levelDisplay(level) }}
+        </v-chip>
+        <v-chip
+          v-show="$vuetify.breakpoint.smAndDown"
+          v-for="(level, index) in level"
+          small
+          :key="'sm' + index"
+          color="secondary"
+          text-color="primary"
+        >{{ levelDisplay(level) }}
+        </v-chip>
       </v-layout>
     </v-toolbar>
     <!-- SIDEBAR -->
