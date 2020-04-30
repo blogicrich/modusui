@@ -14,7 +14,7 @@ export const moduleDashboardComment = {
   actions: {
     // get all data
     async fetchDashboardCommentGet (context) {
-      await apiLib.getData('carer/dashboard-comment/' + 21 + '/' + 1557917441, true, true).then((response) => {
+      await apiLib.getData('carer/dashboard-comment/' + 21 + '/' + 1557917441, false, true).then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
           context.commit('SET_DASHBOARDCOMMENT', null)
         } else {

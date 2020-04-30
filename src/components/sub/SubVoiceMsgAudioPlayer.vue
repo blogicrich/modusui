@@ -17,7 +17,6 @@
         </v-layout>
       </v-flex>
     </v-layout>
-    <!-- <v-divider color="#f2f4f4"></v-divider> -->
   </v-container>
 </template>
 

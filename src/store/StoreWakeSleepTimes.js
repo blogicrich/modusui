@@ -25,7 +25,7 @@ export const moduleWakeSleepTimes = {
     // get all data
     fetchWakeSleepTimes ({ commit, rootGetters }) {
       const user = rootGetters.getterSelectedUser.userId
-      apiLib.getData('cliadmin/wake-sleep-time/' + user, true, true).then((response) => {
+      apiLib.getData('cliadmin/wake-sleep-time/' + user, false, true).then((response) => {
         if (typeof response === 'undefined') {
           commit('SET_WAKESLEEPTIME', {})
           commit('SET_DEFAULTVALUES', {})
@@ -46,7 +46,7 @@ export const moduleWakeSleepTimes = {
       await apiLib.updateData('cliadmin/wake-sleep-time/' + userId, {
         wakeUpTime: convertTimeToSecondsFromMidnight(state.times.wakeUpTime),
         sleepTime: convertTimeToSecondsFromMidnight(state.times.sleepTime)
-      }, true, true)
+      }, false, true)
     }
   },
   getters: {

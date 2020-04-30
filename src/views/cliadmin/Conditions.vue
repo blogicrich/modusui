@@ -20,6 +20,7 @@
       />
     </v-layout>
     <BaseDataTable
+      ref="baseDataTable"
       class="mx-4"
       :headers="headers"
       :items="items"
@@ -81,12 +82,13 @@
 
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'Conditions',
-  mixins: [crudRoutines, validation],
+  mixins: [dataTableNavGuard, crudRoutines, validation],
   components: {
     BaseDataTable
   },

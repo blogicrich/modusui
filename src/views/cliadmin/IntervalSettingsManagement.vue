@@ -135,12 +135,6 @@ export default {
       voiceGroupHeader: 'Voice Interval Options',
       voiceRadioDescription: 'Time between drink reminders - (Voice message)',
       voiceRadioHeader: 'Time interval in minutes',
-      wakeUpGroupHeader: 'Wake-up Interval Options',
-      wakeUpRadioDescription: 'Time between wake up and first communication of the day',
-      wakeUpRadioHeader: 'Time interval in minutes',
-      commsGroupHeader: 'Communication Interval Options',
-      commsRadioDescription: 'Time between edroplet communications - (Timer)',
-      commsRadioHeader: 'Time interval in minutes'
     }
   },
   methods: {
@@ -171,7 +165,6 @@ export default {
     if (!this.intervalsPristine && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
       return next(false)
     }
-
     next()
   }
 }

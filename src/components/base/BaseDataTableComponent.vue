@@ -699,10 +699,10 @@
 import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
+  name: 'BaseDataTable',
   components: {
     BaseDataTableInfoCard
   },
-  name: 'BaseDataTable',
   data () {
     return {
       valid: true,

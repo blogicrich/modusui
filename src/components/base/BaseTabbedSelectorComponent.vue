@@ -29,9 +29,9 @@
           >
           <keep-alive>
             <v-card flat>
-              <v-layout justify-space-around mt-4>
-                <v-flex v-if="item.communicationTypeDescription === 'Email'" lg4 md4 xs12>
-                  <h2 class="table-header">{{ cardEmailHeader }}</h2>
+              <v-layout class="mx-2" align-start justify-space-around>
+                <v-flex v-if="item.communicationTypeDescription === 'Email'" lg8 md8 xs12>
+                  <h2 class="table-header mt-4">{{ cardEmailHeader }}</h2>
                   <BaseDataTableInfoCard
                     :errorMsg="errorMsg"
                     :loadingMsg="loadingMsg"
@@ -39,7 +39,7 @@
                     :loading="loading"
                     :loaded="loaded"
                     :error="error"
-                    :color="primaryColor"
+                    :color="$vuetify.theme.primary"
                   />
                   <v-text-field
                     label="Subject"
@@ -54,9 +54,9 @@
                     @input="showBtns"
                   ></v-textarea>
                 </v-flex>
-                <v-flex v-if="item.communicationTypeDescription === 'SMS'" lg4 md4 xs12>
-                  <v-layout column justify-space-around mt-4>
-                    <h2 class="table-header">{{ cardSmsHeader }}</h2>
+                <v-flex v-if="item.communicationTypeDescription === 'SMS'" lg8 md8 xs12>
+                  <v-layout column justify-space-around>
+                    <h2 class="table-header mt-4">{{ cardSmsHeader }}</h2>
                     <v-textarea
                       label="SMS Body"
                       counter
@@ -127,9 +127,11 @@
 <script>
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import SubLandingNavButton from '@/components/sub/SubLandingNavButton.vue'
+import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
   components: {
+    BaseDataTableInfoCard,
     SubPageNavButton,
     SubLandingNavButton
   },

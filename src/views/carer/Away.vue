@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-layout class="mx-2" column fill-height justify-center>
+  <v-container fluid>
+    <v-layout column fill-height justify-center>
       <!-- Page Header -->
       <BaseViewHeader
         v-if="!userText"

@@ -42,7 +42,7 @@ export const moduleReports = {
   actions: {
     // get all data
     async fetchReportsConditionsGet (context) {
-      await apiLib.getData('carer/condition/' + this.getters.getterUserId, true).then((response) => {
+      await apiLib.getData('carer/condition/' + this.getters.getterUserId, false).then((response) => {
         if (typeof response === 'undefined') {
           context.commit('SET_REPORTSCONDITIONS', null)
         } else {
@@ -51,7 +51,7 @@ export const moduleReports = {
       })
     },
     async fetchReportsSnapshotGet (context) {
-      await apiLib.getData('carer/reports-snapshot/' + this.getters.getterUserId + '/' + this.getters.getterDate, true).then((response) => {
+      await apiLib.getData('carer/reports-snapshot/' + this.getters.getterUserId + '/' + this.getters.getterDate, false).then((response) => {
         if (typeof response === 'undefined') {
           context.commit('SET_REPORTSSNAPSHOT', null)
         } else {
@@ -60,7 +60,7 @@ export const moduleReports = {
       })
     },
     async fetchReportCommentsGet (context) {
-      await apiLib.getData('carer/reports-day-comments/' + this.getters.getterUserId, true).then((response) => {
+      await apiLib.getData('carer/reports-day-comments/' + this.getters.getterUserId, false).then((response) => {
         if (typeof response === 'undefined') {
           context.commit('SET_REPORTSCOMMENTS', null)
         } else {

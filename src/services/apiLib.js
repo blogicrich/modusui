@@ -91,7 +91,6 @@ axi.interceptors.response.use((response) => {
   if ([401, 403].includes(error.response.status)) {
     store.dispatch('LOGOUT')
   }
-
   return error
 })
 

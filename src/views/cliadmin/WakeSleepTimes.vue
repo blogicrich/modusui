@@ -172,6 +172,12 @@ export default {
   },
   mounted () {
     this.$store.dispatch('fetchWakeSleepTimes')
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.timeValueChanged && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+      return next(false)
+    }
+    next()
   }
 
 }

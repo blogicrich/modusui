@@ -8,6 +8,7 @@
       hasDivider
     />
     <BaseDataTable
+      ref="baseDataTable"
       :headers="headers"
       :items="items"
       :editPerms="editPerms"
@@ -67,12 +68,13 @@
 
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
-  name: 'SystemAdmins',
-  mixins: [crudRoutines, validation],
+  name: 'Titles',
+  mixins: [dataTableNavGuard, crudRoutines, validation],
   components: {
     BaseDataTable
   },

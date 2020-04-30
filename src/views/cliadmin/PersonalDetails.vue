@@ -44,12 +44,13 @@
 
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import DataTable from '@/components/base/BaseDataTableComponent'
 import WizardComponent from '@/components/base/BaseWizardComponent'
 
 export default {
   name: 'PersonalDetails',
-  mixins: [crudRoutines],
+  mixins: [dataTableNavGuard, crudRoutines],
   components: {
     DataTable,
     WizardComponent

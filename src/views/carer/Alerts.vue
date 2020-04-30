@@ -6,6 +6,7 @@
       text-xs-center
     >System Administrators</h2>
     <BaseDataTable
+      ref="baseDataTable"
       :headers="headers"
       :items="items"
       :editPerms="editPerms"

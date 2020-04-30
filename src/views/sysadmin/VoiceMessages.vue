@@ -11,7 +11,6 @@
       <v-flex xs12>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>
-          <p class="ma-2"> {{ msgReminderRadioDescription }}</p>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
@@ -23,7 +22,6 @@
         </v-card>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Praises</h2>
-          <p class="ma-2"> {{ msgPraiseRadioDescription }}</p>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
@@ -35,7 +33,6 @@
         </v-card>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Instruct</h2>
-          <p class="ma-2"> {{ msgInstructRadioDescription }}</p>
           <v-divider class="ma-2" color="#00a1cd">
           </v-divider>
           <SubVoiceMsgAudioPlayer
@@ -111,19 +108,9 @@ export default {
       }
       if (this.user.find(level => level === 'SYSTEM ADMINISTRATOR')) {
         await this.$store.dispatch('fetchVoiceMessagesDefaults')
-        // console.log('voice defaults: ', this.$store.state.voiceMessages.voiceMessagesDefaults)
         this.setTypes()
-        // if (this.$store.state.voiceMessages.voiceMessagesDefaults) {
-        // let voiceMessageDefaultStore = this.$store.state.voiceMessages.voiceMessagesDefaults
-        // for (let i = 0; i < voiceMessageDefaultStore.length; i++) {
-        // for (let j = 0; j < voiceMessageDefaultStore[i].length; j++) {
-        // this.apiData.push(voiceMessageDefaultStore[i])
-        // }
-        // }
-        // }
         console.log('api data: ', this.apiData)
       }
-      // this.setTypes()
     }
   },
   mounted () {

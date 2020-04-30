@@ -395,16 +395,10 @@ export default {
     this.$store.dispatch('fetchHydrationParameters')
   },
   beforeRouteLeave (to, from, next) {
-    if (this.defaultValuesChanged === true) {
-      let answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
-      if (answer) {
-        next()
-      } else {
-        next(false)
-      }
-    } else {
-      next()
+    if (this.defaultValuesChanged && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+      return next(false)
     }
+    next()
   }
 }
 </script>

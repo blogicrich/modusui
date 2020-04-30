@@ -205,16 +205,10 @@ export default {
     this.setData()
   },
   beforeRouteLeave (to, from, next) {
-    if (this.newDefaultValue === true) {
-      let answer = window.confirm('Do you really want to leave? You will loseall unsaved changes!')
-      if (answer) {
-        next()
-      } else {
-        next(false)
-      }
-    } else {
-      next()
+    if (this.newDefaultValue && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+      return next(false)
     }
+    next()
   }
 }
 </script>

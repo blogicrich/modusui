@@ -6,9 +6,6 @@
       :dashboardHour="dashboardHour"
       :dashboardWeek="dashboardWeek"
       :refreshRate="refreshRate"
-      @refresh="updateCharts"
-      @dateChange="updateDate"
-      @userChange="updateUser"
       :selectedUser="selectedUser"
       :usersLoaded="usersLoaded"
       :hourLoaded="hourLoaded"
@@ -18,6 +15,10 @@
       :hourError="hourError"
       :dayError="dayError"
       :weekError="weekError"
+
+      @refresh="updateCharts"
+      @dateChange="updateDate"
+      @userChange="updateUser"
     />
   </keep-alive>
 </template>

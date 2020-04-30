@@ -321,8 +321,6 @@ export default {
       if (!this.authenticated) {
         this.logout()
         this.$router.push('/login')
-      } else {
-        console.log('Still Authenticated: ', this.authenticated)
       }
     }
   },

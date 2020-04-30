@@ -58,11 +58,6 @@ export default new Router({
       component: () => import(/* webpackChunkName: "away" */ './views/carer/Away.vue')
     },
     {
-      path: '/userconditions',
-      name: 'UserConditions',
-      component: () => import(/* webpackChunkName: "user-conditions" */ './views/carer/UserConditions.vue')
-    },
-    {
       path: '/dashboard',
       name: 'Dashboard',
       component: () => import(/* webpackChunkName: "dashboard" */ './views/carer/Dashboard.vue')

@@ -6,7 +6,8 @@
       :headerText="headerText"
       hasDivider
     />
-    <baseTab
+    <BaseTabSelector
+      ref="messageTabs"
       class="mx-4"
       v-if="items"
       :items="items"
@@ -23,20 +24,20 @@
       cardSmsHeader= "SMS Message Template"
       @itemsEdited="edittedItems(...arguments)"
       @itemsCancelled="refreshItems"
-    ></baseTab>
+    ></BaseTabSelector>
   </v-container>
 </template>
 
 <script>
 
-import baseTab from '@/components/base/BaseTabbedSelectorComponent.vue'
+import BaseTabSelector from '@/components/base/BaseTabbedSelectorComponent.vue'
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import apiLib from '@/services/apiLib'
 
 export default {
   name: 'TextMessages',
   components: {
-    baseTab
+    BaseTabSelector
   },
   mixins: [crudRoutines],
   data () {
@@ -66,20 +67,16 @@ export default {
   methods: {
     edittedItems (data, item) {
       apiLib.updateData(this.updateUrl + '/' + this.items[item].alertMessagesId, data, true, true)
-      this.$store.dispatch('fetchMessages')
     }
   },
   mounted () {
     this.getItems(this.readUrl)
-    this.$store.dispatch('fetchMessages')
   },
   beforeRouteLeave (to, from, next) {
-    const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
-    if (answer) {
-      next()
-    } else {
-      next(false)
+    if (this.$refs.messageTabs.btns && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+      return next(false)
     }
+    next()
   }
 }
 </script>
