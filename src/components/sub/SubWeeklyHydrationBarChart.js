@@ -1,4 +1,3 @@
-<script>
 import { Bar, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
@@ -36,22 +35,35 @@ export default {
       }
     }
   },
+  watch: {
+    chartData () {
+      this.renderChart(this.chartDataConverted, this.chartOptions)
+    }
+  },
   computed: {
     chartDataConverted () {
       return {
-        labels: this.chartData.map(hourDataPoint => hourDataPoint.label),
+        labels: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
+        ],
         datasets: [{
-          label: 'Hydration in litres',
+          label: 'Total in litres for this day',
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
-          data: this.chartData.map(hourDataPoint => hourDataPoint.value.toFixed(2))
+          data: this.chartData
         }]
       }
     }
   },
   mounted () {
+    console.log(this.chartData)
     this.renderChart(this.chartDataConverted, this.chartOptions)
   }
 }
-</script>

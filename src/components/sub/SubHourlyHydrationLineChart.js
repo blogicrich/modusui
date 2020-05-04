@@ -1,18 +1,10 @@
-<script>
 import { Line, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
 export default {
   extends: Line,
   mixins: [reactiveProp],
-  props: {
-    chartTitle: {
-      type: String
-    },
-    chartData: {
-      type: Array // Array with objects with keys: label and value
-    }
-  },
+  props: ['chartTitle', 'chartData'],
   data () {
     return {
       chartOptions: {
@@ -44,6 +36,13 @@ export default {
       }
     }
   },
+  watch: {
+    chartData () {
+      // this.$data._chart.destroy()
+      this.renderChart(this.chartDataConverted, this.chartOptions) 
+      // this.$data._chart.update()
+    }
+  },
   computed: {
     chartDataConverted () {
       return {
@@ -62,4 +61,4 @@ export default {
     this.renderChart(this.chartDataConverted, this.chartOptions)
   }
 }
-</script>
+

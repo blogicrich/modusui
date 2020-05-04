@@ -1,4 +1,4 @@
-<script>
+
 import { Doughnut, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
@@ -11,6 +11,9 @@ export default {
     },
     chartData: {
       type: Object // Expects object with the following values: overHydrated, target, consumed and remaining
+    },
+    options: {
+      type: Object
     }
   },
   data () {
@@ -32,6 +35,11 @@ export default {
       }
     }
   },
+  watch: {
+    chartData () {
+      this.renderChart(this.chartDataConverted, this.chartOptions)
+    }
+  },
   computed: {
     chartDataConverted () {
       return {
@@ -51,7 +59,7 @@ export default {
     }
   },
   mounted () {
+    // console.log(this.chartData.overHydrated.toFixed(2))
     this.renderChart(this.chartDataConverted, this.chartOptions)
   }
 }
-</script>

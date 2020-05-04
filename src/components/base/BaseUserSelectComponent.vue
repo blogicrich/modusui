@@ -85,7 +85,8 @@ export default {
   },
   methods: {
     userSelected (item) {
-      this.$emit('userSelected', item)
+      console.log(item)
+      this.$emit('user-selected', item)
     },
 
     getDisplayName (user) {
