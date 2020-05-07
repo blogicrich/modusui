@@ -3,7 +3,7 @@
       <v-menu ref="hourlyChartTypeSelector" offset-y>
         <template v-slot:activator="{ on }">
           <v-btn
-            class="text-white mt-2 mr-2"
+            class="text-white"
             color="primary"
             v-on="on"
           >{{ btnTitle }}
@@ -27,30 +27,16 @@
 <script>
 
 export default {
-  name: 'BaseChartSelection',
+  name: 'BaseChartSelectionComponent',
   props: {
     chartTypes: Array,
     btnTitle: String,
     selectedType: String
   },
-  computed: {
-
-  },
-  data () {
-    return {
-      
-    }
-  },
-  watch: {
-
-  },
   methods: {
     tileClicked (value) {
       this.$emit('chart-type-changed', value)
     }
-  },
-  mounted () {
-
   }
 }
 </script>

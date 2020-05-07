@@ -4,14 +4,7 @@ const { reactiveProp } = mixins
 export default {
   extends: Bar,
   mixins: [reactiveProp],
-  props: {
-    chartTitle: {
-      type: String
-    },
-    chartData: {
-      type: Array // Array with objects with keys: label and value
-    }
-  },
+  props: ['chartTitle', 'chartData'],
   data () {
     return {
       chartOptions: {
@@ -20,7 +13,6 @@ export default {
         spanGaps: true,
         title: {
           display: true,
-          text: this.chartTitle,
           fontSize: 16
         },
         scales: {
@@ -37,33 +29,10 @@ export default {
   },
   watch: {
     chartData () {
-      this.renderChart(this.chartDataConverted, this.chartOptions)
-    }
-  },
-  computed: {
-    chartDataConverted () {
-      return {
-        labels: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday'
-        ],
-        datasets: [{
-          label: 'Total in litres for this day',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1,
-          data: this.chartData
-        }]
-      }
+      this.$data._chart.update()
     }
   },
   mounted () {
-    console.log(this.chartData)
-    this.renderChart(this.chartDataConverted, this.chartOptions)
+    this.renderChart(this.chartData, this.chartOptions)
   }
 }

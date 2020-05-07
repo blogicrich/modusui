@@ -1,24 +1,61 @@
 <template>
-  <v-container class="pa-0 ma-0" fluid>
-    <v-layout class="mx-1" v-bind="binding">
-      <v-flex xs12 lg6>
-        <v-layout class="mx-2" v-if="$vuetify.breakpoint.lgAndUp" row fill-height align-center justify-start>
-          <v-icon large color="primary">group</v-icon>
-          <h2 class="text-primary ml-2">Connected eDroplet Users</h2>
+  <v-menu
+    v-model="showMenu"
+    absolute
+    offset-y
+    :close-on-content-click="closeOnclick"
+    full-width
+  >
+    <template  v-slot:activator="{ on }">
+      <v-card hover ref="selected-user-tile" class="pa-3" v-on="on">
+        <v-layout row fill-height align-center justify-space-between>
+          <!-- DESKTOP -->
+          <v-flex v-if="$vuetify.breakpoint.lgAndUp" grow>
+            <v-layout row fill-height align-center justify-start>
+              <v-icon large color="primary">group</v-icon>
+              <transition name="component-fade" mode="out-in">
+                <p class="table-header text-primary ma-2">{{ 'Connected eDroplet User: '}}</p>
+              </transition>
+              <transition name="component-fade" mode="out-in">
+                <p class="table-header text-secondary ma-2">{{ userName }}</p>
+              </transition>
+            </v-layout>
+          </v-flex>
+          <!-- MOBILE -->
+          <v-flex v-if="$vuetify.breakpoint.mdAndDown">
+            <v-layout row fill-height align-center justify-start>
+              <v-icon medium color="primary">group</v-icon>
+              <transition name="component-fade" mode="out-in">
+                <p class="table-header text-secondary text-overflow-ellipsis ma-2">{{ userName }}</p>
+              </transition>
+            </v-layout>
+          </v-flex>
+          <v-spacer></v-spacer>
+
+          <v-icon
+            large
+            :title="getStatus(selectedUser)"
+            :color="getColour(selectedUser)"
+          >notification_important
+          </v-icon>
+          <v-icon
+            large
+            :title="getStatus(selectedUser)"
+            :color="getColour(selectedUser)"
+          >{{ getMood(selectedUser) }}
+          </v-icon> 
         </v-layout>
-        <v-layout v-if="$vuetify.breakpoint.mdAndDown" row fill-height align-center justify-center>
-          <v-icon class="mx-1" medium color="primary">group</v-icon>
-          <h2 class="text-primary">Connected Droplet Users</h2>
-        </v-layout>
-      </v-flex>
-      <v-flex xs12 lg6>
-        <v-text-field class="ma-1" v-model="search" prepend-icon="search"></v-text-field>
-      </v-flex>
-    </v-layout>
+      </v-card>
+    </template>
+    <!-- USER LIST -->
     <v-list two-line subheader class="ma-0 pa-0 userList">
+      <v-list-tile @click="searchTileClicked">
+          <v-text-field class="ma-1" v-model="search" prepend-icon="search"></v-text-field>
+      </v-list-tile>
       <v-list-tile
         avatar
         dense
+        double-line
         v-for="user in searchResults"
         :key="user.userId"
         @click="userSelected(user)"
@@ -27,12 +64,10 @@
         <v-list-tile-avatar>
           <v-icon large color="primary">person</v-icon>
         </v-list-tile-avatar>
-
         <v-list-tile-content>
           <v-list-tile-title>{{ getDisplayName(user) }}</v-list-tile-title>
-          <v-list-tile-sub-title>{{ user.comments || 'No comments'}}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>{{ user.comments || 'No comments' }}</v-list-tile-sub-title>
         </v-list-tile-content>
-
         <v-list-tile-action>
           <v-icon
             :title="getStatus(user)"
@@ -40,15 +75,25 @@
           >{{ getMood(user) }}</v-icon>
         </v-list-tile-action>
       </v-list-tile>
+      <v-list-tile v-if="searchResults.length === 0">
+          <v-flex>
+            <p class="text-primary text-center"> NO USERS MATCHING <br>{{ search }}</p>
+          </v-flex>
+      </v-list-tile>
     </v-list>
-  </v-container>
+  </v-menu>
 </template>
 
 <script>
+
 export default {
+  name: 'BaseUserSelectComponent',
   data () {
     return {
+      closeOnclick: false,
       search: '',
+      showMenu: false,
+      on: false,
       colourMapping: {
         'Green': '#00e676',
         'Amber': '#ffc400',
@@ -61,34 +106,19 @@ export default {
     selectedUser: Object
   },
   computed: {
-    binding () {
-      const binding = {}
-      if (this.$vuetify.breakpoint.mdAndDown) {
-        binding.column = true
-        binding.row = false
-        binding.fillHeight = false
-        binding.alignCenter = true
-        binding.justifySpaceBetween = false
-      }
-      if (this.$vuetify.breakpoint.lgAndUp) {
-        binding.column = false
-        binding.row = true
-        binding.fillHeight = true
-        binding.alignCenter = true
-        binding.justifySpaceBetween = true
-      }
-      return binding
+    userName () {
+      return this.selectedUser.givenName + ' ' + this.selectedUser.familyName
     },
-    searchResults () {
+    searchResults (user) {
       return this.users.filter((user) => this.getDisplayName(user).toLowerCase().match(this.search.toLowerCase()))
     }
   },
   methods: {
-    userSelected (item) {
-      console.log(item)
-      this.$emit('user-selected', item)
+    userSelected (user) {
+      this.closeOnclick = true
+      console.log(user)
+      this.$emit('user-selected', user)
     },
-
     getDisplayName (user) {
       return user.salutation || `${user.givenName} ${user.familyName}`
     },
@@ -115,6 +145,9 @@ export default {
       } else {
         return '#bec5b0'
       }
+    },
+    searchTileClicked () {
+      this.closeOnclick = false
     }
   }
 }
@@ -127,7 +160,9 @@ export default {
   background-color: $table-row-hover;
 }
 
-.userList {
-  overflow-y: auto;
+.text-overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

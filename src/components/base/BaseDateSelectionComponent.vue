@@ -25,7 +25,7 @@
         title="Increase date by one day"
       >keyboard_arrow_right</v-icon>
     </v-layout>
-    </v-container>
+  </v-container>
 </template>
 
 <script>
@@ -37,30 +37,46 @@ export default {
       return this.$moment(this.date).format('L')
     }
   },
+  props: {
+    bounce: Number // Switch bounce time in ms i.e '500' = 0.5s
+  },
   data () {
     return {
+      selectionTimeout: null,
       date: null,
       menu: false,
-      maxDate: this.$moment().format('YYYY-MM-DD')
+      maxDate: this.$moment().format('YYYY-MM-DD'),
     }
   },
   watch: {
     date () {
-      this.$emit('dateChange', this.date)
+      const self = this
+      if (this.selectionTimeout) {
+        console.log('clearing-timeout')
+        clearTimeout(this.selectionTimeout)
+      }
+      this.selectionTimeout = setTimeout(function () {
+        self.$emit('date-change', {
+          iso: self.date,
+          unix: self.$moment.utc(self.date).unix(),
+          formattedDate: self.$moment(self.date).format('LL')
+        })
+      }, this.bounce)
     }
   },
   methods: {
     addDay () {
       this.date = this.$moment(this.date, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD')
     },
-
     subtractDay () {
       this.date = this.$moment(this.date).subtract(1, 'day').format('YYYY-MM-DD')
     }
   },
   mounted () {
     this.date = this.$moment(Date.now()).format('YYYY-MM-DD')
+  },
+  beforeDestroy () {
+    clearTimeout(this.selectionTimeout)
   }
 }
 </script>
-

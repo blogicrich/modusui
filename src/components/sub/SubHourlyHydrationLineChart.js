@@ -21,7 +21,6 @@ export default {
         },
         title: {
           display: true,
-          text: this.chartTitle,
           fontSize: 16
         },
         scales: {
@@ -38,27 +37,10 @@ export default {
   },
   watch: {
     chartData () {
-      // this.$data._chart.destroy()
-      this.renderChart(this.chartDataConverted, this.chartOptions) 
-      // this.$data._chart.update()
-    }
-  },
-  computed: {
-    chartDataConverted () {
-      return {
-        labels: this.chartData.map(hourDataPoint => hourDataPoint.label),
-        datasets: [{
-          label: 'Hydration in litres',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1,
-          data: this.chartData.map(hourDataPoint => hourDataPoint.value.toFixed(2))
-        }]
-      }
+      this.$data._chart.update()
     }
   },
   mounted () {
-    this.renderChart(this.chartDataConverted, this.chartOptions)
+    this.renderChart(this.chartData, this.chartOptions)
   }
 }
-

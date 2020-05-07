@@ -68,9 +68,10 @@ export const moduleEdropletApp = {
     // Actions commit mutations. Actions can be Async! Yay.
     async POST_LOGIN (context, payload) {
       context.commit('SET_LOAD_STATUS', true)
-      let data = apiLib.postAuth('login', payload).then(response => {
+      let data = apiLib.postAuth('login', payload, true).then(response => {
         if (response) {
           if (response.roles) {
+            localStorage.clear()
             context.commit('SET_AUTHENTICATION_STATE', true)
             context.commit('SET_ACCOUNT_HOLDER_ID', response.accountHolderId)
             context.commit('SET_CARER_ID', response.carerId)
