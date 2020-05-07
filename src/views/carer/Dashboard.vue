@@ -2,7 +2,6 @@
   <keep-alive>
       <BaseDashboard
         v-if="!dashboardIsLoading"
-        :is=""
       >
         <BaseDateSelection
           slot="dashboardHeaderCenter"
@@ -220,7 +219,7 @@ export default {
         { type: 'Line Chart' }
       ],
       menu: false,
-      maxDate: this.$moment().format('YYYY-MM-DD'),
+      maxDate: this.$moment().format('YYYY-MM-DD')
     }
   },
   methods: {
@@ -258,6 +257,7 @@ export default {
     this.setUsers()
     this.$watch(
       (vm) => (
+        // eslint-disable-next-line
         vm.selectedDate, vm.selectedUser, Date.now()),
       function () {
         this.updateDashboardStatus()

@@ -9,7 +9,8 @@
           <h1 class="pg-header text-primary header-container">{{ headerText }}</h1>
         </v-layout>
         <v-layout v-if="chipsText" row align-center justify-end>
-          <v-icon class="mx-2" v-if="$vuetify.breakpoint.mdAndUp" outline medium :color="$vuetify.theme.primary">person</v-icon>
+          <slot name="rhColumn"></slot>
+          <!-- <v-icon class="mx-2" v-if="$vuetify.breakpoint.mdAndUp" outline medium :color="$vuetify.theme.primary">person</v-icon>
           <v-icon class="mx-2" v-if="$vuetify.breakpoint.smAndDown" outline small :color="$vuetify.theme.primary">person</v-icon>
           <v-chip
             v-if="$vuetify.breakpoint.mdAndUp"
@@ -23,7 +24,7 @@
             color="secondary"
             text-color="primary"
           >{{ chipsText }}
-          </v-chip>
+          </v-chip> -->
         </v-layout>
       </v-layout>
     </v-layout>
@@ -32,6 +33,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'BaseViewHeader',
   data () {
@@ -42,8 +44,8 @@ export default {
   props: {
     headerIcon: String,
     headerText: String,
-    hasDivider: Boolean,
-    chipsText: String
+    hasDivider: Boolean
+    // chipsText: String
   }
 }
 </script>

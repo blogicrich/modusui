@@ -8,15 +8,11 @@
         :headerIcon="headerIcon"
         :headerText="headerText"
         hasDivider
-      />
-      <BaseViewHeader
-        v-if="userText"
-        class="mx-2 mb-4"
-        :chipsText="userText"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      />
+      >
+        <!-- <BaseUserSelect
+          :users=
+        /> -->
+      </BaseViewHeader>
       <!-- Date selection form -->
       <v-form
         ref="dateSelectForm"
@@ -114,12 +110,15 @@
 <script>
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import dataTable from '@/components/base/BaseDataTableComponent'
 import moment from 'moment'
 
 export default {
+  name: 'Away',
   mixins: [crudRoutines],
   components: {
+    BaseUserSelect,
     dataTable
   },
   computed: {
@@ -153,7 +152,7 @@ export default {
       return this.startDate ? moment(this.startDate).format('dddd, MMMM Do YYYY') : ''
     },
     user: function () {
-      console.log(this.$store.getters.getterSelectedUser)
+      // console.log(this.$store.getters.getterSelectedUser)
       return this.$store.getters.getterSelectedUser
     },
     userText: function () {

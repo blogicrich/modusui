@@ -134,7 +134,7 @@ export default {
       } else {
         return ''
       }
-    },
+    }
   },
   data () {
     return {

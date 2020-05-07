@@ -45,7 +45,7 @@ export default {
       selectionTimeout: null,
       date: null,
       menu: false,
-      maxDate: this.$moment().format('YYYY-MM-DD'),
+      maxDate: this.$moment().format('YYYY-MM-DD')
     }
   },
   watch: {

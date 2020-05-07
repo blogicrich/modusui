@@ -51,8 +51,8 @@ export default {
       this.showSaveFile = false
     },
     saveInterval (values) {
-      console.log(values)
-      console.log(data)
+      // console.log(values)
+      // console.log(data)
     },
     showSaveInterval () {
       return false

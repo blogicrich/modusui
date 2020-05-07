@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     // urls: function () {
-    //   return [{ 
+    //   return [{
     //     ref: [{ statusId: 1, status: 'Live' }, { statusId: 0, status: 'Inactive' }],
     //     attr: 'operationalStatus',
     //     key: 'statusId'

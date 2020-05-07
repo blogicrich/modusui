@@ -43,7 +43,7 @@
             :title="getStatus(selectedUser)"
             :color="getColour(selectedUser)"
           >{{ getMood(selectedUser) }}
-          </v-icon> 
+          </v-icon>
         </v-layout>
       </v-card>
     </template>

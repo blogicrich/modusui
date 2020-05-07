@@ -153,7 +153,7 @@ export default {
       drinkRadioHeader: 'Please select an option from the following:',
       voiceGroupHeader: 'Voice Message Interval Options',
       voiceRadioDescription: 'Time between drink reminders - Voice message:',
-      voiceRadioHeader: 'Time interval in minutes',
+      voiceRadioHeader: 'Time interval in minutes'
     }
   },
   methods: {

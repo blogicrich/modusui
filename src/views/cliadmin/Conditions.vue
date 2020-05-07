@@ -198,7 +198,7 @@ export default {
           attr: 'volume',
           cellLabel: 'Volume',
           validators: [
-            value => !!value || 'Required.',
+            value => !!value || 'Required.'
             // value => value.length <= 20 || 'Max 20 characters',
             // value => {
             //   if (this.alphabeticalRegEx.test(value)) {
@@ -282,7 +282,7 @@ export default {
           attr: 'volume',
           cellLabel: 'Volume',
           validators: [
-            value => !!value || 'Required.',
+            value => !!value || 'Required.'
             // value => value.length <= 20 || 'Max 20 characters',
             // value => {
             //   if (this.alphabeticalRegEx.test(value)) {
