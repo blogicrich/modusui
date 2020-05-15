@@ -22,7 +22,7 @@
             </v-layout>
           </v-flex>
           <!-- MOBILE -->
-          <v-flex v-if="$vuetify.breakpoint.mdAndDown">
+          <v-flex v-if="$vuetify.breakpoint.mdAndDown" grow>
             <v-layout row fill-height align-center justify-start>
               <v-icon medium color="primary">group</v-icon>
               <transition name="component-fade" mode="out-in">
@@ -30,8 +30,6 @@
               </transition>
             </v-layout>
           </v-flex>
-          <v-spacer></v-spacer>
-
           <v-icon
             large
             :title="getStatus(selectedUser)"
@@ -114,31 +112,6 @@ export default {
     }
   },
   methods: {
-    userSelected (user) {
-      this.closeOnclick = true
-      console.log(user)
-      this.$emit('user-selected', user)
-    },
-    getDisplayName (user) {
-      return user.salutation || `${user.givenName} ${user.familyName}`
-    },
-
-    getStatus (user) {
-      if (user.hydrationStatus && user.hydrationStatus.description) {
-        return `This user is ${user.hydrationStatus.description.toLowerCase()}`
-      } else {
-        return 'Hydration status unknown'
-      }
-    },
-
-    getMood (user) {
-      if (user.hydrationStatus && user.hydrationStatus.description) {
-        return user.hydrationStatus.description === 'Hydrated' ? 'mood' : 'mood_bad'
-      } else {
-        return 'mood'
-      }
-    },
-
     getColour (user) {
       if (user.hydrationStatus && user.hydrationStatus.RAG) {
         return this.colourMapping[user.hydrationStatus.RAG]
@@ -146,8 +119,29 @@ export default {
         return '#bec5b0'
       }
     },
+    getDisplayName (user) {
+      return user.salutation || `${user.givenName} ${user.familyName}`
+    },
+    getMood (user) {
+      if (user.hydrationStatus && user.hydrationStatus.description) {
+        return user.hydrationStatus.description === 'Hydrated' ? 'mood' : 'mood_bad'
+      } else {
+        return 'mood'
+      }
+    },
+    getStatus (user) {
+      if (user.hydrationStatus && user.hydrationStatus.description) {
+        return `This user is ${user.hydrationStatus.description.toLowerCase()}`
+      } else {
+        return 'Hydration status unknown'
+      }
+    },
     searchTileClicked () {
       this.closeOnclick = false
+    },
+    userSelected (user) {
+      this.closeOnclick = true
+      this.$emit('user-selected', user)
     }
   }
 }

@@ -1,104 +1,102 @@
 <template>
   <keep-alive>
-      <BaseDashboard
-        v-if="!dashboardIsLoading"
-      >
-        <BaseDateSelection
-          slot="dashboardHeaderCenter"
-          :bounce="500"
-          @date-change="selectedDate = $event"
+    <BaseDashboard
+      v-if="!dashboardIsLoading"
+    >
+      <BaseDateSelection
+        slot="dashboardHeaderCenter"
+        :date="selectedDate"
+        :maxDate="maxDate"
+        :formattedDate="formattedDate"
+        @date-change="$store.commit('SET_DASHBOARD_DATE', $event)"
+        @add-day="$store.commit('INCREMENT_DASHBOARD_DATE', $event)"
+        @subtract-day="$store.commit('DECREMENT_DASHBOARD_DATE', $event)"
+      />
+      <BaseUserSelect
+        slot="dashboardHeaderRight"
+        :users="dashboardUsers"
+        :selectedUser="selectedUser"
+        @user-selected="$store.commit('SET_SELECTED_USER', $event)"
+      />
+      <v-flex slot="tileOne">
+        <BaseChartHeader v-if="hourChartDataLoaded">
+          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
+          <BaseChartTypeSelector
+            slot="tools"
+            :chartTypes="hourChartTypes"
+            btnTitle="Chart Type"
+            :selectedType="hourChartType"
+            @chart-type-changed="hourChartType = $event"
+          />
+        </BaseChartHeader>
+        <SubHourlyHydrationLineChart
+          ref="hourLineChart"
+          v-if="hourChartData && hourChartType === 'Line Chart'"
+          :chartData="hourLineBarChartData"
         />
-        <BaseUserSelect
-          slot="dashboardHeaderRight"
-          :users="dashboardUsers"
-          :selectedUser="selectedUser"
-          @user-selected="$store.commit('SET_SELECTED_USER', $event)"
+        <SubHourlyHydrationBarChart
+          ref="hourBarChart"
+          v-if="hourChartData && hourChartType === 'Bar Chart'"
+          :chartData="hourLineBarChartData"
         />
-        <v-flex slot="tileOne">
-          <BaseChartHeader v-if="hourChartDataLoaded">
-            <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
-            <BaseChartTypeSelector
-              slot="tools"
-              :chartTypes="hourChartTypes"
-              btnTitle="Chart Type"
-              :selectedType="hourChartType"
-              @chart-type-changed="hourChartType = $event"
-            />
-          </BaseChartHeader>
-          <!-- <transition name="component-fade" mode="out-in"> -->
-            <SubHourlyHydrationLineChart
-              ref="hourLineChart"
-              v-if="hourChartDataLoaded && hourChartType === 'Line Chart'"
-              :chartData="hourLineBarChartData"
-            />
-            <SubHourlyHydrationBarChart
-              ref="hourBarChart"
-              v-if="hourChartDataLoaded && hourChartType === 'Bar Chart'"
-              :chartData="hourLineBarChartData"
-            />
-            <BaseDashboardTileOverlay
-              v-if="!hourChartDataLoaded"
-              class="chart-overlay"
-              message="No data for user or date selected"
-            ></BaseDashboardTileOverlay>
-          <!-- </transition> -->
-        </v-flex>
-        <v-flex slot="tileTwo">
-          <BaseChartHeader v-if="dayChartDataLoaded">
-            <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
-          </BaseChartHeader>
-          <SubHydrationDayPieChart
-            v-if="dayChartDataLoaded"
-            ref="dayPieChart"
-            :chartData="dailyPieChartData"
-          />
-          <BaseDashboardTileOverlay
-            v-if="!dayChartDataLoaded"
-            class="chart-overlay"
-            message="No data for user or date selected"
-          ></BaseDashboardTileOverlay>
-        </v-flex>
-        <v-flex slot="tileThree">
-          <BaseChartHeader v-if="weekChartDataLoaded">
-            <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ weekChartTitle }}</p>
-          </BaseChartHeader>
-          <SubWeeklyHydrationBarChart
-            ref="weeklyBarChart"
-            v-if="weekChartDataLoaded"
-            :chartData="weekLineBarChartData"
-          />
-          <BaseDashboardTileOverlay
-            v-if="!weekChartDataLoaded"
-            class="chart-overlay"
-            message="No data for user or date selected"
-          ></BaseDashboardTileOverlay>
-        </v-flex>
-        <v-flex slot="tileFour">
-          <BaseChartHeader v-if="dayChartDataLoaded">
-            <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
-          </BaseChartHeader>
-          <SubHydrationDayPieChart
-            ref="percentHydratedChart"
-            v-if="dayChartDataLoaded"
-            :chartData="dailyPieChartData"
-          />
-          <BaseDashboardTileOverlay
-            v-if="!dayChartDataLoaded"
-            class="chart-overlay"
-            message="No data for user or date selected"
-          ></BaseDashboardTileOverlay>
-        </v-flex>
-      </BaseDashboard>
-      <transition name="component-fade" mode="in-out">
-        <BaseDataInfoCard
-          v-if="dashboardIsLoading"
-          :loading="!dashboardUsersLoaded || !hourChartDataLoaded || !dayChartDataLoaded || !weekChartDataLoaded"
-          :color="$vuetify.theme.primary"
-          :error="false"
-          loadingMsg="Loading dashboard data... Please wait"
-        ></BaseDataInfoCard>
-      </transition>
-    </keep-alive>
+        <!-- <BaseDashboardTileOverlay
+          v-if="!hourChartDataLoaded"
+          message="No data for user or date selected"
+        ></BaseDashboardTileOverlay> -->
+      </v-flex>
+      <v-flex slot="tileTwo">
+        <BaseChartHeader v-if="dayChartDataLoaded">
+          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
+        </BaseChartHeader>
+        <SubHydrationDayPieChart
+          v-if="dayChartDataLoaded"
+          ref="dayPieChart"
+          :chartData="dailyPieChartData"
+        />
+        <!-- <BaseDashboardTileOverlay
+          v-if="!dayChartDataLoaded"
+          message="No data for user or date selected"
+        ></BaseDashboardTileOverlay> -->
+      </v-flex>
+      <v-flex slot="tileThree">
+        <BaseChartHeader v-if="weekChartDataLoaded">
+          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ weekChartTitle }}</p>
+        </BaseChartHeader>
+        <SubWeeklyHydrationBarChart
+          ref="weeklyBarChart"
+          v-if="weekChartDataLoaded"
+          :chartData="weekLineBarChartData"
+        />
+        <!-- <BaseDashboardTileOverlay
+          v-if="!weekChartDataLoaded"
+          message="No data for user or date selected"
+        ></BaseDashboardTileOverlay> -->
+      </v-flex>
+      <v-flex slot="tileFour">
+        <BaseChartHeader v-if="dayChartDataLoaded">
+          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
+        </BaseChartHeader>
+        <SubHydrationDayPieChart
+          ref="percentHydratedChart"
+          v-if="dayChartDataLoaded"
+          :chartData="dailyPieChartData"
+        />
+        <!-- <BaseDashboardTileOverlay
+          v-if="!dayChartDataLoaded"
+          message="No data for user or date selected"
+        ></BaseDashboardTileOverlay> -->
+      </v-flex>
+    </BaseDashboard>
+    <transition name="component-fade" mode="in-out">
+      <BaseDataInfoCard
+        v-if="dashboardIsLoading"
+        :loading="dashboardIsLoading"
+        :color="$vuetify.theme.primary"
+        :error="false"
+        loadingMsg="Loading dashboard data... Please wait"
+      ></BaseDataInfoCard>
+    </transition>
+  </keep-alive>
 </template>
 
 <script>
@@ -133,6 +131,9 @@ export default {
   },
   computed: {
     ...mapState({
+      // Dates
+      selectedDate: state => state.dashboardDates.dashboardSelectedDate,
+      formattedDate: state => state.dashboardDates.dashboardFormattedDate,
       // Users
       selectedUser: state => state.eDropletApp.selectedUser,
       dashboardUsers: state => state.dashboardUsers.dashboardUsers,
@@ -156,120 +157,116 @@ export default {
     }),
     hourLineBarChartData () {
       if (this.hourChartDataLoaded && !this.hourChartDataUpdating) {
-        return {
-          labels: this.hourChartData.map(hourDataPoint => hourDataPoint.label),
-          datasets: [{
-            label: 'Hydration in litres',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-            data: this.hourChartData.map(hourDataPoint => hourDataPoint.value)
-          }]
-        }
-      } else {
-        return false
+        return this.$store.getters.getterHourLineBarChartData
       }
     },
     weekLineBarChartData () {
-      return {
-        labels: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday'
-        ],
-        datasets: [{
-          label: 'Total in litres for this day',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1,
-          data: this.weekChartData
-        }]
+      if (this.weekChartDataLoaded && !this.weekChartDataUpdating) {
+        return this.$store.getters.getterWeekLineBarChartData
       }
     },
     dailyPieChartData () {
-      return {
-        labels: ['Over Hydrated', 'Hydrated', 'Remaining'],
-        datasets: [{
-          backgroundColor: ['rgba(255, 97, 111, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(176, 190, 197, 0.2)'],
-          borderColor: ['rgba(255, 97, 111, 1)', 'rgba(54, 162, 235, 1)', 'rgba(176, 190, 197, 1)'],
-          borderWidth: 1,
-          data: [
-            this.dayChartData.overHydrated,
-            this.dayChartData.hydrated,
-            this.dayChartData.remaining
-          ],
-          weight: 3
-        }]
+      if (this.dayChartDataLoaded && !this.dayChartDataUpdating) {
+        return this.$store.getters.getterDailyPieChartData
       }
     }
   },
   data () {
     return {
-      dashboardIsLoadingTimeout: null,
       dashboardIsLoading: true,
-      loadBounce: 500,
-      selectedDate: null,
+      dashboardLoadingTimeout: null,
+      dashboardPollTimeout: null,
+      dashboardPollRate: 300000, // Dasboard poll time in ms
+      selectionTimeout: null,
+      bounce: 500, // Dasboard parameter selection bounce time in ms
+      // BaseDateSelection
+      maxDate: this.$moment().format('YYYY-MM-DD'),
+      // BaseTypeChartSelector
       hourChartType: 'Bar Chart',
       hourChartTypes: [
         { type: 'Bar Chart' },
         { type: 'Line Chart' }
-      ],
-      menu: false,
-      maxDate: this.$moment().format('YYYY-MM-DD')
+      ]
     }
   },
   methods: {
+    // Dashboard setup
     async setUsers () {
       await this.$store.dispatch('fetchDashboardUsersGet')
       this.$store.commit('SET_SELECTED_USER', this.dashboardUsers[0])
     },
+    setDates () {
+      const date = this.$moment(Date.now()).format('YYYY-MM-DD')
+      this.$store.commit('SET_DASHBOARD_DATE', date)
+    },
+    async setDashboardPoll () {
+      const self = this
+      this.dashboardPollTimeout = setInterval(async function () {
+        await self.updateCharts()
+      }, this.dashboardPollRate)
+    },
+    // Dashboard Update
     async updateCharts () {
       if (this.selectedUser && this.selectedDate) {
-        try {
-          let payload = { userId: this.selectedUser.userId, date: this.selectedDate.unix, formattedDate: this.selectedDate.formattedDate }
-          await this.$store.dispatch('fetchDashboardHourChartData', payload)
-          await this.$store.dispatch('fetchDashboardDayChartData', payload)
-          await this.$store.dispatch('fetchDashboardWeekChartData', payload)
-        } catch (error) {
-          this.chartDataLoadError = true
-        }
+        await this.setSelectionTimeout()
       }
     },
     updateDashboardStatus () {
-      if (this.dashboardUsersLoaded) {
-        const self = this
-        if (this.dashboardIsLoadingTimeout) {
-          clearTimeout(this.dashboardIsLoadingTimeout)
-        }
-        this.dashboardIsLoadingTimeout = setTimeout(function () {
+      const self = this
+      this.dashboardLoadingTimeout = setTimeout(function setLoadFlag () {
+        if (self.dashboardUsersLoaded && self.selectedDate) {
           self.dashboardIsLoading = false
-        }, this.loadBounce)
-      } else {
-        this.dashboardIsLoading = true
+        } else {
+          self.updateDashboardStatus()
+        }
+      }, this.bounce)
+    },
+    // Timeouts
+    async setSelectionTimeout () {
+      const self = this
+      if (this.selectionTimeout) {
+        clearTimeout(this.selectionTimeout)
       }
+      this.selectionTimeout = setTimeout(async function () {
+        try {
+          const date = self.$moment.utc(self.selectedDate).unix()
+          const payload = { userId: self.selectedUser.userId, date: date, formattedDate: self.formattedDate }
+          await self.$store.dispatch('fetchDashboardHourChartData', payload)
+          await self.$store.dispatch('fetchDashboardDayChartData', payload)
+          await self.$store.dispatch('fetchDashboardWeekChartData', payload)
+        } catch (error) {
+          self.chartDataLoadError = true
+        }
+      }, this.bounce)
     }
+  },
+  watch: {
+    selectedUser: {
+      handler: 'updateCharts'
+    },
+    selectedDate: {
+      handler: 'updateCharts'
+    }
+  },
+  created () {
+    this.setUsers()
+    this.setDates()
   },
   mounted () {
-    this.setUsers()
-    this.$watch(
-      (vm) => (
-        // eslint-disable-next-line
-        vm.selectedDate, vm.selectedUser, Date.now()),
-      function () {
-        this.updateDashboardStatus()
-        this.updateCharts()
-      }
-    )
+    this.setDashboardPoll()
+    this.updateDashboardStatus()
   },
   destroyed () {
-    console.log('Im destroyed')
-    if (this.dashboardIsLoadingTimeout) {
-      clearTimeout(this.dashboardIsLoadingTimeout)
+    if (this.dashboardLoadingTimeout) {
+      clearTimeout(this.dashboardLoadingTimeout)
     }
+    if (this.dashboardPollTimeout) {
+      clearInterval(this.dashboardPollTimeout)
+    }
+    if (this.selectionTimeout) {
+      clearTimeout(this.selectionTimeout)
+    }
+    if (this.maxDate) this.maxDate = null
     this.$store.dispatch('resetDashboardHourState')
     this.$store.dispatch('resetDashboardDayState')
     this.$store.dispatch('resetDashboardWeekState')
@@ -279,11 +276,4 @@ export default {
 
 <style lang="scss" scoped>
   @import "./public/scss/main.scss";
-
-.chart-overlay {
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
 </style>

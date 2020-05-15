@@ -71,7 +71,6 @@ export default {
 .v-card {
   background-color: $white;
   padding: 5px;
-  height: 100%;
 }
 
 </style>

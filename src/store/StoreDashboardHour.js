@@ -3,33 +3,14 @@ import { hourLineBarObj } from '@/mixins/chartsObjects.js'
 
 export const moduleDashboardHour = {
   state: {
-    dashboardHourChartDataLoaded: false,
+    dashboardHourChartDataLoaded: true,
     dashboardHourUpdating: false,
     dashboardHourChartData: hourLineBarObj,
     dashboardHourChartTitle: ''
   },
   mutations: {
-    // set the data
     SET_DASHBOARDHOUR (state, data) {
       state.dashboardHourChartData = data
-      // if (data === null || data === undefined) {
-      //   state.dashboardHourChartData.forEach(element => {
-      //     element.value = null
-      //   })
-      // } else {
-      //   data.forEach(dataElement => {
-      //     state.dashboardHourChartData.find(stateElement => {
-
-      //       if (stateElement.label === dataElement.label) {
-      //         // Object.assign(stateElement, dataElement)
-      //         stateElement.value = dataElement.value
-      //       } else {
-      //         state.dashboardHourChartData.push(dataElement)
-      //         state.dashboardHourChartData.pop()
-      //       }
-      //     })
-      //   })
-      // }
     },
     SET_DASHBOARDHOUR_CHART_TITLE (state, data) {
       state.dashboardHourChartTitle = 'Activity on: ' + data
@@ -43,7 +24,7 @@ export const moduleDashboardHour = {
     RESET_DASHBOARDHOUR_STATE (state) {
       state.dashboardHourChartDataLoaded = false
       state.dashboardHourUpdating = false
-      state.dashboardHourChartData = []
+      state.dashboardHourChartData = hourLineBarObj
     }
   },
   actions: {
@@ -51,7 +32,6 @@ export const moduleDashboardHour = {
       context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', true)
       const response = await apiLib.getData('carer/dashboard-hour/' + payload.userId + '/' + payload.date, false, false)
       if (typeof response === 'object') {
-        console.log(response)
         let arr = []
         response.forEach(element => {
           arr.push(
@@ -67,12 +47,27 @@ export const moduleDashboardHour = {
         context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', false)
         context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', true)
       } else {
+        context.commit('SET_DASHBOARDHOUR_CHART_TITLE', payload.formattedDate)
         context.commit('SET_DASHBOARDHOUR', hourLineBarObj)
-        context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', false)
+        context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', true)
       }
     },
     async resetDashboardHourState (context) {
       context.commit('RESET_DASHBOARDHOUR_STATE')
+    }
+  },
+  getters: {
+    getterHourLineBarChartData: state => {
+      return {
+        labels: state.dashboardHourChartData.map(hourDataPoint => hourDataPoint.label),
+        datasets: [{
+          label: 'Hydration in litres',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1,
+          data: state.dashboardHourChartData.map(hourDataPoint => hourDataPoint.value)
+        }]
+      }
     }
   }
 }

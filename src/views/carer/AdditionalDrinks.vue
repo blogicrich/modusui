@@ -2,20 +2,18 @@
   <v-container fluid>
     <v-layout row fill-height justify-center>
       <BaseViewHeader
-        v-if="!userText"
-        class="mx-2 mb-4"
+        class="mx-2 mb-2"
         :headerIcon="headerIcon"
         :headerText="headerText"
         hasDivider
-      />
-      <BaseViewHeader
-        v-if="userText"
-        class="mx-2 mb-4"
-        :chipsText="userText"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      />
+      >
+        <BaseUserSelect
+          slot="rhViewHeaderColumn"
+          :users="dashboardUsers"
+          :selectedUser="selectedUser"
+          @user-selected="$store.commit('SET_SELECTED_USER', $event)"
+        />
+      </BaseViewHeader>
     </v-layout>
     <BaseDataTable
       ref="baseDataTable"
@@ -56,33 +54,23 @@
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
+import { mapState } from 'vuex'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'AdditionalDrinks',
   mixins: [dataTableNavGuard, crudRoutines, validation],
   components: {
-    BaseDataTable
+    BaseDataTable,
+    BaseUserSelect
   },
   computed: {
-    // urls: function () {
-    //   return [{
-    //     ref: [{ statusId: 1, status: 'Live' }, { statusId: 0, status: 'Inactive' }],
-    //     attr: 'operationalStatus',
-    //     key: 'statusId'
-    //   }]
-    // },
-    user: function () {
-      return this.$store.getters.getterSelectedUser
-    },
-    userText: function () {
-      if (this.$store.getters.getterSelectedUser !== null) {
-        return this.$store.getters.getterSelectedUser.givenName
-      } else {
-        return ''
-      }
-    }
+    ...mapState({
+      selectedUser: state => state.eDropletApp.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+    })
   },
   data () {
     return {
@@ -154,7 +142,7 @@ export default {
     }
   },
   mounted () {
-    this.getItems(this.readUrl + this.user.userId)
+    this.getItems(this.readUrl + this.selectedUser.userId)
   }
 }
 </script>

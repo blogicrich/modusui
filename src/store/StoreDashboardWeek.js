@@ -1,16 +1,20 @@
 import apiLib from '../services/apiLib.js'
+import { weekLineBarObj } from '@/mixins/chartsObjects.js'
 
 export const moduleDashboardWeek = {
   state: {
-    dashboardWeekChartDataLoaded: false,
+    dashboardWeekChartDataLoaded: true,
     dashboardWeekChartDataUpdating: false,
-    dashboardWeekChartData: [],
+    dashboardWeekChartData: weekLineBarObj,
     dashboardWeekChartTitle: '',
     dashboardWeekDataAverage: null
   },
   mutations: {
     SET_DASHBOARDWEEK (state, data) {
-      state.dashboardWeekChartData = data
+      for (let i = 0; i < state.dashboardWeekChartData.length; i++) {
+        const element = state.dashboardWeekChartData[i]
+        element.value = data[i]
+      }
     },
     SET_DASHBOARDWEEK_CHART_TITLE (state, data) {
       state.dashboardWeekChartTitle = data
@@ -27,7 +31,7 @@ export const moduleDashboardWeek = {
     RESET_DASHBOARDWEEK_STATE (state) {
       state.dashboardWeekChartDataLoaded = false
       state.dashboardWeekChartDataUpdating = false
-      state.dashboardWeekChartData = []
+      state.dashboardWeekChartData = weekLineBarObj
       state.dashboardWeekDataAverage = null
     }
   },
@@ -39,7 +43,7 @@ export const moduleDashboardWeek = {
         const dataPoints = response.map(weekDayData =>
           (weekDayData.volumeConsumedViaEDroplet && weekDayData.volumeConsumedViaOther)
             ? (parseFloat(weekDayData.volumeConsumedViaEDroplet) + parseFloat(weekDayData.volumeConsumedViaOther))
-            : null
+            : 0.00
         )
         const average = (dataPoints.reduce((a, b) => a + b, 0) / dataPoints.length).toFixed(2)
         const title = 'Weekly summary ' + average + ' litres per day on average'
@@ -49,12 +53,27 @@ export const moduleDashboardWeek = {
         context.commit('SET_DASHBOARDWEEK_LOAD_STATUS', true)
         context.commit('SET_DASHBOARDWEEK_UPDATE_STATUS', false)
       } else {
-        context.commit('SET_DASHBOARDWEEK', [])
-        context.commit('SET_DASHBOARDWEEK_LOAD_STATUS', false)
+        context.commit('SET_DASHBOARDWEEK_CHART_TITLE', 'Weekly summary 0.00 litres per day on average')
+        context.commit('SET_DASHBOARDWEEK', weekLineBarObj)
+        context.commit('SET_DASHBOARDWEEK_LOAD_STATUS', true)
       }
     },
     resetDashboardWeekState (context) {
       context.commit('RESET_DASHBOARDWEEK_STATE')
+    }
+  },
+  getters: {
+    getterWeekLineBarChartData: state => {
+      return {
+        labels: state.dashboardWeekChartData.map(weekDataPoint => weekDataPoint.label),
+        datasets: [{
+          label: 'Total in litres for this day',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1,
+          data: state.dashboardWeekChartData.map(weekDataPoint => weekDataPoint.value)
+        }]
+      }
     }
   }
 }

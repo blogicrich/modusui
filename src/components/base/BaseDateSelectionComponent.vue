@@ -3,19 +3,18 @@
     <v-layout align-center justify-center prepend-icon="event">
       <v-icon large>event</v-icon>
       <v-icon @click="subtractDay()" large title="Decrease date by one day">keyboard_arrow_left</v-icon>
-      <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date">
+      <v-menu ref="menu" v-model="menu" :close-on-content-click="false">
         <v-text-field slot="activator" :value="formattedDate" readonly title="Pick a date"></v-text-field>
         <v-date-picker
           color="primary"
           color-header="primary"
-          v-model="date"
+          v-model="selectedDate"
           :max="maxDate"
           no-title
           scrollable
-          reactive
         >
           <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.menu.save(date)">Ok</v-btn>
+          <v-btn flat color="primary" @click="$refs.menu.save(selectedDate)">Ok</v-btn>
         </v-date-picker>
       </v-menu>
       <v-icon
@@ -32,48 +31,30 @@
 
 export default {
   name: 'BaseDateSelectionComponent',
-  computed: {
-    formattedDate () {
-      return this.$moment(this.date).format('L')
-    }
-  },
   props: {
-    bounce: Number // Switch bounce time in ms i.e '500' = 0.5s
+    maxDate: String,
+    date: String,
+    formattedDate: String
   },
   data () {
     return {
       selectionTimeout: null,
-      date: null,
-      menu: false,
-      maxDate: this.$moment().format('YYYY-MM-DD')
+      selectedDate: new Date().toISOString().substr(0, 10),
+      menu: false
     }
   },
   watch: {
-    date () {
-      const self = this
-      if (this.selectionTimeout) {
-        console.log('clearing-timeout')
-        clearTimeout(this.selectionTimeout)
-      }
-      this.selectionTimeout = setTimeout(function () {
-        self.$emit('date-change', {
-          iso: self.date,
-          unix: self.$moment.utc(self.date).unix(),
-          formattedDate: self.$moment(self.date).format('LL')
-        })
-      }, this.bounce)
+    selectedDate () {
+      this.$emit('date-change', this.selectedDate)
     }
   },
   methods: {
     addDay () {
-      this.date = this.$moment(this.date, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD')
+      this.$emit('add-day', this.date)
     },
     subtractDay () {
-      this.date = this.$moment(this.date).subtract(1, 'day').format('YYYY-MM-DD')
+      this.$emit('subtract-day', this.date)
     }
-  },
-  mounted () {
-    this.date = this.$moment(Date.now()).format('YYYY-MM-DD')
   },
   beforeDestroy () {
     clearTimeout(this.selectionTimeout)

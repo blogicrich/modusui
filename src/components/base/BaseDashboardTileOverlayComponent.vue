@@ -1,5 +1,5 @@
 <template>
-  <v-container class="transparent" fluid>
+  <v-container class="transparent overlay" fluid>
     <v-layout class="pt-1" column fill-height align-center justify-center>
       <v-spacer></v-spacer>
       <v-flex grow>
@@ -32,5 +32,13 @@ export default {
   @import "./public/scss/main.scss";
   .transparent {
     background-color: transparent;
+  }
+
+  .overlay {
+    // height: 100%;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // z-index: 20;
   }
 </style>

@@ -3,15 +3,17 @@
     <v-layout column fill-height justify-center>
       <!-- Page Header -->
       <BaseViewHeader
-        v-if="!userText"
         class="mx-2 mb-2"
         :headerIcon="headerIcon"
         :headerText="headerText"
         hasDivider
       >
-        <!-- <BaseUserSelect
-          :users=
-        /> -->
+        <BaseUserSelect
+          slot="rhViewHeaderColumn"
+          :users="dashboardUsers"
+          :selectedUser="selectedUser"
+          @user-selected="$store.commit('SET_SELECTED_USER', $event)"
+        />
       </BaseViewHeader>
       <!-- Date selection form -->
       <v-form
@@ -112,6 +114,7 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import dataTable from '@/components/base/BaseDataTableComponent'
+import { mapState } from 'vuex'
 import moment from 'moment'
 
 export default {
@@ -122,6 +125,10 @@ export default {
     dataTable
   },
   computed: {
+    ...mapState({
+      selectedUser: state => state.eDropletApp.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+    }),
     binding: function () {
       const binding = {}
       if (this.$vuetify.breakpoint.mdAndDown) {
@@ -150,17 +157,6 @@ export default {
     },
     startDateFormattedValue () {
       return this.startDate ? moment(this.startDate).format('dddd, MMMM Do YYYY') : ''
-    },
-    user: function () {
-      // console.log(this.$store.getters.getterSelectedUser)
-      return this.$store.getters.getterSelectedUser
-    },
-    userText: function () {
-      if (this.$store.getters.getterSelectedUser !== null) {
-        return this.$store.getters.getterSelectedUser.givenName
-      } else {
-        return ''
-      }
     }
   },
   data: () => ({
@@ -246,7 +242,7 @@ export default {
       const unixStartDate = new Date(this.startDate).getTime() / 1000
 
       if (this.$refs.dateSelectForm.validate()) {
-        this.getItems(this.readUrl + this.user.userId + '/' + unixStartDate + '/' + unixEndDate)
+        this.getItems(this.readUrl + this.selectedUser.userId + '/' + unixStartDate + '/' + unixEndDate)
       } else {
         this.errorMsg = 'Please check selected date range.'
         this.loaded = false
@@ -255,7 +251,7 @@ export default {
     }
   },
   mounted () {
-    this.getItems(this.readUrl + this.user.userId + '/' + new Date(this.startDate).getTime() / 1000 + '/' + new Date(this.endDate).getTime() / 1000)
+    this.getItems(this.readUrl + this.selectedUser.userId + '/' + new Date(this.startDate).getTime() / 1000 + '/' + new Date(this.endDate).getTime() / 1000)
   }
 }
 </script>

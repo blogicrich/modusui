@@ -3,7 +3,7 @@ import { dayPieObj } from '@/mixins/chartsObjects.js'
 
 export const moduleDashboardDay = {
   state: {
-    dashboardDayChartDataLoaded: false,
+    dashboardDayChartDataLoaded: true,
     dashboardDayUpdating: false,
     dashboardDayChartData: dayPieObj,
     dashboardDayChartTitle: ''
@@ -12,7 +12,9 @@ export const moduleDashboardDay = {
   mutations: {
     SET_DASHBOARDDAY (state, data) {
       state.dashboardDayChartData = data
-      state.dashboardDayChartTitle = 'Daily hydration status: ' + String(data.consumed) + ' L/' + String(data.target) + ' L' || ''
+    },
+    SET_DASHBOARDDAY_CHART_TITLE (state, data) {
+      state.dashboardDayChartTitle = 'Daily hydration status: ' + String(data.consumed) + ' L/' + String(data.target) + ' L'
     },
     SET_DASHBOARDDAY_LOAD_STATUS (state, data) {
       state.dashboardDayChartDataLoaded = data
@@ -23,7 +25,7 @@ export const moduleDashboardDay = {
     RESET_DASHBOARDDAY_STATE (state) {
       state.dashboardDayChartDataLoaded = false
       state.dashboardDayUpdating = false
-      state.dashboardDayChartData = []
+      state.dashboardDayChartData = dayPieObj
       state.dashboardDayChartTitle = ''
     }
   },
@@ -53,15 +55,35 @@ export const moduleDashboardDay = {
         }
 
         context.commit('SET_DASHBOARDDAY', data)
+        context.commit('SET_DASHBOARDDAY_CHART_TITLE', data)
         context.commit('SET_DASHBOARDDAY_LOAD_STATUS', true)
         context.commit('SET_DASHBOARDDAY_UPDATE_STATUS', false)
       } else {
         context.commit('SET_DASHBOARDDAY', dayPieObj)
-        context.commit('SET_DASHBOARDDAY_LOAD_STATUS', false)
+        context.commit('SET_DASHBOARDDAY_CHART_TITLE', { consumed: '0.00', target: '0.00' })
+        context.commit('SET_DASHBOARDDAY_LOAD_STATUS', true)
       }
     },
     resetDashboardDayState (context) {
       context.commit('RESET_DASHBOARDDAY_STATE')
+    }
+  },
+  getters: {
+    getterDailyPieChartData: state => {
+      return {
+        labels: ['Over Hydrated', 'Hydrated', 'Remaining'],
+        datasets: [{
+          backgroundColor: ['rgba(255, 97, 111, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(176, 190, 197, 0.2)'],
+          borderColor: ['rgba(255, 97, 111, 1)', 'rgba(54, 162, 235, 1)', 'rgba(176, 190, 197, 1)'],
+          borderWidth: 1,
+          data: [
+            state.dashboardDayChartData.overHydrated,
+            state.dashboardDayChartData.hydrated,
+            state.dashboardDayChartData.remaining
+          ],
+          weight: 3
+        }]
+      }
     }
   }
 }

@@ -25,13 +25,23 @@ let hourLineBarObj =
     { label: '04:00', value: null },
     { label: '05:00', value: null }
   ]
+let weekLineBarObj =
+  [
+    { label: 'Monday', value: null },
+    { label: 'Tuesday', value: null },
+    { label: 'Wednesday', value: null },
+    { label: 'Thursday', value: null },
+    { label: 'Friday', value: null },
+    { label: 'Saturday', value: null },
+    { label: 'Sunday', value: null }
+  ]
 let dayPieObj = [
   {
-    hydrated: null,
-    target: null,
-    remaining: null,
-    overHydrated: null,
-    consumed: null
+    hydrated: 0.00,
+    target: 0.00,
+    remaining: 0.00,
+    overHydrated: 0.00,
+    consumed: 0.00
   }
 ]
-export { hourLineBarObj, dayPieObj }
+export { hourLineBarObj, weekLineBarObj, dayPieObj }

@@ -13,6 +13,7 @@ import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
 import { moduleReports } from '@/store/StoreReports'
 // Dashboard
 import { moduleDashboardDay } from '@/store/StoreDashboardDay'
+import { moduleDashboardDates } from '@/store/StoreDashboardDates'
 import { moduleDashboardHour } from '@/store/StoreDashboardHour'
 import { moduleDashboardUsers } from '@/store/StoreDashboardUsers'
 import { moduleDashboardComment } from '@/store/StoreDashboardComment'
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     report: moduleReports,
     // Dashboard
     dashboardDay: moduleDashboardDay,
+    dashboardDates: moduleDashboardDates,
     dashboardHour: moduleDashboardHour,
     dashboardUsers: moduleDashboardUsers,
     DashboardComment: moduleDashboardComment,
@@ -48,5 +50,5 @@ export default new Vuex.Store({
     gettingStartedWizard: moduleGettingStartedWizard
   },
   strict: debug,
-  plugins: debug ? [createLogger()] : [] // set logger only for development
+  plugins: debug ? [ createLogger() ] : [] // set logger only for development
 })
