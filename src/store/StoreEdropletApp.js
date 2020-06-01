@@ -5,7 +5,7 @@ export const moduleEdropletApp = {
     // Login
     isActive: deserialize('isActive'),
     authenticated: deserialize('authenticated', false),
-    deptPersonsId: deserialize('deptPersonsId'),
+    // deptPersonsId: deserialize('deptPersonsId'),
     level: deserialize('level', []),
     portalAuthorisedId: deserialize('portalAuthorisedId'),
     authDataLoading: false,
@@ -14,8 +14,8 @@ export const moduleEdropletApp = {
     userDataLoading: false,
     storeId: null,
     selectedUser: deserialize('selectedUser'),
-    carerId: deserialize('carerId'),
-    accountHolderId: null,
+    // carerId: deserialize('carerId'),
+    // accountHolderId: null,
     deviceMessageTypeId: null,
     messageNo: null,
     date: null,
@@ -23,7 +23,6 @@ export const moduleEdropletApp = {
     dayReportId: null
   },
   mutations: {
-    // Mutate the state. Mutations must be syncronous.
     SET_LOAD_STATUS (state, data) {
       state.authDataLoading = data
     },
@@ -31,18 +30,18 @@ export const moduleEdropletApp = {
       serialize('authenticated', data)
       state.authenticated = data
     },
-    SET_CARER_ID (state, data) {
-      serialize('carerId', data)
-      state.carerId = data
-    },
-    SET_ACCOUNT_HOLDER_ID (state, data) {
-      serialize('accountHolderId', data)
-      state.accountHolderId = data
-    },
-    SET_DEPT_PERSON_ID (state, data) {
-      serialize('deptPersonsId', data)
-      state.deptPersonsId = data
-    },
+    // SET_CARER_ID (state, data) {
+    //   serialize('carerId', data)
+    //   state.carerId = data
+    // },
+    // SET_ACCOUNT_HOLDER_ID (state, data) {
+    //   serialize('accountHolderId', data)
+    //   state.accountHolderId = data
+    // },
+    // SET_DEPT_PERSON_ID (state, data) {
+    //   serialize('deptPersonsId', data)
+    //   state.deptPersonsId = data
+    // },
     SET_PORTAL_AUTH_ID (state, data) {
       serialize('portalAuthorisedId', data)
       state.portalAuthorisedId = data
@@ -65,18 +64,17 @@ export const moduleEdropletApp = {
     }
   },
   actions: {
-    // Actions commit mutations. Actions can be Async! Yay.
     async POST_LOGIN (context, payload) {
       context.commit('SET_LOAD_STATUS', true)
-      let data = apiLib.postAuth('login', payload, true).then(response => {
+      let data = apiLib.postAuth('login', payload).then(response => {
         if (response) {
           if (response.roles) {
             localStorage.clear()
             context.commit('SET_AUTHENTICATION_STATE', true)
-            context.commit('SET_ACCOUNT_HOLDER_ID', response.accountHolderId)
-            context.commit('SET_CARER_ID', response.carerId)
-            context.commit('SET_DEPT_PERSON_ID', response.deptPersonsId)
-            context.commit('SET_PORTAL_AUTH_ID', response.portalAuthorisedId)
+            // context.commit('SET_ACCOUNT_HOLDER_ID', response.accountHolderId)
+            // context.commit('SET_CARER_ID', response.carerId)
+            // context.commit('SET_DEPT_PERSON_ID', response.deptPersonsId)
+            context.commit('SET_PORTAL_AUTH_ID', response.user.portalAuthorisedId)
             context.commit('SET_LEVEL', response.roles)
             context.commit('SET_TOKEN', response.token)
             context.commit('SET_ACTIVE', true)
@@ -88,11 +86,11 @@ export const moduleEdropletApp = {
       return data
     },
     LOGOUT (context) {
-      context.commit('SET_LOAD_STATUS', false)
+      // context.commit('SET_LOAD_STATUS', false)
       context.commit('SET_AUTHENTICATION_STATE', false)
-      context.commit('SET_CARER_ID', null)
-      context.commit('SET_ACCOUNT_HOLDER_ID', null)
-      context.commit('SET_DEPT_PERSON_ID', null)
+      // context.commit('SET_CARER_ID', null)
+      // context.commit('SET_ACCOUNT_HOLDER_ID', null)
+      // context.commit('SET_DEPT_PERSON_ID', null)
       context.commit('SET_PORTAL_AUTH_ID', null)
       context.commit('SET_LEVEL', [])
       context.commit('SET_TOKEN', null)
@@ -102,7 +100,6 @@ export const moduleEdropletApp = {
     }
   },
   getters: {
-    // Gets a derived state from the store state - i.e. use of a filter on the state.
     // Login getters
     isActive: state => state.isActive,
     authenticated: state => state.authenticated,
@@ -129,6 +126,6 @@ function serialize (key, value) {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
-function deserialize (key, defaultValue = null) {
-  return JSON.parse(localStorage.getItem(key)) || defaultValue
+function deserialize (key) {
+  if (key !== undefined) return JSON.parse(localStorage.getItem(key))
 }

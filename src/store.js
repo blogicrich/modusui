@@ -7,6 +7,8 @@ import { moduleEdropletApp } from '@/store/StoreEdropletApp'
 import { moduleHydrationParameters } from '@/store/StoreHydrationParameters'
 import { moduleVoiceMessagesDefaults } from '@/store/StoreVoiceMessagesDefaults' // get no data
 import { moduleIntervalOptions } from '@/store/StoreIntervalOptions'
+import { moduleSystemAdministrators } from '@/store/StoreSysAdmins'
+import { moduleTitles } from '@/store/StoreTitles'
 // client admins
 import { moduleWakeSleepTimes } from '@/store/StoreWakeSleepTimes'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
@@ -34,6 +36,8 @@ export default new Vuex.Store({
     hydrationOptions: moduleHydrationParameters,
     voiceMessages: moduleVoiceMessagesDefaults,
     intervalOptions: moduleIntervalOptions,
+    systemAdmins: moduleSystemAdministrators,
+    titles: moduleTitles,
     // client Admins
     wakeSleepTimes: moduleWakeSleepTimes,
     intervalSettings: moduleIntervalSettings,

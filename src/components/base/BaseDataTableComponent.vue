@@ -2,8 +2,8 @@
   <div>
     <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
-        <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
-        <h2 class="table-header">{{ tableTitle }}</h2>
+        <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
+        <h2 class="table-header ml-1">{{ tableTitle }}</h2>
         <v-divider
           class="mx-2"
           inset
@@ -31,6 +31,9 @@
         ></v-divider>
         <v-btn v-if="editPerms.create" @click="newDialog = true" :color="primaryColor">{{ addBtnTitle }}
           <v-icon class="ml-2">{{ addRecordIcon }}</v-icon>
+        </v-btn>
+        <v-btn v-if="tableActionButton" @click="$emit('action-button-pressed')" :color="primaryColor">{{ actionButtonTitle }}
+          <v-icon class="ml-2">{{ actionButtonIcon }}</v-icon>
         </v-btn>
       </v-toolbar>
       <v-data-table
@@ -78,22 +81,24 @@
     </template>
   <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
-      <tr>
-        <td v-if="editPerms.create || editPerms.update || editPerms.delete">
-          <v-checkbox
-            v-model="props.selected"
-          ></v-checkbox>
-        </td>
-        <td
-          class="text-xs-left"
-          :hidden="header.hidden"
-          v-for="header in headers"
-          :key="header.text"
-          :color="primaryColor"
-        >
-          <div>{{ props.item[header.value] }}</div>
-        </td>
-      </tr>
+      <v-hover v-if="!editPerms.create && !editPerms.update && !editPerms.delete">
+        <tr @click="$emit('row-clicked', props.item)">
+          <td v-if="editPerms.create || editPerms.update || editPerms.delete">
+            <v-checkbox
+              v-model="props.selected"
+            ></v-checkbox>
+          </td>
+          <td
+            class="text-xs-left"
+            :hidden="header.hidden"
+            v-for="header in headers"
+            :key="header.text"
+            :color="primaryColor"
+          >
+            <div>{{ props.item[header.value] }}</div>
+          </td>
+        </tr>
+      </v-hover>
     </template>
   <!-- Table: No Data Slot - spinner Loading, display Error -->
     <template slot="no-data">
@@ -412,6 +417,50 @@
           <v-icon dark>search</v-icon>
         </v-btn>
       </v-speed-dial>
+      <!-- readonly table action button mode -->
+      <v-speed-dial
+        v-if="tableActionButton"
+        v-model="fab"
+        class="table-fab ma-0"
+        fixed
+        :top="top"
+        :bottom="bottom"
+        :right="right"
+        :left="left"
+        :direction="mbDirection"
+        :open-on-hover="hover"
+        :transition="transition"
+      >
+        <v-btn
+          slot="activator"
+          v-model="fab"
+          :color="primaryColor"
+          dark
+          small
+          fab
+        >
+          <v-icon>menu</v-icon>
+          <v-icon>close</v-icon>
+        </v-btn>
+        <v-btn
+          @click="searchBarHidden = !searchBarHidden"
+          fab
+          dark
+          small
+          color="error"
+        >
+        <v-icon>search</v-icon>
+        </v-btn>
+        <v-btn
+          @click="$emit('action-button-pressed')"
+          fab
+          dark
+          small
+          color="success"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-speed-dial>
       <v-fade-transition>
         <v-layout
           row align-center justify-space-around
@@ -430,6 +479,11 @@
         </v-layout>
       </v-fade-transition>
   <!-- </v-toolbar> -->
+      <!-- <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
+        <v-btn v-if="tableActionButton" @click="$emit('action-button-pressed')" :color="primaryColor">{{ actionButtonTitle }}
+          <v-icon class="ml-2">{{ actionButtonIcon }}</v-icon>
+        </v-btn>
+      </v-toolbar> -->
       <v-data-table
         :headers="headers"
         :items="items"
@@ -476,7 +530,7 @@
   <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
       <tr>
-        <td>
+        <td v-if="editPerms.create || editPerms.update || editPerms.delete">
           <v-checkbox
             v-model="props.selected"
           ></v-checkbox>
@@ -753,6 +807,9 @@ export default {
     recordIcon: String,
     addRecordIcon: String,
     addBtnTitle: String,
+    actionButtonTitle: String,
+    actionButtonIcon: String,
+    tableActionButton: Boolean,
     editPerms: Object
   },
   methods: {

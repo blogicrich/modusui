@@ -7,6 +7,7 @@ $vuetify-warning: rgba(#cd9300, 1);
 $vuetify-error: rgba(#cd2c00, 1);
 // Project branding colors that are not part of the Vuetify theme
 $table-row-hover: rgba(0, 161, 205, 0.1);
+$table-row-selected: rgba(#00A1CD, 0.5);
 $dark-blue-grey: rgba(#4d504f, 1);
 $white: rgba(#ffffff, 1);
 
@@ -126,9 +127,12 @@ $white: rgba(#ffffff, 1);
   font-weight: bold;
   color: $vuetify-primary;
 }
+
 tr:hover td {
   background-color: $table-row-hover;
+  cursor: pointer;
 }
+
 // Tranisitions 
 
 .component-fade-enter-active, .component-fade-leave-active {
