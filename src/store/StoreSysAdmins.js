@@ -96,34 +96,19 @@ export const moduleSystemAdministrators = {
     },
     // API Objects
     SET_PAYLOAD_NEW (state) {
-      state.payload.username = state.newSysAdmin.username
-      state.payload.email = state.newSysAdmin.email
-      state.payload.password = state.newPassword
-      state.payload.mobileNo = state.newSysAdmin.mobileNo
-      state.payload.titleId = state.newSysAdmin.titleId
-      state.payload.givenName = state.newSysAdmin.givenName
-      state.payload.familyName = state.newSysAdmin.familyName
-      state.payload.salutation = state.newSysAdmin.salutation
+      Object.keys(state.payload).forEach(function(key) {
+        state.payload[key] = state.newSysAdmin[key]
+      })
     },
     SET_PAYLOAD_SELECTED (state) {
-      state.payload.username = state.selectedSysAdmin.username
-      state.payload.email = state.selectedSysAdmin.email
-      state.payload.password = state.newPassword
-      state.payload.mobileNo = state.selectedSysAdmin.mobileNo
-      state.payload.titleId = state.selectedSysAdmin.titleId
-      state.payload.givenName = state.selectedSysAdmin.givenName
-      state.payload.familyName = state.selectedSysAdmin.familyName
-      state.payload.salutation = state.selectedSysAdmin.salutation
+      Object.keys(state.payload).forEach(function(key) {
+        state.payload[key] = state.selectedSysAdmin[key]
+      })
     },
     RESET_PAYLOAD (state) {
-      state.payload.username = ''
-      state.payload.email = ''
-      state.payload.password = ''
-      state.payload.mobileNo = ''
-      state.payload.titleId = ''
-      state.payload.givenName = ''
-      state.payload.familyName = ''
-      state.payload.salutation = ''
+      Object.keys(state.payload).forEach(function(key) {
+        state.payload[key] = ''
+      })
     }
   },
   actions: {
@@ -170,21 +155,7 @@ export const moduleSystemAdministrators = {
       )
       return update
     },
-    // resetNewSysAdmin (context) {
-    //   context.commit('SET_NEW_SYSADMIN_TITLE', '')
-    //   context.commit('SET_NEW_SYSADMIN_USERNAME', '')
-    //   context.commit('SET_NEW_SYSADMIN_EMAIL', '')
-    //   context.commit('SET_NEW_SYSADMIN_MOBILE_NO', '')
-    //   context.commit('SET_NEW_SYSADMIN_GIVEN_NAME', '')
-    //   context.commit('SET_NEW_SYSADMIN_FAMILY_NAME', '')
-    //   context.commit('SET_NEW_SYSADMIN_SALUTATION', '')
-    // },
-    // resetPassword (context) {
-    //   context.commit('SET_SYSADMIN_NEW_PASSWORD', '')
-    //   context.commit('SET_SYSADMIN_DUPLICATE_NEW_PASSWORD', '')
-    // },
     resetSysAdminsState (context) {
-      // context.commit('SET_SYSADMINS_LOAD_STATUS', true)
       context.commit('SET_SYSADMINS', [])
       context.commit('SET_SELECTED_SYSADMIN', {})
       context.commit('RESET_PAYLOAD')

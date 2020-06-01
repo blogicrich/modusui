@@ -80,6 +80,7 @@
                   color="primaryColor"
                   outline
                   clearable
+                  validate-on-blur
                   :type="passwordMasked ? 'text' : 'password'"
                   :rules="passwordValidation"
                 ></v-text-field>
@@ -90,6 +91,7 @@
                   color="primaryColor"
                   outline
                   clearable
+                  validate-on-blur
                   :type="passwordMasked ? 'text' : 'password'"
                   :rules="passwordValidation"
                 ></v-text-field>
@@ -584,7 +586,9 @@ export default {
       passwordMasked: true,
       passwordFormValid: false,
       passwordValidation: [
-        this.validatePasswordRequired(),
+        value => {
+          if (this.newFormVisible) return !!value || 'Value required.'
+        },
         value => {
           if (value) return value.length >= 8 || 'Password must be more than 8 characters.'
           else return true
@@ -593,7 +597,10 @@ export default {
           if (value) return value.length <= 72 || 'Password must be less than 72 characters.'
           else return true
         },
-        this.validatePasswordMatch()
+        value => {
+          if (value === this.duplicatePasword || value === this.newPassword) return true
+          else return 'Passwords must match'
+        }
       ],
       // New System Admin Form
       newFormVisible: false,
@@ -672,14 +679,6 @@ export default {
     setPasswordMask () {
       if (this.passwordMasked) this.passwordMasked = false
       else this.passwordMasked = true
-    },
-    validatePasswordMatch () {
-      if (this.newPassword === this.duplicateNewPassword) return true
-      else return 'Passwords must match!'
-    },
-    validatePasswordRequired (value) {
-      if (this.newFormVisible && this.newPassword && this.duplicateNewPassword) return true
-      else return 'Value required'
     },
     // STORE CRUD METHODS
     async getSysAdmins () {
