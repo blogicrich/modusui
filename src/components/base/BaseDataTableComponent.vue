@@ -81,24 +81,22 @@
     </template>
   <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
-      <v-hover v-if="!editPerms.create && !editPerms.update && !editPerms.delete">
-        <tr @click="$emit('row-clicked', props.item)">
-          <td v-if="editPerms.create || editPerms.update || editPerms.delete">
-            <v-checkbox
-              v-model="props.selected"
-            ></v-checkbox>
-          </td>
-          <td
-            class="text-xs-left"
-            :hidden="header.hidden"
-            v-for="header in headers"
-            :key="header.text"
-            :color="primaryColor"
-          >
-            <div>{{ props.item[header.value] }}</div>
-          </td>
-        </tr>
-      </v-hover>
+      <tr @click="$emit('row-clicked', props.item)">
+        <td v-if="editPerms.create || editPerms.update || editPerms.delete">
+          <v-checkbox
+            v-model="props.selected"
+          ></v-checkbox>
+        </td>
+        <td
+          class="text-xs-left"
+          :hidden="header.hidden"
+          v-for="header in headers"
+          :key="header.text"
+          :color="primaryColor"
+        >
+          <div>{{ props.item[header.value] }}</div>
+        </td>
+      </tr>
     </template>
   <!-- Table: No Data Slot - spinner Loading, display Error -->
     <template slot="no-data">
