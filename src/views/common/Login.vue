@@ -30,8 +30,13 @@ export default {
   },
   methods: {
     async submitCredentials (item) {
-      await this.$store.dispatch('POST_LOGIN', item)
-      this.$emit('authenticated')
+      this.$store.dispatch('POST_LOGIN', item).then(response => {
+        if (response) {
+          this.msg = response
+        } else {
+          this.$emit('authenticated')
+        }
+      })
     }
   },
   computed: {
@@ -40,6 +45,9 @@ export default {
     },
     level: function () {
       return this.$store.getters.level
+    },
+    loading: function () {
+      return this.$store.state.eDropletApp.authDataLoading
     },
     token: function () {
       return this.$store.getters.token

@@ -67,7 +67,7 @@ let url = function () {
 
 let axi = axios.create({
   baseURL: url(),
-  timeout: 10000
+  timeout: 30000
 })
 
 axi.interceptors.request.use((config) => {
@@ -88,7 +88,9 @@ axi.interceptors.request.use((config) => {
 axi.interceptors.response.use((response) => {
   return response // Don't do anything upon success
 }, (error) => {
+  // console.log(error)
   if ([401, 403].includes(error.response.status)) {
+    console.log(error)
     store.dispatch('LOGOUT')
   }
   return error
@@ -198,9 +200,13 @@ export default {
   async postAuth (url, data, log, toast) {
     if (data) {
       return axi.post(url, data).then(response => {
-        // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
         if (log) logger(response, url)
-        return response.data
+        // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
+        if (!response.message) {
+          return response.data
+        } else {
+          return response.message
+        }
       })
         .catch(error => {
           if (error.response) {
@@ -213,6 +219,7 @@ export default {
             console.log('error.message: ', error.message)
           }
           console.log(error.config)
+          console.log(error)
         })
         .finally(() => {
         // ROUTER TO STD PAGE IF ERR?

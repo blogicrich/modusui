@@ -27,27 +27,39 @@
                   <h2 style="font-size:1em">Authenticating. Please wait...</h2>
                 </v-layout>
               </div>
-              <v-fade-transition>
-                <div v-if="isActive" class="test">
+              <v-layout v-if="!isAuthenticating" column>
+                <v-flex grow>
+                 <v-fade-transition>
                   <v-flex>
-                    <v-layout align-center justify-center>
+                    <v-layout v-if="msg" class="my-2" align-center justify-center>
                       <v-icon class="ma-2" color="error">highlight_off</v-icon>
                       <h2 v-if="$vuetify.breakpoint.smAndDown" style="font-size:1em">{{ msg }}</h2>
                       <h2 v-if="$vuetify.breakpoint.mdAndUp" style="font-size:1.5em">{{ msg }}</h2>
                     </v-layout>
                   </v-flex>
-                </div>
-              </v-fade-transition>
-              <v-layout v-if="!isAuthenticating" column>
-                <v-flex>
-                  <v-layout column align-center>
-                      <input class="inputloginreset" id="userId" v-bind:class="{ 'creds-input': isActive }" v-model="input.username" type="text" placeholder="userId" name="username">
-                      <input class="inputloginreset" id="password" v-bind:class="{ 'creds-input': isActive }" v-model.lazy="input.password" type="password" placeholder="password" name="password">
-                      <v-layout class="mb-2" align-end>
-                        <router-link to="/passwordreset">
-                          <a>Forgotten password?</a>
-                        </router-link>
-                      </v-layout>
+                </v-fade-transition>
+                  <v-text-field
+                    id="userId" 
+                    v-model="input.username" 
+                    type="text" 
+                    label="username" 
+                    name="username"
+                    outline
+                    :rules="[v => !!v || 'Username required!']"
+                  ></v-text-field>
+                  <v-text-field 
+                    id="password"
+                    v-model.lazy="input.password"
+                    type="password"
+                    label="password"
+                    name="password"
+                    outline
+                    :rules="[v => !!v || 'Password required!']"
+                  ></v-text-field>
+                  <v-layout class="mb-2" row align-center justify-center>
+                    <router-link to="/passwordreset">
+                      <a>Forgotten password?</a>
+                    </router-link>
                   </v-layout>
                 </v-flex>
                 <v-layout align-end justify-end column>
