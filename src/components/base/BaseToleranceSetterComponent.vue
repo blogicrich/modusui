@@ -76,11 +76,11 @@ export default {
     rules: Array
   },
   methods: {
-    incrementBtnPressed () {
-      this.$emit('increment', { id: this.fieldId, timePeriod: this.period })
+    incrementBtnPressed (e) {
+      this.$emit('increment', { value: this.fieldValue, id: this.fieldId, timePeriod: this.period })
     },
-    decrementBtnPressed () {
-      this.$emit('decrement', { id: this.fieldId, timePeriod: this.period })
+    decrementBtnPressed (e) {
+      this.$emit('decrement', { value: this.fieldValue, id: this.fieldId, timePeriod: this.period })
     },
     valueChanged (e) {
       this.$emit('field-value-changed', { value: e, id: this.fieldId, timePeriod: this.period })

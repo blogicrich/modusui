@@ -28,7 +28,7 @@
             :fieldId="dehydratedId"
             period="start"
             :rules="startOfDayValidation.dehydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_DEHYDRATED_START', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -40,7 +40,7 @@
             :fieldId="hydratedId"
             period="start"
             :rules="startOfDayValidation.hydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_HYDRATED_START', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -52,7 +52,7 @@
             :fieldId="overHydratedId"
             period="start"
             :rules="startOfDayValidation.overHydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_OVERHYDRATED_START', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -64,7 +64,7 @@
             :fieldId="severelyOverHydratedId"
             period="start"
             :rules="startOfDayValidation.severelyOverHydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_SEVERLEY_OVERHYDRATED_START', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -91,7 +91,7 @@
             :fieldId="dehydratedId"
             period="end"
             :rules="endOfDayValidation.dehydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_DEHYDRATED_END', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -103,7 +103,7 @@
             :fieldId="hydratedId"
             period="end"
             :rules="endOfDayValidation.hydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_HYDRATED_END', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -115,7 +115,7 @@
             :fieldId="overHydratedId"
             period="end"
             :rules="endOfDayValidation.overHydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_OVERHYDRATED_END', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -127,7 +127,7 @@
             :fieldId="severelyOverHydratedId"
             period="end"
             :rules="endOfDayValidation.severelyOverHydrated"
-            @field-value-changed="boundaryChanged"
+            @field-value-changed="$store.commit('UPDATE_SEVERLEY_OVERHYDRATED_END', $event)"
             @increment="increment"
             @decrement="decrement"
           />
@@ -136,7 +136,7 @@
     </v-layout>
     <v-layout v-if="!paramsLoading && $vuetify.breakpoint.lgAndUp" row justify-center align-center>
       <v-btn
-        :disabled="!defaultValuesChanged"
+        :disabled="defaultValuesChanged"
         class="root-nav-btn mt-3"
         @click="save"
         color="primary"
@@ -145,7 +145,7 @@
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
       <v-btn
-        :disabled="!defaultValuesChanged"
+        :disabled="defaultValuesChanged"
         class="root-nav-btn mt-3"
         @click="reset"
         color="primary"
@@ -211,6 +211,7 @@ export default {
   data () {
     return {
       // BaseViewHeader
+      defaultValuesChanged: false,
       headerIcon: 'local_drink',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Hydration Parameters',
@@ -350,48 +351,89 @@ export default {
   },
   computed: {
     ...mapState({
+      hydrationParameters: state => state.hydrationOptions.hydrationParams,
+      hydrationParametersClone: state => state.hydrationOptions.hydrationParamsClone,
       // Booleans
-      defaultValuesChanged: state => state.hydrationOptions.defaultHydrationParamsChanged,
       paramsLoading: state => state.hydrationOptions.hydrationParamsLoading,
       // Dehydrated
-      dehydratedBoundaryStart: state => state.hydrationOptions.dehydrated.lowerBoundaryPercentHydratedStart,
-      dehydratedBoundaryEnd: state => state.hydrationOptions.dehydrated.lowerBoundaryPercentHydratedEnd,
-      dehydratedId: state => state.hydrationOptions.dehydrated.lowerHydrationBoundaryId,
-      // Hydrated
-      hydratedBoundaryStart: state => state.hydrationOptions.hydrated.lowerBoundaryPercentHydratedStart,
-      hydratedBoundaryEnd: state => state.hydrationOptions.hydrated.lowerBoundaryPercentHydratedEnd,
-      hydratedId: state => state.hydrationOptions.hydrated.lowerHydrationBoundaryId,
-      // Over Hydrated
-      overHydratedBoundaryStart: state => state.hydrationOptions.overHydrated.lowerBoundaryPercentHydratedStart,
-      overHydratedBoundaryEnd: state => state.hydrationOptions.overHydrated.lowerBoundaryPercentHydratedEnd,
-      overHydratedId: state => state.hydrationOptions.overHydrated.lowerHydrationBoundaryId,
+      dehydratedBoundaryStart: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundary.percentHydratedStart
+      },
+      dehydratedBoundaryEnd: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundary.percentHydratedEnd
+      },
+      dehydratedId: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundaryId
+      },
+      // // Hydrated
+      hydratedBoundaryStart: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundary.percentHydratedStart
+      },
+      hydratedBoundaryEnd: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundary.percentHydratedEnd
+      },
+      hydratedId: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundaryId
+      },
+      // // Over Hydrated
+      overHydratedBoundaryStart: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundary.percentHydratedStart
+      },
+      overHydratedBoundaryEnd: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundary.percentHydratedEnd
+      },
+      overHydratedId: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundaryId
+      },
       // Severely Over Hydrated
-      severelyOverHydratedStart: state => state.hydrationOptions.severelyOverHydrated.lowerBoundaryPercentHydratedStart,
-      severelyOverHydratedEnd: state => state.hydrationOptions.severelyOverHydrated.lowerBoundaryPercentHydratedEnd,
-      severelyOverHydratedId: state => state.hydrationOptions.severelyOverHydrated.lowerHydrationBoundaryId
+      severelyOverHydratedStart: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundary.percentHydratedStart
+      },
+      severelyOverHydratedEnd: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundary.percentHydratedEnd
+      },
+      severelyOverHydratedId: state => {
+        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundaryId
+      },
     })
   },
   methods: {
-    boundaryChanged (e) {
-      this.$store.commit('UPDATE_HYDRATION_PARAM', e)
-      console.log(this.dehydratedBoundaryStart, e)
+    checkValues () {
+      console.log(this.hydrationParameters, this.hydrationParametersClone)
+      let matched = this.hydrationParameters.forEach((element) => this.hydrationParametersClone.forEach((clone) => {
+        if (element.lowerHydrationBoundary.percentHydratedStart !== clone.lowerHydrationBoundary.percentHydratedStart ||
+            element.lowerHydrationBoundary.percentHydratedEnd !== clone.lowerHydrationBoundary.percentHydratedEnd) {
+              return false
+            }
+        }))
+      return matched
     },
     decrement (e) {
-      this.$store.commit('DECREMENT_PARAM', e)
+      this.$store.commit('DECREMENT_PARAMETER', e)
+      this.checkValues()
     },
     increment (e) {
-      this.$store.commit('INCREMENT_PARAM', e)
+      this.$store.commit('INCREMENT_PARAMETER', e)
+      this.checkValues()
     },
     reset () {
       this.$store.dispatch('refreshHydrationParameters')
+      this.$refs.formEndOfDay.reset()
+      this.$refs.formStartOfDay.reset()
     },
-    save () {
-      const formEndOfDay = this.$refs.formEndOfDay.validate()
-      const formStartOfDay = this.$refs.formStartOfDay.validate()
-      if (formEndOfDay && formStartOfDay) this.$store.dispatch('updateHydrationParameters')
+    async save () {
+      try {
+        if (this.$refs.formEndOfDay.validate() && this.$refs.formStartOfDay.validate()) {
+          await this.$store.dispatch('updateHydrationParameters')
+        }
+          this.$refs.formEndOfDay.validate()
+          this.$refs.formStartOfDay.validate()
+      } catch (error) {
+        // TBI
+      }
     }
   },
-  mounted () {
+  created () {
     this.$store.dispatch('fetchHydrationParameters')
   },
   beforeRouteLeave (to, from, next) {

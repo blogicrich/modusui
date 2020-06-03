@@ -527,7 +527,7 @@
     </template>
   <!-- Table: Row data-->
     <template slot="items" slot-scope="props">
-      <tr>
+      <tr @click="$emit('row-clicked', props.item)">
         <td v-if="editPerms.create || editPerms.update || editPerms.delete">
           <v-checkbox
             v-model="props.selected"

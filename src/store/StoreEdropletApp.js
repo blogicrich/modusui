@@ -66,7 +66,7 @@ export const moduleEdropletApp = {
   actions: {
     async POST_LOGIN (context, payload) {
       context.commit('SET_LOAD_STATUS', true)
-      let data = apiLib.postAuth('login', payload, false, false, true).then(response => {
+      let data = apiLib.postAuth('login', payload, false, false).then(response => {
         if (response) {
           if (response.roles) {
             localStorage.clear()
@@ -97,8 +97,8 @@ export const moduleEdropletApp = {
       context.commit('SET_PORTAL_AUTH_ID', null)
       context.commit('SET_LEVEL', [])
       context.commit('SET_TOKEN', null)
-      context.commit('SET_LOAD_STATUS', false)
       context.commit('SET_ACTIVE', false)
+      context.commit('SET_LOAD_STATUS', false)
       localStorage.clear()
     }
   },

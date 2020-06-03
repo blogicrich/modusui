@@ -67,7 +67,7 @@ let url = function () {
 
 let axi = axios.create({
   baseURL: url(),
-  timeout: 30000
+  timeout: 60000
 })
 
 axi.interceptors.request.use((config) => {
@@ -90,7 +90,8 @@ axi.interceptors.response.use((response) => {
 }, (error) => {
   // console.log(error)
   if ([401, 403].includes(error.response.status)) {
-    console.log(error)
+    // console.log(error.response.status)
+    // console.log(error)
     store.dispatch('LOGOUT')
   }
   return error

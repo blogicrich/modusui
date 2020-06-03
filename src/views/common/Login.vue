@@ -2,7 +2,7 @@
   <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
     <BaseLogin
       :msg="msg"
-      :isAuthenticating="authenticated"
+      :isAuthenticating="loading"
       :isActive="isActive"
       :primaryColor="primaryColor"
       :spinnerSize="spinnerSize"

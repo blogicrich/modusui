@@ -12,8 +12,8 @@
                 >
               <img>
             </v-layout>
-            <v-form>
-              <div v-if="isAuthenticating">
+            <v-form ref="loginForm">
+              <div v-if="showSpinner">
                 <v-layout row justify-center align-center>
                   <v-progress-circular
                     class="ma-2"
@@ -105,9 +105,17 @@ export default {
     spinnerSize: String,
     spinnerWidth: String
   },
+  computed: {
+    showSpinner () {
+      if (this.isAuthenticating) return true
+      else return false
+    }
+  },
   methods: {
     checkValues () {
-      this.$emit('authenticate', { password: this.input.password, username: this.input.username })
+      if (this.$refs.loginForm.validate()) {
+        this.$emit('authenticate', { password: this.input.password, username: this.input.username })
+      }
     }
   }
 }

@@ -4,100 +4,91 @@ export const moduleHydrationParameters = {
   state: {
     hydrationParamsLoading: false,
     defaultHydrationParamsChanged: false,
-    dehydrated: {},
-    hydrated: {},
-    overHydrated: {},
-    severelyOverHydrated: {}
+    hydrationParams: [],
+    hydrationParamsClone: [],
   },
   mutations: {
-    DECREMENT_PARAM (state, data) {
-      Object.keys(state).forEach(function (key) {
-        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'start') {
-          state[key].lowerBoundaryPercentHydratedStart--
-          state.defaultHydrationParamsChanged = true
+    INCREMENT_PARAMETER (state, data) {
+      state.hydrationParams.forEach(element => {
+        if (data.timePeriod === 'start' && data.id === element.lowerHydrationBoundaryId) {
+          element.lowerHydrationBoundary.percentHydratedStart++
         }
-        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'end') {
-          state[key].lowerBoundaryPercentHydratedEnd--
-          state.defaultHydrationParamsChanged = true
+        if (data.timePeriod === 'end' && data.id === element.lowerHydrationBoundaryId) {
+          element.lowerHydrationBoundary.percentHydratedEnd++
         }
       })
     },
-    INCREMENT_PARAM (state, data) {
-      Object.keys(state).forEach(function (key) {
-        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'start') {
-          console.log(data.timePeriod === 'start')
-          state[key].lowerBoundaryPercentHydratedStart++
-          state.defaultHydrationParamsChanged = true
+    DECREMENT_PARAMETER (state, data) {
+      state.hydrationParams.forEach(element => {
+        if (data.timePeriod === 'start' && data.id === element.lowerHydrationBoundaryId) {
+          element.lowerHydrationBoundary.percentHydratedStart--
         }
-        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'end') {
-          console.log(data.timePeriod === 'end')
-          state[key].lowerBoundaryPercentHydratedEnd++
-          state.defaultHydrationParamsChanged = true
+        if (data.timePeriod === 'end' && data.id === element.lowerHydrationBoundaryId) {
+          element.lowerHydrationBoundary.percentHydratedEnd--
         }
       })
     },
-    SET_HYDRATIONPARAMETERS (state, data) {
-      state.defaultHydrationParamsChanged = false
-      Object.keys(data).forEach(function (key) {
-        if (state[key] && data[key]) {
-          state[key] = data[key]
-        } else {
-          // HANDLE ERROR
-        }
-      })
+    SET_HYDRATION_PARAMETERS (state, data) {
+      state.hydrationParams = data
+      state.hydrationParamsClone = JSON.parse(JSON.stringify(state.hydrationParams))
     },
-    UPDATE_HYDRATION_PARAM (state, data) {
-      Object.keys(state).forEach(function (key) {
-        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'start') {
-          console.log(data.timePeriod === 'start')
-          state[key].lowerBoundaryPercentHydratedStart = data.value
-          state.defaultHydrationParamsChanged = true
-        }
-        if (state[key].lowerHydrationBoundaryId === data.id && data.timePeriod === 'end') {
-          console.log(data.timePeriod === 'end')
-          state[key].lowerBoundaryPercentHydratedEnd = data.value
-          state.defaultHydrationParamsChanged = true
-        }
-      })
+    // START
+    UPDATE_DEHYDRATED_START (state, data) {
+      state.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundary.percentHydratedStart = data.value
+    },
+    UPDATE_HYDRATED_START (state, data) {
+      state.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundary.percentHydratedStart = data.value
+    },
+    UPDATE_OVERHYDRATED_START (state, data) {
+      state.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundary.percentHydratedStart = data.value
+    },
+    UPDATE_SEVERLEY_OVERHYDRATED_START (state, data) {
+      state.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundary.percentHydratedStart = data.value
+    },
+    // END
+    UPDATE_DEHYDRATED_END (state, data) {
+      state.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundary.percentHydratedEnd = data.value
+    },
+    UPDATE_HYDRATED_END (state, data) {
+      state.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundary.percentHydratedEnd = data.value
+    },
+    UPDATE_OVERHYDRATED_END (state, data) {
+      state.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundary.percentHydratedEnd = data.value
+    },
+    UPDATE_SEVERLEY_OVERHYDRATED_END (state, data) {
+      state.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundary.percentHydratedEnd = data.value
+    },
+    RESET_HYDRATION_PARAMS (state) {
+      context.commit('UPDATE_DEHYDRATED_START', state.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundary.percentHydratedEnd)
     },
     SET_HYDRATION_PARAMS_LOAD_STATUS (state, data) {
-      state.hydrationParamsLoading = data.value
+      state.hydrationParamsLoading = data
     },
-    SET_HYDRATION_PARAMS_DEFAULT_STATUS (state, data) {
-      state.defaultHydrationParamsChanged = data.value
-    }
   },
   actions: {
-    refreshHydrationParameters (context) {
-      return apiLib.getData('sysadmin/hydration-params').then((response) => {
-        if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_HYDRATIONPARAMETERS', null)
-        } else {
-          context.commit('SET_HYDRATIONPARAMETERS', response)
-          context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', { value: false })
-          context.commit('SET_HYDRATION_PARAMS_DEFAULT_STATUS', { value: false })
-        }
-      })
-    },
     fetchHydrationParameters (context) {
-      context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', { value: true })
+      context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', true)
       return apiLib.getData('sysadmin/hydration-params').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_HYDRATIONPARAMETERS', null)
-          context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', { value: false })
-          context.commit('SET_HYDRATION_PARAMS_DEFAULT_STATUS', { value: false })
+          context.commit('SET_HYDRATION_PARAMETERS', null)
+          context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', false)
+          // context.commit('SET_HYDRATION_PARAMS_DEFAULT_STATUS', false)
         } else {
-          context.commit('SET_HYDRATIONPARAMETERS', response)
-          context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', { value: false })
-          context.commit('SET_HYDRATION_PARAMS_DEFAULT_STATUS', { value: false })
+          context.commit('SET_HYDRATION_PARAMETERS', response)
+          context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', false)
+          // context.commit('SET_HYDRATION_PARAMS_DEFAULT_STATUS', false)
         }
       })
     },
-    updateHydrationParameters ({ dispatch, state }) {
-      const payload = { dehydrated: state.dehydrated, hydrated: state.hydrated, overHydrated: state.overHydrated, severelyOverHydrated: state.severelyOverHydrated }
-      return apiLib.updateData('/sysadmin/hydration-params', payload, false, true).then(() => {
-        dispatch('refreshHydrationParameters')
+    refreshHydrationParameters (context) {
+      context.dispatch('fetchHydrationParameters')
+    },
+    async updateHydrationParameters (context) {
+      context.state.hydrationParams.forEach(async element => {
+        let data = element.lowerHydrationBoundary
+        await apiLib.updateData('sysadmin/hydration-params/' + element.level, data, false, true)
       })
+  
     }
   }
 }
