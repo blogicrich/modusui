@@ -96,17 +96,17 @@ export const moduleSystemAdministrators = {
     },
     // API Objects
     SET_PAYLOAD_NEW (state) {
-      Object.keys(state.payload).forEach(function(key) {
+      Object.keys(state.payload).forEach(function (key) {
         state.payload[key] = state.newSysAdmin[key]
       })
     },
     SET_PAYLOAD_SELECTED (state) {
-      Object.keys(state.payload).forEach(function(key) {
+      Object.keys(state.payload).forEach(function (key) {
         state.payload[key] = state.selectedSysAdmin[key]
       })
     },
     RESET_PAYLOAD (state) {
-      Object.keys(state.payload).forEach(function(key) {
+      Object.keys(state.payload).forEach(function (key) {
         state.payload[key] = ''
       })
     }
@@ -142,8 +142,8 @@ export const moduleSystemAdministrators = {
       context.commit('SET_PAYLOAD_NEW')
       context.commit('SET_SYSADMINS_LOAD_STATUS', true)
       let update = await apiLib.postData('sysadmin/sysadmin/', payload, true, true).then(
-          context.dispatch('fetchSystemAdmins'),
-          context.commit('SET_SYSADMINS_LOAD_STATUS', false)
+        context.dispatch('fetchSystemAdmins'),
+        context.commit('SET_SYSADMINS_LOAD_STATUS', false)
       )
       return update
     },
@@ -151,7 +151,7 @@ export const moduleSystemAdministrators = {
       const portalId = context.state.selectedSysAdmin.portalAuthorisedId
       context.commit('SET_SYSADMINS_LOAD_STATUS', true)
       let update = await apiLib.deleteData('sysadmin/sysadmin/' + portalId, true, true).then(
-          context.commit('SET_SYSADMINS_LOAD_STATUS', false)
+        context.commit('SET_SYSADMINS_LOAD_STATUS', false)
       )
       return update
     },

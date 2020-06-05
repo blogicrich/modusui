@@ -39,15 +39,15 @@
                   </v-flex>
                 </v-fade-transition>
                   <v-text-field
-                    id="userId" 
-                    v-model="input.username" 
-                    type="text" 
-                    label="username" 
+                    id="userId"
+                    v-model="input.username"
+                    type="text"
+                    label="username"
                     name="username"
                     outline
                     :rules="[v => !!v || 'Username required!']"
                   ></v-text-field>
-                  <v-text-field 
+                  <v-text-field
                     id="password"
                     v-model.lazy="input.password"
                     type="password"

@@ -1,78 +1,85 @@
 <template>
   <v-container fluid>
-    <v-layout row align-center fill-height>
-      <BaseViewHeader
-        :headerIcon="headerIcon"
-        :iconColor="iconColor"
-        :headerText="headerText"
-        hasDivider
-      />
-      <v-spacer></v-spacer>
+    <BaseViewHeader
+      :headerIcon="headerIcon"
+      :iconColor="iconColor"
+      :headerText="headerText"
+      hasDivider
+    />
+    <v-layout v-if="!intervalsLoading" row wrap fill-height justify-space-between>
+      <v-flex :class="$vuetify.breakpoint.lgAndUp ? 'lg6' : 'xs12'">
+        <BaseRadioOptions
+          class="ma-2"
+          :groupHeader="'Blue Light Flashing Interval Options'"
+          :groupDescription="'Time between drink reminders - (Blue light flashing)'"
+          :radioHeader="'Please select an option from the following:'"
+        >
+          <template v-slot:options>
+            <v-radio-group
+              :mandatory="false"
+              v-model="blueLight"
+              color="primary"
+              :column="$vuetify.breakpoint.mdAndDown ? true : false"            >
+              <v-radio
+                color="primary"
+                v-for="(interval) in blueLightFlashingIntervals"
+                :key="interval.blueLightFlashingIntervalId"
+                :label="String(interval.time) + ' mins'"
+                :value="interval.time"
+                @change="$store.commit('SET_NEW_BLUE_LIGHT_INTERVAL', { id: interval.blueLightFlashingIntervalId, time: $event })"
+              >
+              </v-radio>
+            </v-radio-group>
+          </template>
+        </BaseRadioOptions>
+      </v-flex>
+      <v-flex xs12 lg6>
+        <BaseRadioOptions
+          class="ma-2"
+          :groupHeader="'Voice Interval Options'"
+          :groupDescription="'Time between drink reminders - (Voice message)'"
+          :radioHeader="'Please select an option from the following:'"
+        >
+          <template v-slot:options>
+            <v-radio-group
+              :mandatory="false"
+              v-model="spoken"
+              color="primary"
+              :column="$vuetify.breakpoint.mdAndDown ? true : false"
+            >
+              <v-radio
+                color="primary"
+                v-for="(interval) in spokenReminderIntervals"
+                :key="interval.spokenReminderId"
+                :label="String(interval.time) + ' mins'"
+                :value="interval.time"
+                @change="$store.commit('SET_NEW_SPOKEN_REMINDER_INTERVAL', { id: interval.spokenReminderId, time: $event })"
+                >
+              </v-radio>
+            </v-radio-group>
+          </template>
+        </BaseRadioOptions>
+      </v-flex>
     </v-layout>
-    <!-- DESKTOP VIEW -->
-    <v-container fluid v-if="intervals.length > 0 && $vuetify.breakpoint.mdAndUp">
-      <v-layout row fill-height align-center justify-space-around>
-          <BaseRadioOptions
-            @radio-option-changed="setNewUpdateObject"
-            :radioConfig="intervals[0].blueLightFlashingInterval"
-            :defaultValue="intervals[0].blueLightFlashingInterval.find(val => val.default === true).time"
-            :groupHeader="drinkGroupHeader"
-            :groupDescription="drinkRadioDescription"
-            :radioHeader="drinkRadioHeader"
-            :height="height"
-            suffix=" mins"
-          />
-          <BaseRadioOptions
-            @radio-option-changed="setNewUpdateObject"
-            :radioConfig="intervals[0].spokenReminder"
-            :groupHeader="voiceGroupHeader"
-            :defaultValue="intervals[0].spokenReminder.find(val => val.default === true).time"
-            :groupDescription="voiceRadioDescription"
-            :radioHeader="voiceRadioHeader"
-            :height="height"
-            suffix=" mins"
-          />
-      </v-layout>
-      <v-layout row justify-center align-center>
-        <v-fade-transition>
-          <v-btn
-            :disabled="!newDefaultValue"
-            class="root-nav-btn"
-            @click="save"
-            color="primary"
-            large
-            >Save
-            <v-icon class="ma-1">save</v-icon>
-          </v-btn>
-        </v-fade-transition>
-      </v-layout>
-    </v-container>
-    <!-- MOBILE VIEW -->
-    <v-container v-if="intervals.length > 0 && $vuetify.breakpoint.smAndDown">
-      <v-layout column fill-height align-center justify-space-around>
-          <BaseRadioOptions
-            @radio-option-changed="setNewUpdateObject"
-            :radioConfig="intervals[0].blueLightFlashingInterval"
-            :defaultValue="intervals[0].blueLightFlashingInterval.find(val => val.default === true).time"
-            :groupHeader="drinkGroupHeader"
-            :groupDescription="drinkRadioDescription"
-            :radioHeader="drinkRadioHeader"
-            :height="height"
-            suffix=" mins"
-          />
-          <BaseRadioOptions
-            @radio-option-changed="setNewUpdateObject"
-            :radioConfig="intervals[0].spokenReminder"
-            :groupHeader="voiceGroupHeader"
-            :defaultValue="intervals[0].spokenReminder.find(val => val.default === true).time"
-            :groupDescription="voiceRadioDescription"
-            :radioHeader="voiceRadioHeader"
-            :height="height"
-            suffix=" mins"
-          />
-      </v-layout>
+    <v-layout v-if="$vuetify.breakpoint.lgAndUp" row justify-center align-center>
+      <v-btn
+      class="root-nav-btn"
+      :disabled="!intervalsPristine" 
+      @click="save(selectedBlueLightInterval, selectedSpokenReminderInterval)" 
+      color="primary" large>
+        Save
+        <v-icon class="ma-1">save</v-icon>
+      </v-btn>
+      <v-btn
+        class="root-nav-btn" 
+        :disabled="!intervalsPristine"
+        @click="reset" 
+        color="primary" large>
+        Reset
+        <v-icon class="ma-1">refresh</v-icon>
+      </v-btn>
+    </v-layout>
     <v-speed-dial
-      v-if="newDefaultValue && $vuetify.breakpoint.mdAndDown"
       v-model="fab"
       fixed
       :bottom="true"
@@ -92,6 +99,7 @@
         </v-btn>
       </template>
       <v-btn
+        :disabled="!intervalsPristine"
         @click="save"
         color="primary"
         fab
@@ -100,7 +108,8 @@
       >
         <v-icon>save</v-icon>
       </v-btn>
-      <!-- <v-btn
+      <v-btn
+        :disabled="!intervalsPristine"
         @click="reset"
         color="primary"
         fab
@@ -108,9 +117,8 @@
         small
       >
         <v-icon>refresh</v-icon>
-      </v-btn> -->
+      </v-btn>
     </v-speed-dial>
-    </v-container>
   </v-container>
 </template>
 
@@ -118,94 +126,76 @@
 
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
 import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
-import apiLib from '@/services/apiLib'
+import { mapState } from 'vuex'
 
 export default {
-  name: 'IntervalOptions',
+  name: 'intervalOptions',
   components: {
     BaseRadioOptions,
     SubPageNavButton
   },
   computed: {
-    height () {
-      var cardHeight = 0
-      if (this.$vuetify.breakpoint.smAndUp) cardHeight = '225px'
-      if (this.$vuetify.breakpoint.xsOnly) cardHeight = '380px'
-      return cardHeight
+    ...mapState({
+      intervals: state => state.intervalOptions.intervals,
+      intervalsLoading: state => state.intervalOptions.intervalsLoading,
+      intervalsClone: state => state.intervalOptionsClone,
+      originalBlueLightFlashingInterval: state => state.intervalOptions.intervalsClone.blueLightFlashingInterval.find(interval => interval.default === 'Y'),
+      originalSpokenReminderInterval: state => state.intervalOptions.intervalsClone.spokenReminder.find(interval => interval.default === 'Y'),
+      blueLightFlashingIntervals: state => state.intervalOptions.intervals.blueLightFlashingInterval,
+      selectedBlueLightInterval: state => state.intervalOptions.intervals.blueLightFlashingInterval.find(interval => interval.default === 'Y'),
+      selectedBlueLightIntervalId: state => state.intervalOptions.intervals.blueLightFlashingInterval.find(interval => interval.default === 'Y').blueLightFlashingIntervalId,
+      spokenReminderIntervals: state => state.intervalOptions.intervals.spokenReminder,
+      selectedSpokenReminderInterval: state => state.intervalOptions.intervals.spokenReminder.find(interval => interval.default === 'Y')
+    }),
+    intervalsPristine () {
+      if (this.selectedBlueLightInterval.blueLightFlashingIntervalId !== this.originalBlueLightFlashingInterval.blueLightFlashingIntervalId || 
+          this.selectedSpokenReminderInterval.spokenReminderId !== this.originalSpokenReminderInterval.spokenReminderId) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   data () {
     return {
-      fab: false,
+      // BaseViewHeader
       headerIcon: 'notification_important',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Interval Options',
-      intervals: [],
-      multiple: false,
-      selectAll: 'Select all',
-      searchName: 'Search user..',
-      sysadminReadUrl: 'sysadmin/interval-options',
-      sysadminWriteUrl: 'sysadmin/interval-options',
-      newDefaultValue: false,
-      updateObj: {},
-      drinkGroupHeader: 'Blue light Interval Options',
-      drinkRadioDescription: 'Time between drink reminders - Blue light flashing:',
-      drinkRadioHeader: 'Please select an option from the following:',
-      voiceGroupHeader: 'Voice Message Interval Options',
-      voiceRadioDescription: 'Time between drink reminders - Voice message:',
-      voiceRadioHeader: 'Time interval in minutes'
+      // BaseRadioSelect
+      spoken: null,
+      blueLight: null,
+      // Speed Dial
+      fab: ''
     }
   },
   methods: {
-    // Get and set UI data
-    setData () {
-      apiLib.getData(this.sysadminReadUrl).then((response) => {
-        this.intervals = response
-        this.setUpdateObject(this.intervals)
-        // console.log('intervals: ', this.intervals, this.updateObj)
-      })
-    },
-    // Sets the new value of the API update object
-    setUpdateObject (intervals) {
-      this.updateObj = {
-        blueLightFlashingIntervalId: intervals[0].blueLightFlashingInterval.find(e => e.default === true).blueLightFlashingIntervalId,
-        buServerIntervalId: intervals[0].buServerInterval.find(e => e.default === true).buServerIntervalId,
-        spokenReminderId: intervals[0].spokenReminder.find(e => e.default === true).spokenReminderId,
-        wakeUpIntervalId: intervals[0].wakeUpInterval.find(e => e.default === true).wakeUpIntervalId
-      }
-    },
-    // Sets the new value of the radio group and appends to updateObject
-    setNewUpdateObject (obj) {
-      const key = Object.keys(obj.items[obj.index])[0]
-      console.log('set value - obj: ', obj)
-      if (obj.defaultValue === obj.newValue) {
-        this.newDefaultValue = false
-      } else {
-        this.newDefaultValue = true
-        this.updateObj[key] = obj.items[obj.index][key]
-      }
-
-      // console.log(obj.items[obj.index])
-      // console.log(Object.keys(obj.items[obj.index])[0])
-      // console.log(this.updateObj)
-    },
-    // Returns radio button cpnfig to stored values
     reset () {
-      // this.setData()
+      this.$store.commit('RESET_INTERVAL_OPTIONS')
+      this.blueLight = this.selectedBlueLightInterval.time
+      this.spoken = this.selectedSpokenReminderInterval.time
     },
-    // Posts update requests
     save () {
-      apiLib.updateData(this.sysadminWriteUrl, this.updateObj, true, true).then(() => {
-        apiLib.getData(this.sysadminReadUrl)
+      this.$store.dispatch('updateIntervalOptions', { 
+        blueLightFlashingIntervalId: this.selectedBlueLightInterval.blueLightFlashingIntervalId, 
+        spokenReminderId: this.selectedSpokenReminderInterval.spokenReminderId
       })
-      this.newDefaultValue = false
+    },
+    async setData () {
+      try {
+        await this.$store.dispatch('fetchIntervals')
+        this.blueLight = this.selectedBlueLightInterval.time
+        this.spoken = this.selectedSpokenReminderInterval.time
+      } catch (error) {
+        // TBI
+      }
     }
   },
   mounted () {
     this.setData()
   },
   beforeRouteLeave (to, from, next) {
-    if (this.newDefaultValue && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+    if (this.intervalsPristine && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
       return next(false)
     }
     next()
@@ -213,5 +203,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
+@import "./public/scss/main.scss";
 </style>

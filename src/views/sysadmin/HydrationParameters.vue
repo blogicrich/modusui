@@ -6,7 +6,7 @@
       :headerText="headerText"
       hasDivider
     />
-    <v-layout row wrap v-if="!paramsLoading">
+    <v-layout row wrap>
 
       <!-- START OF DAY -->
 
@@ -19,55 +19,22 @@
           <v-icon class="mr-3" small color="primary">schedule</v-icon>
           <h3 class="text-primary">Start of the Day</h3>
         </v-layout>
-        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary">
+        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary">        
           <BaseToleranceSetter
+            v-on:keyup.enter="$event.target.nextElementSibling.focus()"
+            v-for="(parameter, index) in hydrationParameters"
+            :key="parameter.lowerHydrationBoundaryId"
             class="baseToleranceSetter"
             color="warning"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Dehydrated - Amber Red Boundary:' : 'Dehydrated' "
-            :fieldValue="Number(dehydratedBoundaryStart)"
-            :fieldId="dehydratedId"
-            period="start"
+            :fieldLabel="parameter.description"
+            :fieldValue="Number(parameter.lowerHydrationBoundary.percentHydratedStart)"
+            :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
             :rules="startOfDayValidation.dehydrated"
-            @field-value-changed="$store.commit('UPDATE_DEHYDRATED_START', $event)"
-            @increment="increment"
-            @decrement="decrement"
-          />
-          <BaseToleranceSetter
-            class="baseToleranceSetter"
-            color="success"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Hydrated - Green Amber Boundary:' : 'Hydrated' "
-            :fieldValue="Number(hydratedBoundaryStart)"
-            :fieldId="hydratedId"
-            period="start"
-            :rules="startOfDayValidation.hydrated"
-            @field-value-changed="$store.commit('UPDATE_HYDRATED_START', $event)"
-            @increment="increment"
-            @decrement="decrement"
-          />
-          <BaseToleranceSetter
-            class="baseToleranceSetter"
-            color="error"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Over Hydrated - Red Amber Boundary:' : 'Over Hydrated' "
-            :fieldValue="Number(overHydratedBoundaryStart)"
-            :fieldId="overHydratedId"
-            period="start"
-            :rules="startOfDayValidation.overHydrated"
-            @field-value-changed="$store.commit('UPDATE_OVERHYDRATED_START', $event)"
-            @increment="increment"
-            @decrement="decrement"
-          />
-          <BaseToleranceSetter
-            class="baseToleranceSetter"
-            color="error"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Severely Over Hydrated - Red Amber Boundary:' : 'Severely Over Hydrated' "
-            :fieldValue="Number(severelyOverHydratedStart)"
-            :fieldId="severelyOverHydratedId"
-            period="start"
-            :rules="startOfDayValidation.severelyOverHydrated"
-            @field-value-changed="$store.commit('UPDATE_SEVERLEY_OVERHYDRATED_START', $event)"
-            @increment="increment"
-            @decrement="decrement"
-          />
+            @field-value-changed="$store.commit('UPDATE_START', { index: index, value: $event.value })"
+            @increment="$store.commit('INCREMENT_START', { index: index, value: $event.value })"
+            @decrement="$store.commit('DECREMENT_START', { index: index, value: $event.value })"
+          >
+          </BaseToleranceSetter>
         </v-form>
       </v-layout>
 
@@ -84,59 +51,24 @@
         </v-layout>
         <v-form ref="formEndOfDay" class="mx-4 pb-3 border-primary">
           <BaseToleranceSetter
+            v-for="(parameter, index) in hydrationParameters"
+            :key="parameter.lowerHydrationBoundaryId"
             class="baseToleranceSetter"
             color="warning"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Dehydrated - Amber Red Boundary:' : 'Dehydrated' "
-            :fieldValue="Number(dehydratedBoundaryEnd)"
-            :fieldId="dehydratedId"
-            period="end"
+            :fieldLabel="parameter.description"
+            :fieldValue="Number(parameter.lowerHydrationBoundary.percentHydratedEnd)"
+            :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
             :rules="endOfDayValidation.dehydrated"
-            @field-value-changed="$store.commit('UPDATE_DEHYDRATED_END', $event)"
-            @increment="increment"
-            @decrement="decrement"
-          />
-          <BaseToleranceSetter
-            class="baseToleranceSetter"
-            color="success"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Hydrated - Green Amber Boundary:' : 'Hydrated' "
-            :fieldValue="Number(hydratedBoundaryEnd)"
-            :fieldId="hydratedId"
-            period="end"
-            :rules="endOfDayValidation.hydrated"
-            @field-value-changed="$store.commit('UPDATE_HYDRATED_END', $event)"
-            @increment="increment"
-            @decrement="decrement"
-          />
-          <BaseToleranceSetter
-            class="baseToleranceSetter"
-            color="error"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Over Hydrated - Red Amber Boundary:' : 'Over Hydrated' "
-            :fieldValue="Number(overHydratedBoundaryEnd)"
-            :fieldId="overHydratedId"
-            period="end"
-            :rules="endOfDayValidation.overHydrated"
-            @field-value-changed="$store.commit('UPDATE_OVERHYDRATED_END', $event)"
-            @increment="increment"
-            @decrement="decrement"
-          />
-          <BaseToleranceSetter
-            class="baseToleranceSetter"
-            color="error"
-            :fieldLabel="$vuetify.breakpoint.lgAndUp ? 'Severely Over Hydrated - Red Amber Boundary:' : 'Severely Over Hydrated' "
-            :fieldValue="Number(severelyOverHydratedEnd)"
-            :fieldId="severelyOverHydratedId"
-            period="end"
-            :rules="endOfDayValidation.severelyOverHydrated"
-            @field-value-changed="$store.commit('UPDATE_SEVERLEY_OVERHYDRATED_END', $event)"
-            @increment="increment"
-            @decrement="decrement"
+            @field-value-changed="$store.commit('UPDATE_END', { index: index, value: $event.value })"
+            @increment="$store.commit('INCREMENT_END', { index: index, value: $event.value })"
+            @decrement="$store.commit('DECREMENT_END', { index: index, value: $event.value })"
           />
         </v-form>
       </v-layout>
     </v-layout>
     <v-layout v-if="!paramsLoading && $vuetify.breakpoint.lgAndUp" row justify-center align-center>
       <v-btn
-        :disabled="defaultValuesChanged"
+        :disabled="parametersPristine"
         class="root-nav-btn mt-3"
         @click="save"
         color="primary"
@@ -145,7 +77,7 @@
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
       <v-btn
-        :disabled="defaultValuesChanged"
+        :disabled="parametersPristine"
         class="root-nav-btn mt-3"
         @click="reset"
         color="primary"
@@ -155,7 +87,8 @@
       </v-btn>
     </v-layout>
     <v-speed-dial
-      v-if="!paramsLoading && defaultValuesChanged && $vuetify.breakpoint.mdAndDown"
+      v-if="!paramsLoading  && $vuetify.breakpoint.mdAndDown"
+      :disabled="parametersPristine"
       v-model="fab"
       fixed
       :bottom="true"
@@ -211,15 +144,14 @@ export default {
   data () {
     return {
       // BaseViewHeader
-      defaultValuesChanged: false,
       headerIcon: 'local_drink',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Hydration Parameters',
-      fab: false,
+      // BaseToleranceSetter
       startOfDayValidation: {
         dehydrated: [
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -237,7 +169,7 @@ export default {
             }
           },
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -255,7 +187,7 @@ export default {
             }
           },
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -272,7 +204,7 @@ export default {
             }
           },
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -284,7 +216,7 @@ export default {
       endOfDayValidation: {
         dehydrated: [
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -302,7 +234,7 @@ export default {
             }
           },
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -321,7 +253,7 @@ export default {
             }
           },
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -338,7 +270,7 @@ export default {
             }
           },
           v => {
-            if (this.numericalRegEx.test(v)) {
+            if (this.numericDpRegEx.test(v)) {
               return true
             } else {
               return 'Numerical characters only'
@@ -346,7 +278,9 @@ export default {
           },
           v => v > this.overHydratedBoundaryEnd || 'Value must be more than Over Hydrated.'
         ]
-      }
+      },
+      // Mobile action button
+      fab: false
     }
   },
   computed: {
@@ -355,69 +289,14 @@ export default {
       hydrationParametersClone: state => state.hydrationOptions.hydrationParamsClone,
       // Booleans
       paramsLoading: state => state.hydrationOptions.hydrationParamsLoading,
-      // Dehydrated
-      dehydratedBoundaryStart: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundary.percentHydratedStart
-      },
-      dehydratedBoundaryEnd: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundary.percentHydratedEnd
-      },
-      dehydratedId: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Dehydrated').lowerHydrationBoundaryId
-      },
-      // // Hydrated
-      hydratedBoundaryStart: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundary.percentHydratedStart
-      },
-      hydratedBoundaryEnd: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundary.percentHydratedEnd
-      },
-      hydratedId: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Hydrated').lowerHydrationBoundaryId
-      },
-      // // Over Hydrated
-      overHydratedBoundaryStart: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundary.percentHydratedStart
-      },
-      overHydratedBoundaryEnd: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundary.percentHydratedEnd
-      },
-      overHydratedId: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Over Hydrated').lowerHydrationBoundaryId
-      },
-      // Severely Over Hydrated
-      severelyOverHydratedStart: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundary.percentHydratedStart
-      },
-      severelyOverHydratedEnd: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundary.percentHydratedEnd
-      },
-      severelyOverHydratedId: state => {
-        return state.hydrationOptions.hydrationParams.find(e => e.description === 'Severely over hydrated').lowerHydrationBoundaryId
-      },
-    })
+    }),
+    parametersPristine () {
+      return false
+    }
   },
   methods: {
-    checkValues () {
-      console.log(this.hydrationParameters, this.hydrationParametersClone)
-      let matched = this.hydrationParameters.forEach((element) => this.hydrationParametersClone.forEach((clone) => {
-        if (element.lowerHydrationBoundary.percentHydratedStart !== clone.lowerHydrationBoundary.percentHydratedStart ||
-            element.lowerHydrationBoundary.percentHydratedEnd !== clone.lowerHydrationBoundary.percentHydratedEnd) {
-              return false
-            }
-        }))
-      return matched
-    },
-    decrement (e) {
-      this.$store.commit('DECREMENT_PARAMETER', e)
-      this.checkValues()
-    },
-    increment (e) {
-      this.$store.commit('INCREMENT_PARAMETER', e)
-      this.checkValues()
-    },
     reset () {
-      this.$store.dispatch('refreshHydrationParameters')
+      this.$store.dispatch('fetchHydrationParameters')
       this.$refs.formEndOfDay.reset()
       this.$refs.formStartOfDay.reset()
     },
@@ -426,8 +305,8 @@ export default {
         if (this.$refs.formEndOfDay.validate() && this.$refs.formStartOfDay.validate()) {
           await this.$store.dispatch('updateHydrationParameters')
         }
-          this.$refs.formEndOfDay.validate()
-          this.$refs.formStartOfDay.validate()
+        this.$refs.formEndOfDay.validate()
+        this.$refs.formStartOfDay.validate()
       } catch (error) {
         // TBI
       }
@@ -437,7 +316,7 @@ export default {
     this.$store.dispatch('fetchHydrationParameters')
   },
   beforeRouteLeave (to, from, next) {
-    if (this.defaultValuesChanged && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+    if (!this.parametersPristine && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
       return next(false)
     }
     next()

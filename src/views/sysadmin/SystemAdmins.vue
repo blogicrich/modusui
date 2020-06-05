@@ -691,10 +691,10 @@ export default {
     },
     async saveNewSysAdmin () {
       if (this.$refs.newSysAdminDetailsForm.validate() && this.$refs.editSysAdminPasswordForm.validate()) {
-        try { 
+        try {
           await this.$store.dispatch('postNewSysAdmin')
         } catch (error) {
-          // TBI 
+          // TBI
         }
       } else {
         this.$refs.editSysAdminPasswordForm.validate()
@@ -724,14 +724,14 @@ export default {
         this.deletingData = true
         await this.$store.dispatch('deleteSelectedSysAdmin', this.selectedSysAdmin)
         await this.$store.dispatch('fetchSystemAdmins')
-        this.spinnerTimeout = setTimeout(function() {
+        this.spinnerTimeout = setTimeout(function () {
           that.closeDialog()
           that.deletingData = false
         }, this.timeoutDuration)
       } catch (error) {
         // TBI
       }
-    },
+    }
   },
   created () {
     this.getSysAdmins()

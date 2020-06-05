@@ -3,7 +3,8 @@
 
     <!-- DESKTOP VIEW -->
 
-    <v-layout v-if="$vuetify.breakpoint.smAndUp" grid-list row fill-height align-center justify-center>
+    <v-layout 
+      v-if="$vuetify.breakpoint.smAndUp" grid-list row fill-height align-center justify-center>
       <v-flex xs8>
         <h2 class="pg-subheader text-primary">{{ fieldLabel }}</h2>
       </v-flex>
@@ -20,6 +21,7 @@
           single-line
           outline
           rounded
+          type="number"
           >{{ fieldValue }}
         </v-text-field>
         <v-btn class="mx-0" icon flat color="primary" @click="incrementBtnPressed">
@@ -46,6 +48,7 @@
           box
           outline
           rounded
+          type="number"
           >{{ fieldValue }}
         </v-text-field>
       </v-flex>
@@ -84,10 +87,7 @@ export default {
     },
     valueChanged (e) {
       this.$emit('field-value-changed', { value: e, id: this.fieldId, timePeriod: this.period })
-    }
-  },
-  mounted () {
-
+    },
   }
 }
 
