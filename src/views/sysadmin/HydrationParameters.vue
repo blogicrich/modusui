@@ -19,7 +19,7 @@
           <v-icon class="mr-3" small color="primary">schedule</v-icon>
           <h3 class="text-primary">Start of the Day</h3>
         </v-layout>
-        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary">        
+        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary">
           <BaseToleranceSetter
             v-on:keyup.enter="$event.target.nextElementSibling.focus()"
             v-for="(parameter, index) in hydrationParameters"
@@ -288,7 +288,7 @@ export default {
       hydrationParameters: state => state.hydrationOptions.hydrationParams,
       hydrationParametersClone: state => state.hydrationOptions.hydrationParamsClone,
       // Booleans
-      paramsLoading: state => state.hydrationOptions.hydrationParamsLoading,
+      paramsLoading: state => state.hydrationOptions.hydrationParamsLoading
     }),
     parametersPristine () {
       return false

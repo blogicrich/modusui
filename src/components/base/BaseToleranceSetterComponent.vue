@@ -3,7 +3,7 @@
 
     <!-- DESKTOP VIEW -->
 
-    <v-layout 
+    <v-layout
       v-if="$vuetify.breakpoint.smAndUp" grid-list row fill-height align-center justify-center>
       <v-flex xs8>
         <h2 class="pg-subheader text-primary">{{ fieldLabel }}</h2>
@@ -87,7 +87,7 @@ export default {
     },
     valueChanged (e) {
       this.$emit('field-value-changed', { value: e, id: this.fieldId, timePeriod: this.period })
-    },
+    }
   }
 }
 

@@ -9,7 +9,7 @@
     <v-layout v-if="!intervalsLoading" row wrap fill-height justify-space-between>
       <v-flex :class="$vuetify.breakpoint.lgAndUp ? 'lg6' : 'xs12'">
         <BaseRadioOptions
-          class="ma-2"
+          class="mx-4 my-2"
           :groupHeader="'Blue Light Flashing Interval Options'"
           :groupDescription="'Time between drink reminders - (Blue light flashing)'"
           :radioHeader="'Please select an option from the following:'"
@@ -35,7 +35,7 @@
       </v-flex>
       <v-flex xs12 lg6>
         <BaseRadioOptions
-          class="ma-2"
+          class="mx-4 my-2"
           :groupHeader="'Voice Interval Options'"
           :groupDescription="'Time between drink reminders - (Voice message)'"
           :radioHeader="'Please select an option from the following:'"
@@ -64,16 +64,16 @@
     <v-layout v-if="$vuetify.breakpoint.lgAndUp" row justify-center align-center>
       <v-btn
       class="root-nav-btn"
-      :disabled="!intervalsPristine" 
-      @click="save(selectedBlueLightInterval, selectedSpokenReminderInterval)" 
+      :disabled="!intervalsPristine"
+      @click="save(selectedBlueLightInterval, selectedSpokenReminderInterval)"
       color="primary" large>
         Save
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
       <v-btn
-        class="root-nav-btn" 
+        class="root-nav-btn"
         :disabled="!intervalsPristine"
-        @click="reset" 
+        @click="reset"
         color="primary" large>
         Reset
         <v-icon class="ma-1">refresh</v-icon>
@@ -148,7 +148,7 @@ export default {
       selectedSpokenReminderInterval: state => state.intervalOptions.intervals.spokenReminder.find(interval => interval.default === 'Y')
     }),
     intervalsPristine () {
-      if (this.selectedBlueLightInterval.blueLightFlashingIntervalId !== this.originalBlueLightFlashingInterval.blueLightFlashingIntervalId || 
+      if (this.selectedBlueLightInterval.blueLightFlashingIntervalId !== this.originalBlueLightFlashingInterval.blueLightFlashingIntervalId ||
           this.selectedSpokenReminderInterval.spokenReminderId !== this.originalSpokenReminderInterval.spokenReminderId) {
         return true
       } else {
@@ -176,8 +176,8 @@ export default {
       this.spoken = this.selectedSpokenReminderInterval.time
     },
     save () {
-      this.$store.dispatch('updateIntervalOptions', { 
-        blueLightFlashingIntervalId: this.selectedBlueLightInterval.blueLightFlashingIntervalId, 
+      this.$store.dispatch('updateIntervalOptions', {
+        blueLightFlashingIntervalId: this.selectedBlueLightInterval.blueLightFlashingIntervalId,
         spokenReminderId: this.selectedSpokenReminderInterval.spokenReminderId
       })
     },

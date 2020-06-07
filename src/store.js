@@ -9,6 +9,7 @@ import { moduleVoiceMessagesDefaults } from '@/store/StoreVoiceMessagesDefaults'
 import { moduleIntervalOptions } from '@/store/StoreIntervalOptions'
 import { moduleSystemAdministrators } from '@/store/StoreSysAdmins'
 import { moduleTitles } from '@/store/StoreTitles'
+import { moduleSmsEmailMessages } from '@/store/StoreSmsEmailMessages'
 // client admins
 import { moduleWakeSleepTimes } from '@/store/StoreWakeSleepTimes'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
@@ -38,6 +39,7 @@ export default new Vuex.Store({
     intervalOptions: moduleIntervalOptions,
     systemAdmins: moduleSystemAdministrators,
     titles: moduleTitles,
+    smsEmailMessages: moduleSmsEmailMessages,
     // client Admins
     wakeSleepTimes: moduleWakeSleepTimes,
     intervalSettings: moduleIntervalSettings,
