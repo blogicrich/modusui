@@ -49,7 +49,7 @@
         </v-list>
       </v-menu>
       <!-- TOOLBAR BUTTONS -->
-      <v-btn :disabled="isPristine" icon>
+      <v-btn :disabled="isPristine" icon @click="save">
         <v-icon>save</v-icon>
       </v-btn>
       <v-btn :disabled="isPristine" icon @click="$store.commit('RESET_SELECTED_MESSAGE', selectedMessage.alertMessagesId)">
@@ -88,9 +88,11 @@
 <script>
 
 import { mapState } from 'vuex'
+import validation from '@/mixins/validation'
 
 export default {
   name: 'TextMessages',
+  mixins: [validation],
   computed: {
     ...mapState({
       messagesLoading: state => state.smsEmailMessages.messagesLoading,
@@ -125,6 +127,14 @@ export default {
   },
   methods: {
     save () {
+      Object.keys(this.messages).forEach(key => {
+        if (this.validateMaxChars(this.messages[key].subject, 4) || this.validateMaxChars(this.messages[key].message, 4)) {
+          console.log ('FALSE -- ', this.validateMaxChars(this.messages[key].subject, 4), this.validateMaxChars(this.messages[key].message, 4), this.messages[key])
+        } else {
+          
+          return false
+        }
+      })
       // TBI
       // validate
       // commit to store

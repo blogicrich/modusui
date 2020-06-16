@@ -19,9 +19,8 @@
           <v-icon class="mr-3" small color="primary">schedule</v-icon>
           <h3 class="text-primary">Start of the Day</h3>
         </v-layout>
-        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary">
+        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary" v-on:keyup.enter="$event.target.nextElementSibling.focus()">
           <BaseToleranceSetter
-            v-on:keyup.enter="$event.target.nextElementSibling.focus()"
             v-for="(parameter, index) in hydrationParameters"
             :key="parameter.lowerHydrationBoundaryId"
             class="baseToleranceSetter"
@@ -56,7 +55,7 @@
             class="baseToleranceSetter"
             color="warning"
             :fieldLabel="parameter.description"
-            :fieldValue="Number(parameter.lowerHydrationBoundary.percentHydratedEnd)"
+            :fieldValue="Number(getterEndOfDayValue(parameter.alertBoundariesAlertTypeBandId))"
             :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
             :rules="endOfDayValidation.dehydrated"
             @field-value-changed="$store.commit('UPDATE_END', { index: index, value: $event.value })"
@@ -131,7 +130,7 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import BaseToleranceSetter from '@/components/base/BaseToleranceSetterComponent.vue'
 import validation from '@/mixins/validation'
 
@@ -290,6 +289,10 @@ export default {
       // Booleans
       paramsLoading: state => state.hydrationOptions.hydrationParamsLoading
     }),
+    ...mapGetters([
+      'getterStartOfDayValue',
+      'getterEndOfDayValue'
+    ]),
     parametersPristine () {
       return false
     }

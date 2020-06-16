@@ -11,7 +11,7 @@ export default {
       requiredRegEx: /(.|\s)*\S(.|\s)*/,
       emailRegEx: /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/,
       macAddressRegEx: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
-      numericDpRegEx: /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/ // ^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$
+      numericDpRegEx: /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/
     }
   },
   methods: {
@@ -38,6 +38,13 @@ export default {
         return this.alphaNumericRegEx.test(payload)
       } else {
         return false
+      }
+    },
+    validateMaxChars: function (payload, maxChars) {
+      if (this.validateUndefined(payload) || this.validateNull(payload) || !this.validateString(payload)) {
+        return false
+      } else {
+        return payload.length <= maxChars
       }
     },
     validateDp: function (payload) {
