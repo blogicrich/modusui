@@ -10,7 +10,11 @@ export const moduleHydrationParameters = {
   mutations: {
     SET_HYDRATION_PARAMETERS (state, data) {
       state.hydrationParams = data
-      state._originalHydrationParams = [...data]
+      // Shallow copy with some exceptions.
+      state._originalHydrationParams = data.map(param => {
+        param.lowerHydrationBoundary = { ...param.lowerHydrationBoundary }
+        return { ...param }
+      })
     },
     SET_HYDRATION_PARAMS_LOAD_STATUS (state, data) {
       state.hydrationParamsLoading = data
@@ -56,13 +60,6 @@ export const moduleHydrationParameters = {
       })
     },
     async updateHydrationParameters ({ state }) {
-      // Object.keys(context.state.hydrationParams).forEach(async key => {
-      //   const data = context.state.hydrationParams[key].lowerHydrationBoundary
-      //   data.percentHydratedStart = String(Number(data.percentHydratedStart).toFixed(2))
-      //   data.percentHydratedEnd = String(Number(data.percentHydratedEnd).toFixed(2))
-      //   // console.log(data)
-      //   // await apiLib.updateData('sysadmin/hydration-params/' + context.state.hydrationParams[key].level, data, false, true)
-      // })
       const jobs = []
       for (const parameter of state.hydrationParams) {
         const { lowerHydrationBoundary } = parameter
@@ -70,13 +67,13 @@ export const moduleHydrationParameters = {
           ._originalHydrationParams.find(originalParameter => parameter.level === originalParameter.level).lowerHydrationBoundary
 
         if (
-          lowerHydrationBoundary.percentHydratedStart !== parseFloat(originalLowerHydrationBoundary.percentHydratedStart) ||
-          lowerHydrationBoundary.percentHydratedEnd !== parseFloat(originalLowerHydrationBoundary.percentHydratedEnd)
+          parseFloat(lowerHydrationBoundary.percentHydratedStart) !== parseFloat(originalLowerHydrationBoundary.percentHydratedStart) ||
+          parseFloat(lowerHydrationBoundary.percentHydratedEnd) !== parseFloat(originalLowerHydrationBoundary.percentHydratedEnd)
         ) {
           jobs.push(apiLib.updateData(`sysadmin/hydration-params/${parameter.level}`, {
-            percentHydratedStart: parameter.percentHydratedStart,
-            percentHydratedEnd: parameter.percentHydratedEnd
-          }, false, true))
+            percentHydratedStart: lowerHydrationBoundary.percentHydratedStart,
+            percentHydratedEnd: lowerHydrationBoundary.percentHydratedEnd
+          }, false, false))
         }
       }
       await Promise.all(jobs)
