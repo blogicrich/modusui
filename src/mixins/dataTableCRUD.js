@@ -30,8 +30,8 @@ export const crudRoutines = {
 
     async deleteItem (items) {
       for (var i = 0; i < items.length; i++) {
-        let index = this.items.indexOf(items[i])
-        let id = (items[i][this.crudIdKey])
+        const index = this.items.indexOf(items[i])
+        const id = (items[i][this.crudIdKey])
         await apiLib.deleteData(this.delUrl + '/' + id, true, true)
           .then(response => {
             this.items.splice(index, 1)
@@ -104,13 +104,13 @@ export const crudRoutines = {
     async setMenuItems (urls) {
       if (urls !== [] || urls !== null) {
         let menuItems = []
-        let values = []
+        const values = []
         // console.log(urls)
         for (var i = 0; i < urls.length; i++) {
           if (urls[i].url) {
             menuItems = await apiLib.getData(urls[i].url, true, true)
             for (var j = 0; j < menuItems.length; j++) {
-              let val = menuItems[j]
+              const val = menuItems[j]
               // console.log('menuItem url: ', val)
               // values.push(menuItems[j][urls[i].key])
               values.push(val)
@@ -119,7 +119,7 @@ export const crudRoutines = {
           if (urls[i].ref) {
             menuItems = urls[i].ref
             for (var k = 0; k < menuItems.length; k++) {
-              let val = menuItems[k]
+              const val = menuItems[k]
               // console.log('menuItem ref: ', val)
               // values.push(menuItems[j][urls[i].key])
               values.push(val)

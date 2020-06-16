@@ -20,14 +20,14 @@ export default {
   mixins: [pdfMixin],
   methods: {
     renderPdf: function () {
-      let doc = this.renderDocument()
+      const doc = this.renderDocument()
 
       for (let i = 0; i < this.tabs.length; i++) {
-        let tab = this.tabs[i]
+        const tab = this.tabs[i]
 
         if (tab.type === 'header') {
           for (let i = 0; i < tab.table.rows.length; i++) {
-            let row = tab.table.rows[i]
+            const row = tab.table.rows[i]
             this.renderHeader(
               doc,
               row.headers,
@@ -35,10 +35,10 @@ export default {
             )
           }
         } else if (tab.type === 'table') {
-          let headerTexts = []
+          const headerTexts = []
           for (let iter = 0; iter < tab.table.headers.length; iter++) { headerTexts.push(tab.table.headers[iter].text) }
 
-          let itemsTexts = []
+          const itemsTexts = []
           for (let iter = 0; iter < tab.table.items.length; iter++) { itemsTexts.push(Object.values(tab.table.items[iter])) }
 
           this.renderTable(

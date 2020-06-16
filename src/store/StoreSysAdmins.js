@@ -130,7 +130,7 @@ export const moduleSystemAdministrators = {
       context.commit('RESET_PAYLOAD')
       context.commit('SET_PAYLOAD_SELECTED')
       context.commit('SET_SYSADMINS_LOAD_STATUS', true)
-      let update = await apiLib.updateData('sysadmin/sysadmin/' + portalId, payload, false, true).then(
+      const update = await apiLib.updateData('sysadmin/sysadmin/' + portalId, payload, false, true).then(
         context.commit('SET_SYSADMINS_LOAD_STATUS', false)
       )
       return update
@@ -141,7 +141,7 @@ export const moduleSystemAdministrators = {
       context.commit('RESET_PAYLOAD')
       context.commit('SET_PAYLOAD_NEW')
       context.commit('SET_SYSADMINS_LOAD_STATUS', true)
-      let update = await apiLib.postData('sysadmin/sysadmin/', payload, true, true).then(
+      const update = await apiLib.postData('sysadmin/sysadmin/', payload, true, true).then(
         context.dispatch('fetchSystemAdmins'),
         context.commit('SET_SYSADMINS_LOAD_STATUS', false)
       )
@@ -150,7 +150,7 @@ export const moduleSystemAdministrators = {
     async deleteSelectedSysAdmin (context) {
       const portalId = context.state.selectedSysAdmin.portalAuthorisedId
       context.commit('SET_SYSADMINS_LOAD_STATUS', true)
-      let update = await apiLib.deleteData('sysadmin/sysadmin/' + portalId, true, true).then(
+      const update = await apiLib.deleteData('sysadmin/sysadmin/' + portalId, true, true).then(
         context.commit('SET_SYSADMINS_LOAD_STATUS', false)
       )
       return update

@@ -35,7 +35,7 @@ export const moduleSmsEmailMessages = {
       state.selectedMessage = Object.assign({}, state.selectedMessage, { message: data.value })
     },
     RESET_SELECTED_MESSAGE (state, data) {
-      let oldData = JSON.parse(JSON.stringify(state.messagesClone[data]))
+      const oldData = JSON.parse(JSON.stringify(state.messagesClone[data]))
       state.selectedMessage = Object.assign({}, state.selectedMessage, oldData)
     }
   },

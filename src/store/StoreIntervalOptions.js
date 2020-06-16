@@ -16,7 +16,7 @@ export const moduleIntervalOptions = {
     },
     SET_NEW_SPOKEN_REMINDER_INTERVAL (state, data) {
       state.intervals.spokenReminder.forEach(e => {
-        let index = state.intervals.spokenReminder.findIndex(slice => slice === e)
+        const index = state.intervals.spokenReminder.findIndex(slice => slice === e)
         if (e.spokenReminderId === data.id) {
           state.intervals.spokenReminder.splice(index, 1, { spokenReminderId: data.id, time: data.time, default: 'Y' })
         } else {
@@ -26,7 +26,7 @@ export const moduleIntervalOptions = {
     },
     SET_NEW_BLUE_LIGHT_INTERVAL (state, data) {
       state.intervals.blueLightFlashingInterval.forEach(e => {
-        let index = state.intervals.blueLightFlashingInterval.findIndex(slice => slice === e)
+        const index = state.intervals.blueLightFlashingInterval.findIndex(slice => slice === e)
         if (e.blueLightFlashingIntervalId === data.id) {
           state.intervals.blueLightFlashingInterval.splice(index, 1, { blueLightFlashingIntervalId: data.id, time: data.time, default: 'Y' })
         } else {

@@ -93,9 +93,9 @@ export default {
       showMenu: false,
       on: false,
       colourMapping: {
-        'Green': '#00e676',
-        'Amber': '#ffc400',
-        'Red': '#ff1744'
+        Green: '#00e676',
+        Amber: '#ffc400',
+        Red: '#ff1744'
       }
     }
   },

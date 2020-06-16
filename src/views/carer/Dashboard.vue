@@ -104,7 +104,6 @@
 import BaseChartTypeSelector from '@/components/base/BaseChartSelectionComponent'
 import BaseChartHeader from '@/components/base/BaseChartHeaderComponent'
 import BaseDashboard from '@/components/base/BaseDashboardComponent'
-import BaseDashboardTileOverlay from '@/components/base/BaseDashboardTileOverlayComponent'
 import BaseDataInfoCard from '@/components/base/BaseDataTableInfoComponent'
 import BaseDateSelection from '@/components/base/BaseDateSelectionComponent'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
@@ -118,7 +117,6 @@ export default {
   name: 'eDropletDashboard',
   components: {
     BaseDashboard,
-    BaseDashboardTileOverlay,
     BaseDataInfoCard,
     BaseDateSelection,
     BaseChartTypeSelector,
@@ -159,16 +157,22 @@ export default {
       if (this.hourChartDataLoaded && !this.hourChartDataUpdating) {
         return this.$store.getters.getterHourLineBarChartData
       }
+
+      return null
     },
     weekLineBarChartData () {
       if (this.weekChartDataLoaded && !this.weekChartDataUpdating) {
         return this.$store.getters.getterWeekLineBarChartData
       }
+
+      return null
     },
     dailyPieChartData () {
       if (this.dayChartDataLoaded && !this.dayChartDataUpdating) {
         return this.$store.getters.getterDailyPieChartData
       }
+
+      return null
     }
   },
   data () {

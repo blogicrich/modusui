@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     titles () {
-      let data = this.$store.getters.getterWizardTitles
+      const data = this.$store.getters.getterWizardTitles
       console.log(this.$store.getters.getterWizardTitles)
       return data
     }

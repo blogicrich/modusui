@@ -47,7 +47,7 @@ import { EventBus } from '@/mixins/eventBus.js'
 import { moduleEdropletApp } from '@/store/StoreEdropletApp'
 import store from '@/store'
 
-let url = function () {
+const url = function () {
   let val = ''
   switch (process.env.NODE_ENV) {
     case 'development':
@@ -65,7 +65,7 @@ let url = function () {
   return val
 }
 
-let axi = axios.create({
+const axi = axios.create({
   baseURL: url(),
   timeout: 60000
 })
@@ -73,9 +73,9 @@ let axi = axios.create({
 axi.interceptors.request.use((config) => {
   // Do something before request is sent
   if (moduleEdropletApp.getters.token) {
-    config.headers.common['authorization'] = 'Bearer ' + moduleEdropletApp.state.token
+    config.headers.common.authorization = 'Bearer ' + moduleEdropletApp.state.token
   } else {
-    delete config.headers.common['authorization']
+    delete config.headers.common.authorization
     axios.defaults.headers.common['Content-Type'] = { 'Accept ': 'application/json' }
   }
   return config

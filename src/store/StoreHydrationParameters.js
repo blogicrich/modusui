@@ -1,42 +1,35 @@
 import apiLib from '../services/apiLib.js'
+import Vue from 'vue'
 
 export const moduleHydrationParameters = {
   state: {
     hydrationParamsLoading: false,
-    hydrationParams: {},
-    hydrationParamsClone: {}
+    hydrationParams: [],
+    _originalHydrationParams: []
   },
   mutations: {
     SET_HYDRATION_PARAMETERS (state, data) {
-      data.forEach(e => {
-        Object.assign(state.hydrationParams, {}, { [e.alertBoundariesAlertTypeBandId]: e })
-      })
-      state.hydrationParamsClone = JSON.parse(JSON.stringify(state.hydrationParams))
+      state.hydrationParams = data
+      state._originalHydrationParams = [...data]
     },
     SET_HYDRATION_PARAMS_LOAD_STATUS (state, data) {
       state.hydrationParamsLoading = data
     },
     INCREMENT_START (state, data) {
-      let newValue = data.value + 1
-      // console.log(newValue, data, stateElement, state.hydrationParams[data.index].lowerHydrationBoundary)
-      state.hydrationParams[data.index].lowerHydrationBoundary = { ...state.hydrationParams[data.index].lowerHydrationBoundary, percentHydratedStart: newValue }
+      state.hydrationParams[data.index].lowerHydrationBoundary.percentHydratedStart++
+      Vue.set(state.hydrationParams, data.index, state.hydrationParams[data.index])
     },
     DECREMENT_START (state, data) {
-      let newValue = data.value - 1
-      // console.log(newValue, data, stateElement, state.hydrationParams[data.index].lowerHydrationBoundary)
-      state.hydrationParams[data.index].lowerHydrationBoundary = Object.assign({}, state.hydrationParams[data.index].lowerHydrationBoundary, { percentHydratedStart: newValue })
+      state.hydrationParams[data.index].lowerHydrationBoundary.percentHydratedStart--
+      Vue.set(state.hydrationParams, data.index, state.hydrationParams[data.index])
     },
     INCREMENT_END (state, data) {
-      let stateElement = state.hydrationParams[data.index].lowerHydrationBoundary
-      const newValue = Number(state.hydrationParams[data.index].lowerHydrationBoundary.percentHydratedEnd) + 1
-
-      stateElement = Object.assign({}, stateElement, { percentHydratedEnd: newValue })
+      state.hydrationParams[data.index].lowerHydrationBoundary.percentHydratedEnd++
+      Vue.set(state.hydrationParams, data.index, state.hydrationParams[data.index])
     },
     DECREMENT_END (state, data) {
-      let stateElement = state.hydrationParams[data.index].lowerHydrationBoundary
-      const newValue = Number(state.hydrationParams[data.index].lowerHydrationBoundary.percentHydratedEnd) - 1
-
-      stateElement = Object.assign({}, stateElement, { percentHydratedEnd: newValue })
+      state.hydrationParams[data.index].lowerHydrationBoundary.percentHydratedEnd--
+      Vue.set(state.hydrationParams, data.index, state.hydrationParams[data.index])
     },
     // START
     UPDATE_START (state, data) {
@@ -62,22 +55,49 @@ export const moduleHydrationParameters = {
         }
       })
     },
-    async updateHydrationParameters (context) {
-      Object.keys(context.state.hydrationParams).forEach(async key => {
-        let data = context.state.hydrationParams[key].lowerHydrationBoundary
-        data.percentHydratedStart = String(Number(data.percentHydratedStart).toFixed(2))
-        data.percentHydratedEnd = String(Number(data.percentHydratedEnd).toFixed(2))
-        // console.log(data)
-        // await apiLib.updateData('sysadmin/hydration-params/' + context.state.hydrationParams[key].level, data, false, true)
-      })
+    async updateHydrationParameters ({ state }) {
+      // Object.keys(context.state.hydrationParams).forEach(async key => {
+      //   const data = context.state.hydrationParams[key].lowerHydrationBoundary
+      //   data.percentHydratedStart = String(Number(data.percentHydratedStart).toFixed(2))
+      //   data.percentHydratedEnd = String(Number(data.percentHydratedEnd).toFixed(2))
+      //   // console.log(data)
+      //   // await apiLib.updateData('sysadmin/hydration-params/' + context.state.hydrationParams[key].level, data, false, true)
+      // })
+      const jobs = []
+      for (const parameter of state.hydrationParams) {
+        const { lowerHydrationBoundary } = parameter
+        const originalLowerHydrationBoundary = state
+          ._originalHydrationParams.find(originalParameter => parameter.level === originalParameter.level).lowerHydrationBoundary
+
+        if (
+          lowerHydrationBoundary.percentHydratedStart !== parseFloat(originalLowerHydrationBoundary.percentHydratedStart) ||
+          lowerHydrationBoundary.percentHydratedEnd !== parseFloat(originalLowerHydrationBoundary.percentHydratedEnd)
+        ) {
+          jobs.push(apiLib.updateData(`sysadmin/hydration-params/${parameter.level}`, {
+            percentHydratedStart: parameter.percentHydratedStart,
+            percentHydratedEnd: parameter.percentHydratedEnd
+          }, false, true))
+        }
+      }
+      await Promise.all(jobs)
     }
   },
   getters: {
-    getterStartOfDayValue: (state) => (alertTypebandId) => {
-      return state.hydrationParams[alertTypebandId].lowerHydrationBoundary.percentHydratedStart
+    getterStartOfDayValue: (state) => (alertBoundariesAlertTypeBandId) => {
+      if (!state.hydrationParams) {
+        return null
+      }
+
+      const parameter = state.hydrationParams.find(param => param.alertBoundariesAlertTypeBandId === alertBoundariesAlertTypeBandId)
+      return parameter ? parameter.lowerHydrationBoundary.percentHydratedStart : null
     },
-    getterEndOfDayValue: (state) => (alertTypebandId) => {
-      return state.hydrationParams[alertTypebandId].lowerHydrationBoundary.percentHydratedEnd
+    getterEndOfDayValue: (state) => (alertBoundariesAlertTypeBandId) => {
+      if (!state.hydrationParams) {
+        return null
+      }
+
+      const parameter = state.hydrationParams.find(param => param.alertBoundariesAlertTypeBandId === alertBoundariesAlertTypeBandId)
+      return parameter ? parameter.lowerHydrationBoundary.percentHydratedEnd : null
     }
   }
 }

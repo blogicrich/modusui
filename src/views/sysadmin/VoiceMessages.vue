@@ -84,8 +84,8 @@ export default {
   methods: {
     setTypes () {
       for (let i = 0; i < this.apiData.length; i++) {
-        let voiceMessageType = this.apiData[i].voiceMessagedescription
-        let voiceMessage = this.apiData[i]
+        const voiceMessageType = this.apiData[i].voiceMessagedescription
+        const voiceMessage = this.apiData[i]
         if (voiceMessageType.includes('Reminder')) {
           this.reminders.push(voiceMessage)
         } else if (voiceMessageType.includes('Praise')) {

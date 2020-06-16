@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     saveAudio () {
-      let data = {
+      const data = {
         audioFile: this.$refs.file.files[0].name
       }
       apiLib.updateData(this.updateSysAdminUrl + this.data.voiceMessagesId, data, true, true)

@@ -56,5 +56,5 @@ export default new Vuex.Store({
     gettingStartedWizard: moduleGettingStartedWizard
   },
   strict: debug,
-  plugins: debug ? [ createLogger() ] : [] // set logger only for development
+  plugins: debug ? [createLogger()] : [] // set logger only for development
 })

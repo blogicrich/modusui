@@ -20,15 +20,15 @@ export const moduleReports = {
       state.reportCommentsGet = data
     },
     SET_DAYREPORTS (state, data) {
-      let dayReports = []
+      const dayReports = []
       for (let i = 0; i < data.length; i++) {
-        let dayReport = data[i]
-        let aggregatedHydration = dayReport.aggregatedHydration
-        let hydrationLevel = (dayReport.volumeConsumedViaEDroplet +
+        const dayReport = data[i]
+        const aggregatedHydration = dayReport.aggregatedHydration
+        const hydrationLevel = (dayReport.volumeConsumedViaEDroplet +
             dayReport.volumeConsumedViaOther) +
           '/' +
           dayReport.hydrationTarget
-        let date = dayReport.dateTime
+        const date = dayReport.dateTime
 
         dayReports.push({
           status: aggregatedHydration,

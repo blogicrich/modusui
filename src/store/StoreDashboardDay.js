@@ -46,7 +46,7 @@ export const moduleDashboardDay = {
         }
 
         const hydrated = consumed - overHydrated
-        let data = {
+        const data = {
           hydrated: hydrated ? hydrated.toFixed(2) : 0.00,
           target: target ? target.toFixed(2) : 0.00,
           remaining: remaining ? remaining.toFixed(2) : 0.00,

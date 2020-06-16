@@ -60,7 +60,7 @@ export default {
       return 'primary'
     },
     onChange: function (event) {
-      this.$emit('change', { 'month': event.start.month, 'year': event.start.year })
+      this.$emit('change', { month: event.start.month, year: event.start.year })
     }
   }
 }

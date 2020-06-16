@@ -60,14 +60,12 @@
 <script>
 
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
-import SubPageNavButton from '@/components/sub/SubPageNavButton.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'IntervalSettingsManagement',
   components: {
-    BaseRadioOptions,
-    SubPageNavButton
+    BaseRadioOptions
   },
   computed: {
     ...mapState({

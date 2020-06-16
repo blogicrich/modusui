@@ -32,7 +32,7 @@ export const moduleDashboardHour = {
       context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', true)
       const response = await apiLib.getData('carer/dashboard-hour/' + payload.userId + '/' + payload.date, false, false)
       if (typeof response === 'object') {
-        let arr = []
+        const arr = []
         response.forEach(element => {
           arr.push(
             {

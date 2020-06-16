@@ -71,13 +71,13 @@ export default {
   },
   computed: {
     reports: function () {
-      let reports = []
-      let users = this.dashboardUsers
-      let conditions = this.reportsConditions
-      let snapshots = this.reportsSnapshots
+      const reports = []
+      const users = this.dashboardUsers
+      const conditions = this.reportsConditions
+      const snapshots = this.reportsSnapshots
       for (let i = 0; i < users.length; i++) {
         const user = users[i]
-        let report = {
+        const report = {
           tabs: [
             {
               type: 'header',
@@ -137,7 +137,7 @@ export default {
         if (conditions) {
           for (let it = 0; it < conditions.length; it++) {
             const condition = conditions[it]
-            let conditionRow = {
+            const conditionRow = {
               description: condition.description,
               adjustment: condition.adjustment
             }
@@ -156,7 +156,7 @@ export default {
         if (snapshots) {
           for (let it = 0; it < snapshots.length; it++) {
             const snapshot = snapshots[it]
-            let dayReportRow = {
+            const dayReportRow = {
               date: this.convertDateTimeToString(snapshot.dateTime),
               hydrationTarget: snapshot.hydrationTarget,
               hydrationActual:

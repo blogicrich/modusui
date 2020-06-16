@@ -37,7 +37,7 @@ export default {
   }),
   methods: {
     getDayReports: function () {
-      let dayReports = this.$store.state.report.reportDayReportsGet
+      const dayReports = this.$store.state.report.reportDayReportsGet
 
       for (let i = 0; i < dayReports.length; i++) {
         const dayReport = dayReports[i]

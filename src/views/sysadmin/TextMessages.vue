@@ -32,11 +32,11 @@
       <!-- SELECT MESSAGE TYPE -->
       <v-menu :nudge-width="100" v-if="getterMenuItems">
         <template v-slot:activator="{ on }">
-          <v-toolbar-title v-on="on">
-            <span>Message Type</span>
-            <v-icon dark>arrow_drop_down</v-icon>
-          </v-toolbar-title>
-        </template>
+  <v-toolbar-title v-on="on">
+    <span>Message Type</span>
+    <v-icon dark>arrow_drop_down</v-icon>
+  </v-toolbar-title>
+</template>
 
         <v-list>
           <v-list-tile
@@ -111,10 +111,10 @@ export default {
       return this.$store.getters.getterSelectedSubject
     },
     isPristine () {
-      if (this.messagesClone[this.selectedMessage.alertMessagesId].message === this.selectedMessage.message ||
-          this.messagesClone[this.selectedMessage.alertMessagesId].subject === this.selectedMessage.subject) {
-        return true
-      }
+      return (
+        this.messagesClone[this.selectedMessage.alertMessagesId].message === this.selectedMessage.message ||
+        this.messagesClone[this.selectedMessage.alertMessagesId].subject === this.selectedMessage.subject
+      )
     }
   },
   data () {
@@ -129,9 +129,8 @@ export default {
     save () {
       Object.keys(this.messages).forEach(key => {
         if (this.validateMaxChars(this.messages[key].subject, 4) || this.validateMaxChars(this.messages[key].message, 4)) {
-          console.log ('FALSE -- ', this.validateMaxChars(this.messages[key].subject, 4), this.validateMaxChars(this.messages[key].message, 4), this.messages[key])
+          console.log('FALSE -- ', this.validateMaxChars(this.messages[key].subject, 4), this.validateMaxChars(this.messages[key].message, 4), this.messages[key])
         } else {
-          
           return false
         }
       })
@@ -153,5 +152,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "./public/scss/main.scss";
+@import "./public/scss/main.scss";
 </style>

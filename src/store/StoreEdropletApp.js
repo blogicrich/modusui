@@ -66,7 +66,7 @@ export const moduleEdropletApp = {
   actions: {
     async POST_LOGIN (context, payload) {
       context.commit('SET_LOAD_STATUS', true)
-      let data = apiLib.postAuth('login', payload, false, false).then(response => {
+      const data = apiLib.postAuth('login', payload, false, false).then(response => {
         if (response) {
           if (response.roles) {
             localStorage.clear()

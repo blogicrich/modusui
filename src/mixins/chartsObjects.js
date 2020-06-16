@@ -1,4 +1,4 @@
-let hourLineBarObj =
+const hourLineBarObj =
   [
     { label: '06:00', value: null },
     { label: '07:00', value: null },
@@ -25,7 +25,7 @@ let hourLineBarObj =
     { label: '04:00', value: null },
     { label: '05:00', value: null }
   ]
-let weekLineBarObj =
+const weekLineBarObj =
   [
     { label: 'Monday', value: null },
     { label: 'Tuesday', value: null },
@@ -35,7 +35,7 @@ let weekLineBarObj =
     { label: 'Saturday', value: null },
     { label: 'Sunday', value: null }
   ]
-let dayPieObj = [
+const dayPieObj = [
   {
     hydrated: 0.00,
     target: 0.00,

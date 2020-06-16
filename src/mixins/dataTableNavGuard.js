@@ -4,7 +4,7 @@ export const dataTableNavGuard = {
     if (this.$refs.baseDataTable.newDialog ||
         this.$refs.baseDataTable.editDialog ||
         this.$refs.baseDataTable.delDialog) {
-      let answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
+      const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
       if (answer) {
         next()
       } else {
