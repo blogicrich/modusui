@@ -1,11 +1,10 @@
 import apiLib from '../services/apiLib.js'
-import { dayPieObj } from '@/mixins/chartsObjects.js'
 
 export const moduleDashboardDay = {
   state: {
     dashboardDayChartDataLoaded: true,
     dashboardDayUpdating: false,
-    dashboardDayChartData: dayPieObj,
+    dashboardDayChartData: {},
     dashboardDayChartTitle: ''
   },
 
@@ -14,7 +13,7 @@ export const moduleDashboardDay = {
       state.dashboardDayChartData = data
     },
     SET_DASHBOARDDAY_CHART_TITLE (state, data) {
-      state.dashboardDayChartTitle = 'Daily hydration status: ' + String(data.consumed) + ' L/' + String(data.target) + ' L'
+      state.dashboardDayChartTitle = 'Daily hydration status: ' + data[0] + ' L / ' + data[1].toFixed(2) + ' L'
     },
     SET_DASHBOARDDAY_LOAD_STATUS (state, data) {
       state.dashboardDayChartDataLoaded = data
@@ -25,7 +24,7 @@ export const moduleDashboardDay = {
     RESET_DASHBOARDDAY_STATE (state) {
       state.dashboardDayChartDataLoaded = false
       state.dashboardDayUpdating = false
-      state.dashboardDayChartData = dayPieObj
+      state.dashboardDayChartData = {}
       state.dashboardDayChartTitle = ''
     }
   },
@@ -33,34 +32,15 @@ export const moduleDashboardDay = {
   actions: {
     async fetchDashboardDayChartData (context, { userId, date }) {
       context.commit('SET_DASHBOARDDAY_UPDATE_STATUS', true)
-      const response = await apiLib.getData('carer/dashboard-day/' + userId + '/' + date, false)
+      const response = await apiLib.getData('carer/dashboard-day/' + userId + '/' + date, true)
       if (typeof response === 'object') {
-        const consumed = parseFloat(response[0].volumeConsumedViaEDroplet) + parseFloat(response[0].volumeConsumedViaOther)
-        const target = parseFloat(response[0].hydrationTarget)
-        let remaining = target - consumed
-        let overHydrated = 0
-
-        if (remaining < 0) {
-          overHydrated = Math.abs(remaining)
-          remaining = 0
-        }
-
-        const hydrated = consumed - overHydrated
-        const data = {
-          hydrated: hydrated ? hydrated.toFixed(2) : 0.00,
-          target: target ? target.toFixed(2) : 0.00,
-          remaining: remaining ? remaining.toFixed(2) : 0.00,
-          overHydrated: overHydrated ? overHydrated.toFixed(2) : 0.00,
-          consumed: consumed ? consumed.toFixed(2) : 0.00
-        }
-
-        context.commit('SET_DASHBOARDDAY', data)
-        context.commit('SET_DASHBOARDDAY_CHART_TITLE', data)
+        context.commit('SET_DASHBOARDDAY', response)
+        context.commit('SET_DASHBOARDDAY_CHART_TITLE', response.data)
         context.commit('SET_DASHBOARDDAY_LOAD_STATUS', true)
         context.commit('SET_DASHBOARDDAY_UPDATE_STATUS', false)
       } else {
-        context.commit('SET_DASHBOARDDAY', dayPieObj)
-        context.commit('SET_DASHBOARDDAY_CHART_TITLE', { consumed: '0.00', target: '0.00' })
+        context.commit('SET_DASHBOARDDAY', {})
+        context.commit('SET_DASHBOARDDAY_CHART_TITLE', [0.00, 0.00])
         context.commit('SET_DASHBOARDDAY_LOAD_STATUS', true)
       }
     },
@@ -71,16 +51,12 @@ export const moduleDashboardDay = {
   getters: {
     getterDailyPieChartData: state => {
       return {
-        labels: ['Over Hydrated', 'Hydrated', 'Remaining'],
+        labels: state.dashboardDayChartData.labels,
         datasets: [{
           backgroundColor: ['rgba(255, 97, 111, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(176, 190, 197, 0.2)'],
           borderColor: ['rgba(255, 97, 111, 1)', 'rgba(54, 162, 235, 1)', 'rgba(176, 190, 197, 1)'],
           borderWidth: 1,
-          data: [
-            state.dashboardDayChartData.overHydrated,
-            state.dashboardDayChartData.hydrated,
-            state.dashboardDayChartData.remaining
-          ],
+          data: state.dashboardDayChartData.data,
           weight: 3
         }]
       }

@@ -196,7 +196,7 @@ export default {
   methods: {
     // Dashboard setup
     async setUsers () {
-      await this.$store.dispatch('fetchDashboardUsersGet')
+      await this.$store.dispatch('fetchDashboardUsers')
       this.$store.commit('SET_SELECTED_USER', this.dashboardUsers[0])
     },
     setDates () {

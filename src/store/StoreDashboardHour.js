@@ -1,11 +1,10 @@
 import apiLib from '../services/apiLib.js'
-import { hourLineBarObj } from '@/mixins/chartsObjects.js'
 
 export const moduleDashboardHour = {
   state: {
     dashboardHourChartDataLoaded: true,
     dashboardHourUpdating: false,
-    dashboardHourChartData: hourLineBarObj,
+    dashboardHourChartData: {},
     dashboardHourChartTitle: ''
   },
   mutations: {
@@ -32,17 +31,17 @@ export const moduleDashboardHour = {
       context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', true)
       const response = await apiLib.getData('carer/dashboard-hour/' + payload.userId + '/' + payload.date, false, false)
       if (typeof response === 'object') {
-        const arr = []
-        response.forEach(element => {
-          arr.push(
-            {
-              label: element.hour,
-              value: parseFloat(element.volumeConsumedViaOther) +
-              parseFloat(element.volumeConsumedViaEDroplet)
-            }
-          )
-        })
-        context.commit('SET_DASHBOARDHOUR', arr)
+        // const arr = []
+        // response.forEach(element => {
+        //   arr.push(
+        //     {
+        //       label: element.hour,
+        //       value: parseFloat(element.volumeConsumedViaOther) +
+        //       parseFloat(element.volumeConsumedViaEDroplet)
+        //     }
+        //   )
+        // })
+        context.commit('SET_DASHBOARDHOUR', response)
         context.commit('SET_DASHBOARDHOUR_CHART_TITLE', payload.formattedDate)
         context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', false)
         context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', true)
@@ -59,13 +58,13 @@ export const moduleDashboardHour = {
   getters: {
     getterHourLineBarChartData: state => {
       return {
-        labels: state.dashboardHourChartData.map(hourDataPoint => hourDataPoint.label),
+        labels: state.dashboardHourChartData.labels,
         datasets: [{
           label: 'Hydration in litres',
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
-          data: state.dashboardHourChartData.map(hourDataPoint => hourDataPoint.value)
+          data: state.dashboardHourChartData.volumeConsumedTotal
         }]
       }
     }

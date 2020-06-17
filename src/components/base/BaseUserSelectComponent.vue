@@ -105,7 +105,7 @@ export default {
   },
   computed: {
     userName () {
-      return this.selectedUser.givenName + ' ' + this.selectedUser.familyName
+      return this.selectedUser.deptPerson.person.givenName + ' ' + this.selectedUser.deptPerson.person.familyName
     },
     searchResults (user) {
       return this.users.filter((user) => this.getDisplayName(user).toLowerCase().match(this.search.toLowerCase()))
@@ -120,7 +120,7 @@ export default {
       }
     },
     getDisplayName (user) {
-      return user.salutation || `${user.givenName} ${user.familyName}`
+      return user.salutation || `${user.deptPerson.person.givenName} ${user.deptPerson.person.familyName}`
     },
     getMood (user) {
       if (user.hydrationStatus && user.hydrationStatus.description) {
