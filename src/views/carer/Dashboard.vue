@@ -40,7 +40,7 @@
           :chartData="hourLineBarChartData"
         />
         <BaseDashboardTileOverlay
-          v-if="hourChartDataLoaded"
+          v-if="!hourChartDataLoaded"
           message="No data for user or date selected"
         ></BaseDashboardTileOverlay>
       </v-flex>

@@ -2,7 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardHour = {
   state: {
-    dashboardHourChartDataLoaded: false,
+    dashboardHourChartDataLoaded: true,
     dashboardHourUpdating: false,
     dashboardHourChartData: {},
     dashboardHourChartTitle: ''
