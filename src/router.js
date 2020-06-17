@@ -144,11 +144,6 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/IntervalOptions.vue')
     },
     {
-      path: '/voicemessages',
-      name: 'VoiceMessageViewComponent',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/VoiceMessages.vue')
-    },
-    {
       path: '/titles',
       name: 'Titles',
       component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')

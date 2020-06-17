@@ -66,13 +66,6 @@
           colorIcon="#006480"
         />
         <BaseLinkComponent
-          routerTitle= "Voice Message Defaults"
-          link="/voicemessages"
-          tooltipText="Upload and set the default voice messages for new eDroplets"
-          icon="record_voice_over"
-          colorIcon="#006480"
-        />
-        <BaseLinkComponent
           routerTitle= "Hydration Parameters"
           link="/hydrationparameters"
           tooltipText="Define the Hydration status boundaries"
