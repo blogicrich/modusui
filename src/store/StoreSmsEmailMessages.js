@@ -4,85 +4,113 @@ import Vue from 'vue'
 export const moduleSmsEmailMessages = {
   state: {
     messagesLoading: true,
-    messagesClone: {},
-    messages: {},
-    selectedMessage: {},
-    messageAlertType: '',
-    messageCommsType: ''
+    _messagesClone: [],
+    messages: [],
+    selectedMessageIndex: 0
   },
   mutations: {
     SET_MESSAGE_LOAD_STATUS (state, data) {
       state.messagesLoading = data
     },
     SET_MESSAGES (state, data) {
-      data.forEach(e => {
-        state.messages[e.alertMessagesId] = Object.assign({}, state.messages[e.alertMessagesId], e)
-        // state.messages[e.alertMessagesId] = { ...state.messages[e.alertMessagesId], e }
+      state.messages = data
+      // Shallow clone array and objects of the array.
+      state._messagesClone = data.map(element => {
+        return { ...element }
       })
-      state.messagesClone = Object.assign({}, state.messagesClone, JSON.parse(JSON.stringify(state.messages)))
     },
-    SET_SELECTED_MESSAGE (state, data) {
-      state.selectedMessage = Object.assign({}, state.selectedMessage, data)
-      // state.selectedMessage = { ...state.selectedMessage, ...data }
+    SET_SELECTED_MESSAGE_INDEX (state, index) {
+      state.selectedMessageIndex = index
     },
-    UPDATE_SELECTED_MESSAGE_COMMS_TYPE (state, data) {
-      state.messageCommsType = data
+    UPDATE_SELECTED_MESSAGE_SUBJECT (state, subject) {
+      Vue.set(state.messages[state.selectedMessageIndex], 'subject', subject)
     },
-    UPDATE_SELECTED_MESSAGE_ALERT_TYPE (state, data) {
-      state.messageAlertType = data
+    UPDATE_SELECTED_MESSAGE_TEXT (state, message) {
+      Vue.set(state.messages[state.selectedMessageIndex], 'message', message)
     },
-    UPDATE_SELECTED_SUBJECT (state, data) {
-      // state.messages[data.id] = Object.assign({}, state.messages[data.id], { subject: data.value })
-      // state.messages[data.id] = { ...state.messages[data.id], subject: data.value }
-      Vue.set(state.messages[data.id], 'subject', data.value)
-    },
-    UPDATE_SELECTED_MESSAGE (state, data) {
-      // state.messages[data.id] = Object.assign({}, state.messages[data.id], { message: data.value })
-      state.messages[data.id] = { ...state.messages[data.id], message: data.value }
-    },
-    RESET_SELECTED_MESSAGE (state, data) {
-      const oldData = state.messagesClone[data]
-      // state.messages[data] = Object.assign({}, state.messages[data], oldData)
-      state.messages[data] = { ...state.messages[data], ...oldData }
+    RESET_MESSAGES (state) {
+      state.messages = state._messagesClone.map(message => {
+        return { ...message }
+      })
     }
   },
   actions: {
     fetchMessages (context) {
       return apiLib.getData('sysadmin/text-messages').then((response) => {
         if (typeof response === 'undefined' || response.length <= 0) {
-          context.commit('SET_MESSAGES', {})
+          context.commit('SET_MESSAGES', [])
+          context.commit('SET_SELECTED_MESSAGE_INDEX', 0)
           context.commit('SET_MESSAGE_LOAD_STATUS', false)
         } else {
           context.commit('SET_MESSAGES', response)
-          context.commit('UPDATE_SELECTED_MESSAGE_COMMS_TYPE', response[0].communicationTypeDescription)
-          context.commit('UPDATE_SELECTED_MESSAGE_ALERT_TYPE', response[0].alertTypeDescription)
+          context.commit('SET_SELECTED_MESSAGE_INDEX', 0)
           context.commit('SET_MESSAGE_LOAD_STATUS', false)
         }
       })
     },
-    async updateMessages (context) {
-      const keys = Object.keys(context.state.messages)
+    async updateMessages ({ state, commit }) {
+      const jobs = []
+      for (let i = 0; state.messages.length > i; i++) {
+        const message = state.messages[i]
+        const originalMessage = state._messagesClone[i]
 
-      for (let index = 0; index < keys.length; index++) {
-        const key = keys[index]
-
-        const payload = { message: context.state.messages[key].message, subject: context.state.messages[key].subject }
-        if (String(context.state.messages[key].message) !== String(context.state.messagesClone[key].message) || String(context.state.messages[key].subject) !== String(context.state.messagesClone[key].subject)) {
-          await apiLib.updateData('sysadmin/text-messages/' + key, payload, false, true)
+        if (message.subject !== originalMessage.subject || message.message !== originalMessage.message) {
+          jobs.push(apiLib.updateData(`/sysadmin/text-messages/${message.alertMessagesId}`, {
+            subject: message.subject,
+            message: message.message
+          }, false, false))
         }
       }
-      context.commit('SET_MESSAGES', Object.values(context.state.messages))
+
+      commit('SET_MESSAGES', state.messages)
+      await Promise.all(jobs)
+    },
+    changeSelectedAlertType ({ state, commit }, alertType) {
+      const currentSelectedMessage = state.messages[state.selectedMessageIndex]
+      commit(
+        'SET_SELECTED_MESSAGE_INDEX',
+        state.messages.findIndex(message =>
+          message.alertTypeDescription === alertType &&
+          message.communicationTypeDescription === currentSelectedMessage.communicationTypeDescription
+        )
+      )
+    },
+    changeSelectedCommsType ({ state, commit }, commsType) {
+      const currentSelectedMessage = state.messages[state.selectedMessageIndex]
+      commit(
+        'SET_SELECTED_MESSAGE_INDEX',
+        state.messages.findIndex(message =>
+          message.communicationTypeDescription === commsType &&
+          message.alertTypeDescription === currentSelectedMessage.alertTypeDescription
+        )
+      )
     }
   },
   getters: {
-    getterMenuItems: (state) => (commsType) => {
-      return Object.values(state.messages).filter(e => e.communicationTypeDescription === commsType)
+    getterAlertTypes: (state) => {
+      const alertTypes = new Set()
+      state.messages.forEach(message => alertTypes.add(message.alertTypeDescription))
+      return Array.from(alertTypes.values())
     },
-    getterSelectedMessage: (state) => (id) => {
-      return state.messages[id].message
+    getterCommsTypes: (state) => {
+      const commsTypes = new Set()
+      state.messages.forEach(message => commsTypes.add(message.communicationTypeDescription))
+      return Array.from(commsTypes.values())
     },
-    getterSelectedSubject: (state) => (id) => {
-      return state.messages[id].subject
+    getterSelectedMessage: (state) => {
+      return state.messages[state.selectedMessageIndex]
+    },
+    getterIsPristine: (state) => {
+      for (let i = 0; state.messages.length > i; i++) {
+        const message = state.messages[i]
+        const originalMessage = state._messagesClone[i]
+
+        if (message.subject !== originalMessage.subject || message.message !== originalMessage.message) {
+          return false
+        }
+      }
+
+      return true
     }
   }
 }

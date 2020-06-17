@@ -8,7 +8,9 @@
     />
     <v-layout class="mx-4 mb-2" row align-center>
     <v-toolbar v-if="!messagesLoading" color="primary darken-1" dark>
-      <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">Edit sms and Email Messages</v-toolbar-title>
+      <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">
+        Edit sms and Email Messages
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- SELECT MESSAGE ALERT TYPE -->
       <v-menu :nudge-width="100">
@@ -21,44 +23,45 @@
 
         <v-list>
           <v-list-tile
-            v-for="alert in commsTypes"
-            :key="alert"
-            @click="$store.commit('UPDATE_SELECTED_MESSAGE_COMMS_TYPE', alert)"
+            v-for="alertType in getterAlertTypes"
+            :key="alertType"
+            @click="$store.dispatch('changeSelectedAlertType', alertType)"
           >
-            <v-list-tile-title v-text="alert"></v-list-tile-title>
+            <v-list-tile-title v-text="alertType"></v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
       <!-- SELECT MESSAGE TYPE -->
-      <v-menu :nudge-width="100" v-if="getterMenuItems">
+      <v-menu :nudge-width="100">
         <template v-slot:activator="{ on }">
-        <v-toolbar-title v-on="on">
-          <span>Message Type</span>
-          <v-icon dark>arrow_drop_down</v-icon>
-        </v-toolbar-title>
-      </template>
+          <v-toolbar-title v-on="on">
+            <span>Message Type</span>
+            <v-icon dark>arrow_drop_down</v-icon>
+          </v-toolbar-title>
+        </template>
 
         <v-list>
           <v-list-tile
-            v-for="item in getterMenuItems(messageCommsType)"
-            :key="item.alertTypeid"
-            @click="$store.commit('UPDATE_SELECTED_MESSAGE_ALERT_TYPE', item.alertTypeDescription)"
+            v-for="commsType in getterCommsTypes"
+            :key="commsType"
+            @click="$store.dispatch('changeSelectedCommsType', commsType)"
           >
-            <v-list-tile-title v-text="item.alertTypeDescription"></v-list-tile-title>
+            <v-list-tile-title v-text="commsType"></v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
       <!-- TOOLBAR BUTTONS -->
       <v-btn
-        v-if="$vuetify.breakpoint.xsOnly"
-        :disabled="isPristine"
-        icon @click="save">
+        v-if="$vuetify.breakpoint.smAndDown"
+        :disabled="getterIsPristine"
+        icon @click="save"
+      >
         <v-icon>save</v-icon>
       </v-btn>
       <v-btn
         v-if="$vuetify.breakpoint.smAndDown"
-        :disabled="isPristine"
-        icon @click="$store.commit('RESET_SELECTED_MESSAGE', selectedMessage.alertMessagesId)"
+        :disabled="getterIsPristine"
+        icon @click="$store.commit('RESET_MESSAGES')"
       >
         <v-icon>refresh</v-icon>
       </v-btn>
@@ -66,24 +69,26 @@
     </v-layout>
     <v-card class="mx-4" v-if="messages">
       <v-form ref="smsEmailMessagesForm">
-        <v-card-title class="text-primary title">{{ messageCommsType + ' : ' + messageAlertType }}</v-card-title>
+        <v-card-title class="text-primary title">
+          {{ getterSelectedMessage.alertTypeDescription + ' : ' + getterSelectedMessage.communicationTypeDescription }}
+        </v-card-title>
         <v-card-text>
           <v-text-field
             label="Subject"
-            :value="getterSelectedSubject(selectedMessage.alertMessagesId)"
+            :value="getterSelectedMessage.subject"
             color="primaryColor"
             outline
-            :rules="[required, validateMaxChars(getterSelectedSubject, 78)]"
-            @input="$store.commit('UPDATE_SELECTED_SUBJECT', { id: selectedMessage.alertMessagesId, value: $event })"
+            :rules="[required, validateMaxChars(getterSelectedMessage.subject, 254)]"
+            @input="$store.commit('UPDATE_SELECTED_MESSAGE_SUBJECT', $event)"
           >
           </v-text-field>
           <v-textarea
             outline
             name="input-7-4"
             label="Message"
-            :value="getterSelectedMessage(selectedMessage.alertMessagesId)"
-            :rules="[required, validateMaxChars(getterSelectedSubject, 160)]"
-            @input="$store.commit('UPDATE_SELECTED_MESSAGE', { id: selectedMessage.alertMessagesId, value: $event })"
+            :value="getterSelectedMessage.message"
+            :rules="[required, validateMaxChars(getterSelectedMessage.message, 254)]"
+            @input="$store.commit('UPDATE_SELECTED_MESSAGE_TEXT', $event)"
           >
           </v-textarea>
         </v-card-text>
@@ -91,7 +96,7 @@
     </v-card>
     <v-layout v-if="!messagesLoading && $vuetify.breakpoint.lgAndUp" row justify-center align-center>
       <v-btn
-        :disabled="isPristine"
+        :disabled="getterIsPristine"
         class="root-nav-btn mt-3"
         @click="save"
         color="primary"
@@ -100,55 +105,15 @@
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
       <v-btn
-        :disabled="isPristine"
+        :disabled="getterIsPristine"
         class="root-nav-btn mt-3"
-        @click="$store.commit('RESET_SELECTED_MESSAGE', selectedMessage.alertMessagesId)"
+        @click="$store.commit('RESET_MESSAGES')"
         color="primary"
         large
         >Reset
         <v-icon class="ma-1">refresh</v-icon>
       </v-btn>
     </v-layout>
-    <v-speed-dial
-      v-if="!messagesLoading  && !isPristine && $vuetify.breakpoint.mdAndDown"
-      :disabled="isPristine"
-      v-model="fab"
-      fixed
-      :bottom="true"
-      :right="true"
-      direction="top"
-      transition="v-fade-transition"
-    >
-      <template v-slot:activator>
-      <v-btn
-        v-model="fab"
-        color="primary"
-        dark
-        fab
-      >
-        <v-icon>edit</v-icon>
-        <v-icon>close</v-icon>
-      </v-btn>
-      </template>
-      <v-btn
-        @click="save"
-        color="primary"
-        fab
-        dark
-        small
-      >
-        <v-icon>save</v-icon>
-      </v-btn>
-      <v-btn
-        @click="$store.commit('RESET_SELECTED_MESSAGE', selectedMessage.alertMessagesId)"
-        color="primary"
-        fab
-        dark
-        small
-      >
-        <v-icon>refresh</v-icon>
-      </v-btn>
-    </v-speed-dial>
   </v-container>
 </template>
 
@@ -164,47 +129,24 @@ export default {
     ...mapState({
       messagesLoading: state => state.smsEmailMessages.messagesLoading,
       messages: state => state.smsEmailMessages.messages,
-      messagesClone: state => state.smsEmailMessages.messagesClone,
-      messageAlertType: state => state.smsEmailMessages.messageAlertType,
-      messageCommsType: state => state.smsEmailMessages.messageCommsType,
       selectedMessage: state => state.smsEmailMessages.selectedMessage
     }),
     ...mapGetters([
-      'getterMenuItems',
+      'getterIsPristine',
       'getterSelectedMessage',
-      'getterSelectedSubject'
-    ]),
-    isPristine () {
-      return Object.keys(this.messages).forEach(key => {
-        if (String(this.messages[key].message) !== String(this.messagesClone[key].message)) {
-          return false
-        }
-      })
-    }
+      'getterCommsTypes',
+      'getterAlertTypes'
+    ])
   },
   data () {
     return {
       headerIcon: 'message',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Text / SMS Messages',
-      commsTypes: ['SMS', 'Email'],
       // Validators
       required: v => !!v || 'Value required',
       // Mobile action button
       fab: false
-    }
-  },
-  watch: {
-    getterSelectedSubject () {
-      console.log('I Have Changed!!!!')
-    },
-    messageAlertType () {
-      const newMessage = Object.values(this.messages).find(e => e.communicationTypeDescription === this.messageCommsType && e.alertTypeDescription === this.messageAlertType)
-      this.$store.commit('SET_SELECTED_MESSAGE', newMessage)
-    },
-    messageCommsType () {
-      const newMessage = Object.values(this.messages).find(e => e.communicationTypeDescription === this.messageCommsType && e.alertTypeDescription === this.messageAlertType)
-      this.$store.commit('SET_SELECTED_MESSAGE', newMessage)
     }
   },
   methods: {
