@@ -2,7 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardHour = {
   state: {
-    dashboardHourChartDataLoaded: true,
+    dashboardHourChartDataLoaded: false,
     dashboardHourUpdating: false,
     dashboardHourChartData: {},
     dashboardHourChartTitle: ''
@@ -23,7 +23,7 @@ export const moduleDashboardHour = {
     RESET_DASHBOARDHOUR_STATE (state) {
       state.dashboardHourChartDataLoaded = false
       state.dashboardHourUpdating = false
-      state.dashboardHourChartData = hourLineBarObj
+      state.dashboardHourChartData = {}
     }
   },
   actions: {
@@ -31,23 +31,13 @@ export const moduleDashboardHour = {
       context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', true)
       const response = await apiLib.getData('carer/dashboard-hour/' + payload.userId + '/' + payload.date, false, false)
       if (typeof response === 'object') {
-        // const arr = []
-        // response.forEach(element => {
-        //   arr.push(
-        //     {
-        //       label: element.hour,
-        //       value: parseFloat(element.volumeConsumedViaOther) +
-        //       parseFloat(element.volumeConsumedViaEDroplet)
-        //     }
-        //   )
-        // })
         context.commit('SET_DASHBOARDHOUR', response)
         context.commit('SET_DASHBOARDHOUR_CHART_TITLE', payload.formattedDate)
         context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', false)
         context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', true)
       } else {
         context.commit('SET_DASHBOARDHOUR_CHART_TITLE', payload.formattedDate)
-        context.commit('SET_DASHBOARDHOUR', hourLineBarObj)
+        context.commit('SET_DASHBOARDHOUR', {})
         context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', true)
       }
     },

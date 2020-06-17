@@ -39,10 +39,10 @@
           v-if="hourChartData && hourChartType === 'Bar Chart'"
           :chartData="hourLineBarChartData"
         />
-        <!-- <BaseDashboardTileOverlay
-          v-if="!hourChartDataLoaded"
+        <BaseDashboardTileOverlay
+          v-if="hourChartDataLoaded"
           message="No data for user or date selected"
-        ></BaseDashboardTileOverlay> -->
+        ></BaseDashboardTileOverlay>
       </v-flex>
       <v-flex slot="tileTwo">
         <BaseChartHeader v-if="dayChartDataLoaded">
@@ -53,10 +53,10 @@
           ref="dayPieChart"
           :chartData="dailyPieChartData"
         />
-        <!-- <BaseDashboardTileOverlay
+        <BaseDashboardTileOverlay
           v-if="!dayChartDataLoaded"
           message="No data for user or date selected"
-        ></BaseDashboardTileOverlay> -->
+        ></BaseDashboardTileOverlay>
       </v-flex>
       <v-flex slot="tileThree">
         <BaseChartHeader v-if="weekChartDataLoaded">
@@ -67,10 +67,10 @@
           v-if="weekChartDataLoaded"
           :chartData="weekLineBarChartData"
         />
-        <!-- <BaseDashboardTileOverlay
+        <BaseDashboardTileOverlay
           v-if="!weekChartDataLoaded"
           message="No data for user or date selected"
-        ></BaseDashboardTileOverlay> -->
+        ></BaseDashboardTileOverlay>
       </v-flex>
       <v-flex slot="tileFour">
         <BaseChartHeader v-if="dayChartDataLoaded">
@@ -81,10 +81,10 @@
           v-if="dayChartDataLoaded"
           :chartData="dailyPieChartData"
         />
-        <!-- <BaseDashboardTileOverlay
+        <BaseDashboardTileOverlay
           v-if="!dayChartDataLoaded"
           message="No data for user or date selected"
-        ></BaseDashboardTileOverlay> -->
+        ></BaseDashboardTileOverlay>
       </v-flex>
     </BaseDashboard>
     <transition name="component-fade" mode="in-out">
@@ -104,6 +104,7 @@
 import BaseChartTypeSelector from '@/components/base/BaseChartSelectionComponent'
 import BaseChartHeader from '@/components/base/BaseChartHeaderComponent'
 import BaseDashboard from '@/components/base/BaseDashboardComponent'
+import BaseDashboardTileOverlay from '@/components/base/BaseDashboardTileOverlayComponent'
 import BaseDataInfoCard from '@/components/base/BaseDataTableInfoComponent'
 import BaseDateSelection from '@/components/base/BaseDateSelectionComponent'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
@@ -117,6 +118,7 @@ export default {
   name: 'eDropletDashboard',
   components: {
     BaseDashboard,
+    BaseDashboardTileOverlay,
     BaseDataInfoCard,
     BaseDateSelection,
     BaseChartTypeSelector,
