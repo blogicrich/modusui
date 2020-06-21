@@ -196,12 +196,12 @@ export default {
           tip: 'Go to Dashboard'
         },
         {
-          title: 'Consumption',
-          btnIcon: 'date_range',
+          title: 'Alerts',
+          btnIcon: 'notification_important',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'consumptioncalendar',
-          tip: 'View consumption'
+          route: 'alerts',
+          tip: 'View Alerts'
         },
         {
           title: 'Add Drinks',
@@ -220,12 +220,12 @@ export default {
           tip: 'Record time away'
         },
         {
-          title: 'Reports',
-          btnIcon: 'report',
+          title: 'Daily Report',
+          btnIcon: 'menu_book',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'reports',
-          tip: 'Reports'
+          route: 'dailyreports',
+          tip: 'View Daily Report'
         },
         {
           title: 'Logout',

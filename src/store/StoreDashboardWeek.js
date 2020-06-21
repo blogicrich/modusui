@@ -2,7 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardWeek = {
   state: {
-    dashboardWeekChartDataLoaded: true,
+    dashboardWeekChartDataLoaded: false,
     dashboardWeekChartDataUpdating: false,
     dashboardWeekChartData: {},
     dashboardWeekChartTitle: '',
@@ -44,7 +44,7 @@ export const moduleDashboardWeek = {
       } else {
         context.commit('SET_DASHBOARDWEEK_CHART_TITLE', 'Weekly summary 0.00 litres per day on average')
         context.commit('SET_DASHBOARDWEEK', {})
-        context.commit('SET_DASHBOARDWEEK_LOAD_STATUS', true)
+        context.commit('SET_DASHBOARDWEEK_LOAD_STATUS', false)
       }
     },
     resetDashboardWeekState (context) {

@@ -2,9 +2,9 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardHour = {
   state: {
-    dashboardHourChartDataLoaded: true,
+    dashboardHourChartDataLoaded: false,
     dashboardHourUpdating: false,
-    dashboardHourChartData: {},
+    dashboardHourChartData: [],
     dashboardHourChartTitle: ''
   },
   mutations: {
@@ -38,7 +38,7 @@ export const moduleDashboardHour = {
       } else {
         context.commit('SET_DASHBOARDHOUR_CHART_TITLE', payload.formattedDate)
         context.commit('SET_DASHBOARDHOUR', {})
-        context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', true)
+        context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', false)
       }
     },
     async resetDashboardHourState (context) {

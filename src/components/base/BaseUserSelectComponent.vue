@@ -10,11 +10,11 @@
       <v-card hover ref="selected-user-tile" class="pa-3" v-on="on">
         <v-layout row fill-height align-center justify-space-between>
           <!-- DESKTOP -->
-          <v-flex v-if="$vuetify.breakpoint.lgAndUp" grow>
+          <v-flex v-if="$vuetify.breakpoint.lgAndUp" class="text-ellipsis">
             <v-layout row fill-height align-center justify-start>
               <v-icon large color="primary">group</v-icon>
               <transition name="component-fade" mode="out-in">
-                <p class="table-header text-primary ma-2">{{ 'Connected eDroplet User: '}}</p>
+                <p class="table-header text-primary text-ellipsis ma-2">{{ 'Connected eDroplet User: '}}</p>
               </transition>
               <transition name="component-fade" mode="out-in">
                 <p class="table-header text-secondary ma-2">{{ userName }}</p>
@@ -22,11 +22,11 @@
             </v-layout>
           </v-flex>
           <!-- MOBILE -->
-          <v-flex v-if="$vuetify.breakpoint.mdAndDown" grow>
+          <v-flex v-if="$vuetify.breakpoint.mdAndDown">
             <v-layout row fill-height align-center justify-start>
               <v-icon medium color="primary">group</v-icon>
               <transition name="component-fade" mode="out-in">
-                <p class="table-header text-secondary text-overflow-ellipsis ma-2">{{ userName }}</p>
+                <p class="table-header text-secondary ma-2">{{ userName }}</p>
               </transition>
             </v-layout>
           </v-flex>

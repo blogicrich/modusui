@@ -1,14 +1,12 @@
 <template>
   <v-container class="transparent overlay" fluid>
     <v-layout class="pt-1" column fill-height align-center justify-center>
-      <v-spacer></v-spacer>
       <v-flex grow>
         <v-layout class="ma-2" row fill-height align-center justify-center>
           <v-icon class="mr-3" color="primary" x-large>error</v-icon>
-          <span class="text-primary pg-header">{{ message }}</span>
+          <span class="text-primary text-center pg-header">{{ message }}</span>
         </v-layout>
       </v-flex>
-      <v-spacer></v-spacer>
     </v-layout>
   </v-container>
 </template>
@@ -35,10 +33,9 @@ export default {
   }
 
   .overlay {
-    // height: 100%;
-    // position: absolute;
-    // top: 0;
-    // left: 0;
-    // z-index: 20;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 </style>

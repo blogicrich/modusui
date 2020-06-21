@@ -4,12 +4,22 @@ export const moduleDashboardUsers = {
   state: {
     dashboardUsersLoaded: false,
     dashboardUsersUpdating: false,
-    dashboardUsers: []
+    dashboardUsers: [],
+    selectedUser: deserialize('selectedUser')
   },
   mutations: {
     SET_DASHBOARDUSERS (state, data) {
       state.dashboardUsers = data
       state.dashboardUsersLoaded = true
+    },
+    SET_USER_CONTEXT (state, user) {
+      if (user !== undefined || user !== null) {
+        serialize('selectedUser', user)
+        state.selectedUser = user
+      } else {
+        serialize('selectedUser', user)
+        state.selectedUser = state.dashboardUsers.find(e => e.userId)
+      }
     }
   },
   actions: {
@@ -22,4 +32,12 @@ export const moduleDashboardUsers = {
       }
     }
   }
+}
+
+function serialize (key, value) {
+  localStorage.setItem(key, JSON.stringify(value))
+}
+
+function deserialize (key) {
+  if (key !== undefined) return JSON.parse(localStorage.getItem(key))
 }

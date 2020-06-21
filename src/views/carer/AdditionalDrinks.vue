@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-    <v-layout row fill-height justify-center>
       <BaseViewHeader
         class="mx-2 mb-2"
         :headerIcon="headerIcon"
@@ -11,10 +10,9 @@
           slot="rhViewHeaderColumn"
           :users="dashboardUsers"
           :selectedUser="selectedUser"
-          @user-selected="$store.commit('SET_SELECTED_USER', $event)"
+          @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
         />
       </BaseViewHeader>
-    </v-layout>
     <BaseDataTable
       ref="baseDataTable"
       class="mx-4"
@@ -68,7 +66,7 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedUser: state => state.eDropletApp.selectedUser,
+      selectedUser: state => state.dashboardUsers.selectedUser,
       dashboardUsers: state => state.dashboardUsers.dashboardUsers
     })
   },

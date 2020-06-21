@@ -2,7 +2,7 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleDashboardDay = {
   state: {
-    dashboardDayChartDataLoaded: true,
+    dashboardDayChartDataLoaded: false,
     dashboardDayUpdating: false,
     dashboardDayChartData: {},
     dashboardDayChartTitle: ''
@@ -41,7 +41,7 @@ export const moduleDashboardDay = {
       } else {
         context.commit('SET_DASHBOARDDAY', {})
         context.commit('SET_DASHBOARDDAY_CHART_TITLE', [0.00, 0.00])
-        context.commit('SET_DASHBOARDDAY_LOAD_STATUS', true)
+        context.commit('SET_DASHBOARDDAY_LOAD_STATUS', false)
       }
     },
     resetDashboardDayState (context) {

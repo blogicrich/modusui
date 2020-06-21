@@ -1,23 +1,18 @@
 <template>
   <v-container fluid>
-    <v-layout row fill-height justify-center>
-      <BaseViewHeader
-        v-if="!userText"
-        class="mx-2 mb-4"
-        :headerIcon="headerIcon"
-        :iconColor="iconColor"
-        :headerText="headerText"
-        hasDivider
+    <BaseViewHeader
+      class="mx-2 mb-2"
+      :headerIcon="headerIcon"
+      :headerText="headerText"
+      hasDivider
+    >
+      <BaseUserSelect
+        slot="rhViewHeaderColumn"
+        :users="dashboardUsers"
+        :selectedUser="selectedUser"
+        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
-      <BaseViewHeader
-        v-if="userText"
-        class="mx-2 mb-4"
-        :chipsText="userText"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      />
-    </v-layout>
+    </BaseViewHeader>
     <BaseDataTable
       ref="baseDataTable"
       class="mx-4"
@@ -86,31 +81,28 @@
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
+import { mapState } from 'vuex'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'EdropletManagement',
   mixins: [dataTableNavGuard, crudRoutines, validation],
   components: {
-    BaseDataTable
+    BaseDataTable,
+    BaseUserSelect
   },
   computed: {
+    ...mapState({
+      selectedUser: state => state.dashboardUsers.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+    }),
     urls: function () {
       return [{
         ref: [{ statusId: 1, status: 'Live' }, { statusId: 0, status: 'Inactive' }],
         attr: 'operationalStatus',
         key: 'statusId'
       }]
-    },
-    user: function () {
-      return this.$store.getters.getterSelectedUser
-    },
-    userText: function () {
-      if (this.$store.getters.getterSelectedUser !== null) {
-        return this.$store.getters.getterSelectedUser.givenName
-      } else {
-        return ''
-      }
     }
   },
   data () {

@@ -1,12 +1,21 @@
 <template>
-  <v-container>
-    <h2
-      v-if="this.$vuetify.breakpoint.mdAndDown"
-      class="pg-subheader text-primary text-center mx-3"
-      text-xs-center
-    >System Administrators</h2>
-    <BaseDataTable
+  <v-container fluid>
+      <BaseViewHeader
+        class="mx-2 mb-2"
+        :headerIcon="headerIcon"
+        :headerText="headerText"
+        hasDivider
+      >
+        <BaseUserSelect
+          slot="rhViewHeaderColumn"
+          :users="dashboardUsers"
+          :selectedUser="selectedUser"
+          @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
+        />
+      </BaseViewHeader>
+    <!-- <BaseDataTable
       ref="baseDataTable"
+      class="mx-4"
       :headers="headers"
       :items="items"
       :editPerms="editPerms"
@@ -33,24 +42,36 @@
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
       @itemsCancelled="refreshItems"
-    />
+    /> -->
   </v-container>
 </template>
 
 <script>
+
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+import { mapState } from 'vuex'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
-  name: 'SystemAdmins',
+  name: 'Alerts',
   mixins: [crudRoutines],
   components: {
-    BaseDataTable
+    BaseDataTable,
+    BaseUserSelect
+  },
+  computed: {
+    ...mapState({
+      selectedUser: state => state.dashboardUsers.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+    })
   },
   data () {
     return {
       crudIdKey: 'portalAuthorisedId',
+      headerText: 'Alerts',
+      headerIcon: 'notification_important',
       items: [],
       editRules: () => [],
       editPerms: { create: false, update: false, delete: false },
@@ -60,7 +81,7 @@ export default {
       errorMsg: '',
       loadingMsg: '',
       loadedMsg: '',
-      readUrl: 'carer/alerts/' + this.$store.state.userId + '/' + 1552922626,
+      // readUrl: 'carer/alerts/' + this.selectedUser.userId + '/' + 1552922626,
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'warning',
@@ -160,7 +181,7 @@ export default {
     }
   },
   mounted () {
-    this.getItems(this.readUrl)
+    // this.getItems(this.readUrl)
   }
 }
 </script>

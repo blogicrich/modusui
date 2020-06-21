@@ -1,41 +1,34 @@
 <template>
-  <v-container>
-    <v-layout column>
-    <v-layout row fill-height justify-center>
-      <BaseViewHeader
-        v-if="!userText"
-        class="mx-2 mb-4"
-        :headerIcon="headerIcon"
-        :iconColor="iconColor"
-        :headerText="headerText"
-        hasDivider
+  <v-container fluid>
+    <BaseViewHeader
+      class="mx-2 mb-2"
+      :headerIcon="headerIcon"
+      :headerText="headerText"
+      hasDivider
+    >
+      <BaseUserSelect
+        slot="rhViewHeaderColumn"
+        :users="dashboardUsers"
+        :selectedUser="selectedUser"
+        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
-      <BaseViewHeader
-        v-if="userText"
-        class="mx-2 mb-4"
-        :chipsText="userText"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      />
-    </v-layout>
-      <v-flex x12>
-        <data-table
-          :editPerms="editPerms"
-          :headers="headers"
-          :items="title"
-          :loading="loading"
-          :loaded="loaded"
-          :error="error"
-          :errorMsg="errorMsg"
-          :loadingMsg="loadingMsg"
-          :loadedMsg="loadedMsg"
-          primaryColor="primary"
-          recordIcon="person"
-          tableTitle="Personal Details"
-        ></data-table>
-      </v-flex>
-    </v-layout>
+    </BaseViewHeader>
+      <data-table
+        ref="baseDataTable"
+        class="mx-4"
+        :editPerms="editPerms"
+        :headers="headers"
+        :items="title"
+        :loading="loading"
+        :loaded="loaded"
+        :error="error"
+        :errorMsg="errorMsg"
+        :loadingMsg="loadingMsg"
+        :loadedMsg="loadedMsg"
+        primaryColor="primary"
+        recordIcon="person"
+        tableTitle="Personal Details"
+      ></data-table>
     <v-layout row justify-end>
       <wizard-component/>
     </v-layout>
@@ -47,32 +40,22 @@ import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import DataTable from '@/components/base/BaseDataTableComponent'
 import WizardComponent from '@/components/base/BaseWizardComponent'
+import { mapState } from 'vuex'
+import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 
 export default {
   name: 'PersonalDetails',
   mixins: [dataTableNavGuard, crudRoutines],
   components: {
     DataTable,
-    WizardComponent
+    WizardComponent,
+    BaseUserSelect
   },
   computed: {
-    carerId () {
-      if (this.$store.getters.getterCarerId !== null || this.$store.getters.getterCarerId !== undefined) {
-        return this.$store.getters.carerId
-      } else {
-        return ''
-      }
-    },
-    user: function () {
-      return this.$store.getters.getterSelectedUser
-    },
-    userText: function () {
-      if (this.$store.getters.getterSelectedUser !== null) {
-        return this.$store.getters.getterSelectedUser.givenName
-      } else {
-        return ''
-      }
-    }
+    ...mapState({
+      selectedUser: state => state.dashboardUsers.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+    })
   },
   data () {
     return {

@@ -16,7 +16,7 @@
         slot="dashboardHeaderRight"
         :users="dashboardUsers"
         :selectedUser="selectedUser"
-        @user-selected="$store.commit('SET_SELECTED_USER', $event)"
+        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
       <v-flex slot="tileOne">
         <BaseChartHeader v-if="hourChartDataLoaded">
@@ -49,7 +49,6 @@
           <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
         </BaseChartHeader>
         <SubHydrationDayPieChart
-          v-if="dayChartDataLoaded"
           ref="dayPieChart"
           :chartData="dailyPieChartData"
         />
@@ -64,7 +63,6 @@
         </BaseChartHeader>
         <SubWeeklyHydrationBarChart
           ref="weeklyBarChart"
-          v-if="weekChartDataLoaded"
           :chartData="weekLineBarChartData"
         />
         <BaseDashboardTileOverlay
@@ -78,7 +76,6 @@
         </BaseChartHeader>
         <SubHydrationDayPieChart
           ref="percentHydratedChart"
-          v-if="dayChartDataLoaded"
           :chartData="dailyPieChartData"
         />
         <BaseDashboardTileOverlay
@@ -135,7 +132,7 @@ export default {
       selectedDate: state => state.dashboardDates.dashboardSelectedDate,
       formattedDate: state => state.dashboardDates.dashboardFormattedDate,
       // Users
-      selectedUser: state => state.eDropletApp.selectedUser,
+      selectedUser: state => state.dashboardUsers.selectedUser,
       dashboardUsers: state => state.dashboardUsers.dashboardUsers,
       dashboardUsersLoaded: state => state.dashboardUsers.dashboardUsersLoaded,
       // Hourly Chart Data
@@ -159,21 +156,18 @@ export default {
       if (this.hourChartDataLoaded && !this.hourChartDataUpdating) {
         return this.$store.getters.getterHourLineBarChartData
       }
-
       return null
     },
     weekLineBarChartData () {
       if (this.weekChartDataLoaded && !this.weekChartDataUpdating) {
         return this.$store.getters.getterWeekLineBarChartData
       }
-
       return null
     },
     dailyPieChartData () {
       if (this.dayChartDataLoaded && !this.dayChartDataUpdating) {
         return this.$store.getters.getterDailyPieChartData
       }
-
       return null
     }
   },
@@ -199,7 +193,7 @@ export default {
     // Dashboard setup
     async setUsers () {
       await this.$store.dispatch('fetchDashboardUsers')
-      this.$store.commit('SET_SELECTED_USER', this.dashboardUsers[0])
+      this.$store.commit('SET_USER_CONTEXT', this.dashboardUsers[0])
     },
     setDates () {
       const date = this.$moment(Date.now()).format('YYYY-MM-DD')

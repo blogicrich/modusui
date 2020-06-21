@@ -12,7 +12,7 @@
           slot="rhViewHeaderColumn"
           :users="dashboardUsers"
           :selectedUser="selectedUser"
-          @user-selected="$store.commit('SET_SELECTED_USER', $event)"
+          @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
         />
       </BaseViewHeader>
       <!-- Date selection form -->
@@ -89,17 +89,16 @@
         :tableTitle="legend"
         :headers="headers"
         :primaryColor="primaryColor"
-        :items="items"
+        :items="awayPeriods"
         searchLabel="Search Records..."
         recordIcon="calendar_today"
         editDialogTitle="Edit Away Period(s)"
         :secondaryColor="secondaryColor"
         item-key="awayId"
-        :readUrl="readUrl"
-        :editPerms="editPerms"
+        :editPerms="{ create: false, update: false, delete: false }"
         :addRecordIcon="iconAdd"
-        :loading="loading"
-        :loaded="loaded"
+        :loading="awayLoading"
+        :loaded="!awayLoading"
         :error="error"
         :errorMsg="errorMsg"
         :loadingMsg="loadingMsg"
@@ -126,8 +125,10 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedUser: state => state.eDropletApp.selectedUser,
-      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+      selectedUser: state => state.dashboardUsers.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers,
+      awayLoading: state => state.dashboardAway.awayLoading,
+      awayPeriods: state => state.dashboardAway.awayPeriods
     }),
     binding: function () {
       const binding = {}
@@ -152,9 +153,9 @@ export default {
     endDateFormattedValue () {
       return this.endDate ? moment(this.endDate).format('dddd, MMMM Do YYYY') : ''
     },
-    readUrl () {
-      return 'carer/away/'
-    },
+    // readUrl () {
+    //   return 'carer/away/'
+    // },
     startDateFormattedValue () {
       return this.startDate ? moment(this.startDate).format('dddd, MMMM Do YYYY') : ''
     }
@@ -173,13 +174,11 @@ export default {
     // BaseDataTable
     items: [],
     iconAdd: 'person_add',
-    editPerms: { create: false, update: false, delete: false },
-    loading: true,
     loaded: false,
     error: false,
     errorMsg: ' ',
-    loadingMsg: ' ',
-    loadedMsg: ' ',
+    loadingMsg: 'Loading Away Periods',
+    loadedMsg: 'No data for selected time period',
     legend: 'Away Periods',
     primaryColor: 'primary',
     secondaryColor: 'primary darken-2',
@@ -230,6 +229,14 @@ export default {
         return 'Select a date after the "Start Date".'
       }
     },
+    async getAwayPeriods (id, startDate, endDate) {
+      console.log(id, endDate, startDate)
+      await this.$store.dispatch('fetchAwayPeriods', { 
+        id: id, 
+        startDate: startDate, 
+        endDate: endDate
+      })
+    },
     startDateValidation () {
       if (this.startDate <= this.endDate) {
         return true
@@ -242,7 +249,13 @@ export default {
       const unixStartDate = new Date(this.startDate).getTime() / 1000
 
       if (this.$refs.dateSelectForm.validate()) {
-        this.getItems(this.readUrl + this.selectedUser.userId + '/' + unixStartDate + '/' + unixEndDate)
+        this.getAwayPeriods(
+          this.selectedUser.userId, 
+          unixStartDate, 
+          unixEndDate
+        )
+        // }
+        // this.getItems(this.readUrl + this.selectedUser.userId + '/' + unixStartDate + '/' + unixEndDate)
       } else {
         this.errorMsg = 'Please check selected date range.'
         this.loaded = false
@@ -251,7 +264,17 @@ export default {
     }
   },
   mounted () {
-    this.getItems(this.readUrl + this.selectedUser.userId + '/' + new Date(this.startDate).getTime() / 1000 + '/' + new Date(this.endDate).getTime() / 1000)
+    try {
+      this.getAwayPeriods(
+        this.selectedUser.userId, 
+        new Date(this.startDate).getTime() / 1000, 
+        new Date(this.endDate).getTime() / 1000 
+      )
+    } catch (error){
+      this.error = true
+      this.errorMsg = 'Please check your internet connection and refresh page to try again.'
+    }
+    // this.getItems(this.readUrl + this.selectedUser.userId + '/' + new Date(this.startDate).getTime() / 1000 + '/' + new Date(this.endDate).getTime() / 1000)
   }
 }
 </script>

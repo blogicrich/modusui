@@ -1,23 +1,18 @@
 <template>
-  <v-container>
-    <v-layout row fill-height justify-center>
-      <BaseViewHeader
-        v-if="!userText"
-        class="mx-2 mb-4"
-        :headerIcon="headerIcon"
-        :iconColor="iconColor"
-        :headerText="headerText"
-        hasDivider
+  <v-container fluid>
+    <BaseViewHeader
+      class="mx-2 mb-2"
+      :headerIcon="headerIcon"
+      :headerText="headerText"
+      hasDivider
+    >
+      <BaseUserSelect
+        slot="rhViewHeaderColumn"
+        :users="dashboardUsers"
+        :selectedUser="selectedUser"
+        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
-      <BaseViewHeader
-        v-if="userText"
-        class="mx-2 mb-4"
-        :chipsText="userText"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      />
-    </v-layout>
+    </BaseViewHeader>
     <v-container v-if="intervalSettings">
       <v-layout row wrap fill-height justify-space-between>
         <v-flex xs12 lg6>
@@ -60,19 +55,22 @@
 <script>
 
 import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.vue'
+import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import { mapState } from 'vuex'
 
 export default {
   name: 'IntervalSettingsManagement',
   components: {
-    BaseRadioOptions
+    BaseRadioOptions,
+    BaseUserSelect
   },
   computed: {
     ...mapState({
       intervalSettings: state => state.intervalSettings.intervalSettings,
-      selectedIntervals: state => state.intervalSettings.intervalSettings.currentSettings
+      selectedIntervals: state => state.intervalSettings.intervalSettings.currentSettings,
+      selectedUser: state => state.dashboardUsers.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers
     }),
-
     selectedBlueLightFlashingInterval () {
       return this.intervalSettings.blueLightFlashingIntervals.find(
         interval => interval.blueLightFlashingIntervalId === this.selectedIntervals.blueLightFlashingIntervalId

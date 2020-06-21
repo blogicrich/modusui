@@ -13,7 +13,7 @@ export const moduleEdropletApp = {
     // Dashboard
     userDataLoading: false,
     storeId: null,
-    selectedUser: deserialize('selectedUser'),
+    // selectedUser: deserialize('selectedUser'),
     // carerId: deserialize('carerId'),
     // accountHolderId: null,
     deviceMessageTypeId: null,
@@ -57,11 +57,11 @@ export const moduleEdropletApp = {
     SET_TOKEN (state, data) {
       serialize('token', data)
       state.token = data
-    },
-    SET_SELECTED_USER (state, user) {
-      serialize('selectedUser', user)
-      state.selectedUser = user
     }
+    // SET_SELECTED_USER (state, user) {
+    //   serialize('selectedUser', user)
+    //   state.selectedUser = user
+    // }
   },
   actions: {
     async POST_LOGIN (context, payload) {
@@ -114,7 +114,7 @@ export const moduleEdropletApp = {
     // Dashboard getters
     getterStoreId: state => state.storeId,
     getterUserId: state => state.userId,
-    getterSelectedUser: state => state.selectedUser,
+    // getterSelectedUser: state => state.selectedUser,
     getterCarerId: state => state.carerId,
     getterAccountHolderId: state => state.accountHolderId,
     getterDeviceMessageTypeId: state => state.deviceMessageTypeId,

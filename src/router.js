@@ -63,19 +63,14 @@ export default new Router({
       component: () => import(/* webpackChunkName: "dashboard" */ './views/carer/Dashboard.vue')
     },
     {
-      path: '/reports',
-      name: 'Reports',
-      component: () => import(/* webpackChunkName: "reports" */ './views/carer/Reports.vue')
+      path: '/dailyreports',
+      name: 'DailyReports',
+      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/DailyReports.vue')
     },
     {
-      path: '/settingsreports',
-      name: 'SettingsReports',
-      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/SettingsReports.vue')
-    },
-    {
-      path: '/consumptioncalendar',
-      name: 'ConsumptionCalendar',
-      component: () => import(/* webpackChunkName: "consumption-calendar" */ './views/carer/ConsumptionCalendar.vue')
+      path: '/viewdrinks',
+      name: 'ViewDrinks',
+      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/ViewDrinks.vue')
     },
 
     // Cliadmin routes

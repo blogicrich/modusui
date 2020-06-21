@@ -1,23 +1,18 @@
 <template lang="html">
-  <v-container>
-    <v-layout row fill-height justify-center>
-      <BaseViewHeader
-        v-if="!userText"
-        class="mx-2 mb-4"
-        :headerIcon="headerIcon"
-        :iconColor="iconColor"
-        :headerText="headerText"
-        hasDivider
+  <v-container fluid>
+    <BaseViewHeader
+      class="mx-2 mb-2"
+      :headerIcon="headerIcon"
+      :headerText="headerText"
+      hasDivider
+    >
+      <BaseUserSelect
+        slot="rhViewHeaderColumn"
+        :users="dashboardUsers"
+        :selectedUser="selectedUser"
+        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
-      <BaseViewHeader
-        v-if="userText"
-        class="mx-2 mb-4"
-        :chipsText="userText"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      />
-    </v-layout>
+    </BaseViewHeader>
     <v-menu
       ref="wakeUpTimePicker"
       v-model="showWakeUpTimePicker"
@@ -74,7 +69,7 @@
     :rules="sleepTimeRules"
     @change="change"
   ></v-text-field>
-</template>
+  </template>
       <v-time-picker
         v-if="showSleepTimePicker"
         v-model="sleepTime"
@@ -100,9 +95,18 @@
 </template>
 
 <script>
+
+import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
+import { mapState } from 'vuex'
+
 export default {
   name: 'WakeSleepTimes',
+  components: { BaseUserSelect },
   computed: {
+    ...mapState({
+      selectedUser: state => state.dashboardUsers.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+    }),
     defaultWakeUpTime () {
       return this.$store.getters.getterDefaultWakeUpTime
     },
@@ -123,16 +127,6 @@ export default {
       },
       set (newValue) {
         this.$store.commit('UPDATE_SLEEPTIME', newValue)
-      }
-    },
-    user: function () {
-      return this.$store.getters.getterSelectedUser
-    },
-    userText: function () {
-      if (this.$store.getters.getterSelectedUser !== null) {
-        return this.$store.getters.getterSelectedUser.givenName
-      } else {
-        return ''
       }
     }
   },
