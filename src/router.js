@@ -67,11 +67,6 @@ export default new Router({
       name: 'DailyReports',
       component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/DailyReports.vue')
     },
-    {
-      path: '/viewdrinks',
-      name: 'ViewDrinks',
-      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/ViewDrinks.vue')
-    },
 
     // Cliadmin routes
 

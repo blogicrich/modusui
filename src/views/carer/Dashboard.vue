@@ -47,14 +47,14 @@
       </v-flex>
       <v-flex slot="tileTwo">
         <p
-          class="text-secondary text-center table-header text-ellipsis" 
+          class="text-secondary text-center table-header text-ellipsis"
           >{{ 'eDroplet Drinks Total: ' + drinksTotal }}
         </p>
         <v-list
           :style="'max-height:' + listHeight"
           class="tile-overflow"
-          three-line dense 
-          :max-height="cardHeight" 
+          three-line dense
+          :max-height="cardHeight"
         >
           <template v-for="(item, index) in drinks">
 
