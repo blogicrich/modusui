@@ -15,10 +15,11 @@ import { moduleWakeSleepTimes } from '@/store/StoreWakeSleepTimes'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
 import { moduleReports } from '@/store/StoreReports'
 // Dashboard
-import { moduleDashboardDailyReport } from '@/store/StoreDailyReports'
 import { moduleDashboardAway } from '@/store/StoreDashboardAway'
+import { moduleDashboardDailyReport } from '@/store/StoreDailyReports'
 import { moduleDashboardDay } from '@/store/StoreDashboardDay'
 import { moduleDashboardDates } from '@/store/StoreDashboardDates'
+import { moduleDashboardDrinks } from '@/store/StoreDashboardDrinks'
 import { moduleDashboardHour } from '@/store/StoreDashboardHour'
 import { moduleDashboardUsers } from '@/store/StoreDashboardUsers'
 import { moduleDashboardComment } from '@/store/StoreDashboardComment'
@@ -51,7 +52,8 @@ export default new Vuex.Store({
     dashboardAway: moduleDashboardAway,
     dashboardDay: moduleDashboardDay,
     dashboardDates: moduleDashboardDates,
-    moduleDashboardDailyReport: moduleDashboardDailyReport,
+    dashboardDailyReport: moduleDashboardDailyReport,
+    dashboardDrinks: moduleDashboardDrinks,
     dashboardHour: moduleDashboardHour,
     dashboardUsers: moduleDashboardUsers,
     dashboardComment: moduleDashboardComment,

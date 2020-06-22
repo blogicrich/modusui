@@ -2,6 +2,7 @@
   <keep-alive>
     <BaseDashboard
       v-if="!dashboardIsLoading"
+      :cardHeight="cardHeight"
     >
       <BaseDateSelection
         slot="dashboardHeaderCenter"
@@ -18,7 +19,7 @@
         :selectedUser="selectedUser"
         @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
-      <v-flex slot="tileOne">
+      <v-flex ref="tileOne" slot="tileOne">
         <BaseChartHeader v-if="hourChartDataLoaded">
           <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
           <BaseChartTypeSelector
@@ -32,29 +33,50 @@
         <SubHourlyHydrationLineChart
           ref="hourLineChart"
           v-if="hourChartData && hourChartType === 'Line Chart'"
-          :chartData="hourLineBarChartData"
+          :chartData="getterHourLineBarChartData"
         />
         <SubHourlyHydrationBarChart
           ref="hourBarChart"
           v-if="hourChartData && hourChartType === 'Bar Chart'"
-          :chartData="hourLineBarChartData"
+          :chartData="getterHourLineBarChartData"
         />
         <BaseDashboardTileOverlay
           v-if="!hourChartDataLoaded"
-          message="No data for user or date selected"
+          message="No data for selected user or date"
         ></BaseDashboardTileOverlay>
       </v-flex>
       <v-flex slot="tileTwo">
-        <BaseChartHeader v-if="dayChartDataLoaded">
-          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
-        </BaseChartHeader>
-        <SubHydrationDayPieChart
-          ref="dayPieChart"
-          :chartData="dailyPieChartData"
-        />
+        <p
+          class="text-secondary text-center table-header text-ellipsis" 
+          >{{ 'eDroplet Drinks Total: ' + drinksTotal }}
+        </p>
+        <v-list
+          :style="'max-height:' + listHeight"
+          class="tile-overflow"
+          three-line dense 
+          :max-height="cardHeight" 
+        >
+          <template v-for="(item, index) in drinks">
+
+            <v-divider :key="index + '-divider'"></v-divider>
+
+            <v-list-tile
+              :key="index + '-macaddress'"
+            >
+              <v-list-tile-avatar>
+                <v-icon :color="$vuetify.theme.primary">local_drink</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title class="text-secondary" v-html="'eDroplet: ' + item.macAddress + '/' + item.friendlyName"></v-list-tile-title>
+                <v-list-tile-sub-title class="text-primary" v-html="'Time: ' + $moment.utc(item.dateTime*1000).format('dddd, MMMM Do YYYY, h:mm:ss a')"></v-list-tile-sub-title>
+                <v-list-tile-sub-title class="text-primary" v-html="'Amount: ' + item.volumeInLitres + ' L'"></v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </template>
+        </v-list>
         <BaseDashboardTileOverlay
           v-if="!dayChartDataLoaded"
-          message="No data for user or date selected"
+          message="No data for selected user or date"
         ></BaseDashboardTileOverlay>
       </v-flex>
       <v-flex slot="tileThree">
@@ -63,11 +85,11 @@
         </BaseChartHeader>
         <SubWeeklyHydrationBarChart
           ref="weeklyBarChart"
-          :chartData="weekLineBarChartData"
+          :chartData="getterWeekLineBarChartData"
         />
         <BaseDashboardTileOverlay
           v-if="!weekChartDataLoaded"
-          message="No data for user or date selected"
+          message="No data for selected user or date"
         ></BaseDashboardTileOverlay>
       </v-flex>
       <v-flex slot="tileFour">
@@ -76,11 +98,11 @@
         </BaseChartHeader>
         <SubHydrationDayPieChart
           ref="percentHydratedChart"
-          :chartData="dailyPieChartData"
+          :chartData="getterDailyPieChartData"
         />
         <BaseDashboardTileOverlay
           v-if="!dayChartDataLoaded"
-          message="No data for user or date selected"
+          message="No data for selected user or date"
         ></BaseDashboardTileOverlay>
     </v-flex>
     </BaseDashboard>
@@ -105,11 +127,12 @@ import BaseDashboardTileOverlay from '@/components/base/BaseDashboardTileOverlay
 import BaseDataInfoCard from '@/components/base/BaseDataTableInfoComponent'
 import BaseDateSelection from '@/components/base/BaseDateSelectionComponent'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
+import BaseDataTable from '@/components/base/BaseDataTableComponent'
 import SubHourlyHydrationLineChart from '@/components/sub/SubHourlyHydrationLineChart'
 import SubHourlyHydrationBarChart from '@/components/sub/SubHourlyHydrationBarChart'
 import SubHydrationDayPieChart from '@/components/sub/SubHydrationDayPieChart'
 import SubWeeklyHydrationBarChart from '@/components/sub/SubWeeklyHydrationBarChart'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'eDropletDashboard',
@@ -118,6 +141,7 @@ export default {
     BaseDashboardTileOverlay,
     BaseDataInfoCard,
     BaseDateSelection,
+    BaseDataTable,
     BaseChartTypeSelector,
     BaseChartHeader,
     BaseUserSelect,
@@ -135,6 +159,10 @@ export default {
       selectedUser: state => state.dashboardUsers.selectedUser,
       dashboardUsers: state => state.dashboardUsers.dashboardUsers,
       dashboardUsersLoaded: state => state.dashboardUsers.dashboardUsersLoaded,
+      // Drinks
+      drinks: state => state.dashboardDrinks.drinks,
+      drinksLoading: state => state.dashboardDrinks.drinksLoading,
+      drinksTotal: state => state.dashboardDrinks.drinksTotal,
       // Hourly Chart Data
       hourChartData: state => state.dashboardHour.dashboardHourChartData,
       hourChartTitle: state => state.dashboardHour.dashboardHourChartTitle,
@@ -152,18 +180,33 @@ export default {
       weekChartDataLoaded: state => state.dashboardWeek.dashboardWeekChartDataLoaded,
       weekChartDataUpdating: state => state.dashboardWeek.dashboardWeekChartDataUpdating
     }),
-    hourLineBarChartData () {
-      return this.$store.getters.getterHourLineBarChartData
+    ...mapGetters([
+      'getterHourLineBarChartData',
+      'getterWeekLineBarChartData',
+      'getterDailyPieChartData'
+    ]),
+    cardHeight () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '522px'
+        case 'sm': return '522px'
+        case 'md': return '522px'
+        case 'lg': return '522px'
+        case 'xl': return '522px'
+      }
     },
-    weekLineBarChartData () {
-      return this.$store.getters.getterWeekLineBarChartData
-    },
-    dailyPieChartData () {
-      return this.$store.getters.getterDailyPieChartData
+    listHeight () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '422px'
+        case 'sm': return '422px'
+        case 'md': return '422px'
+        case 'lg': return '422px'
+        case 'xl': return '422px'
+      }
     }
   },
   data () {
     return {
+      // Dashboard
       dashboardIsLoading: true,
       dashboardLoadingTimeout: null,
       dashboardPollTimeout: null,
@@ -207,6 +250,7 @@ export default {
         arr.push(this.$store.dispatch('fetchDashboardHourChartData', payload))
         arr.push(this.$store.dispatch('fetchDashboardDayChartData', payload))
         arr.push(this.$store.dispatch('fetchDashboardWeekChartData', payload))
+        arr.push(this.$store.dispatch('fetchDashboardDrinks', payload))
 
         Promise.all(arr)
       }
@@ -258,4 +302,8 @@ export default {
 
 <style lang="scss" scoped>
   @import "./public/scss/main.scss";
+
+  .tile-overflow {
+    overflow-y: scroll;
+  }
 </style>

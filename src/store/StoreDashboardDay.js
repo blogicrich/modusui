@@ -13,7 +13,7 @@ export const moduleDashboardDay = {
       state.dashboardDayChartData = data
     },
     SET_DASHBOARDDAY_CHART_TITLE (state, data) {
-      state.dashboardDayChartTitle = 'Daily hydration status: ' + data[0] + ' L / ' + data[1].toFixed(2) + ' L'
+      state.dashboardDayChartTitle = data
     },
     SET_DASHBOARDDAY_LOAD_STATUS (state, data) {
       state.dashboardDayChartDataLoaded = data
@@ -35,12 +35,12 @@ export const moduleDashboardDay = {
       const response = await apiLib.getData('carer/dashboard-day/' + userId + '/' + date)
       if (typeof response === 'object' && hasNullValues(response.data)) {
         context.commit('SET_DASHBOARDDAY', response)
-        context.commit('SET_DASHBOARDDAY_CHART_TITLE', response.data)
+        context.commit('SET_DASHBOARDDAY_CHART_TITLE', response.title)
         context.commit('SET_DASHBOARDDAY_LOAD_STATUS', true)
         context.commit('SET_DASHBOARDDAY_UPDATE_STATUS', false)
       } else {
         context.commit('SET_DASHBOARDDAY', { data: [], labels: response.labels })
-        context.commit('SET_DASHBOARDDAY_CHART_TITLE', [0.00, 0.00])
+        context.commit('SET_DASHBOARDDAY_CHART_TITLE', 'Daily hydration status: 0.00 L / 0.00 L')
         context.commit('SET_DASHBOARDDAY_LOAD_STATUS', false)
       }
     },

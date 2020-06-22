@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-3" ref="dashboard" fluid grid-list-md>
+  <v-container v-if="cardHeight" class="pa-3" ref="dashboard" fluid grid-list-md>
     <!-- HEADER -->
     <v-layout ref="dashboard-header" v-bind="binding">
       <v-flex xs12 md4>
@@ -16,12 +16,12 @@
     <!-- ROW-1 -->
     <v-layout v-bind="binding">
       <v-flex xs12 md8 order-xs1>
-        <v-card class="pa-3" hover>
+        <v-card class="pa-3" hover :height="cardHeight">
           <slot name="tileOne"></slot>
         </v-card>
       </v-flex>
       <v-flex xs12 md4 order-xs2>
-        <v-card hover class="pa-3">
+        <v-card hover class="pa-3" :height="cardHeight">
           <slot name="tileTwo"></slot>
         </v-card>
       </v-flex>
@@ -29,12 +29,12 @@
     <!-- ROW-2 -->
     <v-layout v-bind="binding">
       <v-flex xs12 md8 order-xs3>
-        <v-card hover class="pa-3" dark>
+        <v-card hover class="pa-3" dark :height="cardHeight">
           <slot name="tileThree"></slot>
         </v-card>
       </v-flex>
       <v-flex xs12 md4 order-xs4>
-        <v-card hover class="pa-3">
+        <v-card hover class="pa-3" :height="cardHeight">
           <slot name="tileFour"></slot>
         </v-card>
       </v-flex>
@@ -46,6 +46,9 @@
 
 export default {
   name: 'BaseDashboardComponent',
+  props: {
+    cardHeight: String
+  },
   computed: {
     binding () {
       const binding = {}
