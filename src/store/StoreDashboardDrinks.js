@@ -11,7 +11,7 @@ export const moduleDashboardDrinks = {
       let value = 0
       for (let i = 0; i < data.length; i++) {
         const element = data[i]
-        value = element.volumeInLitres
+        value = value + element.volumeInLitres
       }
       state.drinks = data
       state.drinksTotal = value.toFixed(2) + ' L'

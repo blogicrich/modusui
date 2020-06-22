@@ -304,6 +304,6 @@ export default {
   @import "./public/scss/main.scss";
 
   .tile-overflow {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 </style>
