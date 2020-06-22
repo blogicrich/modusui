@@ -82,7 +82,7 @@
           v-if="!dayChartDataLoaded"
           message="No data for user or date selected"
         ></BaseDashboardTileOverlay>
-      </v-flex>
+    </v-flex>
     </BaseDashboard>
     <transition name="component-fade" mode="in-out">
       <BaseDataInfoCard
@@ -153,22 +153,13 @@ export default {
       weekChartDataUpdating: state => state.dashboardWeek.dashboardWeekChartDataUpdating
     }),
     hourLineBarChartData () {
-      if (this.hourChartDataLoaded && !this.hourChartDataUpdating) {
-        return this.$store.getters.getterHourLineBarChartData
-      }
-      return []
+      return this.$store.getters.getterHourLineBarChartData
     },
     weekLineBarChartData () {
-      if (this.weekChartDataLoaded && !this.weekChartDataUpdating) {
-        return this.$store.getters.getterWeekLineBarChartData
-      }
-      return []
+      return this.$store.getters.getterWeekLineBarChartData
     },
     dailyPieChartData () {
-      if (this.dayChartDataLoaded && !this.dayChartDataUpdating) {
-        return this.$store.getters.getterDailyPieChartData
-      }
-      return []
+      return this.$store.getters.getterDailyPieChartData
     }
   },
   data () {
@@ -208,15 +199,17 @@ export default {
     },
     // Dashboard Update
     async updateCharts () {
-      let arr = []
-      const date = this.$moment.utc(this.selectedDate).unix()
-      const payload = { userId: this.selectedUser.userId, date: date, formattedDate: this.formattedDate }
+      if (this.selectedUser && this.selectedDate) {
+        let arr = []
+        const date = this.$moment.utc(this.selectedDate).unix()
+        const payload = { userId: this.selectedUser.userId, date: date, formattedDate: this.formattedDate }
 
-      arr.push(this.$store.dispatch('fetchDashboardHourChartData', payload))
-      arr.push(this.$store.dispatch('fetchDashboardDayChartData', payload))
-      arr.push(this.$store.dispatch('fetchDashboardWeekChartData', payload))
-      
-      Promise.all(arr)
+        arr.push(this.$store.dispatch('fetchDashboardHourChartData', payload))
+        arr.push(this.$store.dispatch('fetchDashboardDayChartData', payload))
+        arr.push(this.$store.dispatch('fetchDashboardWeekChartData', payload))
+
+        Promise.all(arr)
+      }
     },
     updateDashboardLoadStatus () {
       const self = this

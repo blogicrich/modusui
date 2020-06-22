@@ -74,9 +74,9 @@ export const moduleDashboardWeek = {
 function hasNullValues (data) {
   for (let i = 0; i < data.length; i++) {
     const element = data[i]
-    console.log(element !== null)
+    // console.log(element !== null)
     if (element !== null) {
-      console.log(element)
+      // console.log(element)
       return true
     }
   }
