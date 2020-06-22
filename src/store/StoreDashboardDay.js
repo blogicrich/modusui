@@ -13,7 +13,9 @@ export const moduleDashboardDay = {
       state.dashboardDayChartData = data
     },
     SET_DASHBOARDDAY_CHART_TITLE (state, data) {
-      state.dashboardDayChartTitle = 'Daily hydration status: ' + data[0] + ' L / ' + data[1].toFixed(2) + ' L'
+      if (data[1] !== null) {
+        state.dashboardDayChartTitle = 'Daily hydration status: ' + data[0] + ' L / ' + data[1].toFixed(2) + ' L'
+      }
     },
     SET_DASHBOARDDAY_LOAD_STATUS (state, data) {
       state.dashboardDayChartDataLoaded = data
@@ -32,7 +34,7 @@ export const moduleDashboardDay = {
   actions: {
     async fetchDashboardDayChartData (context, { userId, date }) {
       context.commit('SET_DASHBOARDDAY_UPDATE_STATUS', true)
-      const response = await apiLib.getData('carer/dashboard-day/' + userId + '/' + date, true)
+      const response = await apiLib.getData('carer/dashboard-day/' + userId + '/' + date)
       if (typeof response === 'object') {
         context.commit('SET_DASHBOARDDAY', response)
         context.commit('SET_DASHBOARDDAY_CHART_TITLE', response.data)

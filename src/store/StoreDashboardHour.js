@@ -29,15 +29,15 @@ export const moduleDashboardHour = {
   actions: {
     async fetchDashboardHourChartData (context, payload) {
       context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', true)
-      const response = await apiLib.getData('carer/dashboard-hour/' + payload.userId + '/' + payload.date, false, false)
-      if (typeof response === 'object') {
+      const response = await apiLib.getData('carer/dashboard-hour/' + payload.userId + '/' + payload.date)
+      if (typeof response === 'object' && hasNullValues(response.volumeConsumedTotal)) {
         context.commit('SET_DASHBOARDHOUR', response)
         context.commit('SET_DASHBOARDHOUR_CHART_TITLE', payload.formattedDate)
         context.commit('SET_DASHBOARDHOUR_UPDATE_STATUS', false)
         context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', true)
       } else {
         context.commit('SET_DASHBOARDHOUR_CHART_TITLE', payload.formattedDate)
-        context.commit('SET_DASHBOARDHOUR', {})
+        context.commit('SET_DASHBOARDHOUR', { labels: [], volumeConsumedtotal: [] })
         context.commit('SET_DASHBOARDHOUR_LOAD_STATUS', false)
       }
     },
@@ -57,6 +57,17 @@ export const moduleDashboardHour = {
           data: state.dashboardHourChartData.volumeConsumedTotal
         }]
       }
+    }
+  }
+}
+
+function hasNullValues (data) {
+  for (let i = 0; i < data.length; i++) {
+    const element = data[i]
+    // console.log(element !== null)
+    if (element !== null) {
+      // console.log(element)
+      return true
     }
   }
 }

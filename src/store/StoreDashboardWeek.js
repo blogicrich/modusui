@@ -13,8 +13,12 @@ export const moduleDashboardWeek = {
       state.dashboardWeekChartData = data
     },
     SET_DASHBOARDWEEK_CHART_TITLE (state, data) {
-      const average = (data.reduce((a, b) => a + b, 0) / data.length).toFixed(2)
-      state.dashboardWeekChartTitle = 'Weekly summary ' + average + ' litres per day on average'
+      if (Array.isArray(data)) {
+        const average = (data.reduce((a, b) => a + b, 0) / data.length).toFixed(2)
+        state.dashboardWeekChartTitle = 'Weekly summary ' + average + ' litres per day on average'
+      } else {
+        state.dashboardWeekChartTitle = data
+      }
     },
     SET_DASHBOARD_WEEK_AVERAGE (state, data) {
       state.dashboardWeekDataAverage = data
@@ -35,15 +39,15 @@ export const moduleDashboardWeek = {
   actions: {
     async fetchDashboardWeekChartData (context, payload) {
       context.commit('SET_DASHBOARDWEEK_UPDATE_STATUS', true)
-      const response = await apiLib.getData('carer/dashboard-week/' + payload.userId + '/' + payload.date, true)
-      if (typeof response === 'object') {
+      const response = await apiLib.getData('carer/dashboard-week/' + payload.userId + '/' + payload.date)
+      if (typeof response === 'object' && hasNullValues(response.volumeConsumedTotal)) {
         context.commit('SET_DASHBOARDWEEK', response)
         context.commit('SET_DASHBOARDWEEK_CHART_TITLE', response.volumeConsumedTotal)
         context.commit('SET_DASHBOARDWEEK_LOAD_STATUS', true)
         context.commit('SET_DASHBOARDWEEK_UPDATE_STATUS', false)
       } else {
         context.commit('SET_DASHBOARDWEEK_CHART_TITLE', 'Weekly summary 0.00 litres per day on average')
-        context.commit('SET_DASHBOARDWEEK', {})
+        context.commit('SET_DASHBOARDWEEK', { labels: [], data: [] })
         context.commit('SET_DASHBOARDWEEK_LOAD_STATUS', false)
       }
     },
@@ -63,6 +67,17 @@ export const moduleDashboardWeek = {
           data: state.dashboardWeekChartData.volumeConsumedTotal
         }]
       }
+    }
+  }
+}
+
+function hasNullValues (data) {
+  for (let i = 0; i < data.length; i++) {
+    const element = data[i]
+    console.log(element !== null)
+    if (element !== null) {
+      console.log(element)
+      return true
     }
   }
 }

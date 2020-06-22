@@ -30,7 +30,7 @@ export default {
   },
   watch: {
     chartData () {
-      this.$data._chart.update()
+      this.renderChart(this.chartData, this.chartOptions)
     }
   },
   mounted () {

@@ -231,9 +231,9 @@ export default {
     },
     async getAwayPeriods (id, startDate, endDate) {
       console.log(id, endDate, startDate)
-      await this.$store.dispatch('fetchAwayPeriods', { 
-        id: id, 
-        startDate: startDate, 
+      await this.$store.dispatch('fetchAwayPeriods', {
+        id: id,
+        startDate: startDate,
         endDate: endDate
       })
     },
@@ -250,8 +250,8 @@ export default {
 
       if (this.$refs.dateSelectForm.validate()) {
         this.getAwayPeriods(
-          this.selectedUser.userId, 
-          unixStartDate, 
+          this.selectedUser.userId,
+          unixStartDate,
           unixEndDate
         )
         // }
@@ -266,11 +266,11 @@ export default {
   mounted () {
     try {
       this.getAwayPeriods(
-        this.selectedUser.userId, 
-        new Date(this.startDate).getTime() / 1000, 
-        new Date(this.endDate).getTime() / 1000 
+        this.selectedUser.userId,
+        new Date(this.startDate).getTime() / 1000,
+        new Date(this.endDate).getTime() / 1000
       )
-    } catch (error){
+    } catch (error) {
       this.error = true
       this.errorMsg = 'Please check your internet connection and refresh page to try again.'
     }

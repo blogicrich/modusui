@@ -156,19 +156,19 @@ export default {
       if (this.hourChartDataLoaded && !this.hourChartDataUpdating) {
         return this.$store.getters.getterHourLineBarChartData
       }
-      return null
+      return []
     },
     weekLineBarChartData () {
       if (this.weekChartDataLoaded && !this.weekChartDataUpdating) {
         return this.$store.getters.getterWeekLineBarChartData
       }
-      return null
+      return []
     },
     dailyPieChartData () {
       if (this.dayChartDataLoaded && !this.dayChartDataUpdating) {
         return this.$store.getters.getterDailyPieChartData
       }
-      return null
+      return []
     }
   },
   data () {
@@ -202,40 +202,29 @@ export default {
     async setDashboardPoll () {
       const self = this
       this.dashboardPollTimeout = setInterval(async function () {
+        console.log('POLLING')
         await self.updateCharts()
       }, this.dashboardPollRate)
     },
     // Dashboard Update
     async updateCharts () {
-      if (this.selectedUser && this.selectedDate) {
-        await this.setSelectionTimeout()
-      }
+      let arr = []
+      const date = this.$moment.utc(this.selectedDate).unix()
+      const payload = { userId: this.selectedUser.userId, date: date, formattedDate: this.formattedDate }
+
+      arr.push(this.$store.dispatch('fetchDashboardHourChartData', payload))
+      arr.push(this.$store.dispatch('fetchDashboardDayChartData', payload))
+      arr.push(this.$store.dispatch('fetchDashboardWeekChartData', payload))
+      
+      Promise.all(arr)
     },
-    updateDashboardStatus () {
+    updateDashboardLoadStatus () {
       const self = this
       this.dashboardLoadingTimeout = setTimeout(function setLoadFlag () {
         if (self.dashboardUsersLoaded && self.selectedDate) {
           self.dashboardIsLoading = false
         } else {
-          self.updateDashboardStatus()
-        }
-      }, this.bounce)
-    },
-    // Timeouts
-    async setSelectionTimeout () {
-      const self = this
-      if (this.selectionTimeout) {
-        clearTimeout(this.selectionTimeout)
-      }
-      this.selectionTimeout = setTimeout(async function () {
-        try {
-          const date = self.$moment.utc(self.selectedDate).unix()
-          const payload = { userId: self.selectedUser.userId, date: date, formattedDate: self.formattedDate }
-          await self.$store.dispatch('fetchDashboardHourChartData', payload)
-          await self.$store.dispatch('fetchDashboardDayChartData', payload)
-          await self.$store.dispatch('fetchDashboardWeekChartData', payload)
-        } catch (error) {
-          self.chartDataLoadError = true
+          self.updateDashboardLoadStatus()
         }
       }, this.bounce)
     }
@@ -254,7 +243,7 @@ export default {
   },
   mounted () {
     this.setDashboardPoll()
-    this.updateDashboardStatus()
+    this.updateDashboardLoadStatus()
   },
   destroyed () {
     if (this.dashboardLoadingTimeout) {
