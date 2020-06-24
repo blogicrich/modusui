@@ -10,10 +10,16 @@ import { moduleIntervalOptions } from '@/store/StoreIntervalOptions'
 import { moduleSystemAdministrators } from '@/store/StoreSysAdmins'
 import { moduleTitles } from '@/store/StoreTitles'
 import { moduleSmsEmailMessages } from '@/store/StoreSmsEmailMessages'
-// client admins
+// client admins - To be removed following implementation of API V2
 import { moduleWakeSleepTimes } from '@/store/StoreWakeSleepTimes'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
 import { moduleReports } from '@/store/StoreReports'
+// CliAdmins V2.0
+import { moduleCliAdminCarer } from '@/store/StoreCliAdminCarer'
+import { moduleCliAdminClientAdministrator } from '@/store/StoreCliAdminClientAdministrator'
+import { moduleCliAdminPerson } from '@/store/StoreCliAdminPerson'
+import { moduleCliAdminUserConditions } from '@/store/StoreCliAdminUserConditions'
+import { moduleCliAdminUsers } from '@/store/StoreCliAdminUsers'
 // Dashboard
 import { moduleDashboardAway } from '@/store/StoreDashboardAway'
 import { moduleDashboardDailyReport } from '@/store/StoreDailyReports'
@@ -46,6 +52,11 @@ export default new Vuex.Store({
     // client Admins
     wakeSleepTimes: moduleWakeSleepTimes,
     intervalSettings: moduleIntervalSettings,
+    cliAdminCarer: moduleCliAdminCarer,
+    cliAdminClientAdministrator: moduleCliAdminClientAdministrator,
+    cliAdminPerson: moduleCliAdminPerson,
+    cliAdminUserConditons: moduleCliAdminUserConditions,
+    cliAdminUsers: moduleCliAdminUsers,
     // carer
     report: moduleReports,
     // Dashboard
