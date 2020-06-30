@@ -50,8 +50,8 @@ export const moduleWakeSleepTimes = {
     }
   },
   getters: {
-    getterDefaultSleepTime: state => state.defaultTimes.sleepTime,
-    getterDefaultWakeUpTime: state => state.defaultTimes.wakeUpTime
+    // getterDefaultSleepTime: state => state.defaultTimes.sleepTime,
+    // getterDefaultWakeUpTime: state => state.defaultTimes.wakeUpTime
   }
 }
 

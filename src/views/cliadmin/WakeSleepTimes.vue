@@ -7,10 +7,18 @@
       hasDivider
     >
       <BaseUserSelect
+        v-if="level.find(role => role === 'CARER')"
         slot="rhViewHeaderColumn"
         :users="dashboardUsers"
-        :selectedUser="selectedUser"
+        :selectedUser="selectedDashboardUser"
         @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
+      />
+      <BaseUserSelect
+        v-else
+        slot="rhViewHeaderColumn"
+        :users="cliAdminUsers"
+        :selectedUser="cliAdminSelectedUser"
+        @user-selected="$store.commit('SET_CLIADMIN_SELECTED_USER', $event)"
       />
     </BaseViewHeader>
     <v-menu
@@ -35,7 +43,6 @@
           readonly
           v-on="on"
           :rules="wakeUpTimeRules"
-          @change="change"
         ></v-text-field>
       </template>
       <v-time-picker
@@ -67,7 +74,6 @@
     readonly
     v-on="on"
     :rules="sleepTimeRules"
-    @change="change"
   ></v-text-field>
   </template>
       <v-time-picker
@@ -80,7 +86,7 @@
     <v-layout row justify-center align-center>
       <v-fade-transition>
         <v-btn
-        v-show="timeValueChanged"
+        v-show="!isPristine"
         class="root-nav-btn"
         @click="save"
         color="primary"
@@ -89,7 +95,17 @@
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
     </v-fade-transition>
-
+      <v-fade-transition>
+        <v-btn
+        v-show="!isPristine"
+        class="root-nav-btn"
+        @click="reset"
+        color="primary"
+        large
+        >Reset
+        <v-icon class="ma-1">refresh</v-icon>
+      </v-btn>
+    </v-fade-transition>
     </v-layout>
   </v-container>
 </template>
@@ -104,9 +120,15 @@ export default {
   components: { BaseUserSelect },
   computed: {
     ...mapState({
-      selectedUser: state => state.dashboardUsers.selectedUser,
-      dashboardUsers: state => state.dashboardUsers.dashboardUsers
+      cliAdminSelectedUser: state => state.cliAdminUsers.cliAdminSelectedUser,
+      cliAdminUsers: state => state.cliAdminUsers.cliAdminUsers,
+      selectedDashboardUser: state => state.dashboardUsers.selectedUser,
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers,
+      level: state => state.eDropletApp.level
     }),
+    isPristine () {
+      return this.$store.getters.getterSleepWakeTimesIsPristine
+    },
     defaultWakeUpTime () {
       return this.$store.getters.getterDefaultWakeUpTime
     },
@@ -115,7 +137,7 @@ export default {
     },
     wakeUpTime: {
       get () {
-        return this.$store.state.wakeSleepTimes.times.wakeUpTime
+        return this.$store.getters.getterWakeUpTime
       },
       set (newValue) {
         this.$store.commit('UPDATE_WAKEUPTIME', newValue)
@@ -123,7 +145,7 @@ export default {
     },
     sleepTime: {
       get () {
-        return this.$store.state.wakeSleepTimes.times.sleepTime
+        return this.$store.getters.getterSleepTime
       },
       set (newValue) {
         this.$store.commit('UPDATE_SLEEPTIME', newValue)
@@ -151,24 +173,18 @@ export default {
     }
   },
   methods: {
-    change () {
-      if (this.defaultWakeUpTime !== this.wakeUpTime || this.defaultSleepTime !== this.sleepTime) {
-        this.timeValueChanged = true
-      } else {
-        this.timeValueChanged = false
-      }
+    async save () {
+      await this.$store.dispatch('updateCliAdminUser', this.cliAdminSelectedUser)
     },
-    save () {
-      this.$store.dispatch('updateSleepWakeTimes').then(() => {
-        this.$store.dispatch('fetchWakeSleepTimes')
-      })
+    reset () {
+      this.$store.commit('RESET_SLEEP_WAKE_TIMES')
     }
   },
   mounted () {
-    this.$store.dispatch('fetchWakeSleepTimes')
+    this.$store.dispatch('fetchCliAdminUsers')
   },
   beforeRouteLeave (to, from, next) {
-    if (this.timeValueChanged && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+    if (!this.isPristine && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
       return next(false)
     }
     next()

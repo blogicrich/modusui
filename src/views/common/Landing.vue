@@ -1,13 +1,13 @@
 <template>
   <v-container fluid>
-    <v-layout row fill-height align-start justify-center>
-    <BaseViewHeader
-      class="mb-2"
-      :headerIcon="headerIcon"
-      :iconColor="iconColor"
-      :headerText="headerText"
-    />
-    </v-layout>
+    <!-- <v-layout row fill-height align-start justify-center> -->
+      <BaseViewHeader
+        class="mb-2"
+        :headerIcon="headerIcon"
+        :iconColor="iconColor"
+        :headerText="headerText"
+      />
+    <!-- </v-layout> -->
     <v-layout class="mx-4" v-if="user.find(level => level === 'SYSTEM ADMINISTRATOR')" row wrap align-start justify-start>
       <v-flex sm6 lg4>
         <v-layout class="ma-2" row wrap align-start justify-center style="background-color:#003c4d;border-radius:10px;">
@@ -100,80 +100,80 @@
       </v-flex>
     </v-layout>
     <v-layout v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')" row wrap align-start justify-start class="landing-cli-admin">
-        <v-flex sm6 lg4>
-          <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
-            <v-icon
-              class="ma-1"
-              medium
-              color="white"
-              >people
-            </v-icon>
-            <h2 class="ma-1 text-white">Authorised Persons</h2>
-          </v-layout>
-          <BaseLinkComponent
-            routerTitle= "Personal Details"
-            link="/personaldetails"
-            tooltipText="Add and manage authorised people on this account"
-            icon="person"
-            colorIcon="#006480"
-          />
-
-        </v-flex>
-        <v-flex sm6 lg4>
-          <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
-            <v-icon
-              class="ma-1"
-              medium
-              color="white"
-              >local_drink
-            </v-icon>
-            <h2 class="ma-1 text-white">User Settings</h2>
-          </v-layout>
-          <BaseLinkComponent
-            routerTitle= "Interval Settings Management"
-            link="/intervalmanagement"
-            tooltipText="Set the reminder and Communication intervals for your eDroplets"
-            icon="notification_important"
-            colorIcon="#006480"
-          />
-          <BaseLinkComponent
-            routerTitle= "Conditions"
-            link="/conditions"
-            tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
-            icon="priority_high"
-            colorIcon="#006480"
-          />
-          <BaseLinkComponent
-            routerTitle= "Sleep and Wake Times"
-            link="/wakesleeptimes"
-            tooltipText="Set sleep and wake up time"
-            icon="access_alarm"
-            colorIcon="#006480"
-          />
-        </v-flex>
-        <v-flex sm6 lg4>
-          <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
-            <v-icon
-              class="ma-1"
-              medium
-              color="white"
-              >supervisor_account
-            </v-icon>
-            <h2 class="ma-1 text-white">eDroplet Management</h2>
-          </v-layout>
-          <BaseLinkComponent
-            routerTitle= "eDroplet Management"
-            link="/edropletmanagement"
-            tooltipText="Manage the eDroplets on this account. Assign them to users or deactivate them"
-            icon="local_drink"
-            colorIcon="#006480"
-          />
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </template>
+      <v-flex sm6 lg4>
+        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+          <v-icon
+            class="ma-1"
+            medium
+            color="white"
+            >people
+          </v-icon>
+          <h2 class="ma-1 text-white">Authorised Persons</h2>
+        </v-layout>
+        <BaseLinkComponent
+          routerTitle= "Personal Details"
+          link="/personaldetails"
+          tooltipText="Add and manage authorised people on this account"
+          icon="person"
+          colorIcon="#006480"
+        />
+      </v-flex>
+      <v-flex sm6 lg4>
+        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+          <v-icon
+            class="ma-1"
+            medium
+            color="white"
+            >local_drink
+          </v-icon>
+          <h2 class="ma-1 text-white">User Settings</h2>
+        </v-layout>
+        <BaseLinkComponent
+          routerTitle= "Interval Settings Management"
+          link="/intervalmanagement"
+          tooltipText="Set the reminder and Communication intervals for your eDroplets"
+          icon="notification_important"
+          colorIcon="#006480"
+        />
+        <BaseLinkComponent
+          routerTitle= "Conditions"
+          link="/conditions"
+          tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
+          icon="priority_high"
+          colorIcon="#006480"
+        />
+        <BaseLinkComponent
+          routerTitle= "Sleep and Wake Times"
+          link="/wakesleeptimes"
+          tooltipText="Set sleep and wake up time"
+          icon="access_alarm"
+          colorIcon="#006480"
+        />
+      </v-flex>
+      <v-flex sm6 lg4>
+        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+          <v-icon
+            class="ma-1"
+            medium
+            color="white"
+            >supervisor_account
+          </v-icon>
+          <h2 class="ma-1 text-white">eDroplet Management</h2>
+        </v-layout>
+        <BaseLinkComponent
+          routerTitle= "eDroplet Management"
+          link="/edropletmanagement"
+          tooltipText="Manage the eDroplets on this account. Assign them to users or deactivate them"
+          icon="local_drink"
+          colorIcon="#006480"
+        />
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
 
 <script>
+
 import BaseLinkComponent from '@/components/base/BaseLinkComponent.vue'
 import BaseViewHeader from '@/components/base/BaseViewHeaderComponent.vue'
 
@@ -185,7 +185,6 @@ export default {
   },
   data () {
     return {
-      redirecting: false,
       headerIcon: 'settings',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'eDroplet System Administration'
@@ -197,6 +196,7 @@ export default {
     }
   }
 }
+
 </script>
 <style scoped lang="scss">
   @import "./public/scss/main.scss";

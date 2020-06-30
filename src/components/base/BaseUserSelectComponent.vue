@@ -17,7 +17,7 @@
                 <p class="table-header text-primary text-ellipsis ma-2">{{ 'Connected eDroplet User: '}}</p>
               </transition>
               <transition name="component-fade" mode="out-in">
-                <p class="table-header text-secondary ma-2">{{ userName }}</p>
+                <p class="table-header text-secondary ma-2">{{ getDisplayName(selectedUser) }}</p>
               </transition>
             </v-layout>
           </v-flex>
@@ -26,17 +26,19 @@
             <v-layout row fill-height align-center justify-start>
               <v-icon medium color="primary">group</v-icon>
               <transition name="component-fade" mode="out-in">
-                <p class="table-header text-secondary ma-2">{{ userName }}</p>
+                <p class="table-header text-secondary ma-2">{{ getDisplayName(selectedUser) }}</p>
               </transition>
             </v-layout>
           </v-flex>
           <v-icon
+            v-if="selectedUser.hydrationStatus"
             large
             :title="getStatus(selectedUser)"
             :color="getColour(selectedUser)"
           >notification_important
           </v-icon>
           <v-icon
+            v-if="selectedUser.hydrationStatus"
             large
             :title="getStatus(selectedUser)"
             :color="getColour(selectedUser)"
@@ -68,6 +70,7 @@
         </v-list-tile-content>
         <v-list-tile-action>
           <v-icon
+            v-if="user.hydrationStatus"
             :title="getStatus(user)"
             :color="getColour(user)"
           >{{ getMood(user) }}</v-icon>
@@ -100,13 +103,11 @@ export default {
     }
   },
   props: {
+    roles: Array,
     users: Array,
     selectedUser: Object
   },
   computed: {
-    userName () {
-      return this.selectedUser.deptPerson.person.givenName + ' ' + this.selectedUser.deptPerson.person.familyName
-    },
     searchResults (user) {
       return this.users.filter((user) => this.getDisplayName(user).toLowerCase().match(this.search.toLowerCase()))
     }

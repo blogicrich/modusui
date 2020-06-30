@@ -19,7 +19,7 @@ export const moduleCliAdminUserConditions = {
     RESET_CLIADMIN_USER_CONDITIONS_STATE (state) {
       state.cliAdminUserConditions = []
       state.cliAdminUserConditionsLoading = false
-      state.cliAdminUserConditionsError = false    
+      state.cliAdminUserConditionsError = false
     }
   },
   actions: {
