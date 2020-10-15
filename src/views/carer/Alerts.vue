@@ -50,7 +50,7 @@
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import { mapState } from 'vuex'
-import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+// import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import validation from '@/mixins/validation'
 
@@ -58,7 +58,7 @@ export default {
   name: 'Alerts',
   mixins: [crudRoutines],
   components: {
-    BaseDataTable,
+    // BaseDataTable,
     BaseUserSelect
   },
   computed: {

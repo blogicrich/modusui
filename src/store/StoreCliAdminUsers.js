@@ -48,8 +48,8 @@ export const moduleCliAdminUsers = {
       state.cliAdminSelectedUser.sleepTime = convertTimeToSecondsFromMidnight(data)
     },
     RESET_SLEEP_WAKE_TIMES (state) {
-      let defaultUserData = state._cliAdminSelectedUserDefaults.find(user => user.userId === state.cliAdminSelectedUser.userId)
-      let resetData = Object.assign({}, defaultUserData)
+      const defaultUserData = state._cliAdminSelectedUserDefaults.find(user => user.userId === state.cliAdminSelectedUser.userId)
+      const resetData = Object.assign({}, defaultUserData)
       state.cliAdminSelectedUser = resetData
     }
     // Interval Settings Management

@@ -127,7 +127,7 @@ import BaseDashboardTileOverlay from '@/components/base/BaseDashboardTileOverlay
 import BaseDataInfoCard from '@/components/base/BaseDataTableInfoComponent'
 import BaseDateSelection from '@/components/base/BaseDateSelectionComponent'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
-import BaseDataTable from '@/components/base/BaseDataTableComponent'
+// import BaseDataTable from '@/components/base/BaseDataTableComponent'
 import SubHourlyHydrationLineChart from '@/components/sub/SubHourlyHydrationLineChart'
 import SubHourlyHydrationBarChart from '@/components/sub/SubHourlyHydrationBarChart'
 import SubHydrationDayPieChart from '@/components/sub/SubHydrationDayPieChart'
@@ -141,7 +141,7 @@ export default {
     BaseDashboardTileOverlay,
     BaseDataInfoCard,
     BaseDateSelection,
-    BaseDataTable,
+    // BaseDataTable,
     BaseChartTypeSelector,
     BaseChartHeader,
     BaseUserSelect,
@@ -185,6 +185,7 @@ export default {
       'getterWeekLineBarChartData',
       'getterDailyPieChartData'
     ]),
+    /* eslint-disable vue/return-in-computed-property */
     cardHeight () {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs': return '522px'
@@ -203,6 +204,7 @@ export default {
         case 'xl': return '422px'
       }
     }
+    /* eslint-disable vue/return-in-computed-property */
   },
   data () {
     return {
@@ -243,7 +245,7 @@ export default {
     // Dashboard Update
     async updateCharts () {
       if (this.selectedUser && this.selectedDate) {
-        let arr = []
+        const arr = []
         const date = this.$moment.utc(this.selectedDate).unix()
         const payload = { userId: this.selectedUser.userId, date: date, formattedDate: this.formattedDate }
 

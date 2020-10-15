@@ -103,15 +103,15 @@ export default {
       icon: 'local_pharmacy',
       iconAdd: 'add',
       headers: [
-        {
-          text: 'conditionsId',
-          align: 'left',
-          sortable: true,
-          value: 'conditionId',
-          cellType: 'tb',
-          hidden: true,
-          editable: false
-        },
+        // {
+        //   text: 'conditionsId',
+        //   align: 'left',
+        //   sortable: true,
+        //   value: 'conditionId',
+        //   cellType: 'tb',
+        //   hidden: true,
+        //   editable: false
+        // },
         {
           text: 'Description',
           align: 'left',
@@ -120,16 +120,16 @@ export default {
           cellType: 'tb',
           hidden: false,
           editable: true
-        },
-        {
-          text: 'Status',
-          align: 'left',
-          sortable: true,
-          value: 'status',
-          cellType: 'tb',
-          hidden: false,
-          editable: true
         }
+        // {
+        //   text: 'Status',
+        //   align: 'left',
+        //   sortable: true,
+        //   value: 'status',
+        //   cellType: 'tb',
+        //   hidden: true,
+        //   editable: false
+        // }
       ],
       newItem: [
         {
@@ -149,25 +149,25 @@ export default {
               }
             }
           ]
-        },
-        {
-          status: '',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          menuItems: [],
-          validators: [
-            value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
-            value => {
-              if (this.alphabeticalRegEx.test(value)) {
-                return true
-              } else {
-                return 'Alphabetical characters only'
-              }
-            }
-          ]
         }
+        // {
+        //   status: '',
+        //   cellType: 'tb',
+        //   attr: 'status',
+        //   cellLabel: 'Status',
+        //   menuItems: [],
+        //   validators: [
+        //     value => !!value || 'Required.',
+        //     value => value.length <= 20 || 'Max 20 characters',
+        //     value => {
+        //       if (this.alphabeticalRegEx.test(value)) {
+        //         return true
+        //       } else {
+        //         return 'Alphabetical characters only'
+        //       }
+        //     }
+        //   ]
+        // }
       ],
       defaultItem: [
         { conditionsId: 0, description: ' ', status: ' ' }
@@ -194,27 +194,26 @@ export default {
               }
             }
           ]
-        },
-        {
-          status: '',
-          cellType: 'tb',
-          attr: 'status',
-          cellLabel: 'Status',
-          // menuItems: [],
-          validators: [
-            value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
-            value => {
-              if (this.alphabeticalRegEx.test(value)) {
-                return true
-              } else {
-                return 'Alphabetical characters only'
-              }
-            }
-          ]
         }
+        // {
+        //   status: '',
+        //   cellType: 'tb',
+        //   attr: 'status',
+        //   cellLabel: 'Status',
+        //   // menuItems: [],
+        //   validators: [
+        //     value => !!value || 'Required.',
+        //     value => value.length <= 20 || 'Max 20 characters',
+        //     value => {
+        //       if (this.alphabeticalRegEx.test(value)) {
+        //         return true
+        //       } else {
+        //         return 'Alphabetical characters only'
+        //       }
+        //     }
+        //   ]
+        // }
       ]
-      // this.defaultItem = [{ conditionsId: 0, description: ' ', status: ' ' }]
     }
   },
   mounted () {

@@ -632,7 +632,7 @@ export default {
           }
         ],
         mobileNo: [
-          value => !!value || 'Required.',
+          // value => !!value || 'Required.',
           value => {
             if (this.alphaNumericRegEx.test(value)) {
               return true
@@ -693,6 +693,7 @@ export default {
       if (this.$refs.newSysAdminDetailsForm.validate() && this.$refs.editSysAdminPasswordForm.validate()) {
         try {
           await this.$store.dispatch('postNewSysAdmin')
+          this.getSysAdmins()
         } catch (error) {
           // TBI
         }
