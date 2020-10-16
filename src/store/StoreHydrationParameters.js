@@ -43,7 +43,7 @@ export const moduleHydrationParameters = {
     // END
     UPDATE_END (state, data) {
       const newValue = Number(data.value)
-      state.hydrationParams[data.index].lowerHydrationBoundary = Object.assign({}, state.hydrationParams[data.index].lowerHydrationBoundary, { percentHydratedStart: newValue })
+      state.hydrationParams[data.index].lowerHydrationBoundary = Object.assign({}, state.hydrationParams[data.index].lowerHydrationBoundary, { percentHydratedEnd: newValue })
     }
   },
   actions: {
@@ -54,7 +54,13 @@ export const moduleHydrationParameters = {
           context.commit('SET_HYDRATION_PARAMETERS', null)
           context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', false)
         } else {
-          context.commit('SET_HYDRATION_PARAMETERS', response)
+          // CONVERT ALL HYDRATION VALUES TO NUMBERS TO FOR VALIDATION
+          const params = response
+          params.forEach(element => {
+            element.lowerHydrationBoundary.percentHydratedEnd = Number(element.lowerHydrationBoundary.percentHydratedEnd)
+            element.lowerHydrationBoundary.percentHydratedStart = Number(element.lowerHydrationBoundary.percentHydratedStart)
+          })
+          context.commit('SET_HYDRATION_PARAMETERS', params)
           context.commit('SET_HYDRATION_PARAMS_LOAD_STATUS', false)
         }
       })
@@ -73,7 +79,7 @@ export const moduleHydrationParameters = {
           jobs.push(apiLib.updateData(`sysadmin/hydration-params/${parameter.level}`, {
             percentHydratedStart: lowerHydrationBoundary.percentHydratedStart,
             percentHydratedEnd: lowerHydrationBoundary.percentHydratedEnd
-          }, false, false))
+          }, true, true))
         }
       }
       await Promise.all(jobs)
@@ -95,6 +101,20 @@ export const moduleHydrationParameters = {
 
       const parameter = state.hydrationParams.find(param => param.alertBoundariesAlertTypeBandId === alertBoundariesAlertTypeBandId)
       return parameter ? parameter.lowerHydrationBoundary.percentHydratedEnd : null
+    },
+    getterValidationValues: (state) => {
+      // return {
+      const startDehydrated = state.hydrationParams.find(param => param.description === 'Dehydrated')
+      const startOverHydrated = state.hydrationParams.find(param => param.description === 'Over Hydrated')
+      const endDehydrated = state.hydrationParams.find(param => param.description === 'Dehydrated')
+      const endOverHydrated = state.hydrationParams.find(param => param.description === 'Over Hydrated')
+      // }
+      return {
+        startDehydrated: startDehydrated.lowerHydrationBoundary.percentHydratedStart,
+        startOverHydrated: startOverHydrated.lowerHydrationBoundary.percentHydratedStart,
+        endDehydrated: endDehydrated.lowerHydrationBoundary.percentHydratedEnd,
+        endOverHydrated: endOverHydrated.lowerHydrationBoundary.percentHydratedEnd
+      }
     }
   }
 }

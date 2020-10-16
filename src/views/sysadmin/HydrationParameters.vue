@@ -26,9 +26,9 @@
             class="baseToleranceSetter"
             color="warning"
             :fieldLabel="parameter.description"
-            :fieldValue="Number(parameter.lowerHydrationBoundary.percentHydratedStart)"
+            :fieldValue="Number(getterStartOfDayValue(parameter.alertBoundariesAlertTypeBandId))"
             :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
-            :rules="startOfDayValidation.dehydrated"
+            :rules="startOfDayValidation[parameter.description]"
             @field-value-changed="$store.commit('UPDATE_START', { index: index, value: $event.value })"
             @increment="$store.commit('INCREMENT_START', { index: index, value: $event.value })"
             @decrement="$store.commit('DECREMENT_START', { index: index, value: $event.value })"
@@ -57,7 +57,7 @@
             :fieldLabel="parameter.description"
             :fieldValue="Number(getterEndOfDayValue(parameter.alertBoundariesAlertTypeBandId))"
             :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
-            :rules="endOfDayValidation.dehydrated"
+            :rules="endOfDayValidation[parameter.description]"
             @field-value-changed="$store.commit('UPDATE_END', { index: index, value: $event.value })"
             @increment="$store.commit('INCREMENT_END', { index: index, value: $event.value })"
             @decrement="$store.commit('DECREMENT_END', { index: index, value: $event.value })"
@@ -148,7 +148,7 @@ export default {
       headerText: 'Hydration Parameters',
       // BaseToleranceSetter
       startOfDayValidation: {
-        dehydrated: [
+        Dehydrated: [
           v => {
             if (this.numericDpRegEx.test(v)) {
               return true
@@ -159,7 +159,7 @@ export default {
           v => v <= 100 || 'Value cannot be higher than 100%',
           v => v >= 0 || 'Value cannot be lower than 0%'
         ],
-        hydrated: [
+        Hydrated: [
           v => {
             if (this.requiredRegEx.test(v)) {
               return true
@@ -175,9 +175,9 @@ export default {
             }
           },
           v => v < 100 || 'Value must be less than 100%',
-          v => v < this.dehydratedBoundaryStart || 'Must be less than dehydrated'
+          v => v < this.getterValidationValues.startDehydrated || 'Must be less than dehydrated'
         ],
-        overHydrated: [
+        'Over Hydrated': [
           v => {
             if (this.requiredRegEx.test(v)) {
               return true
@@ -194,7 +194,7 @@ export default {
           },
           v => v > 100 || 'Value must be more than 100%'
         ],
-        severelyOverHydrated: [
+        'Severely over hydrated': [
           v => {
             if (this.requiredRegEx.test(v)) {
               return true
@@ -209,11 +209,11 @@ export default {
               return 'Numerical characters only'
             }
           },
-          v => v > this.overHydratedBoundaryStart || 'Value must be more than Over Hydrated.'
+          v => v > this.getterValidationValues.startOverHydrated || 'Value must be more than Over Hydrated.'
         ]
       },
       endOfDayValidation: {
-        dehydrated: [
+        Dehydrated: [
           v => {
             if (this.numericDpRegEx.test(v)) {
               return true
@@ -224,7 +224,7 @@ export default {
           v => v <= 100 || 'Value cannot be higher than 100%',
           v => v >= 0 || 'Value cannot be lower than 0%'
         ],
-        hydrated: [
+        Hydrated: [
           v => {
             if (this.requiredRegEx.test(v)) {
               return true
@@ -241,9 +241,9 @@ export default {
           },
           v => v < 100 || 'Value must be less than 100%',
           v => v >= 0 || 'Value cannot be lower than 0%',
-          v => v < this.dehydratedBoundaryEnd || 'Must be less than deHydrated'
+          v => v < this.getterValidationValues.endDehydrated || 'Must be less than Dehydrated'
         ],
-        overHydrated: [
+        'Over Hydrated': [
           v => {
             if (this.requiredRegEx.test(v)) {
               return true
@@ -260,7 +260,7 @@ export default {
           },
           v => v > 100 || 'Value must be more than 100%'
         ],
-        severelyOverHydrated: [
+        'Severely over hydrated': [
           v => {
             if (this.requiredRegEx.test(v)) {
               return true
@@ -275,7 +275,7 @@ export default {
               return 'Numerical characters only'
             }
           },
-          v => v > this.overHydratedBoundaryEnd || 'Value must be more than Over Hydrated.'
+          v => v > this.getterValidationValues.endOverHydrated || 'Value must be more than Over Hydrated.'
         ]
       },
       // Mobile action button
@@ -291,7 +291,8 @@ export default {
     }),
     ...mapGetters([
       'getterStartOfDayValue',
-      'getterEndOfDayValue'
+      'getterEndOfDayValue',
+      'getterValidationValues'
     ]),
     parametersPristine () {
       return false
