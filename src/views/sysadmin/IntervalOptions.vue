@@ -80,6 +80,7 @@
       </v-btn>
     </v-layout>
     <v-speed-dial
+      v-if="$vuetify.breakpoint.mdAndDown"
       v-model="fab"
       fixed
       :bottom="true"
