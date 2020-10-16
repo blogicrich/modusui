@@ -322,7 +322,7 @@ export default {
         this.$refs.formEndOfDay.validate()
         this.$refs.formStartOfDay.validate()
       } catch (error) {
-        // TBI
+        // STORE HANDLES ERROR
       }
     }
   },
