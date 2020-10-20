@@ -175,7 +175,7 @@ export default {
             }
           },
           v => v < 100 || 'Value must be less than 100%',
-          v => v < this.getterValidationValues.startDehydrated || 'Must be less than dehydrated'
+          v => v > this.getterValidationValues.startDehydrated || 'Must be more than Dehydrated'
         ],
         'Over Hydrated': [
           v => {
