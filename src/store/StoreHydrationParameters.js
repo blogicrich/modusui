@@ -103,12 +103,10 @@ export const moduleHydrationParameters = {
       return parameter ? parameter.lowerHydrationBoundary.percentHydratedEnd : null
     },
     getterValidationValues: (state) => {
-      // return {
       const startDehydrated = state.hydrationParams.find(param => param.description === 'Dehydrated')
       const startOverHydrated = state.hydrationParams.find(param => param.description === 'Over Hydrated')
       const endDehydrated = state.hydrationParams.find(param => param.description === 'Dehydrated')
       const endOverHydrated = state.hydrationParams.find(param => param.description === 'Over Hydrated')
-      // }
       return {
         startDehydrated: startDehydrated.lowerHydrationBoundary.percentHydratedStart,
         startOverHydrated: startOverHydrated.lowerHydrationBoundary.percentHydratedStart,

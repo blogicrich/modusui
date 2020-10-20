@@ -69,8 +69,8 @@
               </v-layout>
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
-                <span v-if="editFormVisible" class="pg-subheader text-primary">Set System Administrator Password</span>
-                <span v-if="newFormVisible" class="pg-subheader text-primary">Change System Administrator Password</span>
+                <span v-show="editFormVisible" class="pg-subheader text-primary">Change System Administrator Password</span>
+                <span v-show="newFormVisible" class="pg-subheader text-primary">Set System Administrator Password</span>
               </v-card-title>
               <v-card-text>
                 <v-text-field
@@ -152,7 +152,7 @@
                   </v-card>
                 </v-dialog>
               </v-card-title>
-              <v-card-text>
+              <v-card-text v-if="sysAdminDetailsValidation">
                 <v-text-field
                   class="ma-1"
                   label="username"
@@ -690,7 +690,8 @@ export default {
       }
     },
     async saveNewSysAdmin () {
-      if (this.$refs.newSysAdminDetailsForm.validate() && this.$refs.editSysAdminPasswordForm.validate()) {
+      console.log(this.editFormVisible, this.newFormVisible)
+      if (this.$refs.newSysAdminDetailsForm.validate()) {
         try {
           await this.$store.dispatch('postNewSysAdmin')
           this.getSysAdmins()

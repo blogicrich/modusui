@@ -285,7 +285,7 @@ export default {
   computed: {
     ...mapState({
       hydrationParameters: state => state.hydrationOptions.hydrationParams,
-      hydrationParametersClone: state => state.hydrationOptions.hydrationParamsClone,
+      hydrationParametersClone: state => state.hydrationOptions._originalHydrationParams,
       // Booleans
       paramsLoading: state => state.hydrationOptions.hydrationParamsLoading
     }),
@@ -295,7 +295,17 @@ export default {
       'getterValidationValues'
     ]),
     parametersPristine () {
-      return false
+      let isPristine = true
+      for (let i = 0; i < this.hydrationParameters.length; i++) {
+        const el = this.hydrationParameters[i].lowerHydrationBoundary
+        const elClone = this.hydrationParametersClone[i].lowerHydrationBoundary
+        if (el.percentHydratedStart !== elClone.percentHydratedStart ||
+            el.percentHydratedEnd !== elClone.percentHydratedEnd) {
+          isPristine = false
+          return;
+        }
+      }
+      return isPristine
     }
   },
   methods: {
@@ -312,7 +322,7 @@ export default {
         this.$refs.formEndOfDay.validate()
         this.$refs.formStartOfDay.validate()
       } catch (error) {
-        // TBI
+        // STORE HANDLES ERROR
       }
     }
   },

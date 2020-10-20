@@ -11,7 +11,7 @@ export const moduleSystemAdministrators = {
     newSysAdmin: {
       titleId: '',
       username: '',
-      password: '',
+      // password: '',
       email: '',
       mobileNo: '',
       givenName: '',
@@ -21,7 +21,7 @@ export const moduleSystemAdministrators = {
     payload: {
       titleId: '',
       username: '',
-      password: '',
+      // password: '',
       email: '',
       mobileNo: '',
       givenName: '',
@@ -137,13 +137,13 @@ export const moduleSystemAdministrators = {
     },
 
     async postNewSysAdmin (context) {
-      const payload = context.state.payload
+      const payload = { ...context.state.newSysAdmin, password: context.state.newPassword }
       context.commit('RESET_PAYLOAD')
       context.commit('SET_PAYLOAD_NEW')
       context.commit('SET_SYSADMINS_LOAD_STATUS', true)
       const update = await apiLib.postData('sysadmin/sysadmin/', payload, true, true).then(
         context.dispatch('fetchSystemAdmins'),
-        context.commit('SET_SYSADMINS_LOAD_STATUS', false)
+        context.commit('SET_SYSADMINS_LOAD_STATUS', false) 
       )
       return update
     },
