@@ -1,8 +1,11 @@
 import apiLib from '../services/apiLib.js'
+import moment from 'moment'
 
 export const moduleDashboardDrinks = {
   state: {
     drinks: [],
+    additionalDrinks: [],
+    selectedDrink: {},
     drinksLoading: false,
     drinksTotal: null
   },
@@ -12,8 +15,10 @@ export const moduleDashboardDrinks = {
       for (let i = 0; i < data.length; i++) {
         const element = data[i]
         value = value + element.volumeInLitres
+        element.longFormDate = convertTimeToLongForm(element.dateTime*1000)
       }
       state.drinks = data
+      state.additionalDrinks = data.filter(element => element.type === 'eDroplet')
       state.drinksTotal = value.toFixed(2) + ' L'
     },
     SET_DRINKS_LOAD_STATE (state, data) {
@@ -21,10 +26,12 @@ export const moduleDashboardDrinks = {
     }
   },
   actions: {
-    fetchDashboardDrinks (context, payload) {
-      // const user = rootGetters.getterSelectedUser.userId
+    fetchDashboardDrinks (context) {
+      const userId = context.rootState.dashboardUsers.selectedUser.userId
+      const date = context.rootState.dashboardDates.dashboardUnixDate
+
       context.commit('SET_DRINKS_LOAD_STATE', true)
-      apiLib.getData('carer/dashboard-drinks/' + payload.userId + '/' + payload.date).then((response) => {
+      apiLib.getData('carer/dashboard-drinks/' + + userId + '/' + date).then((response) => {
         if (typeof response === 'undefined') {
           context.commit('SET_DRINKS', [])
           context.commit('SET_DRINKS_LOAD_STATE', false)
@@ -35,4 +42,8 @@ export const moduleDashboardDrinks = {
       })
     }
   }
+}
+
+function convertTimeToLongForm (unixDateTime) {
+  return moment(unixDateTime).format('DD-MM-YYYY HH:mm')
 }

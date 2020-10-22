@@ -11,7 +11,6 @@ export const moduleSystemAdministrators = {
     newSysAdmin: {
       titleId: '',
       username: '',
-      // password: '',
       email: '',
       mobileNo: '',
       givenName: '',
@@ -21,7 +20,6 @@ export const moduleSystemAdministrators = {
     payload: {
       titleId: '',
       username: '',
-      // password: '',
       email: '',
       mobileNo: '',
       givenName: '',

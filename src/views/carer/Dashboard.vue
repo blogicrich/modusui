@@ -1,5 +1,5 @@
 <template>
-  <keep-alive>
+  <v-container>
     <BaseDashboard
       v-if="!dashboardIsLoading"
       :cardHeight="cardHeight"
@@ -104,7 +104,7 @@
           v-if="!dayChartDataLoaded"
           message="No data for selected user or date"
         ></BaseDashboardTileOverlay>
-    </v-flex>
+      </v-flex>
     </BaseDashboard>
     <transition name="component-fade" mode="in-out">
       <BaseDataInfoCard
@@ -115,7 +115,7 @@
         loadingMsg="Loading dashboard data... Please wait"
       ></BaseDataInfoCard>
     </transition>
-  </keep-alive>
+  </v-container>
 </template>
 
 <script>
@@ -295,9 +295,9 @@ export default {
       clearTimeout(this.selectionTimeout)
     }
     if (this.maxDate) this.maxDate = null
-    this.$store.dispatch('resetDashboardHourState')
-    this.$store.dispatch('resetDashboardDayState')
-    this.$store.dispatch('resetDashboardWeekState')
+    // this.$store.dispatch('resetDashboardHourState')
+    // this.$store.dispatch('resetDashboardDayState')
+    // this.$store.dispatch('resetDashboardWeekState')
   }
 }
 </script>
