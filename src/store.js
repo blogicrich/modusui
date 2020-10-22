@@ -20,6 +20,8 @@ import { moduleCliAdminClientAdministrator } from '@/store/StoreCliAdminClientAd
 import { moduleCliAdminPerson } from '@/store/StoreCliAdminPerson'
 import { moduleCliAdminUserConditions } from '@/store/StoreCliAdminUserConditions'
 import { moduleCliAdminUsers } from '@/store/StoreCliAdminUsers'
+// Common (public)
+import { moduleCommonData } from '@/store/StoreCommonData'
 // Dashboard
 import { moduleDashboardAway } from '@/store/StoreDashboardAway'
 import { moduleDashboardDailyReport } from '@/store/StoreDailyReports'
@@ -57,6 +59,8 @@ export default new Vuex.Store({
     cliAdminPerson: moduleCliAdminPerson,
     cliAdminUserConditons: moduleCliAdminUserConditions,
     cliAdminUsers: moduleCliAdminUsers,
+    // Common
+    commonData: moduleCommonData,
     // carer
     report: moduleReports,
     // Dashboard

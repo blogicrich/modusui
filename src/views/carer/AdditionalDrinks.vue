@@ -59,34 +59,46 @@
               </v-btn>
             </v-toolbar-items>
           </v-toolbar>
+          
           <!-- Add New Drink -->
-          <v-form v-model="newFormValid" ref="newSysAdminDetailsForm">
+          <v-form v-model="newFormValid" v-if="containerTypes" ref="newSysAdminDetailsForm">
             <v-container>
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
                 <span class="pg-subheader text-primary">Add Drink</span>
               </v-card-title>
-              <v-card-text>
-                <v-text-field
-                  class="ma-1"
-                  label="Username"
-                  v-model="foo1"
-                  color="primaryColor"
-                  outline
-                  required
-                  validate-on-blur
-                  :rules="newDrinkValidation.generic"
-                ></v-text-field>
-                <v-text-field
-                  class="ma-1"
-                  label="Email"
-                  v-model="foo2"
-                  color="primaryColor"
-                  outline
-                  required
-                  validate-on-blur
-                  :rules="newDrinkValidation.email"
-                ></v-text-field>
+              <v-layout row wrap>
+                <v-flex xs12 sm6>
+                  <v-date-picker v-model="pickerDate" :color="$vuetify.theme.primary"></v-date-picker>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-time-picker v-model="pickerTime" :color="$vuetify.theme.primary"></v-time-picker>
+                </v-flex>
+              </v-layout>
+              <v-container fluid grid-list-xl>
+                <v-flex xs6>
+                  <v-card-text
+                    v-for="(container, index) in containerTypes"
+                    :key="`containers-${container.containerTypeId}-${index}`"
+                  >{{ container.description + ' (' + container.volume +' L)' }}
+                    <v-text-field
+                      v-model="newDrinks[container.containerTypeId]"
+                      color="primaryColor"
+                      outline
+                      required
+                      validate-on-blur
+                      :rules="newDrinkValidation.generic"
+                    ></v-text-field>
+                    <v-text-field
+                      class="ma-1"
+                      color="primaryColor"
+                      label:="Total Volume"
+                      :value="(Number(container.volume) * Number(newDrinks[container.containerTypeId])) + ' L'"
+                    >
+                    </v-text-field>
+                  </v-card-text>
+                </v-flex>
+              </v-container>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -97,7 +109,6 @@
                   >RESET
                   </v-btn>
                 </v-card-actions>
-              </v-card-text>
             </v-container>
           </v-form>
         </v-card>
@@ -128,7 +139,8 @@ export default {
       dashboardUsers: state => state.dashboardUsers.dashboardUsers,
       drinks: state => state.dashboardDrinks.drinks,
       additionalDrinks: state => state.dashboardDrinks.additionalDrinks,
-      drinksLoading: state => state.dashboardDrinks.drinksLoading
+      drinksLoading: state => state.dashboardDrinks.drinksLoading,
+      containerTypes: state => state.commonData.containerTypes
     })
   },
   data () {
@@ -137,9 +149,12 @@ export default {
       headerIcon: 'local_drink',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Additional Drinks',
+      newDrinks: {},
       // BaseDataTable
-      foo1: '',
-      foo2: '',
+      // foo1: '',
+      // foo2: '',
+      pickerDate: '',
+      pickerTime: '',
       newFormVisible: false,
       newFormValid: false,
       dialog: false,
@@ -147,7 +162,6 @@ export default {
       newBtnIcon: 'add',
       newBtnTitle: 'Add Manual Drink',
       crudIdKey: 'dateTime',
-      // editPerms: { create: true, update: false, delete: true },
       loading: this.drinksLoading,
       loaded: !this.drinksLoading,
       error: false,
@@ -177,7 +191,7 @@ export default {
           sortable: true, 
           cellType: 'tb', 
           value: 'macAddress',
-          hidden: false,
+          hidden: true,
           editable: true 
         },
         { 
@@ -210,13 +224,13 @@ export default {
       ],
       newDrinkValidation: {
         generic: [
-          value => !!value || 'Required.',
-          value => value.length <= 20 || 'Max 20 characters',
+          // value => !!value || 'Required.',
+          // value => value.length <= 20 || 'Max 20 characters',
           value => {
-            if (this.alphabeticalRegEx.test(value)) {
+            if (this.numericalRegEx.test(value)) {
               return true
             } else {
-              return 'Alphabetical characters only'
+              return 'Numerical characters only'
             }
           }
         ]
@@ -227,6 +241,7 @@ export default {
     // STORE CRUD METHODS
     async fetchDashboardDrinks () {
       try {
+        this.$store.dispatch('fetchCommonData')
         this.$store.dispatch('fetchDashboardDrinks')
       } catch (error) {
         this.error = true
@@ -242,7 +257,9 @@ export default {
       this.newFormVisible = true
     },
     saveNewDrink () {
-      console.log("SAVING!")
+      console.log(this.newDrinks, this.pickerDate, this.pickerTime)
+      // this.$store.commit('SET_NEW_DRINKS', { newDrinks: this.newDrinks, dateTime: this.pickerDate })
+      this.$store.dispatch('postAdditionalDrinks', { newDrinks: this.newDrinks, dateTime: this.pickerDate })
     }
   },
   created () {
