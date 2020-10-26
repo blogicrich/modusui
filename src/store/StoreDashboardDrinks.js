@@ -9,11 +9,20 @@ export const moduleDashboardDrinks = {
     drinksTotal: null,
     // Additional Drinks
     additionalDrinks: [],
-    newDrinks: {},
+    newDrinks: [],
     newDrinksTotal: 0,
-    jobs: {}
+    jobs: []
   },
   mutations: {
+    ADD_NEW_DRINK (state, data) {
+      state.newDrinks.push(data)
+    },
+    REMOVE_NEW_DRINK (state, data) {
+      state.newDrinks.splice(data, 1)
+    },
+    RESET_NEW_DRINKS (state) {
+      state.newDrinks = []
+    },
     SET_DRINKS (state, data) {
       let value = 0
       for (let i = 0; i < data.length; i++) {
@@ -23,7 +32,7 @@ export const moduleDashboardDrinks = {
         element.longFormDate = convertTimeToLongForm(datetime)
       }
       state.drinks = data.filter(element => element.type === 'eDroplet')
-      state.additionalDrinks = data.filter(element => element.type === 'eDroplet')
+      state.additionalDrinks = data.filter(element => element.type === 'other')
       state.drinksTotal = value.toFixed(2) + ' L'
     },
     SET_NEW_DRINKS (state, data) {
@@ -60,36 +69,33 @@ export const moduleDashboardDrinks = {
         }
       })
     },
-    postAdditionalDrinks (context, payload) {
+    postNewDrinks (context) {
       const userId = context.rootState.dashboardUsers.selectedUser.userId
-      const date = context.rootState.dashboardDates.dashboardUnixDate
-
-      let data = {}
       let jobs = []
-      for (const drink in context.state.newDrinks) {
-        if (context.state.newDrinks.hasOwnProperty(drink)) {
-          const element = context.state.newDrinks[drink];
-          data = {
-            volumeInLitres: element,
-            containerId: element,
-            dateTime: payload.dateTime
-          }
-          // jobs.push(apiLib.postData + userId + '/' + date, data)
-          // console.log(jobs)
+      for (let i = 0; i < context.state.newDrinks.length; i++) {
+        const element = context.state.newDrinks[i];
+        const data = {
+          volumeInLitres: Number(element.volume * element.quantity).toFixed(2),
+          containerTypeId: element.containerTypeId,
+          dateTime: convertToUnix(element.date, element.time)
         }
-        // jobs.push(userId + '/' + date, data)
-        context.commit('SET_JOBS', data)
+        jobs.push(apiLib.postData('carer/dashboard-drinks/' + userId, data, true, true))
+        console.log(data)
       }
-      // Promise.all(jobs)
-      
+      Promise.all(jobs).then((response) => {
+        context.commit('RESET_NEW_DRINKS')
+        context.dispatch('fetchDashboardDrinks')
+      })
     }
   }
 }
 
-function convertTimeToLongForm (unixDateTime) {
-  return moment(unixDateTime).format('DD-MM-YYYY HH:mm')
+function convertTimeToLongForm (datetime) {
+  return moment(datetime).unix()
 }
 
-function convertToUnix (longDateTime) {
-  return moment(longDateTime).format('DD-MM-YYYY HH:mm')
+function convertToUnix (date, time) {
+  const datetime = date + ' ' + time 
+  const dateUnix = moment(datetime).unix()
+  return dateUnix
 }

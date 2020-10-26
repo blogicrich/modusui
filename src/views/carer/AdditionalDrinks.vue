@@ -44,7 +44,7 @@
     <v-layout justify-center>
       <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
         <v-card class="pa-4">
-          <v-toolbar dark color="primary">
+          <v-toolbar dark fixed color="primary">
             <v-toolbar-title>Additional Drinks</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -53,7 +53,7 @@
               </v-btn>
               <v-btn
                 icon dark
-                @click="saveNewDrink"
+                @click="saveNewDrinks"
                 title="save and close">
                 <v-icon>save</v-icon>
               </v-btn>
@@ -61,54 +61,184 @@
           </v-toolbar>
           
           <!-- Add New Drink -->
-          <v-form v-model="newFormValid" v-if="containerTypes" ref="newSysAdminDetailsForm">
+
+          <v-form v-model="newFormValid" v-if="containerTypes" ref="newDrinkForm" class="mt-4">
             <v-container>
-              <v-card-title>
-                <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
-                <span class="pg-subheader text-primary">Add Drink</span>
-              </v-card-title>
-              <v-layout row wrap>
-                <v-flex xs12 sm6>
-                  <v-date-picker v-model="pickerDate" :color="$vuetify.theme.primary"></v-date-picker>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-time-picker v-model="pickerTime" :color="$vuetify.theme.primary"></v-time-picker>
-                </v-flex>
-              </v-layout>
-              <v-container fluid grid-list-xl>
-                <v-flex xs6>
-                  <v-card-text
-                    v-for="(container, index) in containerTypes"
-                    :key="`containers-${container.containerTypeId}-${index}`"
-                  >{{ container.description + ' (' + container.volume +' L)' }}
-                    <v-text-field
-                      v-model="newDrinks[container.containerTypeId]"
-                      color="primaryColor"
+              <v-card class="mt-5 pa-3"  tile outline>
+                <v-card-title>
+                  <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
+                  <span class="pg-subheader text-primary">Add Drink</span>
+                </v-card-title>
+                <v-layout row wrap>
+                  <v-flex xs12 sm4>
+                    <v-select
+                      v-if="containerTypes"
+                      :items="containerTypes"
+                      v-model="containerType"
+                      label="Container Type"
+                      width="20"
                       outline
                       required
-                      validate-on-blur
+                      item-value="containerTypeId"
+                      item-text="description"
                       :rules="newDrinkValidation.generic"
-                    ></v-text-field>
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm4>
                     <v-text-field
-                      class="ma-1"
-                      color="primaryColor"
-                      label:="Total Volume"
-                      :value="(Number(container.volume) * Number(newDrinks[container.containerTypeId])) + ' L'"
+                      class="mx-3"
+                      :value="getContainerVolume()"
+                      label="Volume (L)"
+                      prepend-icon="build"
+                      readonly
+                      disabled
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm4>
+                    <v-text-field
+                      class="mx-3"
+                      v-model="drinkQty"
+                      label="Quanity"
+                      prepend-icon="build"
+                      type="number"
+                      :rules="newDrinkValidation.numerical"
+                    ></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                  <v-layout>
+                  <v-flex xs12>
+                    <v-menu
+                      ref="drinkDatePicker"
+                      v-model="showDrinkDatePicker"
+                      :close-on-content-click="false"
+                      :nudge-right="60"
+                      :return-value="drinkDate"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      max-width="290px"
+                      min-width="290px"
                     >
-                    </v-text-field>
-                  </v-card-text>
-                </v-flex>
-              </v-container>
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          class="mx-3"
+                          v-model="drinkDate"
+                          label="Date"
+                          prepend-icon="build"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-if="showDrinkDatePicker"
+                        v-model="drinkDate"
+                        full-width
+                        @click:minute="$refs.drinkDatePicker.save(drinkDate)"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-menu
+                      ref="drinkTimePicker"
+                      v-model="showDrinkTimePicker"
+                      :close-on-content-click="false"
+                      :nudge-right="60"
+                      :return-value="drinkTime"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          class="mx-3"
+                          v-model="drinkTime"
+                          label="Time"
+                          prepend-icon="build"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="showDrinkTimePicker"
+                        v-model="drinkTime"
+                        full-width
+                        @click:minute="$refs.drinkTimePicker.save(drinkTime)"
+                      ></v-time-picker>
+                    </v-menu>
+                  </v-flex>
+                </v-layout>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
-                    title="Rest password fields"
+                    title="Add a new drink"
                     dark
                     :color="$vuetify.theme.primary"
-                    @click="$refs.newSysAdminDetailsForm.reset()"
+                    @click="addNewDrink()"
+                  >ADD
+                  </v-btn>
+                  <v-btn
+                    title="Reset form"
+                    dark
+                    :color="$vuetify.theme.primary"
+                    @click="$refs.newDrinkForm.reset()"
                   >RESET
                   </v-btn>
                 </v-card-actions>
+              </v-card>
+
+              <!-- DRINK SUBMISSION LISTING -->
+
+              <v-list>
+                <v-card-title>
+                  <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
+                  <span class="pg-subheader text-primary">Drinks for Submission:</span>
+                </v-card-title>
+                <v-fade-transition group hide-on-leave>
+                  <v-card
+                    v-show="!newDrinks.length"
+                    class="pa-2"
+                    tile
+                    outline
+                    key="nokeyforthisbadboy"
+                  >
+                  <v-card-text class="text-center">NO DRINKS TO SUBMIT. PLEASE ADD NEW DRINK ABOVE</v-card-text>
+                  </v-card>
+                  <v-card
+                    v-show="newDrinks.length"
+                    class="pa-2"
+                    v-for="(drink, index) in newDrinks"
+                    :key="index"
+                    tile
+                    outline
+                  >
+                    <v-layout>
+                      <v-flex grow>
+                        <span class="accent--text">{{ 
+                          drink.quantity + 
+                          ' x ' + 
+                          drink.description + 
+                          ': ' + 
+                          Number(drink.volume * drink.quantity).toFixed(2) + 
+                          ' (L)' +
+                          ' total on ' +
+                          drink.date +
+                          ' at' +
+                          drink.time }}</span>
+                      </v-flex>
+                      <v-flex shrink>
+                        <v-icon 
+                          color="pink"
+                          @click="$store.commit('REMOVE_NEW_DRINK', index)"
+                        >close</v-icon>
+                      </v-flex>
+                    </v-layout>
+                  </v-card>
+                </v-fade-transition>
+              </v-list>
             </v-container>
           </v-form>
         </v-card>
@@ -140,7 +270,8 @@ export default {
       drinks: state => state.dashboardDrinks.drinks,
       additionalDrinks: state => state.dashboardDrinks.additionalDrinks,
       drinksLoading: state => state.dashboardDrinks.drinksLoading,
-      containerTypes: state => state.commonData.containerTypes
+      containerTypes: state => state.commonData.containerTypes,
+      newDrinks: state => state.dashboardDrinks.newDrinks,
     })
   },
   data () {
@@ -149,12 +280,16 @@ export default {
       headerIcon: 'local_drink',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Additional Drinks',
-      newDrinks: {},
+      // newDrinks: {},
+      // Add Drinks Dialog
+      showContainerTypePicker: true,
+      showDrinkTimePicker: true,
+      showDrinkDatePicker: true,
+      containerType: '',
+      drinkTime: '',
+      drinkDate: '',
+      drinkQty: '',
       // BaseDataTable
-      // foo1: '',
-      // foo2: '',
-      pickerDate: '',
-      pickerTime: '',
       newFormVisible: false,
       newFormValid: false,
       dialog: false,
@@ -224,8 +359,10 @@ export default {
       ],
       newDrinkValidation: {
         generic: [
-          // value => !!value || 'Required.',
+          value => !!value || 'Required.',
           // value => value.length <= 20 || 'Max 20 characters',
+        ],
+        numerical: [
           value => {
             if (this.numericalRegEx.test(value)) {
               return true
@@ -251,15 +388,31 @@ export default {
     closeDialog () {
       this.dialog = false;
       this.newFormVisible = false;
+      // this.$store.commit('RESET_NEW_DRINKS');
     },
     openNewDialog () {
       this.dialog = true
       this.newFormVisible = true
     },
-    saveNewDrink () {
-      console.log(this.newDrinks, this.pickerDate, this.pickerTime)
-      // this.$store.commit('SET_NEW_DRINKS', { newDrinks: this.newDrinks, dateTime: this.pickerDate })
-      this.$store.dispatch('postAdditionalDrinks', { newDrinks: this.newDrinks, dateTime: this.pickerDate })
+    addNewDrink () {
+      console.log(this.newDrinks, this.drinkDate, this.drinkTime, this.containerType, Number(this.drinkQty))
+      this.$store.commit('ADD_NEW_DRINK', {
+        "quantity": Number(this.drinkQty),
+        "containerTypeId": this.containerType,
+        "volume": this.containerTypes.find(container => container.containerTypeId === this.containerType).volume,
+        "description": this.containerTypes.find(container => container.containerTypeId === this.containerType).description,
+        "time": this.drinkTime,
+        "date": this.drinkDate
+      })
+      this.$refs.newDrinkForm.reset()
+    },
+    saveNewDrinks () {
+      // console.log(this.newDrinks, this.drinkDate, this.drinkTime, this.containerType, Number(this.drinkQty))
+      this.$store.dispatch('postNewDrinks')
+    },
+    getContainerVolume () {
+      const volume = this.containerType ? `${this.containerTypes.find(container => container.containerTypeId === this.containerType).volume}` : 'Select Container Type'
+      return `${volume}`
     }
   },
   created () {
