@@ -20,7 +20,7 @@
         @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
       <v-flex ref="tileOne" slot="tileOne">
-        <BaseChartHeader v-if="hourChartDataLoaded">
+        <BaseChartHeader>
           <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
           <BaseChartTypeSelector
             slot="tools"
@@ -48,7 +48,7 @@
       <v-flex slot="tileTwo">
         <p
           class="text-secondary text-center table-header text-ellipsis"
-          >{{ 'eDroplet Drinks Total: ' + drinksTotal }}
+          >{{ 'eDroplet Drinks Total: ' + drinksTotal + ' L' }}
         </p>
         <v-list
           :style="'max-height:' + listHeight"
@@ -75,7 +75,7 @@
           </template>
         </v-list>
         <BaseDashboardTileOverlay
-          v-if="!dayChartDataLoaded"
+          v-if="!hourChartDataLoaded"
           message="No data for selected user or date"
         ></BaseDashboardTileOverlay>
       </v-flex>
@@ -127,7 +127,6 @@ import BaseDashboardTileOverlay from '@/components/base/BaseDashboardTileOverlay
 import BaseDataInfoCard from '@/components/base/BaseDataTableInfoComponent'
 import BaseDateSelection from '@/components/base/BaseDateSelectionComponent'
 import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
-// import BaseDataTable from '@/components/base/BaseDataTableComponent'
 import SubHourlyHydrationLineChart from '@/components/sub/SubHourlyHydrationLineChart'
 import SubHourlyHydrationBarChart from '@/components/sub/SubHourlyHydrationBarChart'
 import SubHydrationDayPieChart from '@/components/sub/SubHydrationDayPieChart'
@@ -141,7 +140,6 @@ export default {
     BaseDashboardTileOverlay,
     BaseDataInfoCard,
     BaseDateSelection,
-    // BaseDataTable,
     BaseChartTypeSelector,
     BaseChartHeader,
     BaseUserSelect,

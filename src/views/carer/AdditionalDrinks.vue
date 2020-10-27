@@ -18,7 +18,7 @@
       class="mx-4"
       :headers="headers"
       :items="additionalDrinks"
-      :editPerms="{ create: false, update: false, delete: true }"
+      :editPerms="{ create: false, update: false, delete: false }"
       :primaryColor="primaryColor"
       :secondaryColor="secondaryColor"
       :recordIcon="icon"
@@ -35,7 +35,6 @@
       searchLabel="Search Records..."
       tableTitle="Additional Drinks"
 
-      @deleteSelected="deleteItem"
       @action-button-pressed="openNewDialog"
     />
 
@@ -89,7 +88,7 @@
                       class="mx-3"
                       :value="getContainerVolume()"
                       label="Volume (L)"
-                      prepend-icon="build"
+                      prepend-icon=""
                       readonly
                       disabled
                     ></v-text-field>
@@ -99,7 +98,7 @@
                       class="mx-3"
                       v-model="drinkQty"
                       label="Quanity"
-                      prepend-icon="build"
+                      prepend-icon="local_drink"
                       type="number"
                       :rules="newDrinkValidation.numerical"
                     ></v-text-field>
@@ -125,7 +124,7 @@
                           class="mx-3"
                           v-model="drinkDate"
                           label="Date"
-                          prepend-icon="build"
+                          prepend-icon="calender_today"
                           readonly
                           v-on="on"
                         ></v-text-field>
@@ -157,7 +156,7 @@
                           class="mx-3"
                           v-model="drinkTime"
                           label="Time"
-                          prepend-icon="build"
+                          prepend-icon="access_time"
                           readonly
                           v-on="on"
                         ></v-text-field>
@@ -224,9 +223,9 @@
                           ': ' + 
                           Number(drink.volume * drink.quantity).toFixed(2) + 
                           ' (L)' +
-                          ' total on ' +
+                          ' on ' +
                           drink.date +
-                          ' at' +
+                          ' at ' +
                           drink.time }}</span>
                       </v-flex>
                       <v-flex shrink>
@@ -249,7 +248,6 @@
 
 <script>
 
-import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import { mapState } from 'vuex'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
@@ -258,7 +256,7 @@ import validation from '@/mixins/validation'
 
 export default {
   name: 'AdditionalDrinks',
-  mixins: [dataTableNavGuard, crudRoutines, validation],
+  mixins: [dataTableNavGuard, validation],
   components: {
     BaseDataTable,
     BaseUserSelect
@@ -271,7 +269,7 @@ export default {
       additionalDrinks: state => state.dashboardDrinks.additionalDrinks,
       drinksLoading: state => state.dashboardDrinks.drinksLoading,
       containerTypes: state => state.commonData.containerTypes,
-      newDrinks: state => state.dashboardDrinks.newDrinks,
+      newDrinks: state => state.dashboardDrinks.newDrinks
     })
   },
   data () {
@@ -280,7 +278,6 @@ export default {
       headerIcon: 'local_drink',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'Additional Drinks',
-      // newDrinks: {},
       // Add Drinks Dialog
       showContainerTypePicker: true,
       showDrinkTimePicker: true,
@@ -330,7 +327,7 @@ export default {
           editable: true 
         },
         { 
-          text: 'Volume', 
+          text: 'Volume (L)', 
           align: 'left', 
           sortable: true, 
           cellType: 'tb', 
@@ -343,7 +340,7 @@ export default {
           align: 'left', 
           sortable: true, 
           cellType: 'tb', 
-          value: 'dateTime', 
+          value: 'longFormDate', 
           hidden: true,
           editable: true 
         },
@@ -360,7 +357,6 @@ export default {
       newDrinkValidation: {
         generic: [
           value => !!value || 'Required.',
-          // value => value.length <= 20 || 'Max 20 characters',
         ],
         numerical: [
           value => {
@@ -388,7 +384,7 @@ export default {
     closeDialog () {
       this.dialog = false;
       this.newFormVisible = false;
-      // this.$store.commit('RESET_NEW_DRINKS');
+      this.$store.commit('RESET_NEW_DRINKS');
     },
     openNewDialog () {
       this.dialog = true
@@ -407,7 +403,6 @@ export default {
       this.$refs.newDrinkForm.reset()
     },
     saveNewDrinks () {
-      // console.log(this.newDrinks, this.drinkDate, this.drinkTime, this.containerType, Number(this.drinkQty))
       this.$store.dispatch('postNewDrinks')
     },
     getContainerVolume () {

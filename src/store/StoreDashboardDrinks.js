@@ -6,12 +6,12 @@ export const moduleDashboardDrinks = {
     // Dashboard
     drinks: [],
     drinksLoading: false,
-    drinksTotal: null,
+    drinksTotal: 0,
     // Additional Drinks
     additionalDrinks: [],
+    additionalDrinksTotal: 0,
     newDrinks: [],
-    newDrinksTotal: 0,
-    jobs: []
+    newDrinksTotal: 0
   },
   mutations: {
     ADD_NEW_DRINK (state, data) {
@@ -24,33 +24,40 @@ export const moduleDashboardDrinks = {
       state.newDrinks = []
     },
     SET_DRINKS (state, data) {
-      let value = 0
+      const drinks = []
+      const additionalDrinks = []
+      let additionalDrinksTotal = 0
+      let drinksTotal = 0
+
       for (let i = 0; i < data.length; i++) {
         const element = data[i]
-        value = value + element.volumeInLitres
-        const datetime = element.dateTime*1000
-        element.longFormDate = convertTimeToLongForm(datetime)
-      }
-      state.drinks = data.filter(element => element.type === 'eDroplet')
-      state.additionalDrinks = data.filter(element => element.type === 'other')
-      state.drinksTotal = value.toFixed(2) + ' L'
-    },
-    SET_NEW_DRINKS (state, data) {
-      state.newDrinks = data.newDrinks
-      let value = 0;
-      for (const drink in state.newDrinks) {
-        if (state.newDrinks.hasOwnProperty(drink)) {
-          const element = state.newDrinks[drink];
+        if (element.type === 'Other') {
+          additionalDrinksTotal = additionalDrinksTotal + Number(element.volumeInLitres)
+          additionalDrinks.push( { ...element, longFormDate: convertTimeToLongForm(element.datetime) } )
+        } else {
+          drinksTotal = drinksTotal + Number(element.volumeInLitres)
+          drinks.push({ ...element, longFormDate: convertTimeToLongForm(element.datetime) })
         }
-        value = Number(value) + Number(state.newDrinks[drink])
       }
-      state.newDrinksTotal = value
+      state.drinks = drinks
+      state.drinksTotal = Number(drinksTotal).toFixed(2)
+      state.additionalDrinks = additionalDrinks
+      state.additionalDrinksTotal= Number(additionalDrinksTotal).toFixed(2)
+      console.log(drinks, additionalDrinks, additionalDrinksTotal, drinksTotal)
     },
     SET_DRINKS_LOAD_STATE (state, data) {
       state.drinksLoading = data
     },
-    SET_JOBS (state, data){
-      state.jobs = data
+    RESET_STATE (state) {
+      // Dashboard
+      state.drinks = []
+      state.drinksLoading = false
+      state.drinksTotal = 0.00
+      // Additional Drinks
+      state.additionalDrinks = []
+      state.additionalDrinksTotal = 0.00
+      state.newDrinks = []
+      state.newDrinksTotal = 0.00
     }
   },
   actions: {
@@ -91,7 +98,7 @@ export const moduleDashboardDrinks = {
 }
 
 function convertTimeToLongForm (datetime) {
-  return moment(datetime).unix()
+  return moment(datetime).format('YYYY:MM:DD HH:MM')
 }
 
 function convertToUnix (date, time) {
