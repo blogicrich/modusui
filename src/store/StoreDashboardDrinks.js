@@ -43,7 +43,6 @@ export const moduleDashboardDrinks = {
       state.drinksTotal = Number(drinksTotal).toFixed(2)
       state.additionalDrinks = additionalDrinks
       state.additionalDrinksTotal= Number(additionalDrinksTotal).toFixed(2)
-      console.log(drinks, additionalDrinks, additionalDrinksTotal, drinksTotal)
     },
     SET_DRINKS_LOAD_STATE (state, data) {
       state.drinksLoading = data
@@ -98,7 +97,7 @@ export const moduleDashboardDrinks = {
 }
 
 function convertTimeToLongForm (datetime) {
-  return moment(datetime).format('YYYY:MM:DD HH:MM')
+  return moment(datetime).format('YYYY-MM-DD HH:MM')
 }
 
 function convertToUnix (date, time) {

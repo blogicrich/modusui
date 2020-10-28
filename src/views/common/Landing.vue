@@ -136,8 +136,8 @@
           colorIcon="#006480"
         />
         <BaseLinkComponent
-          routerTitle= "Conditions"
-          link="/conditions"
+          routerTitle= "User Conditions"
+          link="/userconditions"
           tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
           icon="priority_high"
           colorIcon="#006480"

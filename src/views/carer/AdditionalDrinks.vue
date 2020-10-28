@@ -121,7 +121,6 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          class="mx-3"
                           v-model="drinkDate"
                           label="Date"
                           prepend-icon="calender_today"

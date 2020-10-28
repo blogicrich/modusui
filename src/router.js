@@ -63,9 +63,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "dashboard" */ './views/carer/Dashboard.vue')
     },
     {
-      path: '/dailyreports',
-      name: 'DailyReports',
-      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/DailyReports.vue')
+      path: '/dailyreport',
+      name: 'DailyReport',
+      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/DailyReport.vue')
     },
 
     // Cliadmin routes
@@ -76,9 +76,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/PersonalDetails.vue')
     },
     {
-      path: '/conditions',
-      name: 'Conditions',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/Conditions.vue')
+      path: '/userconditions',
+      name: 'UserConditions',
+      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/UserConditions.vue')
     },
     {
       path: '/edropletmanagement',

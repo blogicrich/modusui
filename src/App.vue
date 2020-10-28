@@ -195,14 +195,14 @@ export default {
           route: 'dashboard',
           tip: 'Go to Dashboard'
         },
-        {
-          title: 'Alerts',
-          btnIcon: 'notification_important',
-          btnColor: 'white',
-          iconColor: 'white',
-          route: 'alerts',
-          tip: 'View Alerts'
-        },
+        // {
+        //   title: 'Alerts',
+        //   btnIcon: 'notification_important',
+        //   btnColor: 'white',
+        //   iconColor: 'white',
+        //   route: 'alerts',
+        //   tip: 'View Alerts'
+        // },
         {
           title: 'Add Drinks',
           btnIcon: 'local_drink',
@@ -224,7 +224,7 @@ export default {
           btnIcon: 'menu_book',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'dailyreports',
+          route: 'dailyreport',
           tip: 'View Daily Report'
         },
         {
@@ -255,7 +255,7 @@ export default {
         }
       } else {
         this.$store.dispatch('LOGOUT')
-        this.$router.push('/login')
+        // this.$router.push('/login')
       }
     },
     showSnack (eventPayload) {
@@ -320,7 +320,7 @@ export default {
     authenticated: function () {
       if (!this.authenticated) {
         this.logout()
-        this.$router.push('/login')
+        // this.$router.push('/login')
       }
     }
   },

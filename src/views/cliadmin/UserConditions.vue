@@ -83,7 +83,7 @@ import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import validation from '@/mixins/validation'
 
 export default {
-  name: 'Conditions',
+  name: 'UserConditions',
   mixins: [dataTableNavGuard, crudRoutines, validation],
   components: {
     BaseDataTable,
@@ -111,10 +111,10 @@ export default {
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      delUrl: '/cliadmin/conditions/' + this.$store.state.userId,
-      updateUrl: '/cliadmin/conditions' + this.$store.state.userId,
-      readUrl: '/cliadmin/conditions/' + this.$store.state.userId,
-      createUrl: '/cliadmin/conditions',
+      delUrl: '/cliadmin/user-condition/', //+ this.$store.state.userId,
+      updateUrl: '/cliadmin/user-condition/', //+ this.$store.state.userId,
+      readUrl: '/cliadmin/user-condition/', //+ this.$store.state.userId,
+      createUrl: '/cliadmin/user-condition/',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
       icon: 'local_pharmacy',
@@ -316,7 +316,9 @@ export default {
     }
   },
   mounted () {
-    this.getItems(this.readUrl)
+    this.getItems(this.readUrl).then(
+      
+    )
   }
 }
 

@@ -24,7 +24,7 @@ import { moduleCliAdminUsers } from '@/store/StoreCliAdminUsers'
 import { moduleCommonData } from '@/store/StoreCommonData'
 // Dashboard
 import { moduleDashboardAway } from '@/store/StoreDashboardAway'
-import { moduleDashboardDailyReport } from '@/store/StoreDailyReports'
+import { moduleDashboardDailyReport } from '@/store/StoreDailyReport'
 import { moduleDashboardDay } from '@/store/StoreDashboardDay'
 import { moduleDashboardDates } from '@/store/StoreDashboardDates'
 import { moduleDashboardDrinks } from '@/store/StoreDashboardDrinks'
