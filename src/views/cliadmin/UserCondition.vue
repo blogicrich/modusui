@@ -5,19 +5,12 @@
       :headerIcon="headerIcon"
       :headerText="headerText"
       hasDivider
-    >
-      <BaseUserSelect
-        slot="rhViewHeaderColumn"
-        :users="dashboardUsers"
-        :selectedUser="selectedUser"
-        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
-      />
-    </BaseViewHeader>
-    <BaseDataTable
+    />
+    <!-- <BaseDataTable
       ref="baseDataTable"
       class="mx-4"
       :headers="headers"
-      :items="items"
+      :items="getterUserConditions(selectedUser.userId)"
       :editPerms="editPerms"
       :newItem="newItem"
       :primaryColor="primaryColor"
@@ -70,30 +63,93 @@
         >{{ property }}
         </v-text-field>
       </template>
-    </BaseDataTable>
+    </BaseDataTable> -->
+    <v-layout class="mx-4 mb-2" row align-center>
+    <v-toolbar color="primary darken-1" dark>
+      <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">
+        Assign User Conditions
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <!-- SELECT MESSAGE ALERT TYPE -->
+      <v-menu :nudge-width="100">
+        <template v-slot:activator="{ on }">
+          <v-toolbar-title v-on="on">
+            <span>Alert Type</span>
+            <v-icon dark>arrow_drop_down</v-icon>
+          </v-toolbar-title>
+        </template>
+
+        <v-list>
+          <v-list-tile
+            v-for="alertType in getterAlertTypes"
+            :key="alertType"
+            @click="$store.dispatch('changeSelectedAlertType', alertType)"
+          >
+            <v-list-tile-title v-text="alertType"></v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+      <!-- SELECT MESSAGE TYPE -->
+      <v-menu :nudge-width="100">
+        <template v-slot:activator="{ on }">
+          <v-toolbar-title v-on="on">
+            <span>Message Type</span>
+            <v-icon dark>arrow_drop_down</v-icon>
+          </v-toolbar-title>
+        </template>
+
+        <v-list>
+          <v-list-tile
+            v-for="commsType in getterCommsTypes"
+            :key="commsType"
+            @click="$store.dispatch('changeSelectedCommsType', commsType)"
+          >
+            <v-list-tile-title v-text="commsType"></v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+      <!-- TOOLBAR BUTTONS -->
+      <v-btn
+        v-if="$vuetify.breakpoint.smAndDown"
+        :disabled="getterIsPristine"
+        icon @click="save"
+      >
+        <v-icon>save</v-icon>
+      </v-btn>
+      <v-btn
+        v-if="$vuetify.breakpoint.smAndDown"
+        :disabled="getterIsPristine"
+        icon @click="$store.commit('RESET_MESSAGES')"
+      >
+        <v-icon>refresh</v-icon>
+      </v-btn>
+    </v-toolbar>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
 import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
-import { mapState } from 'vuex'
-import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
-import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
+import { mapState, mapGetters } from 'vuex'
+// import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'UserConditions',
   mixins: [dataTableNavGuard, crudRoutines, validation],
   components: {
-    BaseDataTable,
-    BaseUserSelect
+    // BaseDataTable
   },
   computed: {
     ...mapState({
       selectedUser: state => state.dashboardUsers.selectedUser,
-      dashboardUsers: state => state.dashboardUsers.dashboardUsers
-    })
+      dashboardUsers: state => state.dashboardUsers.dashboardUsers,
+      items: state => state.cliAdminUserCondition.cliAdminUserConditions
+    }),
+    ...mapGetters([
+      'getterUserConditions'
+    ]),
   },
   data () {
     return {
@@ -104,16 +160,15 @@ export default {
       // BaseDataTable
       editPerms: { create: true, update: true, delete: true },
       crudIdKey: 'conditionsId',
-      items: [],
       loading: true,
       loaded: false,
       error: false,
       errorMsg: ' ',
       loadingMsg: ' ',
       loadedMsg: ' ',
-      delUrl: '/cliadmin/user-condition/', //+ this.$store.state.userId,
-      updateUrl: '/cliadmin/user-condition/', //+ this.$store.state.userId,
-      readUrl: '/cliadmin/user-condition/', //+ this.$store.state.userId,
+      delUrl: '/cliadmin/user-condition/',
+      updateUrl: '/cliadmin/user-condition/',
+      readUrl: '/cliadmin/user-condition/',
       createUrl: '/cliadmin/user-condition/',
       primaryColor: 'primary',
       secondaryColor: 'primary darken-2',
@@ -316,9 +371,7 @@ export default {
     }
   },
   mounted () {
-    this.getItems(this.readUrl).then(
-      
-    )
+    this.$store.dispatch('fetchCliAdminUserConditions')
   }
 }
 

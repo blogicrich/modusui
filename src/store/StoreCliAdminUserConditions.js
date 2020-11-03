@@ -43,6 +43,8 @@ export const moduleCliAdminUserConditions = {
     }
   },
   getters: {
-
+    getterUserConditions: (state) => (userId) => {
+      return state.cliAdminUserConditions.filter(conditions => conditions.userId === userId)
+    }
   }
 }

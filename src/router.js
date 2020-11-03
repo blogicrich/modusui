@@ -76,9 +76,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/PersonalDetails.vue')
     },
     {
-      path: '/userconditions',
-      name: 'UserConditions',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/UserConditions.vue')
+      path: '/usercondition',
+      name: 'UserCondition',
+      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/UserCondition.vue')
     },
     {
       path: '/edropletmanagement',

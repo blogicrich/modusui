@@ -13,7 +13,7 @@ import { moduleSmsEmailMessages } from '@/store/StoreSmsEmailMessages'
 // client admins - To be removed following implementation of API V2
 import { moduleWakeSleepTimes } from '@/store/StoreWakeSleepTimes'
 import { moduleIntervalSettings } from '@/store/StoreIntervalSettings'
-import { moduleReports } from '@/store/StoreReports'
+// import { moduleReports } from '@/store/StoreReports'
 // CliAdmins V2.0
 import { moduleCliAdminCarer } from '@/store/StoreCliAdminCarer'
 import { moduleCliAdminClientAdministrator } from '@/store/StoreCliAdminClientAdministrator'
@@ -24,13 +24,13 @@ import { moduleCliAdminUsers } from '@/store/StoreCliAdminUsers'
 import { moduleCommonData } from '@/store/StoreCommonData'
 // Dashboard
 import { moduleDashboardAway } from '@/store/StoreDashboardAway'
-import { moduleDashboardDailyReport } from '@/store/StoreDailyReport'
+import { moduleDashboardDailyReport } from '@/store/StoreDashboardDailyReport'
 import { moduleDashboardDay } from '@/store/StoreDashboardDay'
 import { moduleDashboardDates } from '@/store/StoreDashboardDates'
 import { moduleDashboardDrinks } from '@/store/StoreDashboardDrinks'
 import { moduleDashboardHour } from '@/store/StoreDashboardHour'
 import { moduleDashboardUsers } from '@/store/StoreDashboardUsers'
-import { moduleDashboardComment } from '@/store/StoreDashboardComment'
+// import { moduleDashboardComment } from '@/store/StoreDashboardComment'
 import { moduleDashboardWeek } from '@/store/StoreDashboardWeek'
 // Unregistered
 import { moduleGettingStartedWizard } from '@/store/StoreGettingStartedWizard'
@@ -62,7 +62,7 @@ export default new Vuex.Store({
     // Common
     commonData: moduleCommonData,
     // carer
-    report: moduleReports,
+    // report: moduleReports,
     // Dashboard
     dashboardAway: moduleDashboardAway,
     dashboardDay: moduleDashboardDay,
@@ -71,7 +71,7 @@ export default new Vuex.Store({
     dashboardDrinks: moduleDashboardDrinks,
     dashboardHour: moduleDashboardHour,
     dashboardUsers: moduleDashboardUsers,
-    dashboardComment: moduleDashboardComment,
+    // dashboardComment: moduleDashboardComment,
     dashboardWeek: moduleDashboardWeek,
     // Unregistered
     gettingStartedWizard: moduleGettingStartedWizard
