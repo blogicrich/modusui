@@ -13,9 +13,6 @@ export const moduleEdropletApp = {
     // Dashboard
     userDataLoading: false,
     storeId: null,
-    // selectedUser: deserialize('selectedUser'),
-    // carerId: deserialize('carerId'),
-    // accountHolderId: null,
     deviceMessageTypeId: null,
     messageNo: null,
     date: null,
@@ -30,18 +27,6 @@ export const moduleEdropletApp = {
       serialize('authenticated', data)
       state.authenticated = data
     },
-    // SET_CARER_ID (state, data) {
-    //   serialize('carerId', data)
-    //   state.carerId = data
-    // },
-    // SET_ACCOUNT_HOLDER_ID (state, data) {
-    //   serialize('accountHolderId', data)
-    //   state.accountHolderId = data
-    // },
-    // SET_DEPT_PERSON_ID (state, data) {
-    //   serialize('deptPersonsId', data)
-    //   state.deptPersonsId = data
-    // },
     SET_PORTAL_AUTH_ID (state, data) {
       serialize('portalAuthorisedId', data)
       state.portalAuthorisedId = data
@@ -58,10 +43,6 @@ export const moduleEdropletApp = {
       serialize('token', data)
       state.token = data
     }
-    // SET_SELECTED_USER (state, user) {
-    //   serialize('selectedUser', user)
-    //   state.selectedUser = user
-    // }
   },
   actions: {
     async POST_LOGIN (context, payload) {
@@ -71,9 +52,6 @@ export const moduleEdropletApp = {
           if (response.roles) {
             localStorage.clear()
             context.commit('SET_AUTHENTICATION_STATE', true)
-            // context.commit('SET_ACCOUNT_HOLDER_ID', response.accountHolderId)
-            // context.commit('SET_CARER_ID', response.carerId)
-            // context.commit('SET_DEPT_PERSON_ID', response.deptPersonsId)
             context.commit('SET_PORTAL_AUTH_ID', response.user.portalAuthorisedId)
             context.commit('SET_LEVEL', response.roles)
             context.commit('SET_TOKEN', response.token)
@@ -89,11 +67,7 @@ export const moduleEdropletApp = {
       return data
     },
     LOGOUT (context) {
-      // context.commit('SET_LOAD_STATUS', false)
       context.commit('SET_AUTHENTICATION_STATE', false)
-      // context.commit('SET_CARER_ID', null)
-      // context.commit('SET_ACCOUNT_HOLDER_ID', null)
-      // context.commit('SET_DEPT_PERSON_ID', null)
       context.commit('SET_PORTAL_AUTH_ID', null)
       context.commit('SET_LEVEL', [])
       context.commit('SET_TOKEN', null)

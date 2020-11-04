@@ -36,9 +36,9 @@ export const moduleCommonData = {
         dispatch('fetchContainerTypes'),
         dispatch('fetchGenderOptions')
       ])
-      .then(
-        commit('SET_COMMON_DATA_LOAD_STATE', false)
-      )
+        .then(
+          commit('SET_COMMON_DATA_LOAD_STATE', false)
+        )
     },
     async fetchGenderOptions (context) {
       apiLib.getData('common/gender-options/').then((response) => {
@@ -78,6 +78,6 @@ export const moduleCommonData = {
     }
   },
   getters: {
-    
+
   }
 }

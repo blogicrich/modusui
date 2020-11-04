@@ -1,12 +1,18 @@
 <template>
-  <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
+  <v-layout
+    class="loginreset-container"
+    row
+    fill-height
+    align-center
+    justify-space-around
+  >
     <BaseLogin
       :msg="msg"
-      :isAuthenticating="loading"
-      :isActive="isActive"
-      :primaryColor="primaryColor"
-      :spinnerSize="spinnerSize"
-      :spinnerWidth="spinnerWidth"
+      :is-authenticating="loading"
+      :is-active="isActive"
+      :primary-color="primaryColor"
+      :spinner-size="spinnerSize"
+      :spinner-width="spinnerWidth"
       @authenticate="submitCredentials"
     />
   </v-layout>
@@ -26,17 +32,6 @@ export default {
       primaryColor: 'primary',
       spinnerSize: '50',
       spinnerWidth: '3'
-    }
-  },
-  methods: {
-    async submitCredentials (item) {
-      this.$store.dispatch('POST_LOGIN', item).then(response => {
-        if (response) {
-          this.msg = response
-        } else {
-          this.$emit('authenticated')
-        }
-      })
     }
   },
   computed: {
@@ -64,7 +59,18 @@ export default {
   },
   mounted () {
     this.$store.dispatch('LOGOUT')
-    this.$emit('authenticated')
+  },
+  methods: {
+    async submitCredentials (item) {
+      this.$store.dispatch('LOGOUT') // Ensure localStorage is clean
+      this.$store.dispatch('POST_LOGIN', item).then((response) => {
+        if (response) {
+          this.msg = response
+        } else {
+          this.$emit('authenticated')
+        }
+      })
+    }
   }
 }
 </script>

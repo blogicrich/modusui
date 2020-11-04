@@ -141,7 +141,7 @@ export const moduleSystemAdministrators = {
       context.commit('SET_SYSADMINS_LOAD_STATUS', true)
       const update = await apiLib.postData('sysadmin/sysadmin/', payload, true, true).then(
         context.dispatch('fetchSystemAdmins'),
-        context.commit('SET_SYSADMINS_LOAD_STATUS', false) 
+        context.commit('SET_SYSADMINS_LOAD_STATUS', false)
       )
       return update
     },

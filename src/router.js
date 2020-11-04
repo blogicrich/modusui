@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from './store'
 
 Vue.use(Router)
 
@@ -8,17 +9,25 @@ export default new Router({
   routes: [
 
     // fallback
-
     {
       path: '*',
       redirect: '/'
     },
 
     // Common routes
-
     {
       path: '/',
-      redirect: { name: 'Login' }
+      beforeEnter: (to, from, next) => {
+        if (store.state.eDropletApp.authenticated) {
+          if (store.state.eDropletApp.level && store.state.eDropletApp.level.includes('CARER')) {
+            next('/dashboard')
+          } else {
+            next('/landing')
+          }
+        } else {
+          next('/login')
+        }
+      }
     },
     {
       path: '/login',
@@ -73,17 +82,17 @@ export default new Router({
     {
       path: '/personaldetails',
       name: 'PersonalDetails',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/PersonalDetails.vue')
+      component: () => import(/* webpackChunkName: "personal-details" */ './views/cliadmin/PersonalDetails.vue')
     },
     {
       path: '/usercondition',
       name: 'UserCondition',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/UserCondition.vue')
+      component: () => import(/* webpackChunkName: "user-condition" */ './views/cliadmin/UserCondition.vue')
     },
     {
       path: '/edropletmanagement',
       name: 'EdropletManagement',
-      component: () => import(/* webpackChunkName: "about" */ './views/cliadmin/EdropManagement.vue')
+      component: () => import(/* webpackChunkName: "edroplet-management" */ './views/cliadmin/EdropManagement.vue')
     },
     {
       path: '/intervalmanagement',
@@ -101,42 +110,42 @@ export default new Router({
     {
       path: '/conditionsoptions',
       name: 'ConditionsOptions',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/ConditionsOptions.vue')
+      component: () => import(/* webpackChunkName: "conditions-options" */ './views/sysadmin/ConditionsOptions.vue')
     },
     {
       path: '/containertypes',
       name: 'ContainerTypes',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/ContainerTypes.vue')
+      component: () => import(/* webpackChunkName: "container-types" */ './views/sysadmin/ContainerTypes.vue')
     },
     {
       path: '/genderoptions',
       name: 'GenderOptions',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/GenderOptions.vue')
+      component: () => import(/* webpackChunkName: "gender-options" */ './views/sysadmin/GenderOptions.vue')
     },
     {
       path: '/hydrationparameters',
       name: 'HydrationParameters',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/HydrationParameters.vue')
+      component: () => import(/* webpackChunkName: "hydration-parameters" */ './views/sysadmin/HydrationParameters.vue')
     },
     {
       path: '/systemadmins',
       name: 'SystemAdmins',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/SystemAdmins.vue')
+      component: () => import(/* webpackChunkName: "system-admins" */ './views/sysadmin/SystemAdmins.vue')
     },
     {
       path: '/textmessages',
       name: 'TextMessages',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/TextMessages.vue')
+      component: () => import(/* webpackChunkName: "text-messages" */ './views/sysadmin/TextMessages.vue')
     },
     {
       path: '/intervaloptions',
       name: 'IntervalOptions',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/IntervalOptions.vue')
+      component: () => import(/* webpackChunkName: "interval-options" */ './views/sysadmin/IntervalOptions.vue')
     },
     {
       path: '/titles',
       name: 'Titles',
-      component: () => import(/* webpackChunkName: "about" */ './views/sysadmin/Titles.vue')
+      component: () => import(/* webpackChunkName: "titles" */ './views/sysadmin/Titles.vue')
     },
 
     // Unregistered users and ByteSnap Landing Page
@@ -145,7 +154,7 @@ export default new Router({
       path: '/register',
       name: 'Registration',
       props: (route) => ({ unsanitizedMacAddress: route.query.macAddress }),
-      component: () => import(/* webpackChunkName: "about" */ './views/unregistered/Registration.vue')
+      component: () => import(/* webpackChunkName: "register" */ './views/unregistered/Registration.vue')
     }
   ]
 })

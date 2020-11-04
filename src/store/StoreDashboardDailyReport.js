@@ -28,9 +28,9 @@ export const moduleDashboardDailyReport = {
     },
     RESET_DAILY_REPORT_STATE (state) {
       state.comments = []
-      state.newComments = [],
-      state.dailyReportsLoading = false,
-      state.dailyReportError = false,
+      state.newComments = []
+      state.dailyReportsLoading = false
+      state.dailyReportError = false
       state.newComment = ''
     }
   },
@@ -42,7 +42,7 @@ export const moduleDashboardDailyReport = {
       context.commit('SET_DAILY_REPORT_LOAD_STATE', true)
       apiLib.getData('carer/day-report/' + date).then((response) => {
         for (let i = 0; i < response.length; i++) {
-          const element = response[i];
+          const element = response[i]
           element.date = convertTimeToLongForm(element.date * 1000)
         }
         if (typeof response === 'undefined') {
@@ -58,9 +58,9 @@ export const moduleDashboardDailyReport = {
       const userId = context.rootState.dashboardUsers.selectedUser.userId
       const date = context.rootState.dashboardDates.dashboardUnixDate
 
-      let jobs = []
+      const jobs = []
       for (let i = 0; i < context.state.newComments.length; i++) {
-        const element = context.state.newComments[i];
+        const element = context.state.newComments[i]
         const data = {
           userId: userId,
           comments: element,
@@ -83,7 +83,7 @@ function convertTimeToLongForm (datetime) {
 }
 
 function convertToUnix (date, time) {
-  const datetime = date + ' ' + time 
+  const datetime = date + ' ' + time
   const dateUnix = moment(datetime).unix()
   return dateUnix
 }

@@ -1,33 +1,59 @@
 <template>
   <v-app
     v-touch="{
-    left: () => swipe('Left'),
-    right: () => swipe('Right'),
-    up: () => swipe('Up'),
-    down: () => swipe('Down')
-  }"
+      left: () => swipe('Left'),
+      right: () => swipe('Right'),
+      up: () => swipe('Up'),
+      down: () => swipe('Down'),
+    }"
   >
     <!-- HEADER -->
-    <v-toolbar v-if="authenticated && !wizardActive" color="white" app :clipped-left="clipped">
+    <v-toolbar
+      v-if="authenticated && !wizardActive"
+      color="white"
+      app
+      :clipped-left="clipped"
+    >
       <img
         v-if="$vuetify.breakpoint.smAndDown"
         @click="drawerState = true"
         alt
         src="./assets/ed_logo.svg"
-      />
-      <img />
-      <img v-if="$vuetify.breakpoint.mdAndUp" alt src="./assets/ed_logo.svg" /><img />
-      <v-spacer></v-spacer>
+      >
+      <img>
+      <img
+        v-if="$vuetify.breakpoint.mdAndUp"
+        alt
+        src="./assets/ed_logo.svg"
+      ><img>
+      <v-spacer />
       <v-layout row fill-height wrap align-center justify-end>
-        <v-icon v-if="$vuetify.breakpoint.mdAndUp" outline medium class="mx-2" color="primary">person_outline</v-icon>
-        <v-icon v-if="$vuetify.breakpoint.smAndDown" outline small class="mx-1" color="primary">person_outline</v-icon>
+        <v-icon
+          v-if="$vuetify.breakpoint.mdAndUp"
+          outline
+          medium
+          class="mx-2"
+          color="primary"
+        >
+          person_outline
+        </v-icon>
+        <v-icon
+          v-if="$vuetify.breakpoint.smAndDown"
+          outline
+          small
+          class="mx-1"
+          color="primary"
+        >
+          person_outline
+        </v-icon>
         <v-chip
           v-show="$vuetify.breakpoint.mdAndUp"
           v-for="(level, index) in level"
           :key="'md' + index"
           color="secondary"
           text-color="primary"
-        >{{ levelDisplay(level) }}
+        >
+          {{ levelDisplay(level) }}
         </v-chip>
         <v-chip
           v-show="$vuetify.breakpoint.smAndDown"
@@ -36,7 +62,8 @@
           :key="'sm' + index"
           color="secondary"
           text-color="primary"
-        >{{ levelDisplay(level) }}
+        >
+          {{ levelDisplay(level) }}
         </v-chip>
       </v-layout>
     </v-toolbar>
@@ -44,7 +71,11 @@
     <transition-group name="navBtns">
       <!-- FOR MD AND UP -->
       <v-navigation-drawer
-        v-if="level.find(level => level === 'CARER') && authenticated && $vuetify.breakpoint.mdAndUp"
+        v-if="
+          level.find((level) => level === 'CARER') &&
+            authenticated &&
+            $vuetify.breakpoint.mdAndUp
+        "
         key="bp-lg"
         class="primary"
         mini-variant
@@ -56,7 +87,10 @@
       >
         <v-layout column fill-height align-center justify-space-between>
           <BaseAppNavBtn
-            v-if="level.find(level => level === 'CARER') && level.find(level => level === 'CLIENT ADMINISTRATOR')"
+            v-if="
+              level.find((level) => level === 'CARER') &&
+                level.find((level) => level === 'CLIENT ADMINISTRATOR')
+            "
             my-3
             right
             btnIcon="settings"
@@ -81,7 +115,11 @@
       <!-- FOR SM AND DOWN -->
       <v-navigation-drawer
         v-model="drawerState"
-        v-if="level.find(level => level === 'CARER') && authenticated && $vuetify.breakpoint.smAndDown"
+        v-if="
+          level.find((level) => level === 'CARER') &&
+            authenticated &&
+            $vuetify.breakpoint.smAndDown
+        "
         key="bp-sm"
         class="primary"
         disable-route-watcher
@@ -94,7 +132,10 @@
       >
         <v-layout column fill-height align-start justify-start>
           <BaseAppNavBtn
-            v-if="level.find(level => level === 'CARER') && level.find(level => level === 'CLIENT ADMINISTRATOR')"
+            v-if="
+              level.find((level) => level === 'CARER') &&
+                level.find((level) => level === 'CLIENT ADMINISTRATOR')
+            "
             my-3
             right
             btnIcon="settings"
@@ -131,34 +172,67 @@
     <v-fade-transition>
       <v-footer
         v-if="
-          level.find(level => level === 'SYSTEM ADMINISTRATOR') ||
-          level.find(level => level === 'CLIENT ADMINISTRATOR') &&
-          !(level.find(level => level === 'CARER')) &&
-          this.authenticated && !wizardActive"
+          level.find((level) => level === 'SYSTEM ADMINISTRATOR') ||
+            (level.find((level) => level === 'CLIENT ADMINISTRATOR') &&
+              !level.find((level) => level === 'CARER') &&
+              authenticated &&
+              !wizardActive)
+        "
         :fixed="fixed"
         color="white"
         app
       >
         <v-layout row fill height align-space-between justify-space-between>
           <v-layout class="pt-2" row align-center justify-start>
-            <p v-if="$vuetify.breakpoint.smAndDown" class="ml-3" style="align-center">v: alpha</p>
-            <p v-if="$vuetify.breakpoint.mdAndUp" class="ml-3 caption" style="align-center">Version: ALPHA</p>
+            <p
+              v-if="$vuetify.breakpoint.smAndDown"
+              class="ml-3"
+              style="align-center"
+            >
+              v: alpha
+            </p>
+            <p
+              v-if="$vuetify.breakpoint.mdAndUp"
+              class="ml-3 caption"
+              style="align-center"
+            >
+              Version: ALPHA
+            </p>
           </v-layout>
-          <BaseAppNavBtn btnIcon="home" btnColor="primary" route="landing" tip="Home" top />
           <BaseAppNavBtn
-            v-if="level.find(level => level === 'CARER') && this.authenticated"
+            btnIcon="home"
+            btnColor="primary"
+            route="landing"
+            tip="Home"
+            top
+          />
+          <BaseAppNavBtn
+            v-if="
+              level.find((level) => level === 'CARER') && this.authenticated
+            "
             btnIcon="dashboard"
             btnColor="primary"
             route="dashboard"
             tip="Dashboard"
             top
           />
-          <BaseAppNavBtn btnIcon="exit_to_app" btnColor="primary" route="/login" tip="Logout" top />
+          <BaseAppNavBtn
+            btnIcon="exit_to_app"
+            btnColor="primary"
+            route="login"
+            tip="Logout"
+            top
+          />
         </v-layout>
       </v-footer>
     </v-fade-transition>
     <!-- SNACKBAR -->
-    <v-snackbar v-model="snackState" :color="snackColor" :timeout="snackTimeout" bottom>
+    <v-snackbar
+      v-model="snackState"
+      :color="snackColor"
+      :timeout="snackTimeout"
+      bottom
+    >
       {{ snackText }}
       <v-btn dark flat @click="snackState = false">Close</v-btn>
     </v-snackbar>
@@ -166,7 +240,6 @@
 </template>
 
 <script>
-
 import BaseAppNavBtn from '@/components/base/BaseAppNavFooterBtn.vue'
 import { EventBus } from '@/mixins/eventBus.js'
 import { mapState } from 'vuex'
@@ -246,11 +319,17 @@ export default {
     },
     setAuthenticated (newStatus) {
       if (this.level) {
-        if (this.level.find(level => level === 'SYSTEM ADMINISTRATOR') || this.level.find(level => level === 'CLIENT ADMINISTRATOR')) {
+        if (
+          this.level.find((level) => level === 'SYSTEM ADMINISTRATOR') ||
+          this.level.find((level) => level === 'CLIENT ADMINISTRATOR')
+        ) {
           this.$router.push('/landing')
         }
-        if (this.level.find(level => level === 'CARER') ||
-          (this.level.find(level => level === 'CARER') && this.level.find(level => level === 'CLIENT ADMINISTRATOR'))) {
+        if (
+          this.level.find((level) => level === 'CARER') ||
+          (this.level.find((level) => level === 'CARER') &&
+            this.level.find((level) => level === 'CLIENT ADMINISTRATOR'))
+        ) {
           this.$router.push('/dashboard')
         }
       } else {
@@ -307,7 +386,7 @@ export default {
       return this.$store.getters.isActive
     },
     ...mapState({
-      wizardActive: state => state.gettingStartedWizard.wizardActive
+      wizardActive: (state) => state.gettingStartedWizard.wizardActive
     })
   },
   watch: {
@@ -328,7 +407,7 @@ export default {
     if (!this.authenticated) {
       this.logout()
     }
-    EventBus.$on('snack-msg', data => {
+    EventBus.$on('snack-msg', (data) => {
       this.showSnack(data)
     })
   },

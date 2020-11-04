@@ -1,5 +1,4 @@
 <template>
-
   <v-layout class="pt-1" row fill-height align-center justify-space-around>
     <v-flex grow @click="navigate">
       <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
@@ -17,7 +16,6 @@
       <span class="text-white">{{ title }}</span>
     </v-flex>
   </v-layout>
-
 </template>
 
 <script>
