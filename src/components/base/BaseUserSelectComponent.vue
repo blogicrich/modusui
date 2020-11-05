@@ -47,13 +47,6 @@
           >
             {{ getMood(selectedUser) }}
           </v-icon>
-          <v-icon
-            large
-            class="mx-1"
-            @click="incrementUser"
-          >
-            {{ 'chevron_right' }}
-          </v-icon>
         </v-layout>
       </v-card>
     </template>
