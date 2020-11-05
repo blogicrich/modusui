@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <BaseViewHeader
+    <!-- <BaseViewHeader
       v-if="this.$vuetify.breakpoint.mdAndDown"
       :headerIcon="headerIcon"
       :iconColor="iconColor"
@@ -13,7 +13,7 @@
         :selectedUser="selectedUser"
         @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
-    </BaseViewHeader>
+    </BaseViewHeader> -->
     <BaseDataTable
       ref="baseDataTable"
       class="mx-4"
@@ -44,7 +44,7 @@
       <v-card class="pa-4">
         <v-toolbar dark color="primary">
           <v-toolbar-title>{{ dialogTitle() }}</v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-toolbar-items>
             <v-btn icon dark @click="closeDialog" title="cancel and close">
               <v-icon>close</v-icon>
@@ -53,14 +53,16 @@
               v-if="editFormVisible"
               icon dark
               @click="updateSelectedComment"
-              title="save and close">
+              title="save and close"
+            >
               <v-icon>save</v-icon>
             </v-btn>
             <v-btn
               v-if="newFormVisible"
               icon dark
               @click="saveNewComments"
-              title="save and close">
+              title="save and close"
+            >
               <v-icon>save</v-icon>
             </v-btn>
           </v-toolbar-items>
@@ -71,7 +73,7 @@
             <v-card-title>
               <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
               <span class="pg-subheader text-primary">Change Selected Comment</span>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <!-- Delete Comment Confirmation Dialog -->
               <v-dialog v-model="confirmationDialog" persistent max-width="500">
                 <template v-slot:activator="{ on }">
@@ -85,16 +87,16 @@
                     Delete Comment from Day Report?
                   </v-card-title>
                   <v-card-text>
-                  <v-layout class="text-xs-center" column align-center>
-                    <v-progress-circular v-if="deletingData" indeterminate color="primary" :value="80"></v-progress-circular>
-                    <span v-if="deletingData">{{ 'Deleting: ' + selectedUsername }}</span>
-                    <span v-if="!deletingData">{{ 'You are about to permanently delete this System Administrator: ' + selectedUsername + '. Are you sure? This action cannot be undone.' }}</span>
-                  </v-layout>
+                    <v-layout class="text-xs-center" column align-center>
+                      <v-progress-circular v-if="deletingData" indeterminate color="primary" :value="80" />
+                      <span v-if="deletingData">{{ 'Deleting: ' + selectedUsername }}</span>
+                      <span v-if="!deletingData">{{ 'You are about to permanently delete this System Administrator: ' + selectedUsername + '. Are you sure? This action cannot be undone.' }}</span>
+                    </v-layout>
                   </v-card-text>
-                  <v-divider></v-divider>
-                  <v-spacer></v-spacer>
+                  <v-divider />
+                  <v-spacer />
                   <v-card-actions>
-                    <v-spacer></v-spacer>
+                    <v-spacer />
                     <v-btn :color="$vuetify.theme.primary" flat @click.native.prevent="confirmationDialog = false">Cancel</v-btn>
                     <v-btn :color="$vuetify.theme.primary" flat @click.native.prevent="deleteSelectedComment">Delete</v-btn>
                   </v-card-actions>
@@ -114,16 +116,16 @@
                 outline
                 rounded
                 type="number"
-                >
-              </v-textarea>
+              />
               <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn
                   title="Rest password fields"
                   dark
                   :color="$vuetify.theme.primary"
                   @click="$store.commit('UNDO_SELECTED_SYSADMIN')"
-                >RESET
+                >
+                  RESET
                 </v-btn>
               </v-card-actions>
             </v-card-text>
@@ -149,17 +151,17 @@
                 outline
                 rounded
                 @input="$store.commit('UPDATE_NEW_COMMENT', $event)"
-                >
-              </v-textarea>
+              />
               <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn
                   :disabled="newCommentPristine"
                   title="Add Comment to Day Report"
                   dark
                   :color="$vuetify.theme.primary"
                   @click="addCommentToDayReport"
-                >Add
+                >
+                  Add
                 </v-btn>
                 <v-btn
                   :disabled="newCommentPristine"
@@ -167,11 +169,12 @@
                   dark
                   :color="$vuetify.theme.primary"
                   @click="$refs.newCommentForm.reset()"
-                >RESET
+                >
+                  RESET
                 </v-btn>
               </v-card-actions>
             </v-card-text>
-                              
+
             <!-- Comments for Submission -->
 
             <v-list>
@@ -187,7 +190,7 @@
                   outline
                   key="nokeyforthisbadboy"
                 >
-                <v-card-text class="text-center">NO COMMENTS TO SUBMIT. PLEASE ADD COMMENT FOR SUBMISSION</v-card-text>
+                  <v-card-text class="text-center">NO COMMENTS TO SUBMIT. PLEASE ADD COMMENT FOR SUBMISSION</v-card-text>
                 </v-card>
                 <v-card
                   v-show="newComments.length"
@@ -202,10 +205,12 @@
                       <span class="accent--text">{{ comment }}</span>
                     </v-flex>
                     <v-flex shrink>
-                      <v-icon 
+                      <v-icon
                         color="pink"
                         @click="$store.commit('REMOVE_NEW_COMMENT', index)"
-                      >close</v-icon>
+                      >
+                        close
+                      </v-icon>
                     </v-flex>
                   </v-layout>
                 </v-card>
@@ -220,15 +225,23 @@
 
 <script>
 
-import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
+// import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import BaseDataTable from '@/components/base/BaseDataTableComponent'
 import { mapState } from 'vuex'
 
 export default {
   name: 'DailyReport',
   components: {
-    BaseUserSelect,
+    // BaseUserSelect,
     BaseDataTable
+  },
+  watch: {
+    selectedUser () {
+      this.$store.dispatch('fetchDailyReport')
+    },
+    selectedDate () {
+      this.$store.dispatch('fetchDailyReport')
+    }
   },
   computed: {
     ...mapState({
@@ -250,9 +263,9 @@ export default {
   data () {
     return {
       // BaseViewHeader
-      headerIcon: 'menu_book',
-      iconColor: this.$vuetify.theme.primary,
-      headerText: 'Day Report',
+      // headerIcon: 'menu_book',
+      // iconColor: this.$vuetify.theme.primary,
+      // headerText: 'Day Report',
       // BaseDataTable
       tableActionButtonVisible: true,
       headers: [
@@ -351,7 +364,7 @@ export default {
     saveNewComments () {
       if (this.newFormVisible && this.newFormValid) {
         this.$store.dispatch('postNewComments')
-      } 
+      }
       // else {
       //   this.$refs.newCommentForm.validate()
       // }
@@ -359,7 +372,7 @@ export default {
   },
   created () {
     this.$store.dispatch('fetchDailyReport')
-  },
+  }
 }
 
 </script>

@@ -11,8 +11,7 @@
       <v-flex xs12>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Reminders</h2>
-          <v-divider class="ma-2" color="#00a1cd">
-          </v-divider>
+          <v-divider class="ma-2" color="#00a1cd" />
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in reminders"
             :data="voiceMessage"
@@ -22,8 +21,7 @@
         </v-card>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Praises</h2>
-          <v-divider class="ma-2" color="#00a1cd">
-          </v-divider>
+          <v-divider class="ma-2" color="#00a1cd" />
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in praises"
             :data="voiceMessage"
@@ -33,8 +31,7 @@
         </v-card>
         <v-card class="pa-2 my-3">
           <h2 class="ma-2 pg-subheader text-primary">Message Type: Instruct</h2>
-          <v-divider class="ma-2" color="#00a1cd">
-          </v-divider>
+          <v-divider class="ma-2" color="#00a1cd" />
           <SubVoiceMsgAudioPlayer
             v-for="voiceMessage in instructs"
             :data="voiceMessage"

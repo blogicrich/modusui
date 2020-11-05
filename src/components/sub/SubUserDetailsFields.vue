@@ -14,7 +14,7 @@
       v-model="dailyOtherHydrationConsumption"
       append-icon="L"
       @change="change"
-    ></v-text-field>
+    />
     <v-menu
       ref="wakeUpTimePicker"
       v-model="showWakeUpTimePicker"
@@ -37,14 +37,14 @@
           v-on="on"
           :rules="wakeUpTimeRules"
           @change="change"
-        ></v-text-field>
+        />
       </template>
       <v-time-picker
         v-if="showWakeUpTimePicker"
         v-model="wakeUpTime"
         full-width
         @click:minute="$refs.wakeUpTimePicker.save(wakeUpTime)"
-      ></v-time-picker>
+      />
     </v-menu>
     <v-menu
       ref="sleepTimePicker"
@@ -68,14 +68,14 @@
           v-on="on"
           :rules="sleepTimeRules"
           @change="change"
-        ></v-text-field>
+        />
       </template>
       <v-time-picker
         v-if="showSleepTimePicker"
         v-model="sleepTime"
         full-width
         @click:minute="$refs.sleepTimePicker.save(sleepTime)"
-      ></v-time-picker>
+      />
     </v-menu>
     <v-slider
       v-model="voiceMessageVolume"
@@ -84,7 +84,7 @@
       hint="Connected Droplet volume"
       persistent-hint
       @change="change"
-    ></v-slider>
+    />
   </div>
 </template>
 

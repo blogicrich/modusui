@@ -10,8 +10,8 @@
       v-for="(column, index) in row.headers"
       :key="index"
     >
-      <h4>{{row.headers[index]}}:</h4>
-      <span class="ml-2">{{Object.values(row.items)[index]}}</span>
+      <h4>{{ row.headers[index] }}:</h4>
+      <span class="ml-2">{{ Object.values(row.items)[index] }}</span>
     </v-flex>
   </v-layout>
 </template>

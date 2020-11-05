@@ -7,7 +7,6 @@
       hasDivider
     />
     <v-layout row wrap>
-
       <!-- START OF DAY -->
 
       <v-layout column>
@@ -19,7 +18,7 @@
           <v-icon class="mr-3" small color="primary">schedule</v-icon>
           <h3 class="text-primary">Start of the Day</h3>
         </v-layout>
-        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary" v-on:keyup.enter="$event.target.nextElementSibling.focus()">
+        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary" @keyup.enter="$event.target.nextElementSibling.focus()">
           <BaseToleranceSetter
             v-for="(parameter, index) in hydrationParameters"
             :key="parameter.lowerHydrationBoundaryId"
@@ -32,8 +31,7 @@
             @field-value-changed="$store.commit('UPDATE_START', { index: index, value: $event.value })"
             @increment="$store.commit('INCREMENT_START', { index: index, value: $event.value })"
             @decrement="$store.commit('DECREMENT_START', { index: index, value: $event.value })"
-          >
-          </BaseToleranceSetter>
+          />
         </v-form>
       </v-layout>
 
@@ -72,7 +70,8 @@
         @click="save"
         color="primary"
         large
-        >Save
+      >
+        Save
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
       <v-btn
@@ -81,12 +80,13 @@
         @click="reset"
         color="primary"
         large
-        >Reset
+      >
+        Reset
         <v-icon class="ma-1">refresh</v-icon>
       </v-btn>
     </v-layout>
     <v-speed-dial
-      v-if="!paramsLoading  && $vuetify.breakpoint.mdAndDown"
+      v-if="!paramsLoading && $vuetify.breakpoint.mdAndDown"
       :disabled="parametersPristine"
       v-model="fab"
       fixed
@@ -302,7 +302,7 @@ export default {
         if (el.percentHydratedStart !== elClone.percentHydratedStart ||
             el.percentHydratedEnd !== elClone.percentHydratedEnd) {
           isPristine = false
-          return;
+          return
         }
       }
       return isPristine

@@ -43,14 +43,14 @@
           readonly
           v-on="on"
           :rules="wakeUpTimeRules"
-        ></v-text-field>
+        />
       </template>
       <v-time-picker
         v-if="showWakeUpTimePicker"
         v-model="wakeUpTime"
         full-width
         @click:minute="$refs.wakeUpTimePicker.save(wakeUpTime)"
-      ></v-time-picker>
+      />
     </v-menu>
     <v-menu
       ref="sleepTimePicker"
@@ -66,46 +66,48 @@
       min-width="290px"
     >
       <template v-slot:activator="{ on }">
-  <v-text-field
-    class="mx-3"
-    v-model="sleepTime"
-    label="Sleep time"
-    prepend-icon="brightness_3"
-    readonly
-    v-on="on"
-    :rules="sleepTimeRules"
-  ></v-text-field>
-  </template>
+        <v-text-field
+          class="mx-3"
+          v-model="sleepTime"
+          label="Sleep time"
+          prepend-icon="brightness_3"
+          readonly
+          v-on="on"
+          :rules="sleepTimeRules"
+        />
+      </template>
       <v-time-picker
         v-if="showSleepTimePicker"
         v-model="sleepTime"
         full-width
         @click:minute="$refs.sleepTimePicker.save(sleepTime)"
-      ></v-time-picker>
+      />
     </v-menu>
     <v-layout row justify-center align-center>
       <v-fade-transition>
         <v-btn
-        v-show="!isPristine"
-        class="root-nav-btn"
-        @click="save"
-        color="primary"
-        large
-        >Save
-        <v-icon class="ma-1">save</v-icon>
-      </v-btn>
-    </v-fade-transition>
+          v-show="!isPristine"
+          class="root-nav-btn"
+          @click="save"
+          color="primary"
+          large
+        >
+          Save
+          <v-icon class="ma-1">save</v-icon>
+        </v-btn>
+      </v-fade-transition>
       <v-fade-transition>
         <v-btn
-        v-show="!isPristine"
-        class="root-nav-btn"
-        @click="reset"
-        color="primary"
-        large
-        >Reset
-        <v-icon class="ma-1">refresh</v-icon>
-      </v-btn>
-    </v-fade-transition>
+          v-show="!isPristine"
+          class="root-nav-btn"
+          @click="reset"
+          color="primary"
+          large
+        >
+          Reset
+          <v-icon class="ma-1">refresh</v-icon>
+        </v-btn>
+      </v-fade-transition>
     </v-layout>
   </v-container>
 </template>

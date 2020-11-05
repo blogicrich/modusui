@@ -31,7 +31,7 @@
         :width="spinnerWidth"
         :color="primaryColor"
         indeterminate
-      ></v-progress-circular>
+      />
       <h2 class="headline font-weight-light">{{ loadingMessage }}</h2>
     </v-layout>
     <BasicRegDetailsForm

@@ -19,7 +19,8 @@
               :mandatory="false"
               v-model="blueLight"
               color="primary"
-              :column="$vuetify.breakpoint.mdAndDown ? true : false"            >
+              :column="$vuetify.breakpoint.mdAndDown ? true : false"
+            >
               <v-radio
                 color="primary"
                 v-for="(interval) in blueLightFlashingIntervals"
@@ -27,8 +28,7 @@
                 :label="String(interval.time) + ' mins'"
                 :value="interval.time"
                 @change="$store.commit('SET_NEW_BLUE_LIGHT_INTERVAL', { id: interval.blueLightFlashingIntervalId, time: $event })"
-              >
-              </v-radio>
+              />
             </v-radio-group>
           </template>
         </BaseRadioOptions>
@@ -54,8 +54,7 @@
                 :label="String(interval.time) + ' mins'"
                 :value="interval.time"
                 @change="$store.commit('SET_NEW_SPOKEN_REMINDER_INTERVAL', { id: interval.spokenReminderId, time: $event })"
-                >
-              </v-radio>
+              />
             </v-radio-group>
           </template>
         </BaseRadioOptions>
@@ -63,10 +62,11 @@
     </v-layout>
     <v-layout v-if="$vuetify.breakpoint.lgAndUp" row justify-center align-center>
       <v-btn
-      class="root-nav-btn"
-      :disabled="!intervalsPristine"
-      @click="save(selectedBlueLightInterval, selectedSpokenReminderInterval)"
-      color="primary" large>
+        class="root-nav-btn"
+        :disabled="!intervalsPristine"
+        @click="save(selectedBlueLightInterval, selectedSpokenReminderInterval)"
+        color="primary" large
+      >
         Save
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
@@ -74,7 +74,8 @@
         class="root-nav-btn"
         :disabled="!intervalsPristine"
         @click="reset"
-        color="primary" large>
+        color="primary" large
+      >
         Reset
         <v-icon class="ma-1">refresh</v-icon>
       </v-btn>
@@ -129,7 +130,7 @@ import BaseRadioOptions from '@/components/base/BaseRadioOptionsSelectComponent.
 import { mapState } from 'vuex'
 
 export default {
-  name: 'intervalOptions',
+  name: 'IntervalOptions',
   components: {
     BaseRadioOptions
   },

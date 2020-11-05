@@ -27,11 +27,15 @@
             <h2
               v-if="$vuetify.breakpoint.mdAndUp"
               class="headline font-weight-light"
-            >Lets get you started with your Connected Droplet</h2>
+            >
+              Lets get you started with your Connected Droplet
+            </h2>
             <h2
               v-if="$vuetify.breakpoint.smAndDown"
               class="font font-weight-thin text-center"
-            >Lets get you started with your Connected Droplet</h2>
+            >
+              Lets get you started with your Connected Droplet
+            </h2>
           </v-flex>
         </v-layout>
       </v-layout>
@@ -55,7 +59,9 @@
               type="submit"
               :disabled="!stepOne.valid"
               @click="step = 2"
-            >Next</v-btn>
+            >
+              Next
+            </v-btn>
             <router-link to="/login">Already have an account? Click here to log in</router-link>
           </v-form>
         </v-stepper-content>
@@ -68,7 +74,7 @@
                 label="Email Address"
                 v-model="stepTwo.email"
                 :rules="stepTwo.emailRules"
-              ></v-text-field>
+              />
               <sub-person-details-fields v-model="stepTwo.personalDetails" :titles="titles" />
             </v-flex>
             <v-btn class="ml-0" @click="step = 1">Go Back</v-btn>
@@ -78,7 +84,9 @@
               @click="submitAccountDetails"
               type="submit"
               :disabled="!stepTwo.valid"
-            >Create Account</v-btn>
+            >
+              Create Account
+            </v-btn>
           </v-form>
         </v-stepper-content>
 
@@ -92,14 +100,16 @@
                 hint="Something that helps you identify this droplet (e.g. Jim's Connected Droplet)"
                 :placeholder="macAddress"
                 counter="45"
-              ></v-text-field>
+              />
               <v-btn
                 class="ml-0"
                 color="primary"
                 type="submit"
                 @click="submitEdropletConfig"
                 :disabled="!stepThree.valid"
-              >Configure</v-btn>
+              >
+                Configure
+              </v-btn>
             </v-flex>
           </v-form>
         </v-stepper-content>
@@ -150,18 +160,24 @@
               color="primary"
               v-if="stepFour.dropletUse === 'SELF'"
               :disabled="!stepFour.valid"
-            >Save configuration</v-btn>
+            >
+              Save configuration
+            </v-btn>
             <v-btn
               type="submit"
               color="primary"
               v-if="stepFour.dropletUse === 'OTHER_USER'"
               :disabled="!stepFour.valid"
-            >Save configuration for other user</v-btn>
+            >
+              Save configuration for other user
+            </v-btn>
             <v-btn
               type="submit"
               color="primary"
               v-if="stepFour.dropletUse === 'SOMETHING_ELSE'"
-            >To Dashboard</v-btn>
+            >
+              To Dashboard
+            </v-btn>
           </v-form>
         </v-stepper-content>
       </v-stepper>

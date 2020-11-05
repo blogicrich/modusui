@@ -3,13 +3,13 @@
     <v-flex>
       <v-layout column align-center>
         <v-fade-transition>
-          <div id="login-loaded" class="mp_login" v-on:keyup.enter="checkValues">
+          <div id="login-loaded" class="mp_login" @keyup.enter="checkValues">
             <v-layout class="ma-2" column align-center>
               <img
                 class="loginresetimg"
                 alt=""
-                src='../../assets/ed_logo.svg'
-                >
+                src="../../assets/ed_logo.svg"
+              >
               <img>
             </v-layout>
             <v-form ref="loginForm">
@@ -22,22 +22,21 @@
                     :width="spinnerWidth"
                     :color="primaryColor"
                     indeterminate
-                  >
-                  </v-progress-circular>
+                  />
                   <h2 style="font-size:1em">Authenticating. Please wait...</h2>
                 </v-layout>
               </div>
               <v-layout v-if="!isAuthenticating" column>
                 <v-flex grow>
-                 <v-fade-transition>
-                  <v-flex>
-                    <v-layout v-if="msg" class="my-2" align-center justify-center>
-                      <v-icon class="ma-2" color="error">highlight_off</v-icon>
-                      <h2 v-if="$vuetify.breakpoint.smAndDown" style="font-size:1em">{{ msg }}</h2>
-                      <h2 v-if="$vuetify.breakpoint.mdAndUp" style="font-size:1.5em">{{ msg }}</h2>
-                    </v-layout>
-                  </v-flex>
-                </v-fade-transition>
+                  <v-fade-transition>
+                    <v-flex>
+                      <v-layout v-if="msg" class="my-2" align-center justify-center>
+                        <v-icon class="ma-2" color="error">highlight_off</v-icon>
+                        <h2 v-if="$vuetify.breakpoint.smAndDown" style="font-size:1em">{{ msg }}</h2>
+                        <h2 v-if="$vuetify.breakpoint.mdAndUp" style="font-size:1.5em">{{ msg }}</h2>
+                      </v-layout>
+                    </v-flex>
+                  </v-fade-transition>
                   <v-text-field
                     id="userId"
                     v-model="input.username"
@@ -46,7 +45,7 @@
                     name="username"
                     outline
                     :rules="[v => !!v || 'Username required!']"
-                  ></v-text-field>
+                  />
                   <v-text-field
                     id="password"
                     v-model.lazy="input.password"
@@ -55,7 +54,7 @@
                     name="password"
                     outline
                     :rules="[v => !!v || 'Password required!']"
-                  ></v-text-field>
+                  />
                   <v-layout class="mb-2" row align-center justify-center>
                     <router-link to="/passwordreset">
                       <a>Forgotten password?</a>
@@ -66,8 +65,8 @@
                   <button
                     class="loginreset"
                     type="button"
-                    v-on:click="checkValues"
-                    >
+                    @click="checkValues"
+                  >
                     Submit
                   </button>
                 </v-layout>

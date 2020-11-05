@@ -2,18 +2,18 @@
   <v-container class="pa-0">
     <v-layout row wrap align-center justify-space-around>
       <v-flex xl2 md3 lg2 sm12 xs12>
-          <v-layout row align-center justify-center>
-            <h3 class="text-intervals">{{ data.voiceMessagedescription }}</h3>
-            <v-icon @click="$refs.file.click()" class="mx-2" color="primary">{{ uploadIcon }}</v-icon>
-          </v-layout>
-          <v-layout cloumn align-center justify-center>
+        <v-layout row align-center justify-center>
+          <h3 class="text-intervals">{{ data.voiceMessagedescription }}</h3>
+          <v-icon @click="$refs.file.click()" class="mx-2" color="primary">{{ uploadIcon }}</v-icon>
+        </v-layout>
+        <v-layout cloumn align-center justify-center>
           <input @change="showSaveFile = true" type="file" style="display:none" ref="file" accept=".mp3">
           <v-btn v-if="showSaveFile" color="primary" @click="saveAudio()">Save changes</v-btn>
         </v-layout>
       </v-flex>
       <v-flex xl5 md3 lg5 sm12 xs12>
         <v-layout row align-center justify-center style="margin: 5px auto;">
-          <BaseAudioPlayer class="vuetify-audio" :file="data.audioFile"></BaseAudioPlayer>
+          <BaseAudioPlayer class="vuetify-audio" :file="data.audioFile" />
         </v-layout>
       </v-flex>
     </v-layout>

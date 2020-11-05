@@ -30,15 +30,14 @@
       :loadedMsg="loadedMsg"
       @row-clicked="openEditDialog"
       @action-button-pressed="openNewDialog"
-    >
-    </BaseDataTable>
+    />
     <!-- CRUD dialog -->
     <v-layout justify-center v-if="selectedSysAdmin">
       <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
         <v-card class="pa-4">
           <v-toolbar dark color="primary">
             <v-toolbar-title>{{ dialogTitle() }}</v-toolbar-title>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-toolbar-items>
               <v-btn icon dark @click="closeDialog" title="cancel and close">
                 <v-icon>close</v-icon>
@@ -47,14 +46,16 @@
                 v-if="editFormVisible"
                 icon dark
                 @click="updateSelectedSysAdmin"
-                title="save and close">
+                title="save and close"
+              >
                 <v-icon>save</v-icon>
               </v-btn>
               <v-btn
                 v-if="newFormVisible"
                 icon dark
                 @click="saveNewSysAdmin"
-                title="save and close">
+                title="save and close"
+              >
                 <v-icon>save</v-icon>
               </v-btn>
             </v-toolbar-items>
@@ -83,7 +84,7 @@
                   validate-on-blur
                   :type="passwordMasked ? 'text' : 'password'"
                   :rules="passwordValidation"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="Repeat New Password"
@@ -94,14 +95,15 @@
                   validate-on-blur
                   :type="passwordMasked ? 'text' : 'password'"
                   :rules="passwordValidation"
-                ></v-text-field>
+                />
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn :color="$vuetify.theme.primary" @click="setPasswordMask">
                     <v-icon
                       title="Password visibility"
                       medium
-                      :color="$vuetify.theme.secondary">
+                      :color="$vuetify.theme.secondary"
+                    >
                       {{ passwordMasked ? 'visibility' : 'visibility_off' }}
                     </v-icon>
                   </v-btn>
@@ -110,7 +112,8 @@
                     dark
                     :color="$vuetify.theme.primary"
                     @click="$refs.editSysAdminPasswordForm.reset()"
-                  >RESET
+                  >
+                    RESET
                   </v-btn>
                 </v-card-actions>
               </v-card-text>
@@ -122,7 +125,7 @@
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
                 <span class="pg-subheader text-primary">Change System Admin Details</span>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <!-- Delete Confirmation Dialog -->
                 <v-dialog v-model="confirmationDialog" persistent max-width="500">
                   <template v-slot:activator="{ on }">
@@ -136,16 +139,16 @@
                       Delete System Administrator?
                     </v-card-title>
                     <v-card-text>
-                    <v-layout class="text-xs-center" column align-center>
-                      <v-progress-circular v-if="deletingData" indeterminate color="primary" :value="80"></v-progress-circular>
-                      <span v-if="deletingData">{{ 'Deleting: ' + selectedUsername }}</span>
-                      <span v-if="!deletingData">{{ 'You are about to permanently delete this System Administrator: ' + selectedUsername + '. Are you sure? This action cannot be undone.' }}</span>
-                    </v-layout>
+                      <v-layout class="text-xs-center" column align-center>
+                        <v-progress-circular v-if="deletingData" indeterminate color="primary" :value="80" />
+                        <span v-if="deletingData">{{ 'Deleting: ' + selectedUsername }}</span>
+                        <span v-if="!deletingData">{{ 'You are about to permanently delete this System Administrator: ' + selectedUsername + '. Are you sure? This action cannot be undone.' }}</span>
+                      </v-layout>
                     </v-card-text>
-                    <v-divider></v-divider>
-                    <v-spacer></v-spacer>
+                    <v-divider />
+                    <v-spacer />
                     <v-card-actions>
-                      <v-spacer></v-spacer>
+                      <v-spacer />
                       <v-btn :color="primaryColor" flat @click.native.prevent="confirmationDialog = false">Cancel</v-btn>
                       <v-btn :color="primaryColor" flat @click.native.prevent="deleteSysAdmin">Delete</v-btn>
                     </v-card-actions>
@@ -162,7 +165,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="email"
@@ -172,7 +175,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.email"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="mobile"
@@ -182,7 +185,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.mobileNo"
-                ></v-text-field>
+                />
                 <v-select
                   v-if="titles"
                   :items="titles"
@@ -193,7 +196,7 @@
                   item-value="titleId"
                   item-text="shortDescription"
                   :rules="sysAdminDetailsValidation.title"
-                ></v-select>
+                />
                 <v-text-field
                   class="ma-1"
                   label="givenName"
@@ -203,7 +206,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="familyName"
@@ -213,7 +216,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="salutation"
@@ -223,15 +226,16 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn
                     title="Rest password fields"
                     dark
                     :color="$vuetify.theme.primary"
                     @click="$store.commit('UNDO_SELECTED_SYSADMIN')"
-                  >RESET
+                  >
+                    RESET
                   </v-btn>
                 </v-card-actions>
               </v-card-text>
@@ -254,7 +258,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="Email"
@@ -264,7 +268,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.email"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="Mobile"
@@ -274,7 +278,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.mobileNo"
-                ></v-text-field>
+                />
                 <v-select
                   v-if="titles"
                   :items="titles"
@@ -284,7 +288,7 @@
                   item-value="titleId"
                   item-text="shortDescription"
                   :rules="sysAdminDetailsValidation.title"
-                ></v-select>
+                />
                 <v-text-field
                   class="ma-1"
                   label="Given Name"
@@ -294,7 +298,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="Family Name"
@@ -304,7 +308,7 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-text-field
                   class="ma-1"
                   label="Salutation"
@@ -314,15 +318,16 @@
                   required
                   validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
-                ></v-text-field>
+                />
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn
                     title="Rest password fields"
                     dark
                     :color="$vuetify.theme.primary"
                     @click="$refs.newSysAdminDetailsForm.reset()"
-                  >RESET
+                  >
+                    RESET
                   </v-btn>
                 </v-card-actions>
               </v-card-text>

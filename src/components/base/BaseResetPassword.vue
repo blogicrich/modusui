@@ -1,44 +1,50 @@
 <template>
   <v-container id="forgotpassword">
     <v-fade-transition>
-    <v-flex>
-      <v-layout class="mb-2" column align-center>
-        <router-link to="/login">
-          <img class="loginresetimg" alt="" src="../../assets/ed_logo.svg">
-        </router-link>
-      </v-layout>
-      <v-form ref="forgotpwform" v-on:submit.prevent="checkEmail">
-        <v-layout align-center justify-center column fill-height>
-          <h3
-            v-if="$vuetify.breakpoint.mdAndUp"
-            class="text-center"
-            >{{ instructions }}</h3>
-          <h4
-            v-if="$vuetify.breakpoint.smAndDown"
-            class="text-center"
-            >{{ instructions }}</h4>
-          <v-text-field
-            class="mt-3 inputloginreset"
-            ref="email" :hint="hint"
-            v-model="email"
-            type="email"
-            name="email"
-            :rules="emailRules"
-            label="Enter your e-mail address"
-            single-line
-            clearable
+      <v-flex>
+        <v-layout class="mb-2" column align-center>
+          <router-link to="/login">
+            <img class="loginresetimg" alt="" src="../../assets/ed_logo.svg">
+          </router-link>
+        </v-layout>
+        <v-form ref="forgotpwform" @submit.prevent="checkEmail">
+          <v-layout align-center justify-center column fill-height>
+            <h3
+              v-if="$vuetify.breakpoint.mdAndUp"
+              class="text-center"
+            >
+              {{ instructions }}
+            </h3>
+            <h4
+              v-if="$vuetify.breakpoint.smAndDown"
+              class="text-center"
+            >
+              {{ instructions }}
+            </h4>
+            <v-text-field
+              class="mt-3 inputloginreset"
+              ref="email" :hint="hint"
+              v-model="email"
+              type="email"
+              name="email"
+              :rules="emailRules"
+              label="Enter your e-mail address"
+              single-line
+              clearable
             />
             <v-btn
-            class="loginreset"
-            v-bind:disabled="email === ''"
-            flat
-            round
-            v-on:click="checkEmail"
-            >Send E-mail</v-btn>
-        </v-layout>
-      </v-form>
-    </v-flex>
-  </v-fade-transition>
+              class="loginreset"
+              :disabled="email === ''"
+              flat
+              round
+              @click="checkEmail"
+            >
+              Send E-mail
+            </v-btn>
+          </v-layout>
+        </v-form>
+      </v-flex>
+    </v-fade-transition>
   </v-container>
 </template>
 

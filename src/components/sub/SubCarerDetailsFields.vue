@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-select v-model="communicationMethodId" :items="communicationMethodOptions" label="Preferred communcation method" @change="change"/>
-    <v-select v-model="alertTypeIds" :items="alertTypeOptions" label="Enabled Alerts" attach chips deletable-chips multiple @change="change"/>
+    <v-select v-model="communicationMethodId" :items="communicationMethodOptions" label="Preferred communcation method" @change="change" />
+    <v-select v-model="alertTypeIds" :items="alertTypeOptions" label="Enabled Alerts" attach chips deletable-chips multiple @change="change" />
   </div>
 </template>
 

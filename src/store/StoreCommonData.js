@@ -1,5 +1,4 @@
 import apiLib from '../services/apiLib.js'
-import moment from 'moment'
 
 export const moduleCommonData = {
   state: {

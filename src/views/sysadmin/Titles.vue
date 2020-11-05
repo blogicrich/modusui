@@ -37,6 +37,7 @@
       @deleteSelected="deleteItem"
       @itemsCancelled="getItems(readUrl)"
     >
+      <!-- eslint-disable-next-line -->
       <template v-slot:newSlot="{ item, itemKey }">
         <v-text-field
           class="ma-1"
@@ -47,8 +48,9 @@
           required
           validate-on-blur
           :rules="newItem[itemKey].validators"
-        ></v-text-field>
+        />
       </template>
+      <!-- eslint-disable-next-line -->
       <template v-slot:editSlot="{ item, itemKey, property }">
         <v-text-field
           :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
@@ -59,7 +61,8 @@
           required
           validata-on-blur
           :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
-        >{{ property }}
+        >
+          {{ property }}
         </v-text-field>
       </template>
     </BaseDataTable>

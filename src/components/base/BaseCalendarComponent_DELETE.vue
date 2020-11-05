@@ -10,7 +10,7 @@
               :title="event.status"
               :color="getColorByStatus(event.status)"
               :menuText="event.hydrationLevel"
-            ></calendarEvent>
+            />
           </template>
         </v-calendar>
       </v-sheet>
@@ -21,7 +21,8 @@
       </v-btn>
     </v-flex>
     <v-flex xs6 class="text-xs-right">
-      <v-btn color="primary" @click="$refs.calendar.next()">Next
+      <v-btn color="primary" @click="$refs.calendar.next()">
+        Next
         <v-icon right dark>keyboard_arrow_right</v-icon>
       </v-btn>
     </v-flex>

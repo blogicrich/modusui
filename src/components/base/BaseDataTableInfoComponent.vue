@@ -13,7 +13,7 @@
             :width="7"
             :color="color"
             indeterminate
-          ></v-progress-circular>
+          />
         </v-layout>
       </v-flex>
       <v-flex v-if="loading && this.$vuetify.breakpoint.smAndDown" class="mx-2 mb-5" xs12>
@@ -28,11 +28,11 @@
             :width="5"
             :color="color"
             indeterminate
-          ></v-progress-circular>
+          />
         </v-layout>
       </v-flex>
       <v-flex class="mx-2" v-if="loaded" xs12>
-        <v-layout v-if="loaded && this.$vuetify.breakpoint.mdAndUp"  class="my-3" row fill-height align-center justify-center>
+        <v-layout v-if="loaded && this.$vuetify.breakpoint.mdAndUp" class="my-3" row fill-height align-center justify-center>
           <v-icon color="warning" size="36">warning</v-icon>
           <h3 class="text-xs-center pg-subheader text-warning">{{ loadedMsg }}</h3>
         </v-layout>
@@ -52,7 +52,7 @@
         </v-layout>
       </v-flex>
     </v-layout>
-</v-fade-transition>
+  </v-fade-transition>
 </template>
 
 <script>

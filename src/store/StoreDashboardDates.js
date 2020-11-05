@@ -4,13 +4,17 @@ export const moduleDashboardDates = {
   state: {
     dashboardSelectedDate: null,
     dashboardUnixDate: null,
-    dashboardFormattedDate: null
+    dashboardFormattedDate: null,
+    maxDate: null
   },
   mutations: {
     SET_DASHBOARD_DATE (state, data) {
       state.dashboardSelectedDate = data
       state.dashboardUnixDate = moment.utc(data).unix()
       state.dashboardFormattedDate = moment(data).format('LL')
+    },
+    SET_MAX_DATE (state) {
+      state.maxDate = moment().format('YYYY-MM-DD')
     },
     INCREMENT_DASHBOARD_DATE (state, data) {
       state.dashboardSelectedDate = moment(data, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD')
@@ -26,6 +30,7 @@ export const moduleDashboardDates = {
       state.dashboardSelectedDate = null
       state.dashboardUnixDate = null
       state.dashboardFormattedDate = null
+      state.maxDate = null
     }
   },
   actions: {

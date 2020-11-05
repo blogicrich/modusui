@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-btn v-on:click="renderPdf" icon large :color="color">
-      <v-icon>{{icon}}</v-icon>
+    <v-btn @click="renderPdf" icon large :color="color">
+      <v-icon>{{ icon }}</v-icon>
     </v-btn>
   </div>
 </template>

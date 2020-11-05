@@ -13,24 +13,24 @@
         @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
     </BaseViewHeader>
-      <data-table
-        ref="baseDataTable"
-        class="mx-4"
-        :editPerms="editPerms"
-        :headers="headers"
-        :items="title"
-        :loading="loading"
-        :loaded="loaded"
-        :error="error"
-        :errorMsg="errorMsg"
-        :loadingMsg="loadingMsg"
-        :loadedMsg="loadedMsg"
-        primaryColor="primary"
-        recordIcon="person"
-        tableTitle="Personal Details"
-      ></data-table>
+    <data-table
+      ref="baseDataTable"
+      class="mx-4"
+      :editPerms="editPerms"
+      :headers="headers"
+      :items="title"
+      :loading="loading"
+      :loaded="loaded"
+      :error="error"
+      :errorMsg="errorMsg"
+      :loadingMsg="loadingMsg"
+      :loadedMsg="loadedMsg"
+      primaryColor="primary"
+      recordIcon="person"
+      tableTitle="Personal Details"
+    />
     <v-layout row justify-end>
-      <wizard-component/>
+      <wizard-component />
     </v-layout>
   </v-container>
 </template>

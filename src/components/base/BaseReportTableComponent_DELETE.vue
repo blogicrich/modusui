@@ -1,7 +1,6 @@
 <template>
   <v-container v-if="type === `header`">
-    <BaseReportHeaderRow v-for="(row, index) in table.rows" :key="index" :row="row">
-    </BaseReportHeaderRow>
+    <BaseReportHeaderRow v-for="(row, index) in table.rows" :key="index" :row="row" />
   </v-container>
 
   <v-data-table v-else-if="type === `table`" :headers="table.headers" :items="table.items">
@@ -10,7 +9,9 @@
         :class="table.align ? 'text-xs-' + table.align : ''"
         v-for="(data, index) in props.item"
         :key="index"
-      >{{data}}</td>
+      >
+        {{ data }}
+      </td>
     </template>
   </v-data-table>
 </template>

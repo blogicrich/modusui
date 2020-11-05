@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <BaseViewHeader
+    <!-- <BaseViewHeader
       class="mx-2 mb-2"
       :headerIcon="headerIcon"
       :headerText="headerText"
@@ -12,7 +12,7 @@
         :selectedUser="selectedUser"
         @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
       />
-    </BaseViewHeader>
+    </BaseViewHeader> -->
     <BaseDataTable
       ref="baseDataTable"
       class="mx-4"
@@ -34,7 +34,6 @@
       :loadedMsg="loadedMsg"
       searchLabel="Search Records..."
       tableTitle="Additional Drinks"
-
       @action-button-pressed="openNewDialog"
     />
 
@@ -45,7 +44,7 @@
         <v-card class="pa-4">
           <v-toolbar dark fixed color="primary">
             <v-toolbar-title>Additional Drinks</v-toolbar-title>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-toolbar-items>
               <v-btn icon dark @click="closeDialog" title="cancel and close">
                 <v-icon>close</v-icon>
@@ -53,17 +52,18 @@
               <v-btn
                 icon dark
                 @click="saveNewDrinks"
-                title="save and close">
+                title="save and close"
+              >
                 <v-icon>save</v-icon>
               </v-btn>
             </v-toolbar-items>
           </v-toolbar>
-          
+
           <!-- Add New Drink -->
 
           <v-form v-model="newFormValid" v-if="containerTypes" ref="newDrinkForm" class="mt-4">
             <v-container>
-              <v-card class="mt-5 pa-3"  tile outline>
+              <v-card class="mt-5 pa-3" tile outline>
                 <v-card-title>
                   <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
                   <span class="pg-subheader text-primary">Add Drink</span>
@@ -81,7 +81,7 @@
                       item-value="containerTypeId"
                       item-text="description"
                       :rules="newDrinkValidation.generic"
-                    ></v-select>
+                    />
                   </v-flex>
                   <v-flex xs12 sm4>
                     <v-text-field
@@ -91,7 +91,7 @@
                       prepend-icon=""
                       readonly
                       disabled
-                    ></v-text-field>
+                    />
                   </v-flex>
                   <v-flex xs12 sm4>
                     <v-text-field
@@ -101,10 +101,10 @@
                       prepend-icon="local_drink"
                       type="number"
                       :rules="newDrinkValidation.numerical"
-                    ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-                  <v-layout>
+                    />
+                  </v-flex>
+                </v-layout>
+                <v-layout>
                   <v-flex xs12>
                     <v-menu
                       ref="drinkDatePicker"
@@ -126,14 +126,14 @@
                           prepend-icon="calender_today"
                           readonly
                           v-on="on"
-                        ></v-text-field>
+                        />
                       </template>
                       <v-date-picker
                         v-if="showDrinkDatePicker"
                         v-model="drinkDate"
                         full-width
                         @click:minute="$refs.drinkDatePicker.save(drinkDate)"
-                      ></v-date-picker>
+                      />
                     </v-menu>
                   </v-flex>
                   <v-flex xs12>
@@ -158,32 +158,34 @@
                           prepend-icon="access_time"
                           readonly
                           v-on="on"
-                        ></v-text-field>
+                        />
                       </template>
                       <v-time-picker
                         v-if="showDrinkTimePicker"
                         v-model="drinkTime"
                         full-width
                         @click:minute="$refs.drinkTimePicker.save(drinkTime)"
-                      ></v-time-picker>
+                      />
                     </v-menu>
                   </v-flex>
                 </v-layout>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn
                     title="Add a new drink"
                     dark
                     :color="$vuetify.theme.primary"
                     @click="addNewDrink()"
-                  >ADD
+                  >
+                    ADD
                   </v-btn>
                   <v-btn
                     title="Reset form"
                     dark
                     :color="$vuetify.theme.primary"
                     @click="$refs.newDrinkForm.reset()"
-                  >RESET
+                  >
+                    RESET
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -203,7 +205,7 @@
                     outline
                     key="nokeyforthisbadboy"
                   >
-                  <v-card-text class="text-center">NO DRINKS TO SUBMIT. PLEASE ADD NEW DRINK ABOVE</v-card-text>
+                    <v-card-text class="text-center">NO DRINKS TO SUBMIT. PLEASE ADD NEW DRINK ABOVE</v-card-text>
                   </v-card>
                   <v-card
                     v-show="newDrinks.length"
@@ -215,23 +217,25 @@
                   >
                     <v-layout>
                       <v-flex grow>
-                        <span class="accent--text">{{ 
-                          drink.quantity + 
-                          ' x ' + 
-                          drink.description + 
-                          ': ' + 
-                          Number(drink.volume * drink.quantity).toFixed(2) + 
-                          ' (L)' +
-                          ' on ' +
-                          drink.date +
-                          ' at ' +
-                          drink.time }}</span>
+                        <span class="accent--text">{{
+                          drink.quantity +
+                            ' x ' +
+                            drink.description +
+                            ': ' +
+                            Number(drink.volume * drink.quantity).toFixed(2) +
+                            ' (L)' +
+                            ' on ' +
+                            drink.date +
+                            ' at ' +
+                            drink.time }}</span>
                       </v-flex>
                       <v-flex shrink>
-                        <v-icon 
+                        <v-icon
                           color="pink"
                           @click="$store.commit('REMOVE_NEW_DRINK', index)"
-                        >close</v-icon>
+                        >
+                          close
+                        </v-icon>
                       </v-flex>
                     </v-layout>
                   </v-card>
@@ -250,19 +254,20 @@
 import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import { mapState } from 'vuex'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
-import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
+// import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'AdditionalDrinks',
   mixins: [dataTableNavGuard, validation],
   components: {
-    BaseDataTable,
-    BaseUserSelect
+    BaseDataTable
+    // BaseUserSelect
   },
   computed: {
     ...mapState({
       selectedUser: state => state.dashboardUsers.selectedUser,
+      selectedDate: state => state.dashboardDates.dashboardSelectedDate,
       dashboardUsers: state => state.dashboardUsers.dashboardUsers,
       drinks: state => state.dashboardDrinks.drinks,
       additionalDrinks: state => state.dashboardDrinks.additionalDrinks,
@@ -271,12 +276,24 @@ export default {
       newDrinks: state => state.dashboardDrinks.newDrinks
     })
   },
+  watch: {
+    selectedUser () {
+      this.fetchDashboardDrinks()
+    },
+    selectedDate () {
+      this.fetchDashboardDrinks()
+    }
+  },
+  // props: {
+  //   selectedUser: Object,
+  //   dashboardUsers: Object
+  // },
   data () {
     return {
       // BaseViewHeader
-      headerIcon: 'local_drink',
-      iconColor: this.$vuetify.theme.primary,
-      headerText: 'Additional Drinks',
+      // headerIcon: 'local_drink',
+      // iconColor: this.$vuetify.theme.primary,
+      // headerText: 'Additional Drinks',
       // Add Drinks Dialog
       showContainerTypePicker: true,
       showDrinkTimePicker: true,
@@ -307,55 +324,55 @@ export default {
         sortBy: 'dateTime'
       },
       headers: [
-        { 
-          text: 'Friendly Name', 
-          align: 'left', 
-          sortable: true, 
-          cellType: 'tb', 
+        {
+          text: 'Friendly Name',
+          align: 'left',
+          sortable: true,
+          cellType: 'tb',
           value: 'friendlyName',
           hidden: true,
-          editable: true 
+          editable: true
         },
-        { 
-          text: 'MAC Address', 
-          align: 'left', 
-          sortable: true, 
-          cellType: 'tb', 
+        {
+          text: 'MAC Address',
+          align: 'left',
+          sortable: true,
+          cellType: 'tb',
           value: 'macAddress',
           hidden: true,
-          editable: true 
+          editable: true
         },
-        { 
-          text: 'Volume (L)', 
-          align: 'left', 
-          sortable: true, 
-          cellType: 'tb', 
+        {
+          text: 'Volume (L)',
+          align: 'left',
+          sortable: true,
+          cellType: 'tb',
           value: 'volumeInLitres',
           hidden: false,
-          editable: true 
+          editable: true
         },
-        { 
-          text: 'Datetime', 
-          align: 'left', 
-          sortable: true, 
-          cellType: 'tb', 
-          value: 'longFormDate', 
+        {
+          text: 'Datetime',
+          align: 'left',
+          sortable: true,
+          cellType: 'tb',
+          value: 'longFormDate',
           hidden: true,
-          editable: true 
+          editable: true
         },
-        { 
-          text: 'Date', 
-          align: 'left', 
-          sortable: true, 
-          cellType: 'tb', 
-          value: 'longFormDate', 
+        {
+          text: 'Date',
+          align: 'left',
+          sortable: true,
+          cellType: 'tb',
+          value: 'longFormDate',
           hidden: false,
-          editable: true 
-        },
+          editable: true
+        }
       ],
       newDrinkValidation: {
         generic: [
-          value => !!value || 'Required.',
+          value => !!value || 'Required.'
         ],
         numerical: [
           value => {
@@ -381,9 +398,9 @@ export default {
     },
     // Dialogs
     closeDialog () {
-      this.dialog = false;
-      this.newFormVisible = false;
-      this.$store.commit('RESET_NEW_DRINKS');
+      this.dialog = false
+      this.newFormVisible = false
+      this.$store.commit('RESET_NEW_DRINKS')
     },
     openNewDialog () {
       this.dialog = true
@@ -392,12 +409,12 @@ export default {
     addNewDrink () {
       console.log(this.newDrinks, this.drinkDate, this.drinkTime, this.containerType, Number(this.drinkQty))
       this.$store.commit('ADD_NEW_DRINK', {
-        "quantity": Number(this.drinkQty),
-        "containerTypeId": this.containerType,
-        "volume": this.containerTypes.find(container => container.containerTypeId === this.containerType).volume,
-        "description": this.containerTypes.find(container => container.containerTypeId === this.containerType).description,
-        "time": this.drinkTime,
-        "date": this.drinkDate
+        quantity: Number(this.drinkQty),
+        containerTypeId: this.containerType,
+        volume: this.containerTypes.find(container => container.containerTypeId === this.containerType).volume,
+        description: this.containerTypes.find(container => container.containerTypeId === this.containerType).description,
+        time: this.drinkTime,
+        date: this.drinkDate
       })
       this.$refs.newDrinkForm.reset()
     },

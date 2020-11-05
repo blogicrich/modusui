@@ -1,6 +1,6 @@
 <template>
   <v-layout class="pt-1" row fill-height align-center justify-space-around>
-    <v-flex grow @click="navigate">
+    <v-flex grow>
       <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
         <span>{{ tip }}</span>
         <v-btn
@@ -9,6 +9,7 @@
           flat
           icon
           :color="btnColor"
+          @click.stop="$emit('nav-btn-clicked')"
         >
           <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
         </v-btn>
@@ -38,12 +39,6 @@ export default {
     tip: String,
     title: String,
     route: String
-  },
-  methods: {
-    navigate () {
-      this.$emit('nav-btn-clicked', { route: this.route })
-      this.$router.push('/' + this.route)
-    }
   }
 }
 </script>

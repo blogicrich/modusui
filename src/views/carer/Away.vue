@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-layout column fill-height justify-center>
       <!-- Page Header -->
-      <BaseViewHeader
+      <!-- <BaseViewHeader
         class="mx-2 mb-2"
         :headerIcon="headerIcon"
         :headerText="headerText"
@@ -14,7 +14,7 @@
           :selectedUser="selectedUser"
           @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
         />
-      </BaseViewHeader>
+      </BaseViewHeader> -->
       <!-- Date selection form -->
       <v-form
         ref="dateSelectForm"
@@ -43,15 +43,15 @@
                 readonly
                 :rules="[startDateValidation]"
                 v-on="on"
-              ></v-text-field>
+              />
             </template>
             <v-date-picker show current :max="endDateMax" v-model="startDate" no-title scrollable>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn flat color="primary" @click="startDateMenu = false">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.startDateMenu.save(startDate)">OK</v-btn>
             </v-date-picker>
           </v-menu>
-        <!-- End date menu picker -->
+          <!-- End date menu picker -->
           <v-menu
             ref="endDateMenu"
             v-model="endDateMenu"
@@ -72,10 +72,10 @@
                 readonly
                 :rules="[endDateValidation]"
                 v-on="on"
-              ></v-text-field>
+              />
             </template>
             <v-date-picker show current :max="endDateMax" v-model="endDate" no-title scrollable>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn flat color="primary" @click="endDateMenu = false">Cancel</v-btn>
               <v-btn flat color="primary" @click="$refs.endDateMenu.save(endDate)">OK</v-btn>
             </v-date-picker>
@@ -103,7 +103,7 @@
         :errorMsg="errorMsg"
         :loadingMsg="loadingMsg"
         :loadedMsg="loadedMsg"
-      ></dataTable>
+      />
     </v-layout>
   </v-container>
 </template>
@@ -111,7 +111,7 @@
 <script>
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
+// import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import dataTable from '@/components/base/BaseDataTableComponent'
 import { mapState } from 'vuex'
 import moment from 'moment'
@@ -120,8 +120,24 @@ export default {
   name: 'Away',
   mixins: [crudRoutines],
   components: {
-    BaseUserSelect,
+    // BaseUserSelect,
     dataTable
+  },
+  watch: {
+    selectedUser () {
+      this.getAwayPeriods(
+        this.selectedUser.userId,
+        new Date(this.startDate).getTime() / 1000,
+        new Date(this.endDate).getTime() / 1000
+      )
+    },
+    selectedDate () {
+      this.getAwayPeriods(
+        this.selectedUser.userId,
+        new Date(this.startDate).getTime() / 1000,
+        new Date(this.endDate).getTime() / 1000
+      )
+    }
   },
   computed: {
     ...mapState({

@@ -4,7 +4,7 @@
     <h3 v-if="$vuetify.breakpoint.smAndDown" class="text-center text-primary ma-1"> {{ groupHeader }} </h3>
     <p class="text-left my-2"> {{ groupDescription }} </p>
     <h4 class="text-left text-primary"> {{ radioHeader }}</h4>
-    <slot name="options"></slot>
+    <slot name="options" />
   </v-flex>
 </template>
 

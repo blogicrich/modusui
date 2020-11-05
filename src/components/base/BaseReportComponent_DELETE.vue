@@ -1,12 +1,12 @@
 <template>
   <v-card>
     <div v-for="(tab, index) in tabs" :key="index">
-      <v-divider v-if="index > 0" class="mt-2"></v-divider>
-      <v-subheader v-if="tab.subheader">{{tab.subheader}}</v-subheader>
-      <BaseReportTable :type="tab.type" :table="tab.table"></BaseReportTable>
+      <v-divider v-if="index > 0" class="mt-2" />
+      <v-subheader v-if="tab.subheader">{{ tab.subheader }}</v-subheader>
+      <BaseReportTable :type="tab.type" :table="tab.table" />
     </div>
     <div v-if="button.appear">
-      <v-divider class="mt-2"></v-divider>
+      <v-divider class="mt-2" />
       <v-container>
         <v-layout row justify-end>
           <BaseReportPdfButton
@@ -14,7 +14,7 @@
             :color="button.color"
             :icon="button.icon"
             :docName="button.docName"
-          ></BaseReportPdfButton>
+          />
         </v-layout>
       </v-container>
     </div>

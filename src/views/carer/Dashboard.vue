@@ -1,24 +1,9 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <BaseDashboard
       v-if="!dashboardIsLoading"
       :cardHeight="cardHeight"
     >
-      <BaseDateSelection
-        slot="dashboardHeaderCenter"
-        :date="selectedDate"
-        :maxDate="maxDate"
-        :formattedDate="formattedDate"
-        @date-change="$store.commit('SET_DASHBOARD_DATE', $event)"
-        @add-day="$store.commit('INCREMENT_DASHBOARD_DATE', $event)"
-        @subtract-day="$store.commit('DECREMENT_DASHBOARD_DATE', $event)"
-      />
-      <BaseUserSelect
-        slot="dashboardHeaderRight"
-        :users="dashboardUsers"
-        :selectedUser="selectedUser"
-        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
-      />
       <v-flex ref="tileOne" slot="tileOne">
         <BaseChartHeader>
           <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
@@ -43,12 +28,13 @@
         <BaseDashboardTileOverlay
           v-if="!hourChartDataLoaded"
           message="No data for selected user or date"
-        ></BaseDashboardTileOverlay>
+        />
       </v-flex>
       <v-flex slot="tileTwo">
         <p
           class="text-secondary text-center table-header text-ellipsis"
-          >{{ 'eDroplet Drinks Total: ' + drinksTotal + ' L' }}
+        >
+          {{ 'eDroplet Drinks Total: ' + drinksTotal + ' L' }}
         </p>
         <v-list
           :style="'max-height:' + listHeight"
@@ -57,8 +43,7 @@
           :max-height="cardHeight"
         >
           <template v-for="(item, index) in drinks">
-
-            <v-divider :key="index + '-divider'"></v-divider>
+            <v-divider :key="index + '-divider'" />
 
             <v-list-tile
               :key="index + '-macaddress'"
@@ -67,9 +52,10 @@
                 <v-icon :color="$vuetify.theme.primary">local_drink</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title class="text-secondary" v-html="'eDroplet: ' + item.macAddress + '/' + item.friendlyName"></v-list-tile-title>
-                <v-list-tile-sub-title class="text-primary" v-html="'Time: ' + $moment.utc(item.dateTime*1000).format('dddd, MMMM Do YYYY, h:mm:ss a')"></v-list-tile-sub-title>
-                <v-list-tile-sub-title class="text-primary" v-html="'Amount: ' + item.volumeInLitres + ' L'"></v-list-tile-sub-title>
+                <!-- eslint-disable-next-line -->
+                <v-list-tile-title class="text-secondary">{{ 'eDroplet: ' + item.macAddress + '/' + item.friendlyName }}</v-list-tile-title>
+                <v-list-tile-sub-title class="text-primary">{{ 'Time: ' + $moment.utc(item.dateTime*1000).format('dddd, MMMM Do YYYY, h:mm:ss a') }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title class="text-primary">{{ 'Amount: ' + item.volumeInLitres + ' L' }}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
           </template>
@@ -77,7 +63,7 @@
         <BaseDashboardTileOverlay
           v-if="!hourChartDataLoaded"
           message="No data for selected user or date"
-        ></BaseDashboardTileOverlay>
+        />
       </v-flex>
       <v-flex slot="tileThree">
         <BaseChartHeader v-if="weekChartDataLoaded">
@@ -90,7 +76,7 @@
         <BaseDashboardTileOverlay
           v-if="!weekChartDataLoaded"
           message="No data for selected user or date"
-        ></BaseDashboardTileOverlay>
+        />
       </v-flex>
       <v-flex slot="tileFour">
         <BaseChartHeader v-if="dayChartDataLoaded">
@@ -103,7 +89,7 @@
         <BaseDashboardTileOverlay
           v-if="!dayChartDataLoaded"
           message="No data for selected user or date"
-        ></BaseDashboardTileOverlay>
+        />
       </v-flex>
     </BaseDashboard>
     <transition name="component-fade" mode="in-out">
@@ -113,7 +99,7 @@
         :color="$vuetify.theme.primary"
         :error="false"
         loadingMsg="Loading dashboard data... Please wait"
-      ></BaseDataInfoCard>
+      />
     </transition>
   </v-container>
 </template>
@@ -125,8 +111,6 @@ import BaseChartHeader from '@/components/base/BaseChartHeaderComponent'
 import BaseDashboard from '@/components/base/BaseDashboardComponent'
 import BaseDashboardTileOverlay from '@/components/base/BaseDashboardTileOverlayComponent'
 import BaseDataInfoCard from '@/components/base/BaseDataTableInfoComponent'
-import BaseDateSelection from '@/components/base/BaseDateSelectionComponent'
-import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import SubHourlyHydrationLineChart from '@/components/sub/SubHourlyHydrationLineChart'
 import SubHourlyHydrationBarChart from '@/components/sub/SubHourlyHydrationBarChart'
 import SubHydrationDayPieChart from '@/components/sub/SubHydrationDayPieChart'
@@ -134,19 +118,27 @@ import SubWeeklyHydrationBarChart from '@/components/sub/SubWeeklyHydrationBarCh
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-  name: 'eDropletDashboard',
+  name: 'EDropletDashboard',
   components: {
     BaseDashboard,
     BaseDashboardTileOverlay,
     BaseDataInfoCard,
-    BaseDateSelection,
+    // BaseDateSelection,
     BaseChartTypeSelector,
     BaseChartHeader,
-    BaseUserSelect,
+    // BaseUserSelect,
     SubHourlyHydrationLineChart,
     SubHourlyHydrationBarChart,
     SubHydrationDayPieChart,
     SubWeeklyHydrationBarChart
+  },
+  watch: {
+    selectedUser () {
+      this.updateCharts()
+    },
+    selectedDate () {
+      this.updateCharts()
+    }
   },
   computed: {
     ...mapState({
@@ -230,8 +222,10 @@ export default {
       this.$store.commit('SET_USER_CONTEXT', this.dashboardUsers[0])
     },
     setDates () {
-      const date = this.$moment(Date.now()).format('YYYY-MM-DD')
-      this.$store.commit('SET_DASHBOARD_DATE', date)
+      if (!this.selectedDate) {
+        const date = this.$moment(Date.now()).format('YYYY-MM-DD')
+        this.$store.commit('SET_DASHBOARD_DATE', date)
+      }
     },
     async setDashboardPoll () {
       const self = this
@@ -266,14 +260,6 @@ export default {
       }, this.bounce)
     }
   },
-  watch: {
-    selectedUser: {
-      handler: 'updateCharts'
-    },
-    selectedDate: {
-      handler: 'updateCharts'
-    }
-  },
   created () {
     this.setUsers()
     this.setDates()
@@ -292,10 +278,6 @@ export default {
     if (this.selectionTimeout) {
       clearTimeout(this.selectionTimeout)
     }
-    if (this.maxDate) this.maxDate = null
-    // this.$store.dispatch('resetDashboardHourState')
-    // this.$store.dispatch('resetDashboardDayState')
-    // this.$store.dispatch('resetDashboardWeekState')
   }
 }
 </script>

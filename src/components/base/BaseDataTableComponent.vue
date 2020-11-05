@@ -4,8 +4,8 @@
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
         <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
         <h2 class="table-header ml-1">{{ tableTitle }}</h2>
-        <v-divider class="mx-2" inset vertical></v-divider>
-        <v-spacer></v-spacer>
+        <v-divider class="mx-2" inset vertical />
+        <v-spacer />
         <v-flex v-if="searchBarHidden" lg-3 xl-2>
           <v-text-field
             class="mb-2"
@@ -16,10 +16,10 @@
             single-line
             hide-details
             append-outer-icon="close"
-          ></v-text-field>
+          />
         </v-flex>
-        <v-spacer></v-spacer>
-        <v-divider v-if="editPerms.create" class="mx-2 mr-3" inset vertical></v-divider>
+        <v-spacer />
+        <v-divider v-if="editPerms.create" class="mx-2 mr-3" inset vertical />
         <v-btn v-if="editPerms.create" @click="newDialog = true" :color="primaryColor">
           {{ addBtnTitle }}
           <v-icon class="ml-2">{{ addRecordIcon }}</v-icon>
@@ -43,7 +43,7 @@
         select-all
         hide-actions
         :pagination.sync="pagination"
-        :total="this.items.length"
+        :total="items.length"
         class="elevation-1"
       >
         <!-- Table: Headers -->
@@ -55,7 +55,7 @@
               primary
               hide-details
               @click.native="toggleAll"
-            ></v-checkbox>
+            />
           </th>
           <th
             v-for="header in props.headers"
@@ -76,7 +76,7 @@
         <template slot="items" slot-scope="props">
           <tr @click="$emit('row-clicked', props.item)">
             <td v-if="editPerms.create || editPerms.update || editPerms.delete">
-              <v-checkbox v-model="props.selected"></v-checkbox>
+              <v-checkbox v-model="props.selected" />
             </td>
             <td
               class="text-xs-left"
@@ -113,14 +113,14 @@
                 :items="rows"
                 label="rows"
                 :color="primaryColor"
-              ></v-select>
+              />
             </v-flex>
             <v-pagination
               class="ml-1 mr-4"
               v-model="pagination.page"
               total-visible="10"
               :length="pages()"
-            ></v-pagination>
+            />
             <!-- Table: Footer Speed dial -->
             <v-speed-dial
               v-if="$vuetify.breakpoint.mdAndDown"
@@ -180,7 +180,7 @@
               <v-card-title class="table-header">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn :color="primaryColor" flat @click.native.prevent="close">Cancel</v-btn>
                 <v-btn :color="primaryColor" flat @click.native.prevent="deleteItem">Delete</v-btn>
               </v-card-actions>
@@ -226,13 +226,13 @@
                           return-object
                           :item-value="item.returnVal"
                           :item-text="item.displayVal"
-                        ></v-select>
+                        />
                       </v-flex>
                     </v-layout>
                   </v-container>
                 </v-card-text>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
                   <v-btn :color="secondaryColor" :disabled="!valid" flat @click.native="save">Save</v-btn>
                 </v-card-actions>
@@ -285,20 +285,22 @@
                           required
                           :item-value="newItem.find(attribute => attribute.attr === key).returnVal"
                           :item-text="newItem.find(attribute => attribute.attr === key).displayVal"
-                        ></v-select>
+                        />
                       </v-flex>
                     </v-layout>
                   </v-container>
                 </v-card-text>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
                   <v-btn
                     :color="secondaryColor"
                     :disabled="!valid"
                     flat
                     @click.native="saveChanges"
-                  >save</v-btn>
+                  >
+                    save
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-form>
@@ -431,7 +433,7 @@
             single-line
             hide-details
             append-outer-icon="close"
-          ></v-text-field>
+          />
         </v-layout>
       </v-fade-transition>
       <!-- </v-toolbar> -->
@@ -449,7 +451,7 @@
         select-all
         hide-actions
         :pagination.sync="pagination"
-        :total="this.items.length"
+        :total="items.length"
         class="elevation-1"
       >
         <!-- Table: Headers -->
@@ -462,7 +464,7 @@
               small
               hide-details
               @click.native="toggleAll"
-            ></v-checkbox>
+            />
           </th>
           <th
             v-for="header in props.headers"
@@ -483,7 +485,7 @@
         <template slot="items" slot-scope="props">
           <tr @click="$emit('row-clicked', props.item)">
             <td v-if="editPerms.create || editPerms.update || editPerms.delete">
-              <v-checkbox v-model="props.selected"></v-checkbox>
+              <v-checkbox v-model="props.selected" />
             </td>
             <td
               class="text-xs-left"
@@ -549,14 +551,14 @@
                 :items="rows"
                 label="rows"
                 :color="primaryColor"
-              ></v-select>
+              />
             </v-flex>
             <v-pagination
               class="ml-1 mr-4"
               v-model="pagination.page"
               total-visible="3"
               :length="pages()"
-            ></v-pagination>
+            />
           </v-layout>
           <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
@@ -564,7 +566,7 @@
               <v-card-title class="table-header">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
                 <v-btn :color="secondaryColor" flat @click.native="deleteItem">Delete</v-btn>
               </v-card-actions>
@@ -610,20 +612,22 @@
                           return-object
                           :item-value="item.returnVal"
                           :item-text="item.displayVal"
-                        ></v-select>
+                        />
                       </v-flex>
                     </v-layout>
                   </v-container>
                 </v-card-text>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn :color="primaryColor" flat @click.native.stop="close">Cancel</v-btn>
                   <v-btn
                     :color="secondaryColor"
                     :disabled="!valid"
                     flat
                     @click.native.stop="save"
-                  >Save</v-btn>
+                  >
+                    Save
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-form>
@@ -698,7 +702,9 @@
                             return-object
                             :item-value="newItem.find(attribute => attribute.attr === key).returnVal"
                             :item-text="newItem.find(attribute => attribute.attr === key).displayVal"
-                          >></v-select>
+                          >
+                            >
+                          </v-select>
                         </v-flex>
                       </v-layout>
                     </template>
@@ -706,14 +712,16 @@
                 </v-card-text>
                 <v-card-actions column>
                   <v-layout row wrap>
-                    <v-spacer></v-spacer>
+                    <v-spacer />
                     <v-btn :color="primaryColor" flat @click.native="close">Cancel</v-btn>
                     <v-btn
                       :color="secondaryColor"
                       :disabled="!valid"
                       flat
                       @click.native="saveChanges"
-                    >Save</v-btn>
+                    >
+                      Save
+                    </v-btn>
                   </v-layout>
                 </v-card-actions>
               </v-card>

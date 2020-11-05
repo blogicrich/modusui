@@ -1,15 +1,15 @@
 <template>
-  <v-container v-if="cardHeight" class="pa-3" ref="dashboard" fluid grid-list-md>
+  <v-container v-if="cardHeight" ref="dashboard" fluid grid-list-md>
     <!-- HEADER -->
     <v-layout ref="dashboard-header" v-bind="binding">
       <v-flex xs12 md4>
-        <slot name="dashboardHeaderLeft"></slot>
+        <slot name="dashboardHeaderLeft" />
       </v-flex>
       <v-flex xs12 md4>
-        <slot name="dashboardHeaderCenter"></slot>
+        <slot name="dashboardHeaderCenter" />
       </v-flex>
       <v-flex xs12 md4>
-        <slot name="dashboardHeaderRight"></slot>
+        <slot name="dashboardHeaderRight" />
       </v-flex>
     </v-layout>
     <!-- DASHBOARD CONTENT -->
@@ -17,12 +17,12 @@
     <v-layout v-bind="binding">
       <v-flex xs12 md8 order-xs1>
         <v-card class="pa-3" hover :height="cardHeight">
-          <slot name="tileOne"></slot>
+          <slot name="tileOne" />
         </v-card>
       </v-flex>
       <v-flex xs12 md4 order-xs2>
         <v-card hover class="pa-3" :height="cardHeight">
-          <slot name="tileTwo"></slot>
+          <slot name="tileTwo" />
         </v-card>
       </v-flex>
     </v-layout>
@@ -30,12 +30,12 @@
     <v-layout v-bind="binding">
       <v-flex xs12 md8 order-xs3>
         <v-card hover class="pa-3" dark :height="cardHeight">
-          <slot name="tileThree"></slot>
+          <slot name="tileThree" />
         </v-card>
       </v-flex>
       <v-flex xs12 md4 order-xs4>
         <v-card hover class="pa-3" :height="cardHeight">
-          <slot name="tileFour"></slot>
+          <slot name="tileFour" />
         </v-card>
       </v-flex>
     </v-layout>

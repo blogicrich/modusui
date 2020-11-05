@@ -20,6 +20,12 @@ export const moduleDashboardUsers = {
         serialize('selectedUser', user)
         state.selectedUser = state.dashboardUsers.find(e => e.userId)
       }
+    },
+    DECREMENT_USER_CONTEXT (state, user) {
+      console.log(state.selectedUser)
+    },
+    INCREMENT_USER_CONTEXT (state, user) {
+      console.log(state.selectedUser)
     }
   },
   actions: {

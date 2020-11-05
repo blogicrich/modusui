@@ -58,7 +58,7 @@ export const moduleDashboardDailyReport = {
       const userId = context.rootState.dashboardUsers.selectedUser.userId
       const date = context.rootState.dashboardDates.dashboardUnixDate
 
-      const jobs = []
+      // const jobs = []
       for (let i = 0; i < context.state.newComments.length; i++) {
         const element = context.state.newComments[i]
         const data = {
@@ -82,8 +82,8 @@ function convertTimeToLongForm (datetime) {
   return moment(datetime).format('YYYY-MM-DD HH:MM')
 }
 
-function convertToUnix (date, time) {
-  const datetime = date + ' ' + time
-  const dateUnix = moment(datetime).unix()
-  return dateUnix
-}
+// function convertToUnix (date, time) {
+//   const datetime = date + ' ' + time
+//   const dateUnix = moment(datetime).unix()
+//   return dateUnix
+// }

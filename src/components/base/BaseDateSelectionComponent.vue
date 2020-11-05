@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid>
+  <v-container class="pa-0">
     <v-layout align-center justify-center prepend-icon="event">
       <v-icon large>event</v-icon>
       <v-icon @click="subtractDay()" large title="Decrease date by one day">keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false">
-        <v-text-field slot="activator" :value="formattedDate" readonly title="Pick a date"></v-text-field>
+        <v-text-field slot="activator" :value="formattedDate" readonly title="Pick a date" />
         <v-date-picker
           color="primary"
           color-header="primary"
@@ -22,7 +22,9 @@
         large
         :disabled="date === maxDate"
         title="Increase date by one day"
-      >keyboard_arrow_right</v-icon>
+      >
+        keyboard_arrow_right
+      </v-icon>
     </v-layout>
   </v-container>
 </template>

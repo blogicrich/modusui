@@ -12,20 +12,20 @@
       label="Given Name"
       :rules="givenNameRules"
       @change="formUpdate()"
-    ></v-text-field>
+    />
     <v-text-field
       v-model="familyName"
       label="Family Name"
       :rules="familyNameRules"
       @change="formUpdate()"
-    ></v-text-field>
+    />
     <v-text-field
       v-model="salutation"
       label="Saluation (Optional)"
       :rules="salutationRules"
       :placeholder="`${givenName} ${familyName}`"
       @change="formUpdate()"
-    ></v-text-field>
+    />
   </div>
 </template>
 

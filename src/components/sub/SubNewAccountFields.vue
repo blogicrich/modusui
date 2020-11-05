@@ -6,7 +6,7 @@
       v-model="username"
       :rules="usernameRules"
       @change="change"
-    ></v-text-field>
+    />
     <v-text-field
       label="Password"
       type="password"
@@ -14,14 +14,14 @@
       v-model="password"
       :rules="passwordRules"
       @change="change"
-    ></v-text-field>
+    />
     <v-text-field
       label="Repeat your password"
       type="password"
       v-model="passwordRepeat"
       :rules="passwordRepeatRules"
       @change="change"
-    ></v-text-field>
+    />
   </div>
 </template>
 

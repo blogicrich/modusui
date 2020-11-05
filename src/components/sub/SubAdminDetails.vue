@@ -1,15 +1,15 @@
 <template>
   <v-form v-model="valid" lazy-validation ref="form">
     <v-container grid-list-xl>
-      <v-layout  row wrap>
+      <v-layout row wrap>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6 offset-md3 offset-xl3 offset-lg3>
-          <v-text-field label="Username" :rules="rule" v-model="submittedData.username" required @input="validate()"></v-text-field>
+          <v-text-field label="Username" :rules="rule" v-model="submittedData.username" required @input="validate()" />
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6 offset-md3 offset-xl3 offset-lg3>
-          <v-text-field label="Mobile Phone Number (Optional)" v-model="submittedData.phoneNumber" ></v-text-field>
+          <v-text-field label="Mobile Phone Number (Optional)" v-model="submittedData.phoneNumber" />
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6 offset-md3 offset-xl3 offset-lg3>
-          <v-text-field label="Email Address" :rules="rule" v-model="submittedData.emailAddress" required @input="validate()"></v-text-field>
+          <v-text-field label="Email Address" :rules="rule" v-model="submittedData.emailAddress" required @input="validate()" />
         </v-flex>
       </v-layout>
     </v-container>

@@ -31,7 +31,7 @@ export default new Router({
     },
     {
       path: '/login',
-      name: 'Login',
+      name: 'login',
       component: () => import(/* webpackChunkName: "login" */ './views/common/Login.vue')
     },
     {
@@ -51,30 +51,39 @@ export default new Router({
     },
 
     // Carer routes
+
     {
-      path: '/additionaldrinks',
-      name: 'AdditionalDrinks',
-      component: () => import(/* webpackChunkName: "additional-drinks" */ './views/carer/AdditionalDrinks.vue')
-    },
-    {
-      path: '/alerts',
-      name: 'Alerts',
-      component: () => import(/* webpackChunkName: "alerts" */ './views/carer/Alerts.vue')
-    },
-    {
-      path: '/away',
-      name: 'Away',
-      component: () => import(/* webpackChunkName: "away" */ './views/carer/Away.vue')
-    },
-    {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: () => import(/* webpackChunkName: "dashboard" */ './views/carer/Dashboard.vue')
-    },
-    {
-      path: '/dailyreport',
-      name: 'DailyReport',
-      component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/DailyReport.vue')
+      path: '/carer/:view',
+      name: 'BaseCarerView',
+      props: true,
+      component: () => import(/* webpackChunkName: "carer-view" */ './components/base/BaseCarerView.vue'),
+      children: [
+        {
+          path: '/carer/additionaldrinks',
+          name: 'additionaldrinks',
+          component: () => import(/* webpackChunkName: "additional-drinks" */ './views/carer/AdditionalDrinks.vue')
+        },
+        {
+          path: '/carer/alerts',
+          name: 'alerts',
+          component: () => import(/* webpackChunkName: "alerts" */ './views/carer/Alerts.vue')
+        },
+        {
+          path: '/carer/away',
+          name: 'away',
+          component: () => import(/* webpackChunkName: "away" */ './views/carer/Away.vue')
+        },
+        {
+          path: '/carer/dailyreport',
+          name: 'dailyreport',
+          component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/DailyReport.vue')
+        },
+        {
+          path: '/carer/dashboard',
+          name: 'dashboard',
+          component: () => import(/* webpackChunkName: "settings-reports" */ './views/carer/Dashboard.vue')
+        }
+      ]
     },
 
     // Cliadmin routes

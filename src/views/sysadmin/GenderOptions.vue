@@ -47,7 +47,7 @@
           required
           validate-on-blur
           :rules="newItem[itemKey].validators"
-        ></v-text-field>
+        />
       </template>
       <template v-slot:editSlot="{ item, itemKey, property }">
         <v-text-field
@@ -59,7 +59,8 @@
           required
           validata-on-blur
           :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
-        >{{ property }}
+        >
+          {{ property }}
         </v-text-field>
       </template>
     </BaseDataTable>

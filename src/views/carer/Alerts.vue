@@ -1,18 +1,18 @@
 <template>
   <v-container fluid>
-      <BaseViewHeader
-        class="mx-2 mb-2"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      >
-        <BaseUserSelect
-          slot="rhViewHeaderColumn"
-          :users="dashboardUsers"
-          :selectedUser="selectedUser"
-          @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
-        />
-      </BaseViewHeader>
+    <BaseViewHeader
+      class="mx-2 mb-2"
+      :headerIcon="headerIcon"
+      :headerText="headerText"
+      hasDivider
+    >
+      <BaseUserSelect
+        slot="rhViewHeaderColumn"
+        :users="dashboardUsers"
+        :selectedUser="selectedUser"
+        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
+      />
+    </BaseViewHeader>
     <!-- <BaseDataTable
       ref="baseDataTable"
       class="mx-4"

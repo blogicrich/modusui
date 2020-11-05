@@ -5,7 +5,7 @@
         color="primary"
         v-model="isUser"
         :label="`This Personel ${isUser ? '' : 'NOT'} is an eDroplet User`"
-      ></v-switch>
+      />
       <v-flex v-if="isUser">
         <v-layout row wrap>
           <v-flex d-flex xs12 sm12 md5 lg5 xl5>
@@ -32,7 +32,7 @@
                   readonly
                   v-on="on"
                   :rules="ruleRequired"
-                ></v-text-field>
+                />
               </template>
               <v-time-picker
                 v-if="menuStartUp"
@@ -42,7 +42,7 @@
                 @input="validate()"
                 :rules="ruleRequired"
                 required
-              ></v-time-picker>
+              />
             </v-menu>
           </v-flex>
           <v-flex d-flex xs12 sm12 md5 lg5 xl5>
@@ -69,7 +69,7 @@
                   readonly
                   v-on="on"
                   :rules="ruleRequired"
-                ></v-text-field>
+                />
               </template>
               <v-time-picker
                 v-if="menuWakeUp"
@@ -79,7 +79,7 @@
                 required
                 @input="validate()"
                 :rules="ruleRequired"
-              ></v-time-picker>
+              />
             </v-menu>
           </v-flex>
           <v-flex d-flex xs12 sm12 md2 lg2 xl2 v-if="eDroplets.length >= 1">
@@ -89,7 +89,7 @@
               v-model="selectedEDroplet"
               item-text="macAddress"
               item-value="baseId"
-            ></v-select>
+            />
           </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -99,7 +99,7 @@
               v-model="otherHydration"
               mask="#.##"
               append-icon="L"
-            ></v-text-field>
+            />
           </v-flex>
           <v-flex d-flex xs12 sm12 md7 lg7 xl7>
             <v-text-field
@@ -108,7 +108,7 @@
               v-model="comments"
               required
               @input="validate()"
-            ></v-text-field>
+            />
           </v-flex>
         </v-layout>
       </v-flex>

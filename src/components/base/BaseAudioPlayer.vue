@@ -15,7 +15,7 @@
         <v-card>
           <v-list style="padding:15px 0 10px 0;">
             <v-list-tile>
-              <v-slider v-model="volumeValue" thumb-label @input="volume()" :thumb-size="20"></v-slider>
+              <v-slider v-model="volumeValue" thumb-label @input="volume()" :thumb-size="20" />
             </v-list-tile>
           </v-list>
         </v-card>
@@ -23,11 +23,11 @@
       <p style="display:inline;text-align:center;" class="text-white" dark icon>{{ timeLeft }}</p>
       <v-layout row>
         <v-flex offset-xs1 xs10>
-          <v-slider dark color="white" class="progressSlider" step="0.1" tick-size="0.1" always-dirty @click.native="setPosition()" v-model="percentage" :disabled="!loaded"></v-slider>
+          <v-slider dark color="white" class="progressSlider" step="0.1" tick-size="0.1" always-dirty @click.native="setPosition()" v-model="percentage" :disabled="!loaded" />
         </v-flex>
       </v-layout>
     </v-card-text>
-    <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
+    <audio id="player" ref="player" @ended="ended" @canplay="canPlay" :src="file" />
   </v-flex>
 </template>
 <script>

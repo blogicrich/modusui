@@ -6,7 +6,8 @@
     :close-on-content-click="closeOnclick"
     full-width
   >
-    <template  v-slot:activator="{ on }">
+    <!-- eslint-disable-next-line -->
+    <template v-slot:activator="{ on }">
       <v-card hover ref="selected-user-tile" class="pa-3" v-on="on">
         <v-layout row fill-height align-center justify-space-between>
           <!-- DESKTOP -->
@@ -14,7 +15,7 @@
             <v-layout row fill-height align-center justify-start>
               <v-icon large color="primary">group</v-icon>
               <transition name="component-fade" mode="out-in">
-                <p class="table-header text-primary text-ellipsis ma-2">{{ 'Connected eDroplet User: '}}</p>
+                <p class="table-header text-primary text-ellipsis ma-2">{{ 'Connected eDroplet User: ' }}</p>
               </transition>
               <transition name="component-fade" mode="out-in">
                 <p class="table-header text-secondary ma-2">{{ getDisplayName(selectedUser) }}</p>
@@ -35,14 +36,23 @@
             large
             :title="getStatus(selectedUser)"
             :color="getColour(selectedUser)"
-          >notification_important
+          >
+            notification_important
           </v-icon>
           <v-icon
             v-if="selectedUser.hydrationStatus"
             large
             :title="getStatus(selectedUser)"
             :color="getColour(selectedUser)"
-          >{{ getMood(selectedUser) }}
+          >
+            {{ getMood(selectedUser) }}
+          </v-icon>
+          <v-icon
+            large
+            class="mx-1"
+            @click="incrementUser"
+          >
+            {{ 'chevron_right' }}
           </v-icon>
         </v-layout>
       </v-card>
@@ -50,7 +60,7 @@
     <!-- USER LIST -->
     <v-list two-line subheader class="ma-0 pa-0 userList">
       <v-list-tile @click="searchTileClicked">
-          <v-text-field class="ma-1" v-model="search" prepend-icon="search"></v-text-field>
+        <v-text-field class="ma-1" v-model="search" prepend-icon="search" />
       </v-list-tile>
       <v-list-tile
         avatar
@@ -73,13 +83,15 @@
             v-if="user.hydrationStatus"
             :title="getStatus(user)"
             :color="getColour(user)"
-          >{{ getMood(user) }}</v-icon>
+          >
+            {{ getMood(user) }}
+          </v-icon>
         </v-list-tile-action>
       </v-list-tile>
       <v-list-tile v-if="searchResults.length === 0">
-          <v-flex>
-            <p class="text-primary text-center"> NO USERS MATCHING <br>{{ search }}</p>
-          </v-flex>
+        <v-flex>
+          <p class="text-primary text-center"> NO USERS MATCHING <br>{{ search }}</p>
+        </v-flex>
       </v-list-tile>
     </v-list>
   </v-menu>

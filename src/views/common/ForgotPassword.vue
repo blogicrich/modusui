@@ -1,6 +1,6 @@
 <template>
   <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
-    <base-reset-password></base-reset-password>
+    <base-reset-password />
   </v-layout>
 </template>
 

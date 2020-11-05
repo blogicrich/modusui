@@ -54,11 +54,11 @@
           required
           validate-on-blur
           :rules="newItem[itemKey].validators"
-        ></v-text-field>
+        />
       </template>
       <template v-slot:editSlot="{ item, itemKey, property }">
         <v-layout row align-center justify-start>
-          <h2 class="ma-1 text-primary" >{{ item['macAddress'] + ' : ' }}</h2>
+          <h2 class="ma-1 text-primary">{{ item['macAddress'] + ' : ' }}</h2>
           <v-text-field
             :label="newItem.find(attribute => attribute.attr === itemKey).cellLabel"
             v-model="item[itemKey]"
@@ -68,7 +68,8 @@
             required
             validata-on-blur
             :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
-          >{{ property }}
+          >
+            {{ property }}
           </v-text-field>
         </v-layout>
       </template>

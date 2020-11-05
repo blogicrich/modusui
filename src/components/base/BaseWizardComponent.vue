@@ -1,42 +1,42 @@
 <template>
-    <v-dialog v-model="dialog" persistent>
-      <template v-slot:activator="{ on }">
-        <v-btn color="primary" dark v-on="on">New user</v-btn>
-      </template>
-      <v-stepper v-model="e1" vertical v-for="step in steps" v-bind:key="step.id">
-        <v-stepper-step :step="step.id" :complete="e1 > step.id">
-          {{ step.title }}
-        </v-stepper-step>
-        <v-stepper-content :step="step.id">
-          <div class="mb-5" v-if="step.id === 1">
-            <BasicDetails @onvalidation="validateStep1(...arguments)"/>
-          </div>
-          <div class="mb-5" v-else-if="step.id === 2">
-            <UserDetails @onvalidation="validateStep2(...arguments)"/>
-          </div>
-          <div class="mb-5" v-else-if="step.id === 3">
-            <CarerDetails @onvalidation="validateStep3(...arguments)" @changeAdmin="changeAdmin(...arguments)"/>
-          </div>
-          <div class="mb-5" v-else-if="step.id === 4">
-            <AdminDetails
-              v-if="isAdmin"
-              @onvalidation="validateStep4(...arguments)"
-              :submittedData="submittedData"
-            />
-            <v-flex class="mb-5" v-else>
-              This person is not an admin.
-            </v-flex>
-          </div>
-          <v-flex xs12 sm12 md4 lg4 xl4 offset-md4 offset-lg4 offset-xl4>
+  <v-dialog v-model="dialog" persistent>
+    <template v-slot:activator="{ on }">
+      <v-btn color="primary" dark v-on="on">New user</v-btn>
+    </template>
+    <v-stepper v-model="e1" vertical v-for="step in steps" :key="step.id">
+      <v-stepper-step :step="step.id" :complete="e1 > step.id">
+        {{ step.title }}
+      </v-stepper-step>
+      <v-stepper-content :step="step.id">
+        <div class="mb-5" v-if="step.id === 1">
+          <BasicDetails @onvalidation="validateStep1(...arguments)" />
+        </div>
+        <div class="mb-5" v-else-if="step.id === 2">
+          <UserDetails @onvalidation="validateStep2(...arguments)" />
+        </div>
+        <div class="mb-5" v-else-if="step.id === 3">
+          <CarerDetails @onvalidation="validateStep3(...arguments)" @changeAdmin="changeAdmin(...arguments)" />
+        </div>
+        <div class="mb-5" v-else-if="step.id === 4">
+          <AdminDetails
+            v-if="isAdmin"
+            @onvalidation="validateStep4(...arguments)"
+            :submittedData="submittedData"
+          />
+          <v-flex class="mb-5" v-else>
+            This person is not an admin.
+          </v-flex>
+        </div>
+        <v-flex xs12 sm12 md4 lg4 xl4 offset-md4 offset-lg4 offset-xl4>
           <v-btn block v-show="showBack" @click="step.back()" flat>Back</v-btn>
           <v-btn block color="primary" :disabled="!showContinue" @click="step.continue()">{{ step.next }}</v-btn>
-          </v-flex>
-          <v-flex xs12 sm12 md4 lg4 xl4 offset-md4 offset-lg4 offset-xl4>
-            <v-btn block color="red" dark @click="dialog = false">Cancel</v-btn>
-          </v-flex>
-        </v-stepper-content>
-      </v-stepper>
-    </v-dialog>
+        </v-flex>
+        <v-flex xs12 sm12 md4 lg4 xl4 offset-md4 offset-lg4 offset-xl4>
+          <v-btn block color="red" dark @click="dialog = false">Cancel</v-btn>
+        </v-flex>
+      </v-stepper-content>
+    </v-stepper>
+  </v-dialog>
 </template>
 
 <script>

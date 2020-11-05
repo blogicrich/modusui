@@ -13,7 +13,7 @@
             item-value="titleId"
             item-text="longDescription"
             @change="validate()"
-          ></v-select>
+          />
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
@@ -22,7 +22,7 @@
             v-model="aka"
             required
             @input="validate()"
-          ></v-text-field>
+          />
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
@@ -31,7 +31,7 @@
             v-model="givenName"
             required
             @input="validate()"
-          ></v-text-field>
+          />
         </v-flex>
         <v-flex d-flex xs12 sm12 md6 lg6 xl6>
           <v-text-field
@@ -40,7 +40,7 @@
             v-model="familyName"
             required
             @input="validate()"
-          ></v-text-field>
+          />
         </v-flex>
       </v-layout>
     </v-container>

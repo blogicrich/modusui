@@ -48,22 +48,22 @@
         </v-icon>
         <v-chip
           v-show="$vuetify.breakpoint.mdAndUp"
-          v-for="(level, index) in level"
+          v-for="(role, index) in level"
           :key="'md' + index"
           color="secondary"
           text-color="primary"
         >
-          {{ levelDisplay(level) }}
+          {{ levelDisplay(role) }}
         </v-chip>
         <v-chip
           v-show="$vuetify.breakpoint.smAndDown"
-          v-for="(level, index) in level"
+          v-for="(role, index) in level"
           small
           :key="'sm' + index"
           color="secondary"
           text-color="primary"
         >
-          {{ levelDisplay(level) }}
+          {{ levelDisplay(role) }}
         </v-chip>
       </v-layout>
     </v-toolbar>
@@ -97,7 +97,9 @@
             btnColor="white"
             iconColor="white"
             route="landing"
+            name="Landing"
             tip="Administration"
+            @nav-btn-clicked="$router.push('/landing')"
           />
           <BaseAppNavBtn
             my-3
@@ -109,6 +111,7 @@
             :iconColor="item.iconColor"
             :route="item.route"
             :tip="item.tip"
+            @nav-btn-clicked="$router.push({ name: item.name, params: { headerIcon: item.btnIcon, headerText: item.title} })"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -144,6 +147,7 @@
             route="landing"
             tip="Administration"
             title="Administration"
+            @nav-btn-clicked="$router.push('/landing')"
           />
           <BaseAppNavBtn
             my-3
@@ -156,6 +160,7 @@
             :route="item.route"
             :tip="item.tip"
             :title="item.title"
+            @nav-btn-clicked="$router.push({ name: item.name, params: { headerIcon: item.btnIcon, headerText: item.title} })"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -205,16 +210,18 @@
             route="landing"
             tip="Home"
             top
+            @nav-btn-clicked="$router.push('/landing')"
           />
           <BaseAppNavBtn
             v-if="
-              level.find((level) => level === 'CARER') && this.authenticated
+              level.find((level) => level === 'CARER') && authenticated
             "
             btnIcon="dashboard"
             btnColor="primary"
             route="dashboard"
             tip="Dashboard"
             top
+            @nav-btn-clicked="$router.push({ name: 'dashboard', params: { headerIcon: 'dashboard', headerText: 'Dashboard' } })"
           />
           <BaseAppNavBtn
             btnIcon="exit_to_app"
@@ -222,6 +229,7 @@
             route="login"
             tip="Logout"
             top
+            @nav-btn-clicked="$router.push('/login')"
           />
         </v-layout>
       </v-footer>
@@ -265,7 +273,8 @@ export default {
           btnIcon: 'dashboard',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'dashboard',
+          route: 'carer/dashboard',
+          name: 'dashboard',
           tip: 'Go to Dashboard'
         },
         // {
@@ -274,6 +283,7 @@ export default {
         //   btnColor: 'white',
         //   iconColor: 'white',
         //   route: 'alerts',
+        //   name: '',
         //   tip: 'View Alerts'
         // },
         {
@@ -281,7 +291,8 @@ export default {
           btnIcon: 'local_drink',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'additionaldrinks',
+          route: 'carer/additionaldrinks',
+          name: 'additionaldrinks',
           tip: 'Add Drinks'
         },
         {
@@ -289,7 +300,8 @@ export default {
           btnIcon: 'calendar_today',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'away',
+          route: 'carer/away',
+          name: 'away',
           tip: 'Record time away'
         },
         {
@@ -297,7 +309,8 @@ export default {
           btnIcon: 'menu_book',
           btnColor: 'white',
           iconColor: 'white',
-          route: 'dailyreport',
+          route: 'carer/dailyreport',
+          name: 'dailyreport',
           tip: 'View Daily Report'
         },
         {
@@ -306,6 +319,7 @@ export default {
           btnColor: 'white',
           iconColor: 'white',
           route: 'login',
+          name: 'login',
           tip: 'Exit application'
         }
       ],
@@ -314,6 +328,10 @@ export default {
     }
   },
   methods: {
+    test (e) {
+      console.log(e)
+      this.$router.push({ path: '/' + e.route, query: { headerText: e.text, headerIcon: e.icon } })
+    },
     swipe (direction) {
       this.swipeDirection = direction
     },
@@ -330,11 +348,10 @@ export default {
           (this.level.find((level) => level === 'CARER') &&
             this.level.find((level) => level === 'CLIENT ADMINISTRATOR'))
         ) {
-          this.$router.push('/dashboard')
+          this.$router.push({ name: 'dashboard', params: { headerText: 'Dashboard', headerIcon: 'dashboard' } })
         }
       } else {
         this.$store.dispatch('LOGOUT')
-        // this.$router.push('/login')
       }
     },
     showSnack (eventPayload) {
@@ -399,7 +416,6 @@ export default {
     authenticated: function () {
       if (!this.authenticated) {
         this.logout()
-        // this.$router.push('/login')
       }
     }
   },

@@ -7,65 +7,65 @@
       hasDivider
     />
     <v-layout class="mx-4 mb-2" row align-center>
-    <v-toolbar v-if="!messagesLoading" color="primary darken-1" dark>
-      <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">
-        Edit sms and Email Messages
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <!-- SELECT MESSAGE ALERT TYPE -->
-      <v-menu :nudge-width="100">
-        <template v-slot:activator="{ on }">
-          <v-toolbar-title v-on="on">
-            <span>Alert Type</span>
-            <v-icon dark>arrow_drop_down</v-icon>
-          </v-toolbar-title>
-        </template>
+      <v-toolbar v-if="!messagesLoading" color="primary darken-1" dark>
+        <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">
+          Edit sms and Email Messages
+        </v-toolbar-title>
+        <v-spacer />
+        <!-- SELECT MESSAGE ALERT TYPE -->
+        <v-menu :nudge-width="100">
+          <template v-slot:activator="{ on }">
+            <v-toolbar-title v-on="on">
+              <span>Alert Type</span>
+              <v-icon dark>arrow_drop_down</v-icon>
+            </v-toolbar-title>
+          </template>
 
-        <v-list>
-          <v-list-tile
-            v-for="alertType in getterAlertTypes"
-            :key="alertType"
-            @click="$store.dispatch('changeSelectedAlertType', alertType)"
-          >
-            <v-list-tile-title v-text="alertType"></v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-      <!-- SELECT MESSAGE TYPE -->
-      <v-menu :nudge-width="100">
-        <template v-slot:activator="{ on }">
-          <v-toolbar-title v-on="on">
-            <span>Message Type</span>
-            <v-icon dark>arrow_drop_down</v-icon>
-          </v-toolbar-title>
-        </template>
+          <v-list>
+            <v-list-tile
+              v-for="alertType in getterAlertTypes"
+              :key="alertType"
+              @click="$store.dispatch('changeSelectedAlertType', alertType)"
+            >
+              <v-list-tile-title v-text="alertType" />
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+        <!-- SELECT MESSAGE TYPE -->
+        <v-menu :nudge-width="100">
+          <template v-slot:activator="{ on }">
+            <v-toolbar-title v-on="on">
+              <span>Message Type</span>
+              <v-icon dark>arrow_drop_down</v-icon>
+            </v-toolbar-title>
+          </template>
 
-        <v-list>
-          <v-list-tile
-            v-for="commsType in getterCommsTypes"
-            :key="commsType"
-            @click="$store.dispatch('changeSelectedCommsType', commsType)"
-          >
-            <v-list-tile-title v-text="commsType"></v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-      <!-- TOOLBAR BUTTONS -->
-      <v-btn
-        v-if="$vuetify.breakpoint.smAndDown"
-        :disabled="getterIsPristine"
-        icon @click="save"
-      >
-        <v-icon>save</v-icon>
-      </v-btn>
-      <v-btn
-        v-if="$vuetify.breakpoint.smAndDown"
-        :disabled="getterIsPristine"
-        icon @click="$store.commit('RESET_MESSAGES')"
-      >
-        <v-icon>refresh</v-icon>
-      </v-btn>
-    </v-toolbar>
+          <v-list>
+            <v-list-tile
+              v-for="commsType in getterCommsTypes"
+              :key="commsType"
+              @click="$store.dispatch('changeSelectedCommsType', commsType)"
+            >
+              <v-list-tile-title v-text="commsType" />
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+        <!-- TOOLBAR BUTTONS -->
+        <v-btn
+          v-if="$vuetify.breakpoint.smAndDown"
+          :disabled="getterIsPristine"
+          icon @click="save"
+        >
+          <v-icon>save</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="$vuetify.breakpoint.smAndDown"
+          :disabled="getterIsPristine"
+          icon @click="$store.commit('RESET_MESSAGES')"
+        >
+          <v-icon>refresh</v-icon>
+        </v-btn>
+      </v-toolbar>
     </v-layout>
     <v-card class="mx-4" v-if="messages">
       <v-form ref="smsEmailMessagesForm">
@@ -80,8 +80,7 @@
             outline
             :rules="[required, validateMaxChars(getterSelectedMessage.subject, 254)]"
             @input="$store.commit('UPDATE_SELECTED_MESSAGE_SUBJECT', $event)"
-          >
-          </v-text-field>
+          />
           <v-textarea
             outline
             name="input-7-4"
@@ -89,8 +88,7 @@
             :value="getterSelectedMessage.message"
             :rules="[required, validateMaxChars(getterSelectedMessage.message, 254)]"
             @input="$store.commit('UPDATE_SELECTED_MESSAGE_TEXT', $event)"
-          >
-          </v-textarea>
+          />
         </v-card-text>
       </v-form>
     </v-card>
@@ -101,7 +99,8 @@
         @click="save"
         color="primary"
         large
-        >Save
+      >
+        Save
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
       <v-btn
@@ -110,7 +109,8 @@
         @click="$store.commit('RESET_MESSAGES')"
         color="primary"
         large
-        >Reset
+      >
+        Reset
         <v-icon class="ma-1">refresh</v-icon>
       </v-btn>
     </v-layout>

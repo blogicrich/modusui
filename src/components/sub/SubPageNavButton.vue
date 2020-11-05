@@ -1,16 +1,16 @@
 <template>
   <div>
     <BaseButton
-    :type="type"
-    :btnColor="btnColor"
-    :btnClass="btnClass"
-    :title="title"
-    :route="route"
-    :large="large"
-    :fab="fab"
-    :small="small"
-    :icon="icon"
-    :btnIcon="btnIcon"
+      :type="type"
+      :btnColor="btnColor"
+      :btnClass="btnClass"
+      :title="title"
+      :route="route"
+      :large="large"
+      :fab="fab"
+      :small="small"
+      :icon="icon"
+      :btnIcon="btnIcon"
     />
   </div>
 </template>
