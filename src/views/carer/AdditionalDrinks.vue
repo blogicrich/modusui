@@ -1,18 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- <BaseViewHeader
-      class="mx-2 mb-2"
-      :headerIcon="headerIcon"
-      :headerText="headerText"
-      hasDivider
-    >
-      <BaseUserSelect
-        slot="rhViewHeaderColumn"
-        :users="dashboardUsers"
-        :selectedUser="selectedUser"
-        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
-      />
-    </BaseViewHeader> -->
     <BaseDataTable
       ref="baseDataTable"
       class="mx-4"
@@ -254,7 +241,6 @@
 import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import { mapState } from 'vuex'
 import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
-// import BaseUserSelect from '@/components/base/BaseUserSelectComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
@@ -262,7 +248,6 @@ export default {
   mixins: [dataTableNavGuard, validation],
   components: {
     BaseDataTable
-    // BaseUserSelect
   },
   computed: {
     ...mapState({
@@ -284,17 +269,8 @@ export default {
       this.fetchDashboardDrinks()
     }
   },
-  // props: {
-  //   selectedUser: Object,
-  //   dashboardUsers: Object
-  // },
   data () {
     return {
-      // BaseViewHeader
-      // headerIcon: 'local_drink',
-      // iconColor: this.$vuetify.theme.primary,
-      // headerText: 'Additional Drinks',
-      // Add Drinks Dialog
       showContainerTypePicker: true,
       showDrinkTimePicker: true,
       showDrinkDatePicker: true,

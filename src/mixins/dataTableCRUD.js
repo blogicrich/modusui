@@ -9,7 +9,7 @@ export const crudRoutines = {
         if (item[i].sync) item[i][item[i].attr] = item[i].sync[item[i].attr]
         Object.keys(item[i]).forEach(function (key) {
           row[item[i].attr] = item[i][item[i].attr]
-          console.log(row[item[i].attr], item[i][item[i].attr])
+          // console.log(row[item[i].attr], item[i][item[i].attr])
         })
       }
       await apiLib.postData(this.createUrl, row, true, true).then(() => {

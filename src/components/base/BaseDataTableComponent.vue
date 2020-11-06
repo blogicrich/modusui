@@ -204,16 +204,6 @@
                           :item="item"
                           :itemKey="key"
                         />
-                        <!-- <v-text-field
-                        v-if="item.cellType === 'tb'"
-                        class="ma-1"
-                        :label="item.cellLabel"
-                        v-model="newItem[key].sync"
-                        :color="primaryColor"
-                        outline
-                        @change="validate(key, item[key])"
-                        ></v-text-field>-->
-
                         <v-select
                           v-else-if="item.cellType === 'md'"
                           class="ma-1"
@@ -262,17 +252,6 @@
                           :itemKey="key"
                           :property="property"
                         />
-                        <!-- <v-text-field
-                        v-if="inputType(item, key, 'tb')"
-                        class="ma-1"
-                        :label="getCellLabel(item, key, index)"
-                        v-model="item[key]"
-                        :color="primaryColor"
-                        @change="validate(key, item[key])"
-                        outline
-                        required
-                      >{{ item[key].value }}
-                        </v-text-field>-->
                         <v-select
                           v-if="inputType(item, key, 'md')"
                           class="ma-1"
@@ -308,16 +287,6 @@
         </v-container>
       </v-card>
       <v-layout row justify-center align-center ma-3>
-        <!-- <v-fade-transition>
-          <v-btn class="std-btn" @click="$router.push('/landing')" color="primary" large>home
-            <v-icon class="ml-2">home</v-icon>
-          </v-btn>
-        </v-fade-transition>
-        <v-fade-transition>
-          <v-btn class="std-btn" @click="" color="primary" large>save
-            <v-icon class="ml-2">save</v-icon>
-          </v-btn>
-        </v-fade-transition>-->
         <v-fade-transition>
           <v-btn
             v-if="selected.length > 0 && editPerms.update"
@@ -378,15 +347,6 @@
         <v-btn v-if="selected.length > 0" @click="editDialog = true" fab dark small color="success">
           <v-icon>edit</v-icon>
         </v-btn>
-        <!-- <v-btn
-          @click="searchBarHidden = !searchBarHidden"
-          fab
-          dark
-          small
-          color="error"
-        >
-        <v-icon>search</v-icon>
-        </v-btn>-->
         <v-btn @click="newDialog = true" fab dark small color="success">
           <v-icon>add</v-icon>
         </v-btn>
@@ -436,12 +396,6 @@
           />
         </v-layout>
       </v-fade-transition>
-      <!-- </v-toolbar> -->
-      <!-- <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
-        <v-btn v-if="tableActionButton" @click="$emit('action-button-pressed')" :color="primaryColor">{{ actionButtonTitle }}
-          <v-icon class="ml-2">{{ actionButtonIcon }}</v-icon>
-        </v-btn>
-      </v-toolbar>-->
       <v-data-table
         :headers="headers"
         :items="items"
@@ -451,7 +405,7 @@
         select-all
         hide-actions
         :pagination.sync="pagination"
-        :total="items.length"
+        :total="this.items.length"
         class="elevation-1"
       >
         <!-- Table: Headers -->
@@ -493,38 +447,7 @@
               :hidden="header.hidden"
               :key="header.text"
             >
-              <!-- <v-edit-dialog
-             :return-value.sync="props.item[header.value]"
-             lazy
-             large
-             permanent
-             persistent
-             @save="msgSave"
-             @cancel="msgCancel"
-             @close="msgClose"
-              >-->
               <div>{{ props.item[header.value] }}</div>
-              <!-- <div slot="input" class="my-3 title">{{ header.text }}</div>
-             <v-text-field
-               v-if="header.cellType == 'tb'"
-               slot="input"
-               v-model="props.item[header.value]"
-               label="Edit"
-               single-line
-               counter
-             ></v-text-field>
-             <v-select
-               v-else-if="header.cellType === 'md'"
-               slot="input"
-               class="ma-1"
-               v-model="props.item[header.value]"
-               :items="headers"
-               :label="header.text"
-               :color="primaryColor"
-               large
-               outline
-             ></v-select>
-              </v-edit-dialog>-->
             </td>
           </tr>
         </template>
@@ -590,16 +513,6 @@
                           :item="item"
                           :itemKey="key"
                         />
-                        <!-- <v-text-field
-                        v-if="item.cellType === 'tb'"
-                        class="ma-1"
-                        :label="item.cellLabel"
-                        v-model="newItem[key].sync"
-                        :color="primaryColor"
-                        outline
-                        @change="validate(key, item[key])"
-                        required
-                        ></v-text-field>-->
                         <v-select
                           v-else-if="item.cellType === 'md'"
                           class="ma-1"
@@ -678,17 +591,6 @@
                             :itemKey="key"
                             :property="property"
                           />
-                          <!-- <v-text-field
-                        v-if="inputType(item, key, 'tb')"
-                        class="ma-1"
-                        :label="getCellLabel(item, key, index)"
-                        v-model="item[key]"
-                        :color="primaryColor"
-                        outline
-                        @change="validate(key, item[key])"
-                        required
-                      >{{ item[key].value }}
-                          </v-text-field>-->
                           <v-select
                             v-if="inputType(item, key, 'md')"
                             class="ma-1"
@@ -840,7 +742,6 @@ export default {
     },
     validate (key, value) {
       this.$emit('validate', { key: key, value: value })
-      // console.log('fjkdfjkkjfkjrwkjgrkekwjlge:  ', { key: key, value: value })
     },
     increment (index) {
       if (this.selected[index] && this.selected[index + 1]) {

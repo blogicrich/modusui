@@ -15,9 +15,8 @@ export const moduleDashboardAway = {
   },
   actions: {
     fetchAwayPeriods (context, payload) {
-      // const user = rootGetters.getterSelectedUser.userId
       context.commit('SET_AWAY_PERIODS_LOAD_STATE', true)
-      apiLib.getData('carer/away/' + payload.id + '/' + payload.startDate + '/' + payload.endDate, true).then((response) => {
+      apiLib.getData('carer/away/' + payload.id + '/' + payload.startDate + '/' + payload.endDate).then((response) => {
         if (typeof response === 'undefined') {
           context.commit('SET_AWAY_PERIODS', [])
           context.commit('SET_AWAY_PERIODS_LOAD_STATE', false)

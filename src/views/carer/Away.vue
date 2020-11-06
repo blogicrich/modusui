@@ -1,21 +1,6 @@
 <template>
   <v-container fluid>
     <v-layout column fill-height justify-center>
-      <!-- Page Header -->
-      <!-- <BaseViewHeader
-        class="mx-2 mb-2"
-        :headerIcon="headerIcon"
-        :headerText="headerText"
-        hasDivider
-      >
-        <BaseUserSelect
-          slot="rhViewHeaderColumn"
-          :users="dashboardUsers"
-          :selectedUser="selectedUser"
-          @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
-        />
-      </BaseViewHeader> -->
-      <!-- Date selection form -->
       <v-form
         ref="dateSelectForm"
         class="ma-4"
@@ -111,7 +96,6 @@
 <script>
 
 import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-// import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import dataTable from '@/components/base/BaseDataTableComponent'
 import { mapState } from 'vuex'
 import moment from 'moment'
@@ -120,7 +104,6 @@ export default {
   name: 'Away',
   mixins: [crudRoutines],
   components: {
-    // BaseUserSelect,
     dataTable
   },
   watch: {
@@ -169,9 +152,6 @@ export default {
     endDateFormattedValue () {
       return this.endDate ? moment(this.endDate).format('dddd, MMMM Do YYYY') : ''
     },
-    // readUrl () {
-    //   return 'carer/away/'
-    // },
     startDateFormattedValue () {
       return this.startDate ? moment(this.startDate).format('dddd, MMMM Do YYYY') : ''
     }
@@ -246,7 +226,6 @@ export default {
       }
     },
     async getAwayPeriods (id, startDate, endDate) {
-      console.log(id, endDate, startDate)
       await this.$store.dispatch('fetchAwayPeriods', {
         id: id,
         startDate: startDate,
@@ -270,8 +249,6 @@ export default {
           unixStartDate,
           unixEndDate
         )
-        // }
-        // this.getItems(this.readUrl + this.selectedUser.userId + '/' + unixStartDate + '/' + unixEndDate)
       } else {
         this.errorMsg = 'Please check selected date range.'
         this.loaded = false
@@ -290,7 +267,6 @@ export default {
       this.error = true
       this.errorMsg = 'Please check your internet connection and refresh page to try again.'
     }
-    // this.getItems(this.readUrl + this.selectedUser.userId + '/' + new Date(this.startDate).getTime() / 1000 + '/' + new Date(this.endDate).getTime() / 1000)
   }
 }
 </script>

@@ -58,7 +58,6 @@ export default {
   },
   watch: {
     $route (to, from) {
-      console.log(to)
       to.name === 'away' ? this.ctrSlotVisible = false : this.ctrSlotVisible = true
     }
   },

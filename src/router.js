@@ -41,7 +41,7 @@ export default new Router({
     },
     {
       path: '/landing',
-      name: 'Landing',
+      name: 'landing',
       component: () => import(/* webpackChunkName: "landing" */ './views/common/Landing.vue')
     },
     {

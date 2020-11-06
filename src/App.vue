@@ -97,7 +97,7 @@
             btnColor="white"
             iconColor="white"
             route="landing"
-            name="Landing"
+            name="landing"
             tip="Administration"
             @nav-btn-clicked="$router.push('/landing')"
           />
@@ -201,7 +201,7 @@
               class="ml-3 caption"
               style="align-center"
             >
-              Version: ALPHA
+              Version: 0.0.1
             </p>
           </v-layout>
           <BaseAppNavBtn
@@ -329,7 +329,6 @@ export default {
   },
   methods: {
     test (e) {
-      console.log(e)
       this.$router.push({ path: '/' + e.route, query: { headerText: e.text, headerIcon: e.icon } })
     },
     swipe (direction) {

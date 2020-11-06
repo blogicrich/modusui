@@ -188,7 +188,6 @@ export default {
           console.log(error.config)
         })
         .finally(() => {
-          console.log('URL', url)
         // ROUTER TO STD PAGE IF ERR?
         })
     }

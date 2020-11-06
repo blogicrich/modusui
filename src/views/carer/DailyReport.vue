@@ -1,19 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- <BaseViewHeader
-      v-if="this.$vuetify.breakpoint.mdAndDown"
-      :headerIcon="headerIcon"
-      :iconColor="iconColor"
-      :headerText="headerText"
-      hasDivider
-    >
-      <BaseUserSelect
-        slot="rhViewHeaderColumn"
-        :users="dashboardUsers"
-        :selectedUser="selectedUser"
-        @user-selected="$store.commit('SET_USER_CONTEXT', $event)"
-      />
-    </BaseViewHeader> -->
     <BaseDataTable
       ref="baseDataTable"
       class="mx-4"
@@ -28,6 +14,8 @@
       actionButtonIcon="person_add"
       actionButtonTitle="Add new comment to daily report"
       recordIcon="menu_book"
+      item-key="dayReportId"
+      crudIdKey="dayReportId"
 
       :loading="dayReportLoading"
       :loaded="!dayReportLoading"
@@ -36,10 +24,9 @@
       loadingMsg="Loading comments"
       loadedMsg="No comments to display"
 
-      @row-clicked="openEditDialog"
       @action-button-pressed="openNewDialog"
+      @row-clicked="openEditDialog"
     />
-    <!-- <v-layout justify-center v-if="selectedSysAdmin"> -->
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card class="pa-4">
         <v-toolbar dark color="primary">
@@ -71,7 +58,7 @@
         <v-form v-if="editFormVisible" v-model="editFormValid" ref="editCommentForm">
           <v-container>
             <v-card-title>
-              <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
+              <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
               <span class="pg-subheader text-primary">Change Selected Comment</span>
               <v-spacer />
               <!-- Delete Comment Confirmation Dialog -->
@@ -83,14 +70,20 @@
                   <v-card-title
                     class="headline warning lighten-2"
                   >
-                    <v-icon class="mr-3" medium :color="$vuetify.theme.error">Warning</v-icon>
+                    <v-icon class="mr-3" medium :color="$vuetify.theme.error">warning</v-icon>
                     Delete Comment from Day Report?
                   </v-card-title>
                   <v-card-text>
                     <v-layout class="text-xs-center" column align-center>
                       <v-progress-circular v-if="deletingData" indeterminate color="primary" :value="80" />
-                      <span v-if="deletingData">{{ 'Deleting: ' + selectedUsername }}</span>
-                      <span v-if="!deletingData">{{ 'You are about to permanently delete this System Administrator: ' + selectedUsername + '. Are you sure? This action cannot be undone.' }}</span>
+                      <span v-if="deletingData">{{ 'Deleting: comments dated' + selectedComment.date }}</span>
+                      <span v-if="!deletingData">
+                        {{ 'You are about to permanently delete a comment from the day report dated: ' +
+                          selectedComment.date + ' at ' +
+                          selectedComment.time +
+                          '. Are you sure? This action cannot be undone.'
+                        }}
+                      </span>
                     </v-layout>
                   </v-card-text>
                   <v-divider />
@@ -103,15 +96,78 @@
                 </v-card>
               </v-dialog>
             </v-card-title>
-            <v-card-text v-if="dayReportValidation">
+            <!-- EDIT Form Fields -->
+            <v-card-text>
+              <v-menu
+                ref="commentDateMenu"
+                v-model="showCommentDatePicker"
+                :close-on-content-click="false"
+                :return-value.sync="selectedComment.date"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    :value="selectedComment.date"
+                    label="Comment Date"
+                    prepend-icon="event"
+                    readonly
+                    :rules="[dayReportValidation.generic, dayReportValidation.date]"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  show
+                  current
+                  :max="maxDate"
+                  v-model="selectedComment.date"
+                  no-title scrollable
+                >
+                  <v-spacer />
+                  <v-btn flat color="primary" @click="showCommentDatePicker = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="$refs.commentDateMenu.save(selectedComment.date)">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+              <!-- Comment Time Picker -->
+              <v-menu
+                ref="commentTimePicker"
+                v-model="showCommentTimePicker"
+                :close-on-content-click="false"
+                :return-value="selectedComment.time"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="selectedComment.time"
+                    label="Time"
+                    prepend-icon="access_time"
+                    readonly
+                    v-on="on"
+                    @input="$store.commit('UPDATE_NEW_COMMENT_TIME', $event)"
+                  />
+                </template>
+                <v-time-picker
+                  v-if="showCommentTimePicker"
+                  v-model="selectedComment.time"
+                  full-width
+                  @click:minute="$refs.commentTimePicker.save(selectedComment.time)"
+                />
+              </v-menu>
               <v-textarea
                 :color="$vuetify.theme.primary"
                 clearable
                 label="Day report"
                 placeholder="Report Text"
                 required
-                :rules="dayReportValidation"
-                v-model="reportText"
+                :rules="[dayReportValidation.generic, dayReportValidation.date]"
+                v-model="selectedComment.comments"
                 box
                 outline
                 rounded
@@ -131,20 +187,89 @@
             </v-card-text>
           </v-container>
         </v-form>
+
         <!-- Add New Comment to Day Report -->
+
         <v-form v-if="newFormVisible" v-model="newFormValid" ref="newCommentForm">
-          <v-container>
+          <v-container fluid>
             <v-card-title>
               <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
               <span class="pg-subheader text-primary">Add new comment</span>
             </v-card-title>
+
+            <!-- New Comment Date Picker -->
+
+            <v-card-text>
+              <v-menu
+                ref="commentDateMenu"
+                v-model="showCommentDatePicker"
+                :close-on-content-click="false"
+                :return-value.sync="newCommentDate"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    :value="newCommentDate"
+                    label="Comment Date"
+                    prepend-icon="event"
+                    readonly
+                    :rules="[dayReportValidation.generic, dayReportValidation.date]"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  show
+                  current
+                  :max="maxDate"
+                  v-model="newCommentDate"
+                  no-title scrollable
+                >
+                  <v-spacer />
+                  <v-btn flat color="primary" @click="showCommentDatePicker = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="$refs.commentDateMenu.save(newCommentDate)">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+              <!-- New Comment Time Picker -->
+              <v-menu
+                ref="commentTimePicker"
+                v-model="showCommentTimePicker"
+                :close-on-content-click="false"
+                :return-value="newCommentTime"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="newCommentTime"
+                    label="Time"
+                    prepend-icon="access_time"
+                    readonly
+                    v-on="on"
+                    @input="$store.commit('UPDATE_NEW_COMMENT_TIME', $event)"
+                  />
+                </template>
+                <v-time-picker
+                  v-if="showCommentTimePicker"
+                  v-model="newCommentTime"
+                  full-width
+                  @click:minute="$refs.commentTimePicker.save(newCommentTime)"
+                />
+              </v-menu>
+            </v-card-text>
             <v-card-text>
               <v-textarea
                 :color="$vuetify.theme.primary"
                 label="Day report"
                 placeholder="Report Text"
                 required
-                :rules="dayReportValidation"
+                :rules="[dayReportValidation.generic, dayReportValidation.text]"
                 :value="newDayReportComment"
                 clearable
                 box
@@ -155,7 +280,7 @@
               <v-card-actions>
                 <v-spacer />
                 <v-btn
-                  :disabled="newCommentPristine"
+                  :disabled="!newDayReportComment"
                   title="Add Comment to Day Report"
                   dark
                   :color="$vuetify.theme.primary"
@@ -195,18 +320,23 @@
                 <v-card
                   v-show="newComments.length"
                   class="pa-2"
-                  v-for="(comment, index) in newComments"
+                  v-for="(record, index) in newComments"
                   :key="index"
                   tile
                   outline
                 >
                   <v-layout>
                     <v-flex grow>
-                      <span class="accent--text">{{ comment }}</span>
+                      <span class="accent--text">{{ record.comment }}</span>
+                    </v-flex>
+                    <v-spacer />
+                    <v-flex shrink>
+                      <span class="accent--text">{{ record.datetime }}</span>
                     </v-flex>
                     <v-flex shrink>
                       <v-icon
                         color="pink"
+                        class="mx-3"
                         @click="$store.commit('REMOVE_NEW_COMMENT', index)"
                       >
                         close
@@ -225,33 +355,35 @@
 
 <script>
 
-// import BaseUserSelect from '@/components/base/BaseUserSelectComponent'
 import BaseDataTable from '@/components/base/BaseDataTableComponent'
 import { mapState } from 'vuex'
 
 export default {
   name: 'DailyReport',
   components: {
-    // BaseUserSelect,
     BaseDataTable
   },
   watch: {
     selectedUser () {
       this.$store.dispatch('fetchDailyReport')
     },
-    selectedDate () {
+    dashboardSelectedDate () {
       this.$store.dispatch('fetchDailyReport')
     }
   },
   computed: {
     ...mapState({
       selectedUser: state => state.dashboardUsers.selectedUser,
+      dashboardSelectedDate: state => state.dashboardDates.dashboardSelectedDate,
       dashboardUsers: state => state.dashboardUsers.dashboardUsers,
       comments: state => state.dashboardDailyReport.comments,
       newComments: state => state.dashboardDailyReport.newComments,
+      selectedComment: state => state.dashboardDailyReport.selectedComment,
       dayReportLoading: state => state.dashboardDailyReport.dailyReportLoading,
       dayReportError: state => state.dashboardDailyReport.dayReportError,
-      newDayReportComment: state => state.dashboardDailyReport.newComment
+      newDayReportComment: state => state.dashboardDailyReport.newComment,
+      newDayReportCommentDate: state => state.dashboardDailyReport.newCommentDate,
+      maxDate: state => state.dashboardDates.maxDate
     }),
     newCommentPristine () {
       return false
@@ -262,12 +394,9 @@ export default {
   },
   data () {
     return {
-      // BaseViewHeader
-      // headerIcon: 'menu_book',
-      // iconColor: this.$vuetify.theme.primary,
-      // headerText: 'Day Report',
       // BaseDataTable
       tableActionButtonVisible: true,
+      selected: [],
       headers: [
         {
           text: 'dayReportId',
@@ -306,24 +435,47 @@ export default {
           editable: false
         }
       ],
-      // Edit Dialog
-      confirmationDialog: false,
-      dialog: false,
-      icon: 'menu_book',
-      reportText: '',
+      // New Dialog
       newFormVisible: false,
       newFormValid: false,
+      newCommentDate: null,
+      // newCommentDateMenu: false,
+      newCommentTime: null,
+      showCommentTimePicker: false,
+      showCommentDatePicker: false,
+      commentTime: null,
+      reportText: '',
+      // Edit Dialog
+      dialog: false,
+      editFormValid: false,
       editFormVisible: false,
-      dayReportValidation: [
-        value => !!value || 'Required.',
-        value => value.length <= 320 || 'Max 320 characters'
-      ]
+      // Delete Confirmation Dialog
+      confirmationDialog: false,
+      deletingData: false,
+      spinnerTimeout: null,
+      timeoutDuration: 2000,
+      icon: 'menu_book',
+      dayReportValidation: {
+        generic: value => !!value || 'Required.',
+        date: value => !!value || 'Required.',
+        // date: value => value <= this.maxDate || 'Date cannot be after today',
+        text: value => {
+          if (value) {
+            return value.length <= 320 ? true : 'Max 320 characters'
+          } else {
+            return 'required'
+          }
+        }
+      }
     }
   },
   methods: {
     addCommentToDayReport () {
-      this.$store.commit('ADD_NEW_COMMENT')
+      this.$store.commit('ADD_NEW_COMMENT', { date: this.newCommentDate, time: this.newCommentTime, text: this.newDayReportComment })
       this.$refs.newCommentForm.reset()
+    },
+    deleteItems (e) {
+      console.log(e)
     },
     dialogTitle () {
       if (this.newFormVisible) {
@@ -332,9 +484,12 @@ export default {
         return 'Edit Day Report'
       }
     },
+    editItems (e) {
+      console.log(e)
+    },
     closeDialog () {
       // REST ALL BOOLEANS AND STORE OBJECTS
-      this.$store.commit('RESET_DAILY_REPORT_STATE')
+      // this.$store.commit('RESET_DAILY_REPORT_STATE')
       this.dialog = false
       this.editFormVisible = false
       this.editFormValid = false
@@ -342,10 +497,9 @@ export default {
       this.newFormValid = false
       if (this.$refs.editCommentForm) this.$refs.editCommentForm.reset()
       if (this.$refs.newCommentForm) this.$refs.newCommentForm.reset()
-      this.reportText = ''
     },
-    openEditDialog () {
-      // this.$store.commit('SET_SELECTED_SYSADMIN', value)
+    openEditDialog (e) {
+      this.$store.commit('SET_SELECTED_COMMENT', e)
       this.editFormVisible = true
       this.newFormVisible = false
       this.dialog = true
@@ -358,16 +512,29 @@ export default {
     updateSelectedComment () {
 
     },
-    deleteSelectedComment () {
+    async deleteSelectedComment () {
+      const that = this
+      try {
+        this.deletingData = true
+        await this.$store.dispatch('deleteComment', this.selectedComment)
+        await this.$store.dispatch('fetchDailyReport')
+        this.spinnerTimeout = setTimeout(function () {
+          that.closeDialog()
+          that.deletingData = false
+        }, this.timeoutDuration)
+      } catch (error) {
+        // TBI
+      }
+    },
+    refreshItems () {
 
     },
-    saveNewComments () {
-      if (this.newFormVisible && this.newFormValid) {
-        this.$store.dispatch('postNewComments')
+    async saveNewComments () {
+      if (this.newFormVisible) {
+        await this.$store.dispatch('postNewComments').then(
+          this.closeDialog()
+        )
       }
-      // else {
-      //   this.$refs.newCommentForm.validate()
-      // }
     }
   },
   created () {
