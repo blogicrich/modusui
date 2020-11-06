@@ -76,12 +76,10 @@
                   <v-card-text>
                     <v-layout class="text-xs-center" column align-center>
                       <v-progress-circular v-if="deletingData" indeterminate color="primary" :value="80" />
-                      <span v-if="deletingData">{{ 'Deleting: comments dated' + selectedComment.date }}</span>
+                      <span v-if="deletingData">{{ 'Deleting: comments dated ' + selectedComment.date }}</span>
                       <span v-if="!deletingData">
                         {{ 'You are about to permanently delete a comment from the day report dated: ' +
-                          selectedComment.date + ' at ' +
-                          selectedComment.time +
-                          '. Are you sure? This action cannot be undone.'
+                          selectedComment.date + '. Are you sure? This action cannot be undone.'
                         }}
                       </span>
                     </v-layout>
@@ -98,6 +96,7 @@
             </v-card-title>
             <!-- EDIT Form Fields -->
             <v-card-text>
+              <!-- Comment Date Picker -->
               <v-menu
                 ref="commentDateMenu"
                 v-model="showCommentDatePicker"
@@ -123,55 +122,31 @@
                   show
                   current
                   :max="maxDate"
-                  v-model="selectedComment.date"
-                  no-title scrollable
+                  :value="selectedComment.date"
+                  @input="$store.commit('UPDATE_SELECTED_COMMENT_DATE', $event)"
+                  no-title
+                  scrollable
                 >
                   <v-spacer />
                   <v-btn flat color="primary" @click="showCommentDatePicker = false">Cancel</v-btn>
                   <v-btn flat color="primary" @click="$refs.commentDateMenu.save(selectedComment.date)">OK</v-btn>
                 </v-date-picker>
               </v-menu>
-              <!-- Comment Time Picker -->
-              <v-menu
-                ref="commentTimePicker"
-                v-model="showCommentTimePicker"
-                :close-on-content-click="false"
-                :return-value="selectedComment.time"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="selectedComment.time"
-                    label="Time"
-                    prepend-icon="access_time"
-                    readonly
-                    v-on="on"
-                    @input="$store.commit('UPDATE_NEW_COMMENT_TIME', $event)"
-                  />
-                </template>
-                <v-time-picker
-                  v-if="showCommentTimePicker"
-                  v-model="selectedComment.time"
-                  full-width
-                  @click:minute="$refs.commentTimePicker.save(selectedComment.time)"
-                />
-              </v-menu>
+
+              <!-- EDIT selected comment -->
+
               <v-textarea
                 :color="$vuetify.theme.primary"
                 clearable
                 label="Day report"
                 placeholder="Report Text"
                 required
-                :rules="[dayReportValidation.generic, dayReportValidation.date]"
-                v-model="selectedComment.comments"
+                :rules="[dayReportValidation.generic, dayReportValidation.text]"
+                :value="selectedComment.comments"
                 box
                 outline
                 rounded
-                type="number"
+                @input="$store.commit('UPDATE_SELECTED_COMMENT', $event)"
               />
               <v-card-actions>
                 <v-spacer />
@@ -179,7 +154,8 @@
                   title="Rest password fields"
                   dark
                   :color="$vuetify.theme.primary"
-                  @click="$store.commit('UNDO_SELECTED_SYSADMIN')"
+                  :disabled="editCommentPristine"
+                  @click="$store.commit('UNDO_SELECTED_COMMENT', selectedComment.dayReportId)"
                 >
                   RESET
                 </v-btn>
@@ -204,7 +180,6 @@
                 ref="commentDateMenu"
                 v-model="showCommentDatePicker"
                 :close-on-content-click="false"
-                :return-value.sync="newCommentDate"
                 lazy
                 transition="scale-transition"
                 offset-y
@@ -225,42 +200,15 @@
                   show
                   current
                   :max="maxDate"
-                  v-model="newCommentDate"
-                  no-title scrollable
+                  :value="newCommentDate"
+                  no-title
+                  scrollable
+                  @input="$store.commit('UPDATE_NEW_COMMENT_DATE', $event)"
                 >
                   <v-spacer />
                   <v-btn flat color="primary" @click="showCommentDatePicker = false">Cancel</v-btn>
                   <v-btn flat color="primary" @click="$refs.commentDateMenu.save(newCommentDate)">OK</v-btn>
                 </v-date-picker>
-              </v-menu>
-              <!-- New Comment Time Picker -->
-              <v-menu
-                ref="commentTimePicker"
-                v-model="showCommentTimePicker"
-                :close-on-content-click="false"
-                :return-value="newCommentTime"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="newCommentTime"
-                    label="Time"
-                    prepend-icon="access_time"
-                    readonly
-                    v-on="on"
-                    @input="$store.commit('UPDATE_NEW_COMMENT_TIME', $event)"
-                  />
-                </template>
-                <v-time-picker
-                  v-if="showCommentTimePicker"
-                  v-model="newCommentTime"
-                  full-width
-                  @click:minute="$refs.commentTimePicker.save(newCommentTime)"
-                />
               </v-menu>
             </v-card-text>
             <v-card-text>
@@ -270,7 +218,7 @@
                 placeholder="Report Text"
                 required
                 :rules="[dayReportValidation.generic, dayReportValidation.text]"
-                :value="newDayReportComment"
+                :value="newComment"
                 clearable
                 box
                 outline
@@ -280,7 +228,7 @@
               <v-card-actions>
                 <v-spacer />
                 <v-btn
-                  :disabled="!newDayReportComment"
+                  :disabled="!newComment"
                   title="Add Comment to Day Report"
                   dark
                   :color="$vuetify.theme.primary"
@@ -331,7 +279,7 @@
                     </v-flex>
                     <v-spacer />
                     <v-flex shrink>
-                      <span class="accent--text">{{ record.datetime }}</span>
+                      <span class="accent--text">{{ record.date }}</span>
                     </v-flex>
                     <v-flex shrink>
                       <v-icon
@@ -381,15 +329,18 @@ export default {
       selectedComment: state => state.dashboardDailyReport.selectedComment,
       dayReportLoading: state => state.dashboardDailyReport.dailyReportLoading,
       dayReportError: state => state.dashboardDailyReport.dayReportError,
-      newDayReportComment: state => state.dashboardDailyReport.newComment,
-      newDayReportCommentDate: state => state.dashboardDailyReport.newCommentDate,
-      maxDate: state => state.dashboardDates.maxDate
+      newComment: state => state.dashboardDailyReport.newComment,
+      newCommentDate: state => state.dashboardDailyReport.newCommentDate,
+      maxDate: state => state.dashboardDailyReport.maxDate
     }),
     newCommentPristine () {
-      return false
+      if (this.newComment === '') return true
+      else return false
     },
     editCommentPristine () {
-      return false
+      const pristineComment = this.comments.find((report) => this.selectedComment.dayReportId === report.dayReportId).comments
+      if (this.selectedComment.comments === pristineComment) return true
+      else return false
     }
   },
   data () {
@@ -438,12 +389,8 @@ export default {
       // New Dialog
       newFormVisible: false,
       newFormValid: false,
-      newCommentDate: null,
-      // newCommentDateMenu: false,
-      newCommentTime: null,
-      showCommentTimePicker: false,
+      // newCommentDate: null,
       showCommentDatePicker: false,
-      commentTime: null,
       reportText: '',
       // Edit Dialog
       dialog: false,
@@ -457,8 +404,7 @@ export default {
       icon: 'menu_book',
       dayReportValidation: {
         generic: value => !!value || 'Required.',
-        date: value => !!value || 'Required.',
-        // date: value => value <= this.maxDate || 'Date cannot be after today',
+        date: value => value <= this.maxDate || 'Date cannot be after today',
         text: value => {
           if (value) {
             return value.length <= 320 ? true : 'Max 320 characters'
@@ -471,7 +417,7 @@ export default {
   },
   methods: {
     addCommentToDayReport () {
-      this.$store.commit('ADD_NEW_COMMENT', { date: this.newCommentDate, time: this.newCommentTime, text: this.newDayReportComment })
+      this.$store.commit('ADD_NEW_COMMENT', { date: this.newCommentDate, text: this.newComment })
       this.$refs.newCommentForm.reset()
     },
     deleteItems (e) {
@@ -488,8 +434,9 @@ export default {
       console.log(e)
     },
     closeDialog () {
-      // REST ALL BOOLEANS AND STORE OBJECTS
-      // this.$store.commit('RESET_DAILY_REPORT_STATE')
+      // RESET ALL BOOLEANS AND STORE OBJECTS
+      this.$store.commit('RESET_NEW_COMMENT_STATE')
+      this.$store.commit('RESET_SELECTED_COMMENT_STATE')
       this.dialog = false
       this.editFormVisible = false
       this.editFormValid = false
@@ -509,8 +456,18 @@ export default {
       this.editFormVisible = false
       this.dialog = true
     },
-    updateSelectedComment () {
-
+    async updateSelectedComment () {
+      if (this.$refs.editCommentForm.validate()) {
+        try {
+          await this.$store.dispatch('updateComment')
+          await this.$store.dispatch('fetchDailyReport')
+          this.closeDialog()
+        } catch (error) {
+          // TBI
+        }
+      } else {
+        this.$refs.editCommentForm.validate()
+      }
     },
     async deleteSelectedComment () {
       const that = this
@@ -521,6 +478,7 @@ export default {
         this.spinnerTimeout = setTimeout(function () {
           that.closeDialog()
           that.deletingData = false
+          that.confirmationDialog = false
         }, this.timeoutDuration)
       } catch (error) {
         // TBI

@@ -9,6 +9,7 @@
           flat
           icon
           :color="btnColor"
+          :disabled="enabled"
           @click.stop="$emit('nav-btn-clicked')"
         >
           <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
@@ -28,6 +29,12 @@ export default {
       hovering: false
     }
   },
+  computed: {
+    enabled () {
+      if (String(this.name) === String(this.$route.name)) return true
+      else return false
+    }
+  },
   props: {
     bottom: Boolean,
     left: Boolean,
@@ -38,7 +45,8 @@ export default {
     iconColor: String,
     tip: String,
     title: String,
-    route: String
+    route: String,
+    name: String
   }
 }
 </script>

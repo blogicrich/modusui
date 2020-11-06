@@ -405,7 +405,7 @@
         select-all
         hide-actions
         :pagination.sync="pagination"
-        :total="this.items.length"
+        :total="items.length"
         class="elevation-1"
       >
         <!-- Table: Headers -->

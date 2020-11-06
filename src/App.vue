@@ -111,6 +111,7 @@
             :iconColor="item.iconColor"
             :route="item.route"
             :tip="item.tip"
+            :name="item.name"
             @nav-btn-clicked="$router.push({ name: item.name, params: { headerIcon: item.btnIcon, headerText: item.title} })"
           />
         </v-layout>
@@ -209,6 +210,7 @@
             btnColor="primary"
             route="landing"
             tip="Home"
+            name="home"
             top
             @nav-btn-clicked="$router.push('/landing')"
           />
@@ -220,6 +222,7 @@
             btnColor="primary"
             route="dashboard"
             tip="Dashboard"
+            name="dashboard"
             top
             @nav-btn-clicked="$router.push({ name: 'dashboard', params: { headerIcon: 'dashboard', headerText: 'Dashboard' } })"
           />
@@ -227,6 +230,7 @@
             btnIcon="exit_to_app"
             btnColor="primary"
             route="login"
+            name="login"
             tip="Logout"
             top
             @nav-btn-clicked="$router.push('/login')"
