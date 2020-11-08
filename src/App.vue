@@ -148,6 +148,7 @@
             route="landing"
             tip="Administration"
             title="Administration"
+            name="landing"
             @nav-btn-clicked="$router.push('/landing')"
           />
           <BaseAppNavBtn
@@ -161,6 +162,7 @@
             :route="item.route"
             :tip="item.tip"
             :title="item.title"
+            :name="item.name"
             @nav-btn-clicked="$router.push({ name: item.name, params: { headerIcon: item.btnIcon, headerText: item.title} })"
           />
         </v-layout>
@@ -210,7 +212,7 @@
             btnColor="primary"
             route="landing"
             tip="Home"
-            name="home"
+            name="landing"
             top
             @nav-btn-clicked="$router.push('/landing')"
           />
