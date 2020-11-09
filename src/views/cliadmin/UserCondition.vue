@@ -6,12 +6,13 @@
       :headerText="headerText"
       hasDivider
     />
-    <BaseDataTable
-      ref="baseDataTable"
+    <SubDisplayTable
+      ref="subDisplayTable"
       class="mx-4"
       :headers="headers"
       :items="items"
-      :editPerms="{ create: false, update: false, delete: false }"
+      :expandable="true"
+      :tableTitleIcon="headerIcon"
       primaryColor="primary"
       secondaryColor="secondary"
       :tableActionButton="tableActionButtonVisible"
@@ -20,29 +21,53 @@
       :loading="loadingUserConditions"
       :loaded="!loadingUserConditions"
       :error="errorUserConditions"
-      errorMsg="Error loading User COndition records..."
+      errorMsg="Error loading User Condition records..."
       loadingMsg="Loading User Conditions..."
-      item-key="conditionsId"
+      item-key="userConditionId"
       searchLabel="Search Records..."
       tableTitle="User Condition Records"
-
+      @row-clicked="updateSelected"
       @action-button-pressed="openNewDialog"
-      @row-clicked="openEditDialog"
-    />
+    >
+      <v-card v-if="selected" @click="openEditDialog" slot="expandedRow">
+        <v-container fluid>
+          <v-layout row fill-height justify-end align-center>
+            <v-btn :color="$vuetify.theme.primary" dark>
+              {{ 'EDIT' }}
+            </v-btn>
+          </v-layout>
+          <v-layout align-center justify-center row fill-height>
+            <v-flex xs12 class="d-inline-flex">
+              <v-text-field
+                v-for="(value, parameter) in selected.condition"
+                :key="parameter + '-' + value"
+                class="ma-2"
+                :value="value"
+                :label="parameter"
+                :color="$vuetify.theme.primary"
+                hide-details
+                outline
+              >
+              </v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </SubDisplayTable>
   </v-container>
 </template>
 
 <script>
-import { crudRoutines } from '@/mixins/dataTableCRUD.js'
+
 import { mapState, mapGetters } from 'vuex'
-import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import SubDisplayTable from '@/components/sub/SubDisplayTableComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'UserConditions',
   mixins: [validation],
   components: {
-    BaseDataTable
+    SubDisplayTable
   },
   computed: {
     ...mapState({
@@ -51,9 +76,7 @@ export default {
       errorUserConditions: state => state.cliAdminUserConditions.cliAdminUserConditionsError,
       items: state => state.cliAdminUserConditions.cliAdminUserConditions
     }),
-    ...mapGetters([
-      // 'getterUserConditions'
-    ])
+    ...mapGetters([])
   },
   data () {
     return {
@@ -61,6 +84,8 @@ export default {
       headerIcon: 'local_pharmacy',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'User Conditions',
+      // Data Table
+      selected: null,
       tableActionButtonVisible: true,
       // New Dialog
       newFormVisible: false,
@@ -119,11 +144,14 @@ export default {
     }
   },
   methods: {
-    openNewDialog () {
-
+    openNewDialog (e) {
+      // console.log(e)
     },
     openEditDialog () {
-
+      console.log('EDIT DIALOG OPEN')
+    },
+    updateSelected (e) {
+      this.selected = e.item
     }
   },
   mounted () {
