@@ -20,7 +20,7 @@ export default new Router({
       beforeEnter: (to, from, next) => {
         if (store.state.eDropletApp.authenticated) {
           if (store.state.eDropletApp.level && store.state.eDropletApp.level.includes('CARER')) {
-            next('/dashboard')
+            next('/carer/dashboard')
           } else {
             next('/landing')
           }
