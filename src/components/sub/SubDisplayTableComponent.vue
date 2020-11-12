@@ -87,7 +87,7 @@
             :loadingMsg="loadingMsg"
             :loadedMsg="loadedMsg"
             :loading="loading"
-            :loaded="loaded"
+
             :error="error"
             :color="primaryColor"
           />
@@ -239,9 +239,9 @@
           <BaseDataTableInfoCard
             :errorMsg="errorMsg"
             :loadingMsg="loadingMsg"
-            :loadedMsg="loadedMsg"
+
             :loading="loading"
-            :loaded="loaded"
+
             :error="error"
             :color="primaryColor"
           />
@@ -330,7 +330,7 @@ export default {
       default: false
     },
     error: Boolean,
-    loaded: Boolean,
+
     loading: Boolean,
     // Table Action Button
     actionButtonTitle: String,

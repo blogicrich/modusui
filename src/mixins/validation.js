@@ -11,7 +11,8 @@ export default {
       requiredRegEx: /(.|\s)*\S(.|\s)*/,
       emailRegEx: /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/,
       macAddressRegEx: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
-      numericDpRegEx: /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/
+      numericDpRegEx: /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/,
+      numeric3dpRegEx: /^[-]?([1-9]{1}[0-9]{0,}(\.[0-9]{0,3})?|0(\.[0-9]{0,3})?|\.[0-9]{1,2})$/ // Allows negative numers
     }
   },
   methods: {
@@ -45,6 +46,13 @@ export default {
         return false
       } else {
         return payload.length <= maxChars
+      }
+    },
+    validate3dp: function (payload) {
+      if (this.validateUndefined(payload) || this.validateNull(payload) || !this.validateNumber(payload)) {
+        return false
+      } else {
+        return 'Number to max. 3 decimal places'
       }
     },
     validateDp: function (payload) {

@@ -109,7 +109,6 @@ export const moduleSmsEmailMessages = {
           return false
         }
       }
-
       return true
     }
   }
