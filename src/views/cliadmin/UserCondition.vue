@@ -25,8 +25,8 @@
       item-key="userId"
       searchLabel="Search Records..."
       tableTitle="User Condition Records"
-      @row-clicked="updateSelected"
-      @action-button-pressed="openNewDialog"
+      @row-clicked="setSelectedUser"
+      @action-button-pressed="openDialog"
     >
       <v-card
         v-if="selected"
@@ -37,7 +37,7 @@
         <!-- EDIT CONDITIONS -->
         <v-form v-model="editFormValid" ref="editFrom">
           <v-container fluid>
-            <!-- EDIT MODE -->
+            <!-- EDIT MODE CARD HEADER-->
             <v-layout row fill-height justify-end align-center>
               <v-btn
                 :color="$vuetify.theme.primary"
@@ -53,7 +53,7 @@
                 {{ 'EDIT' }}
               </v-btn>
             </v-layout>
-
+            <!-- EDIT FIELDS ROW -->
             <v-layout
               v-for="(item, index) in selected.conditions"
               :key="item.description + '-' + `${index}`"
@@ -73,7 +73,7 @@
                     :value="value"
                     :label="(parameter === 'hydrationAdjustment') ? 'adjustment' : parameter"
                     :color="$vuetify.theme.primary"
-                    :rules="[hydrationAdjustmentValidation.generic, hydrationAdjustmentValidation.threeDp]"
+                    :rules="[conditionValidation.generic, conditionValidation.threeDp]"
                     class="ma-2"
                     outline
                     @input="$store.commit('UPDATE_SELECTED_USER_CONDITIONS', {
@@ -84,13 +84,14 @@
                   />
                 </v-layout>
               </v-flex>
+              <!-- EDIT FIELDS ROW BUTTONS -->
               <v-flex shrink>
                 <v-layout row fill-height justify-center align-center>
                   <v-btn icon>
                     <v-icon
                       :disabled="!editing"
                       :color="$vuetify.theme.error"
-                      @click="$store.dispatch('deleteCliAdminUserCondition', item.userConditionId)"
+                      @click="deleteConditions(item.userConditionId)"
                     >
                       delete
                     </v-icon>
@@ -115,16 +116,7 @@
                       :disabled="!editing || parametersPristine"
                       :color="$vuetify.theme.success"
                       class="mr-2"
-                      @click="$store.dispatch('updateCliAdminUserCondition',
-                          {
-                          userConditionId: item.userConditionId,
-                          data: {
-                            userId: selected.userId,
-                            conditionId: item.conditionsId,
-                            comments: '',
-                            adjustment: item.hydrationAdjustment
-                          }
-                      })"
+                      @click="updateUserConditions(item)"
                     >
                       save
                     </v-icon>
@@ -164,47 +156,76 @@
           <v-container fluid>
             <v-card-title>
               <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-              <span class="pg-subheader text-primary">Add new comment</span>
+              <span class="pg-subheader text-primary">{{ `Add conditions for: ${selected.username}` }}</span>
             </v-card-title>
             <v-card-text>
-              <!-- <v-textarea
-                :color="$vuetify.theme.primary"
-                label="Day report"
-                placeholder="Report Text"
-                required
-                :rules="[dayReportValidation.generic, dayReportValidation.text]"
-                :value="newComment"
-                clearable
-                box
-                outline
-                rounded
-                @input="$store.commit('UPDATE_NEW_COMMENT', $event)"
-              /> -->
-              <!-- <v-card-actions>
+              <v-layout column justify-center align-space-around>
+                <v-layout row fill-height justify-center align-space-between>
+                  <v-select
+                    :items="conditions"
+                    class="ma-2"
+                    v-model="newCondition.condition"
+                    label="Condition"
+                    outline
+                    required
+                    item-text="description"
+                    return-object
+                    :rules="[conditionValidation.generic]"
+                  />
+                  <v-text-field
+                    :color="$vuetify.theme.primary"
+                    label="Adjustment"
+                    placeholder="hydration adjustment"
+                    class="ma-2"
+                    required
+                    :rules="[conditionValidation.generic, conditionValidation.threeDp]"
+                    v-model="newCondition.adjustment"
+                    type="number"
+                    full-width
+                    clearable
+                    box
+                    outline
+                    rounded
+                  />
+                  <v-text-field
+                    :color="$vuetify.theme.primary"
+                    label="Comments"
+                    placeholder="comments"
+                    class="pa-2"
+                    required
+                    :rules="[conditionValidation.generic, conditionValidation.text]"
+                    v-model="newCondition.comment"
+                    type="text"
+                    clearable
+                    box
+                    outline
+                    rounded
+                  />
+                </v-layout>
+              </v-layout>
+              <v-card-actions>
                 <v-spacer />
                 <v-btn
-                  :disabled="!newComment"
+                  :disabled="!newFormValid"
                   title="Add Comment to Day Report"
                   dark
                   :color="$vuetify.theme.primary"
-                  @click="addCommentToDayReport"
+                  @click="stageCondition()"
                 >
                   Add
                 </v-btn>
                 <v-btn
-                  :disabled="newCommentPristine"
-                  title="Reset Comment"
+                  :disabled="!newParametersPristine"
+                  title="Reset Condition"
                   dark
                   :color="$vuetify.theme.primary"
-                  @click="$refs.newCommentForm.reset()"
+                  @click="$refs.newConditionForm.reset()"
                 >
                   RESET
                 </v-btn>
-              </v-card-actions> -->
+              </v-card-actions>
             </v-card-text>
-
-            <!-- Comments for Submission -->
-
+            <!-- Conditions for Submission -->
             <v-list>
               <v-card-title>
                 <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
@@ -212,39 +233,45 @@
               </v-card-title>
               <v-fade-transition group hide-on-leave>
                 <v-card
-                  v-show="!newConditions.length"
+                  v-show="!newUserConditions.length"
                   class="pa-2"
                   tile
                   outline
                   key="nokeyforthisbadboy"
                 >
-                  <v-card-text class="text-center">NO COMMENTS TO SUBMIT. PLEASE ADD COMMENT FOR SUBMISSION</v-card-text>
+                  <v-card-text class="text-center">
+                    NO CONDITIONS TO SUBMIT. PLEASE ADD CONDITION FOR SUBMISSION
+                  </v-card-text>
                 </v-card>
                 <v-card
-                  v-show="newConditions.length"
+                  v-show="newUserConditions.length"
                   class="pa-2"
-                  v-for="(record, index) in newConditions"
+                  v-for="(record, index) in newUserConditions"
                   :key="index"
                   tile
                   outline
                 >
                   <v-layout>
-                    <v-flex grow>
-                      <span class="accent--text">{{ record.comment }}</span>
-                    </v-flex>
-                    <v-spacer />
-                    <v-flex shrink>
-                      <span class="accent--text">{{ record.date }}</span>
-                    </v-flex>
-                    <v-flex shrink>
-                      <v-icon
-                        color="pink"
-                        class="mx-3"
-                        @click="$store.commit('REMOVE_NEW_COMMENT', index)"
-                      >
-                        close
-                      </v-icon>
-                    </v-flex>
+                    <v-container grid-list-md>
+                      <v-layout row fill-height justify-space-between align-center>
+                        <v-flex grow>
+                          <span class="accent--text">{{ 'condition: ' + record.condition.description }}</span>
+                        </v-flex>
+                        <v-flex grow>
+                          <span class="accent--text">{{ 'comment: ' + record.comment }}</span>
+                        </v-flex>
+                        <v-flex grow>
+                          <span class="accent--text">{{ 'adjustment: ' + record.adjustment }}</span>
+                        </v-flex>
+                        <v-spacer />
+                        <v-icon
+                          :color="$vuetify.theme.error"
+                          @click="removeStagedCondition(index)"
+                        >
+                          close
+                        </v-icon>
+                      </v-layout>
+                    </v-container>
                   </v-layout>
                 </v-card>
               </v-fade-transition>
@@ -275,13 +302,24 @@ export default {
       items: state => state.cliAdminUserConditions.cliAdminUserConditions,
       selected: state => state.cliAdminUserConditions.cliAdminSelectedUserConditions,
       userConditions: state => state.cliAdminUserConditions.cliAdminUserConditions,
-      userConditionsClone: state => state.cliAdminUserConditions.cliAdminUserConditionsClone,
+      newUserConditions: state => state.cliAdminUserConditions.cliAdminNewUserConditions,
       // Store CRUD Booleans
       deletingUserConditions: state => state.cliAdminUserConditions.cliAdminUserConditionsDeleting,
       updatingUserConditions: state => state.cliAdminUserConditions.cliAdminUserConditionsError,
       loadingUserConditions: state => state.cliAdminUserConditions.cliAdminUserConditionsLoading,
       errorUserConditions: state => state.cliAdminUserConditions.cliAdminUserConditionsError
     }),
+    newParametersPristine () {
+      let isPristine = true
+      for (const condition in this.newCondtion) {
+        const element = this.newCondtion[condition]
+        if (element !== null) {
+          isPristine = false
+          return
+        }
+      }
+      return isPristine
+    },
     parametersPristine () {
       let isPristine = true
       if (this.selected.conditions) {
@@ -313,7 +351,11 @@ export default {
       // New Condition Form
       newFormVisible: false,
       newFormValid: false,
-      newConditions: [],
+      newCondition: {
+        condition: null,
+        comment: null,
+        adjustment: null
+      },
       // newCommentDate: null,
       showCommentDatePicker: false,
       reportText: '',
@@ -325,7 +367,7 @@ export default {
       deletingData: false,
       spinnerTimeout: null,
       timeoutDuration: 2000,
-      icon: 'menu_book',
+      icon: 'local_pharmacy',
       headers: [
         {
           text: 'userId',
@@ -364,7 +406,7 @@ export default {
           editable: true
         }
       ],
-      hydrationAdjustmentValidation: {
+      conditionValidation: {
         generic: value => !!value || 'Required.',
         threeDp: value => {
           if (this.numeric3dpRegEx.test(value)) {
@@ -372,22 +414,44 @@ export default {
           } else {
             return 'Must be decimal to max. 3 decimal places'
           }
+        },
+        text: value => {
+          if (!value) {
+            return false
+          } else if (value.length <= 80) {
+            return true
+          } else {
+            return '80 Chars or less'
+          }
         }
       }
     }
   },
   methods: {
     closeDialog () {
-      // RESET ALL BOOLEANS AND STORE OBJECTS
-      // this.$store.commit('RESET_NEW_CONDITIONS_STATE')
       this.dialog = false
       this.newFormVisible = false
       this.newFormValid = false
       if (this.$refs.newConditionForm) this.$refs.newConditionForm.reset()
+      this.$store.commit('RESET_NEW_USER_CONDITIONS')
     },
-    openNewDialog (e) {
+    openDialog () {
       this.dialog = true
       this.newFormVisible = true
+    },
+    stageCondition () {
+      this.$store.commit('ADD_NEW_USER_CONDITION', { ...this.newCondition })
+      this.$refs.newConditionForm.reset()
+    },
+    removeStagedCondition (index) {
+      this.$store.commit('REMOVE_NEW_USER_CONDITION', index)
+      this.$refs.newConditionForm.reset()
+    },
+    resetNewCondition () {
+      this.$refs.newConditionForm.reset()
+    },
+    setSelectedUser (e) {
+      this.$store.commit('SET_SELECTED_USER_CONDITIONS', { ...e.item })
     },
     showField (param) {
       if (param === 'conditionsId' || param === 'userConditionId') {
@@ -396,18 +460,43 @@ export default {
         return true
       }
     },
-    saveNewConditions () {
-      console.log('SAVING NEW CONDITIONS')
+    async deleteConditions (data) {
+      try {
+        await this.$store.dispatch('deleteCliAdminUserCondition', data)
+      } catch (error) {
+        console.error(error)
+      }
     },
-    updateSelected (e) {
-      this.$store.commit('SET_SELECTED_USER_CONDITIONS', { ...e.item })
+    async saveNewConditions () {
+      try {
+        await this.$store.dispatch('postNewUserConditions')
+        this.$refs.newConditionForm.reset()
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async updateUserConditions (data) {
+      try {
+        await this.$store.dispatch('updateCliAdminUserCondition', {
+          userConditionId: data.userConditionId,
+          data: {
+            userId: this.selected.userId,
+            conditionId: data.conditionsId,
+            comments: '',
+            adjustment: data.hydrationAdjustment
+          }
+        })
+        this.editing = false
+      } catch (error) {
+        console.error(error)
+      }
     }
   },
   mounted () {
     this.$store.dispatch('fetchCliAdminUserConditions')
   },
   destroyed () {
-    // this.$store.commit('RESET_CLIADMIN_USER_CONDITIONS_STATE')
+    this.$store.commit('RESET_CLIADMIN_USER_CONDITIONS_STORE_STATE')
   }
 }
 

@@ -16,21 +16,14 @@ export const moduleCliAdminUserConditions = {
     },
     // Selected Conditions
     SET_SELECTED_USER_CONDITIONS (state, data) {
-      if (!data && state.cliAdminSelectedUserConditions.userId) {
+      if (data) {
+        state.cliAdminSelectedUserConditions = setSelected({ ...data })
+      }
+      if (state.cliAdminSelectedUserConditions.userId) {
         const userData = state.cliAdminUserConditions.find((e) => e.userId === state.cliAdminSelectedUserConditions.userId)
-        state.cliAdminSelectedUserConditions = {
-          userId: userData.userId,
-          username: userData.username,
-          status: userData.status,
-          conditions: setSelected(userData)
-        }
+        state.cliAdminSelectedUserConditions = setSelected({ ...userData })
       } else {
-        state.cliAdminSelectedUserConditions = {
-          userId: data.userId,
-          username: data.username,
-          status: data.status,
-          conditions: (setSelected(data))
-        }
+        state.cliAdminNewUserConditions = { ...state.cliAdminNewUserConditions[0] }
       }
     },
     UPDATE_SELECTED_USER_CONDITIONS (state, data) {
@@ -42,11 +35,14 @@ export const moduleCliAdminUserConditions = {
       state.cliAdminSelectedUserConditions.conditions[data.index].hydrationAdjustment = pristineValue[data.index].hydrationAdjustment
     },
     // New Conditions
-    SET_NEW_USER_CONDITIONS (state, data) {
+    ADD_NEW_USER_CONDITION (state, data) {
+      state.cliAdminNewUserConditions.push(data)
     },
     REMOVE_NEW_USER_CONDITION (state, data) {
+      state.cliAdminNewUserConditions.splice(data, 1)
     },
-    REMOVE_NEW_USER_CONDITIONS (tate, data) {
+    RESET_NEW_USER_CONDITIONS (state) {
+      state.cliAdminNewUserConditions = []
     },
     // Store
     SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE (state, data) {
@@ -61,12 +57,14 @@ export const moduleCliAdminUserConditions = {
     SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE (state, data) {
       state.cliAdminUserConditionsDeleting = data
     },
-    RESET_CLIADMIN_USER_CONDITIONS_STATE (state) {
-      state.cliAdminUserConditions = []
-      state.cliAdminUserConditionsClone = []
+    RESET_CLIADMIN_USER_CONDITIONS_STORE_STATE (state) {
+      state.cliAdminNewUserConditions = []
       state.cliAdminSelectedUserConditions = {}
+      state.cliAdminNewUserConditions = []
       state.cliAdminUserConditionsLoading = false
       state.cliAdminUserConditionsError = false
+      state.cliAdminUserConditionsUpdating = false
+      state.cliAdminUserConditionsDeleting = false
     }
   },
   actions: {
@@ -79,7 +77,7 @@ export const moduleCliAdminUserConditions = {
         const users = context.rootState.cliAdminUsers.cliAdminUsers
         context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', true)
         // Get user conditions from the API
-        const response = await apiLib.getData('cliadmin/user-condition', true)
+        const response = await apiLib.getData('cliadmin/user-condition')
         // Check response and normalise data
         if (Array.isArray(response)) {
           context.commit('SET_CLIADMIN_USER_CONDITIONS', normalizeData(users, response))
@@ -89,6 +87,7 @@ export const moduleCliAdminUserConditions = {
           context.commit('SET_CLIADMIN_USER_CONDITIONS', [])
           context.commit('SET_CLIADMIN_SELECTED_CLIENT_ADMIN', {})
           context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', false)
+          context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
         }
       } catch (error) {
         console.error(error)
@@ -99,9 +98,39 @@ export const moduleCliAdminUserConditions = {
       try {
         context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', true)
         await apiLib.deleteData('cliadmin/user-condition/' + payload, true, true)
-        context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', false)
-        context.dispatch('fetchCliAdminUserConditions')
+        await context.dispatch('fetchCliAdminUserConditions')
         context.commit('SET_SELECTED_USER_CONDITIONS')
+        context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', false)
+      } catch (error) {
+        console.error(error)
+        context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
+      }
+    },
+    async postNewUserConditions (context) {
+      try {
+        context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', true)
+        const userId = context.state.cliAdminSelectedUserConditions.userId
+        const conditionId = context.state.cliAdminSelectedUserConditions.conditionId
+        const jobs = []
+        // Pool post new conditions
+        for (let i = 0; i < context.state.cliAdminNewUserConditions.length; i++) {
+          const element = context.state.cliAdminNewUserConditions[i]
+          const payload = {
+            userId: userId,
+            conditionId: element.condition.conditionsId,
+            comments: element.comment,
+            adjustment: element.adjustment
+          }
+          jobs.push(await apiLib.postData('cliadmin/user-condition/', payload, true))
+        }
+        // Post new conditions
+        Promise.all(jobs)
+        // Get all conditions
+        await context.dispatch('fetchCliAdminUserConditions')
+        // Set store state
+        context.commit('SET_SELECTED_USER_CONDITIONS')
+        context.commit('RESET_NEW_USER_CONDITIONS')
+        context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', false)
       } catch (error) {
         console.error(error)
         context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
@@ -113,8 +142,9 @@ export const moduleCliAdminUserConditions = {
         const id = payload.userConditionId
         const data = payload.data
         await apiLib.updateData('cliadmin/user-condition/' + id, data, true, true)
+        await context.dispatch('fetchCliAdminUserConditions')
+        context.commit('SET_SELECTED_USER_CONDITIONS')
         context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', false)
-        context.dispatch('fetchCliAdminUserConditions')
       } catch (error) {
         console.error(error)
         context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
@@ -124,6 +154,7 @@ export const moduleCliAdminUserConditions = {
 }
 
 function normalizeData (users, conditions) {
+  // Create unreferenced conditions array
   const arr = []
   for (let i = 0; i < users.length; i++) {
     // Get userId, user details and filter response for conditions pertaining to userId
@@ -157,10 +188,14 @@ function normalizeData (users, conditions) {
 }
 
 function setSelected (data) {
+  // Create new conditions array
   const conditions = []
-  for (let j = 0; j < data.conditions.length; j++) {
-    const condition = { ...data.conditions[j] }
-    conditions.push(condition)
+  if (data.conditions) {
+    for (let j = 0; j < data.conditions.length; j++) {
+      const condition = { ...data.conditions[j] }
+      conditions.push(condition)
+    }
+    data.conditions = conditions
+    return data
   }
-  return conditions
 }

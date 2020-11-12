@@ -73,9 +73,7 @@
             </td>
           </tr>
         </template>
-
         <!-- Table Row Expanded Data -->
-
         <!-- eslint-disable-next-line -->
         <template slot="expand" slot-scope="props">
           <slot name="expandedRow" />
@@ -194,11 +192,13 @@
         </v-layout>
       </v-fade-transition>
       <v-data-table
+        id="table"
         :headers="headers"
         :items="items"
         :search="search"
-        :item-key="itemKey"
+        :expand="closeRowOnClick"
         v-model="selected"
+        :item-key="itemKey"
         select-all
         hide-actions
         :pagination.sync="pagination"
@@ -224,7 +224,7 @@
         </template>
         <!-- Table: Row data-->
         <template slot="items" slot-scope="props">
-          <tr @click="$emit('row-clicked', props.item)">
+          <tr ref="clickableRow" @click="expandable ? (props.expanded = !props.expanded) && rowClicked(props) : rowClicked(props)">
             <td
               class="text-xs-left"
               v-for="header in headers"
@@ -245,6 +245,11 @@
             :error="error"
             :color="primaryColor"
           />
+        </template>
+        <!-- Table Row Expanded Data -->
+        <!-- eslint-disable-next-line -->
+        <template slot="expand" slot-scope="props">
+          <slot name="expandedRow" />
         </template>
       </v-data-table>
       <!-- Table: Footer Pagination CRUD function buttons -->
