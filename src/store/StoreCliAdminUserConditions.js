@@ -3,6 +3,7 @@ import apiLib from '../services/apiLib.js'
 export const moduleCliAdminUserConditions = {
   state: {
     cliAdminUserConditions: [],
+    cliAdminFilteredConditions: [],
     cliAdminSelectedUserConditions: {},
     cliAdminNewUserConditions: [],
     cliAdminUserConditionsLoading: false,
@@ -20,7 +21,9 @@ export const moduleCliAdminUserConditions = {
         state.cliAdminSelectedUserConditions = setSelected({ ...data })
       }
       if (state.cliAdminSelectedUserConditions.userId) {
-        const userData = state.cliAdminUserConditions.find((e) => e.userId === state.cliAdminSelectedUserConditions.userId)
+        const userData = state.cliAdminUserConditions.find(
+          (e) => e.userId === state.cliAdminSelectedUserConditions.userId
+        )
         state.cliAdminSelectedUserConditions = setSelected({ ...userData })
       } else {
         state.cliAdminNewUserConditions = { ...state.cliAdminNewUserConditions[0] }
@@ -30,9 +33,13 @@ export const moduleCliAdminUserConditions = {
       const value = data.value
       state.cliAdminSelectedUserConditions.conditions[data.index][data.parameter] = value
     },
-    RESET_SELECTED_USER_CONDITION (state, data) {
+    RESET_SELECTED_USER_CONDITIONS (state, data) {
       const pristineValue = state.cliAdminUserConditions.find((e) => e.userId === data.userId).conditions
-      state.cliAdminSelectedUserConditions.conditions[data.index].hydrationAdjustment = pristineValue[data.index].hydrationAdjustment
+      for (let i = 0; i < pristineValue.length; i++) {
+        const source = pristineValue[i]
+        const target = state.cliAdminSelectedUserConditions.conditions[i]
+        target.hydrationAdjustment = source.hydrationAdjustment
+      }
     },
     // New Conditions
     ADD_NEW_USER_CONDITION (state, data) {
@@ -97,7 +104,7 @@ export const moduleCliAdminUserConditions = {
     async deleteCliAdminUserCondition (context, payload) {
       try {
         context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', true)
-        await apiLib.deleteData('cliadmin/user-condition/' + payload, true, true)
+        await apiLib.deleteData('cliadmin/user-condition/' + payload, false, true)
         await context.dispatch('fetchCliAdminUserConditions')
         context.commit('SET_SELECTED_USER_CONDITIONS')
         context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', false)
@@ -110,7 +117,6 @@ export const moduleCliAdminUserConditions = {
       try {
         context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', true)
         const userId = context.state.cliAdminSelectedUserConditions.userId
-        const conditionId = context.state.cliAdminSelectedUserConditions.conditionId
         const jobs = []
         // Pool post new conditions
         for (let i = 0; i < context.state.cliAdminNewUserConditions.length; i++) {
@@ -121,7 +127,7 @@ export const moduleCliAdminUserConditions = {
             comments: element.comment,
             adjustment: element.adjustment
           }
-          jobs.push(await apiLib.postData('cliadmin/user-condition/', payload, true))
+          jobs.push(await apiLib.postData('cliadmin/user-condition/', payload, false, true))
         }
         // Post new conditions
         Promise.all(jobs)
@@ -153,38 +159,51 @@ export const moduleCliAdminUserConditions = {
   }
 }
 
+// Create unreferenced conditions array
 function normalizeData (users, conditions) {
-  // Create unreferenced conditions array
   const arr = []
+  if (!users.length) return arr
+  // Set empty condition array if no user condition data exists
   for (let i = 0; i < users.length; i++) {
-    // Get userId, user details and filter response for conditions pertaining to userId
     const userDetails = users[i]
     const conditionData = conditions.filter(condition => condition.userId === userDetails.userId)
-    const conditionStatus = conditionData.find(e => e.userId === userDetails.userId).status
-    const userConditionId = conditionData.find(e => e.userId === userDetails.userId).userConditionId
-    const conditionId = conditionData.find(e => e.userId === userDetails.userId).conditionId
-    // Return all condition and hydration data for filtered conditions
-    const userConditions = function () {
-      const data = []
-      for (let k = 0; k < conditionData.length; k++) {
-        data.push({
-          ...conditionData[k].condition,
-          hydrationAdjustment: conditionData[k].hydrationAdjustment.adjustment,
-          userConditionId: userConditionId
-        })
-      }
-      return data
+    if (conditionData.length === undefined || conditionData.length <= 0) {
+      arr.push({
+        userId: users[i].userId,
+        status: 'Inactive',
+        username: users[i].deptPerson.person.givenName + ' ' + users[i].deptPerson.person.familyName,
+        conditions: []
+      })
+    } else {
+      // Filter response for conditions pertaining to userId
+      const conditionData = conditions.filter(condition => condition.userId === userDetails.userId)
+      const conditionStatus = conditionData.find(e => e.userId === userDetails.userId).status
+      const userConditionId = conditionData.find(e => e.userId === userDetails.userId).userConditionId
+      const conditionId = conditionData.find(e => e.userId === userDetails.userId).conditionId
+      // Push normalised data
+      arr.push({
+        userId: userDetails.userId,
+        username: userDetails.deptPerson.person.givenName + ' ' + userDetails.deptPerson.person.familyName,
+        status: conditionStatus,
+        conditionId: conditionId,
+        conditions: setUserConditions(conditionData, userConditionId)
+      })
     }
-    // Push normalised data
-    arr.push({
-      userId: userDetails.userId,
-      username: userDetails.deptPerson.person.givenName + ' ' + userDetails.deptPerson.person.familyName,
-      status: conditionStatus,
-      conditionId: conditionId,
-      conditions: userConditions()
-    })
-    return arr
   }
+  return arr
+}
+
+function setUserConditions (conditions, id) {
+  // Set condition data for filtered conditions
+  const data = []
+  for (let k = 0; k < conditions.length; k++) {
+    data.push({
+      ...conditions[k].condition,
+      hydrationAdjustment: conditions[k].hydrationAdjustment.adjustment,
+      userConditionId: id
+    })
+  }
+  return data
 }
 
 function setSelected (data) {

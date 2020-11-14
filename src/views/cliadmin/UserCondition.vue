@@ -11,17 +11,19 @@
       class="mx-4"
       :headers="headers"
       :items="items"
-      :expandable="true"
+      :expandable="false"
       :tableTitleIcon="headerIcon"
       primaryColor="primary"
       secondaryColor="secondary"
-      :tableActionButton="tableActionButtonVisible"
+      :tableActionButton="selectedHasConditions"
       actionButtonIcon="add"
       actionButtonTitle="Add new User Condition"
       :loading="loadingUserConditions"
+      :loaded="!loadingUserConditions"
       :error="errorUserConditions"
       errorMsg="Error loading User Condition records..."
       loadingMsg="Loading User Conditions..."
+      loadedMsg="No users records to display"
       item-key="userId"
       searchLabel="Search Records..."
       tableTitle="User Condition Records"
@@ -29,17 +31,49 @@
       @action-button-pressed="openDialog"
     >
       <v-card
-        v-if="selected"
         slot="expandedRow"
         flat
         outline
       >
-        <!-- EDIT CONDITIONS -->
-        <v-form v-model="editFormValid" ref="editFrom">
-          <v-container fluid>
+        <v-form
+          ref="editConditionsForm"
+          v-model="editFormValid"
+        >
+          <v-container
+            v-if="selectedHasConditions && !updatingUserConditions || !deletingUserConditions"
+            fluid
+          >
             <!-- EDIT MODE CARD HEADER-->
-            <v-layout row fill-height justify-end align-center>
+            <v-layout
+              row
+              fill-height
+              justify-end
+              align-center
+            >
               <v-btn
+                :disabled="!editing || parametersPristine"
+                :color="$vuetify.theme.primary"
+                dark
+                @click="$store.commit('RESET_SELECTED_USER_CONDITIONS', {userId: selected.userId })"
+              >
+                <v-icon>
+                  refresh
+                </v-icon>
+                {{ 'REFRESH' }}
+              </v-btn>
+              <v-btn
+                :disabled="parametersPristine"
+                :color="$vuetify.theme.primary"
+                dark
+                @click="updateUserConditions()"
+              >
+                <v-icon>
+                  save
+                </v-icon>
+                {{ 'SAVE' }}
+              </v-btn>
+              <v-btn
+                v-if="selectedHasConditions"
                 :color="$vuetify.theme.primary"
                 dark
                 @click="editing = !editing"
@@ -53,7 +87,7 @@
                 {{ 'EDIT' }}
               </v-btn>
             </v-layout>
-            <!-- EDIT FIELDS ROW -->
+            <!-- EDIT ROWS -->
             <v-layout
               v-for="(item, index) in selected.conditions"
               :key="item.description + '-' + `${index}`"
@@ -84,7 +118,7 @@
                   />
                 </v-layout>
               </v-flex>
-              <!-- EDIT FIELDS ROW BUTTONS -->
+              <!-- EDIT ROW BUTTONS -->
               <v-flex shrink>
                 <v-layout row fill-height justify-center align-center>
                   <v-btn icon>
@@ -96,40 +130,34 @@
                       delete
                     </v-icon>
                   </v-btn>
-                  <v-btn icon>
-                    <v-icon
-                      :disabled="!editing || parametersPristine"
-                      :color="$vuetify.theme.primary"
-                      @click="$store.commit('RESET_SELECTED_USER_CONDITION', {
-                        index: index,
-                        userId: selected.userId,
-                        conditions: item
-                      })"
-                    >
-                      refresh
-                    </v-icon>
-                  </v-btn>
-                  <v-btn
-                    icon
-                  >
-                    <v-icon
-                      :disabled="!editing || parametersPristine"
-                      :color="$vuetify.theme.success"
-                      class="mr-2"
-                      @click="updateUserConditions(item)"
-                    >
-                      save
-                    </v-icon>
-                  </v-btn>
                 </v-layout>
               </v-flex>
             </v-layout>
+            <!-- NO CONDITIONS RECORD CARD  -->
+            <BaseDataTableInfoCard
+              v-if="!selectedHasConditions"
+              :loadedMsg="`No user condition data for user: ${selected.username}. Add a new user condition to continue.`"
+              :loaded="!selectedHasConditions"
+              :color="$vuetify.theme.primary"
+              :actionBtn="true"
+              :actionBtnTitle="`Add a condition for ${selected.username}`"
+              @action-button-pressed="openDialog"
+            />
           </v-container>
+          <!-- UPDATE AND DELETE PROGRESS -->
+          <BaseDataTableInfoCard
+            v-if="selectedHasConditions && updatingUserConditions || deletingUserConditions"
+            :loadingMsg="`Updating ${selected.username} conditions.`"
+            :loading="updatingUserConditions || deletingUserConditions"
+            :color="$vuetify.theme.primary"
+            @action-button-pressed="openDialog"
+          />
         </v-form>
       </v-card>
     </SubDisplayTable>
     <!-- ADD NEW CONDITIONS DIALOG -->
     <v-dialog
+      ref="newConditionsDialog"
       v-model="dialog"
       fullscreen
       hide-overlay
@@ -152,17 +180,28 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-form v-if="newFormVisible" v-model="newFormValid" ref="newConditionForm">
+        <v-form
+          v-if="newFormVisible"
+          v-model="newFormValid"
+          ref="newConditionForm"
+        >
           <v-container fluid>
             <v-card-title>
               <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
               <span class="pg-subheader text-primary">{{ `Add conditions for: ${selected.username}` }}</span>
             </v-card-title>
-            <v-card-text>
+            <BaseDataTableInfoCard
+              v-if="!conditionOptions.length"
+              :errorMsg="`No conditions available for assignment to user. Please contact your System Administrator.`"
+              :error="!conditionOptions.length"
+              :color="$vuetify.theme.primary"
+              :actionBtn="false"
+            />
+            <v-card-text v-if="conditionOptions.length">
               <v-layout column justify-center align-space-around>
                 <v-layout row fill-height justify-center align-space-between>
                   <v-select
-                    :items="conditions"
+                    :items="filteredConditions"
                     class="ma-2"
                     v-model="newCondition.condition"
                     label="Condition"
@@ -226,10 +265,10 @@
               </v-card-actions>
             </v-card-text>
             <!-- Conditions for Submission -->
-            <v-list>
+            <v-list v-if="conditionOptions.length">
               <v-card-title>
                 <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-                <span class="pg-subheader text-primary">Comments for submission:</span>
+                <span class="pg-subheader text-primary">Conditions for submission:</span>
               </v-card-title>
               <v-fade-transition group hide-on-leave>
                 <v-card
@@ -287,18 +326,20 @@
 
 import { mapState } from 'vuex'
 import SubDisplayTable from '@/components/sub/SubDisplayTableComponent.vue'
+import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'UserConditions',
   mixins: [validation],
   components: {
-    SubDisplayTable
+    SubDisplayTable,
+    BaseDataTableInfoCard
   },
   computed: {
     ...mapState({
       // Store data objects
-      conditions: state => state.commonData.conditionOptions,
+      conditionOptions: state => state.commonData.conditionOptions,
       items: state => state.cliAdminUserConditions.cliAdminUserConditions,
       selected: state => state.cliAdminUserConditions.cliAdminSelectedUserConditions,
       userConditions: state => state.cliAdminUserConditions.cliAdminUserConditions,
@@ -335,6 +376,35 @@ export default {
         }
       }
       return isPristine
+    },
+    selectedHasConditions () {
+      try {
+        if (!this.selected || this.selected === undefined || this.selected.conditions.length <= 0) {
+          return false
+        } else {
+          return true
+        }
+      } catch (error) {
+        if (error instanceof TypeError) {
+          return false
+        } else {
+          console.error(error)
+        }
+        return false
+      }
+    },
+    filteredConditions () {
+      const options = [...this.conditionOptions]
+      for (let j = 0; j < this.selected.conditions.length; j++) {
+        const selectedUserCondition = this.selected.conditions[j]
+        const index = options.findIndex(e => String(selectedUserCondition.conditionsId) === String(e.conditionsId))
+        console.log(index, options, selectedUserCondition.description)
+        if (index !== -1) {
+          console.log(index)
+          options.splice(index, 1)
+        }
+      }
+      return options
     }
   },
   data () {
@@ -344,7 +414,7 @@ export default {
       iconColor: this.$vuetify.theme.primary,
       headerText: 'User Conditions',
       // Data Table
-      tableActionButtonVisible: true,
+      // tableActionButtonVisible: true,
       // Dialog
       dialog: false,
       dialogTitle: 'Add New Conditions',
@@ -379,7 +449,7 @@ export default {
           editable: false
         },
         {
-          text: 'userName',
+          text: 'User',
           align: 'left',
           sortable: true,
           value: 'username',
@@ -387,15 +457,15 @@ export default {
           hidden: false,
           editable: false
         },
-        {
-          text: 'comments',
-          align: 'left',
-          sortable: true,
-          value: 'comments',
-          cellType: 'tb',
-          hidden: false,
-          editable: true
-        },
+        // {
+        //   text: 'comments',
+        //   align: 'left',
+        //   sortable: true,
+        //   value: 'comments',
+        //   cellType: 'tb',
+        //   hidden: false,
+        //   editable: true
+        // },
         {
           text: 'Status',
           align: 'left',
@@ -475,18 +545,25 @@ export default {
         console.error(error)
       }
     },
-    async updateUserConditions (data) {
+    async updateUserConditions () {
       try {
-        await this.$store.dispatch('updateCliAdminUserCondition', {
-          userConditionId: data.userConditionId,
-          data: {
-            userId: this.selected.userId,
-            conditionId: data.conditionsId,
-            comments: '',
-            adjustment: data.hydrationAdjustment
+        const pristineUserConditions = this.userConditions.find(e => e.userId === this.selected.userId).conditions
+        for (let i = 0; i < this.selected.conditions.length; i++) {
+          const editedHydrationValue = this.selected.conditions[i]
+          const pristineHydrationValue = pristineUserConditions.find(e => e.conditionsId === editedHydrationValue.conditionsId)
+          if (editedHydrationValue.hydrationAdjustment !== pristineHydrationValue.hydrationAdjustment) {
+            await this.$store.dispatch('updateCliAdminUserCondition', {
+              userConditionId: editedHydrationValue.userConditionId,
+              data: {
+                userId: this.selected.userId,
+                conditionId: editedHydrationValue.conditionsId,
+                comments: editedHydrationValue.comments,
+                adjustment: editedHydrationValue.hydrationAdjustment
+              }
+            })
           }
-        })
-        this.editing = false
+        }
+        // this.editing = false
       } catch (error) {
         console.error(error)
       }

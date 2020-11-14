@@ -33,7 +33,7 @@
         :headers="headers"
         :items="items"
         :search="search"
-        :expand="closeRowOnClick"
+        :expand="expand"
         v-model="selected"
         :item-key="itemKey"
         select-all
@@ -61,7 +61,7 @@
         </template>
         <!-- Table: Row data-->
         <template slot="items" slot-scope="props">
-          <tr ref="clickableRow" @click="expandable ? (props.expanded = !props.expanded) && rowClicked(props) : rowClicked(props)">
+          <tr ref="clickableRow" @click="(props.expanded = !props.expanded) && rowClicked(props)">
             <td
               class="text-xs-left"
               :hidden="header.hidden"
@@ -75,7 +75,7 @@
         </template>
         <!-- Table Row Expanded Data -->
         <!-- eslint-disable-next-line -->
-        <template slot="expand" slot-scope="props">
+        <template slot="expand">
           <slot name="expandedRow" />
         </template>
         <!-- Table: No Data Slot - spinner Loading, display Error -->
@@ -85,7 +85,7 @@
             :loadingMsg="loadingMsg"
             :loadedMsg="loadedMsg"
             :loading="loading"
-
+            :loaded="loaded"
             :error="error"
             :color="primaryColor"
           />
@@ -196,7 +196,7 @@
         :headers="headers"
         :items="items"
         :search="search"
-        :expand="closeRowOnClick"
+        :expand="expand"
         v-model="selected"
         :item-key="itemKey"
         select-all
@@ -224,7 +224,7 @@
         </template>
         <!-- Table: Row data-->
         <template slot="items" slot-scope="props">
-          <tr ref="clickableRow" @click="expandable ? (props.expanded = !props.expanded) && rowClicked(props) : rowClicked(props)">
+          <tr ref="clickableRow" @click="(props.expanded = !props.expanded) && rowClicked(props)">
             <td
               class="text-xs-left"
               v-for="header in headers"
@@ -239,16 +239,15 @@
           <BaseDataTableInfoCard
             :errorMsg="errorMsg"
             :loadingMsg="loadingMsg"
-
             :loading="loading"
-
+            :loaded="loading"
             :error="error"
             :color="primaryColor"
           />
         </template>
         <!-- Table Row Expanded Data -->
         <!-- eslint-disable-next-line -->
-        <template slot="expand" slot-scope="props">
+        <template slot="expand">
           <slot name="expandedRow" />
         </template>
       </v-data-table>
@@ -289,7 +288,6 @@ export default {
   },
   data () {
     return {
-      expand: true,
       rows: [5, 10, 15, 20, 25, 50, 100],
       search: '',
       selected: [],
@@ -322,9 +320,9 @@ export default {
     searchLabel: String,
     tableTitleIcon: String,
     // Booleans
-    closeRowOnClick: {
+    expand: {
       type: Boolean,
-      default: true
+      default: false
     },
     expandable: {
       type: Boolean,
@@ -335,7 +333,7 @@ export default {
       default: false
     },
     error: Boolean,
-
+    loaded: Boolean,
     loading: Boolean,
     // Table Action Button
     actionButtonTitle: String,
