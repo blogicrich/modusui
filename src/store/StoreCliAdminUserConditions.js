@@ -180,6 +180,10 @@ function normalizeData (users, conditions) {
   const arr = []
   if (!users.length) return arr
   // Set empty condition array if no user condition data exists
+  for (let i = 0; i < conditions.length; i++) {
+    const element = conditions[i]
+    // const conditionId =
+  }
   for (let i = 0; i < users.length; i++) {
     const userDetails = users[i]
     const conditionData = conditions.filter(condition => condition.userId === userDetails.userId)
@@ -193,8 +197,9 @@ function normalizeData (users, conditions) {
     } else {
       // Filter response for conditions pertaining to userId
       const conditionData = conditions.filter(condition => condition.userId === userDetails.userId)
-      const conditionStatus = conditionData.find(e => e.userId === userDetails.userId).status
       const userConditionId = conditionData.find(e => e.userId === userDetails.userId).userConditionId
+      // const conditionData = conditions.filter(condition => condition.userConditionId === userConditionId)
+      const conditionStatus = conditionData.find(e => e.userId === userDetails.userId).status
       const conditionId = conditionData.find(e => e.userId === userDetails.userId).conditionId
       // Push normalised data
       arr.push({
@@ -202,21 +207,22 @@ function normalizeData (users, conditions) {
         username: userDetails.deptPerson.person.givenName + ' ' + userDetails.deptPerson.person.familyName,
         status: conditionStatus,
         conditionId: conditionId,
-        conditions: setUserConditions(conditionData, userConditionId)
+        conditions: setUserConditions(conditionData)
       })
     }
   }
   return arr
 }
 
-function setUserConditions (conditions, id) {
+function setUserConditions (conditions) {
   // Set condition data for filtered conditions
   const data = []
   for (let k = 0; k < conditions.length; k++) {
+    const element = conditions[k].condition
     data.push({
-      ...conditions[k].condition,
+      ...element,
       hydrationAdjustment: conditions[k].hydrationAdjustment.adjustment,
-      userConditionId: id
+      userConditionId: conditions[k].userConditionId
     })
   }
   return data

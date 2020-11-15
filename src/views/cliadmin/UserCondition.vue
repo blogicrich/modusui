@@ -67,7 +67,7 @@
                   </v-btn>
                   <v-btn
                     key="conditionsSaveBtn"
-                    :disabled="parametersPristine"
+                    :disabled="parametersPristine || !editFormValid"
                     :color="$vuetify.theme.primary"
                     dark
                     @click="updateUserConditions()"
@@ -184,6 +184,7 @@
             </v-btn>
             <v-btn
               icon dark
+              :disabled="!newFormValid"
               @click="saveNewConditions"
               title="save and close"
             >
@@ -212,7 +213,7 @@
               <v-layout column justify-center align-space-around>
                 <v-layout row fill-height justify-center align-space-between>
                   <v-select
-                    :items="filteredConditions"
+                    :items="conditionOptions"
                     class="ma-2"
                     v-model="newCondition.condition"
                     label="Condition"
@@ -403,18 +404,6 @@ export default {
         }
         return false
       }
-      // return false
-    },
-    filteredConditions () {
-      const options = [...this.conditionOptions]
-      for (let j = 0; j < this.selected.conditions.length; j++) {
-        const selectedUserCondition = this.selected.conditions[j]
-        const assignedConditionsIndex = options.findIndex(e => String(selectedUserCondition.conditionsId) === String(e.conditionsId))
-        const newConditionsIndex = this.newUserConditions.findIndex(e => String(selectedUserCondition.conditionsId) === String(e.conditionsId))
-        if (newConditionsIndex !== -1) options.splice(newConditionsIndex, 1)
-        if (assignedConditionsIndex !== -1) options.splice(assignedConditionsIndex, 1)
-      }
-      return options
     }
   },
   data () {
