@@ -140,7 +140,6 @@ export const moduleCliAdminUserConditions = {
         // Get all conditions
         await context.dispatch('fetchCliAdminUserConditions')
         // Set store state
-        
         context.commit('SET_SELECTED_USER_CONDITIONS')
         context.commit('RESET_NEW_USER_CONDITIONS')
         setTimeout(() => {
