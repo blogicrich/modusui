@@ -1,5 +1,7 @@
 import apiLib from '../services/apiLib.js'
 
+const bounce = 500
+
 export const moduleCliAdminUserConditions = {
   state: {
     cliAdminUserConditions: [],
@@ -84,16 +86,18 @@ export const moduleCliAdminUserConditions = {
         const users = context.rootState.cliAdminUsers.cliAdminUsers
         context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', true)
         // Get user conditions from the API
-        const response = await apiLib.getData('cliadmin/user-condition')
+        const response = await apiLib.getData('cliadmin/user-condition', true)
         // Check response and normalise data
         if (Array.isArray(response)) {
           context.commit('SET_CLIADMIN_USER_CONDITIONS', normalizeData(users, response))
-          context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', false)
+          setTimeout(() => {
+            context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', false)
+          }, bounce)
           context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', false)
         } else {
           context.commit('SET_CLIADMIN_USER_CONDITIONS', [])
           context.commit('SET_CLIADMIN_SELECTED_CLIENT_ADMIN', {})
-          context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', false)
+          context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', true)
           context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
         }
       } catch (error) {
@@ -107,7 +111,9 @@ export const moduleCliAdminUserConditions = {
         await apiLib.deleteData('cliadmin/user-condition/' + payload, false, true)
         await context.dispatch('fetchCliAdminUserConditions')
         context.commit('SET_SELECTED_USER_CONDITIONS')
-        context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', false)
+        setTimeout(() => {
+          context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', false)
+        }, bounce)
       } catch (error) {
         console.error(error)
         context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
@@ -134,9 +140,12 @@ export const moduleCliAdminUserConditions = {
         // Get all conditions
         await context.dispatch('fetchCliAdminUserConditions')
         // Set store state
+        
         context.commit('SET_SELECTED_USER_CONDITIONS')
         context.commit('RESET_NEW_USER_CONDITIONS')
-        context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', false)
+        setTimeout(() => {
+          context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', false)
+        }, bounce)
       } catch (error) {
         console.error(error)
         context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
@@ -144,13 +153,21 @@ export const moduleCliAdminUserConditions = {
     },
     async updateCliAdminUserCondition (context, payload) {
       try {
+        const jobs = []
         context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', true)
-        const id = payload.userConditionId
-        const data = payload.data
-        await apiLib.updateData('cliadmin/user-condition/' + id, data, true, true)
+        for (let i = 0; i < payload.length; i++) {
+          const element = payload[i]
+          const id = element.userConditionId
+          const data = element.data
+          const request = await apiLib.updateData('cliadmin/user-condition/' + id, data, true, true)
+          jobs.push(request)
+        }
+        Promise.all(jobs)
         await context.dispatch('fetchCliAdminUserConditions')
         context.commit('SET_SELECTED_USER_CONDITIONS')
-        context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', false)
+        setTimeout(() => {
+          context.commit('SET_CLIADMIN_USER_CONDITIONS_UPDATE_STATE', false)
+        }, bounce)
       } catch (error) {
         console.error(error)
         context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)

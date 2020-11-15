@@ -61,7 +61,7 @@
         </template>
         <!-- Table: Row data-->
         <template slot="items" slot-scope="props">
-          <tr ref="clickableRow" @click="(props.expanded = !props.expanded) && rowClicked(props)">
+          <tr ref="clickableRow" @click="(props.expanded = !props.expanded) && rowClicked(props)" :class="props.expanded ? 'select' : 'unselect'">
             <td
               class="text-xs-left"
               :hidden="header.hidden"

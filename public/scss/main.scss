@@ -119,7 +119,6 @@ $white: rgba(#ffffff, 1);
   border-radius: 4px;
   font-size: 1em;
 }
-
 // Table
 
 .table-cell-header {
@@ -129,6 +128,16 @@ $white: rgba(#ffffff, 1);
   color: $vuetify-primary;
 }
 
+.select {
+  td {
+    background-color: $table-row-selected;
+  }
+}
+.unselect {
+  td {
+    background-color: inherit;
+  }
+}
 tr:hover td {
   background-color: $table-row-hover;
   cursor: pointer;
@@ -136,10 +145,10 @@ tr:hover td {
 
 // Tranisitions 
 
-.component-fade-enter-active, .component-fade-leave-active {
-  transition: opacity .3s ease;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
 }
-.component-fade-enter, .component-fade-leave-to
+.fade-enter, .fade-leave-to
   /* .component-fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
