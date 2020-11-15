@@ -86,7 +86,7 @@ export const moduleCliAdminUserConditions = {
         const users = context.rootState.cliAdminUsers.cliAdminUsers
         context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', true)
         // Get user conditions from the API
-        const response = await apiLib.getData('cliadmin/user-condition', true)
+        const response = await apiLib.getData('cliadmin/user-condition', false)
         // Check response and normalise data
         if (Array.isArray(response)) {
           context.commit('SET_CLIADMIN_USER_CONDITIONS', normalizeData(users, response))
@@ -158,7 +158,7 @@ export const moduleCliAdminUserConditions = {
           const element = payload[i]
           const id = element.userConditionId
           const data = element.data
-          const request = await apiLib.updateData('cliadmin/user-condition/' + id, data, true, true)
+          const request = await apiLib.updateData('cliadmin/user-condition/' + id, data, false, true)
           jobs.push(request)
         }
         Promise.all(jobs)
