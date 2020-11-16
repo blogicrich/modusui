@@ -192,6 +192,7 @@ function normalizeData (users, conditions) {
         userId: users[i].userId,
         status: 'Inactive',
         username: users[i].deptPerson.person.givenName + ' ' + users[i].deptPerson.person.familyName,
+        comments: '',
         conditions: []
       })
     } else {
@@ -205,6 +206,7 @@ function normalizeData (users, conditions) {
       arr.push({
         userId: userDetails.userId,
         username: userDetails.deptPerson.person.givenName + ' ' + userDetails.deptPerson.person.familyName,
+        comments: userDetails.comments,
         status: conditionStatus,
         conditionId: conditionId,
         conditions: setUserConditions(conditionData)

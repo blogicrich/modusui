@@ -10,7 +10,7 @@
       ref="subDisplayTable"
       class="mx-4"
       :headers="headers"
-      :items="items"
+      :items="userConditions"
       :expandable="false"
       :tableTitleIcon="headerIcon"
       primaryColor="primary"
@@ -159,7 +159,6 @@
                 :loadingMsg="`Updating ${selected.username} conditions.`"
                 :loading="loadingUserConditions || updatingUserConditions || deletingUserConditions"
                 :color="$vuetify.theme.primary"
-                @action-button-pressed="openDialog"
               />
             </v-container>
           </transition-group>
@@ -352,7 +351,6 @@ export default {
     ...mapState({
       // Store data objects
       conditionOptions: state => state.commonData.conditionOptions,
-      items: state => state.cliAdminUserConditions.cliAdminUserConditions,
       selected: state => state.cliAdminUserConditions.cliAdminSelectedUserConditions,
       userConditions: state => state.cliAdminUserConditions.cliAdminUserConditions,
       newUserConditions: state => state.cliAdminUserConditions.cliAdminNewUserConditions,
@@ -412,8 +410,6 @@ export default {
       headerIcon: 'local_pharmacy',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'User Conditions',
-      // Data Table
-      // tableActionButtonVisible: true,
       // Dialog
       dialog: false,
       dialogTitle: 'Add New Conditions',
@@ -425,18 +421,12 @@ export default {
         comment: null,
         adjustment: null
       },
-      // newCommentDate: null,
       showCommentDatePicker: false,
-      reportText: '',
       // Edit Form
       editing: false,
       editFormValid: false,
-      // dialog: false,
-      confirmationDialog: false,
-      deletingData: false,
-      spinnerTimeout: null,
-      timeoutDuration: 2000,
       icon: 'local_pharmacy',
+      // Data Table
       headers: [
         {
           text: 'userId',
@@ -456,15 +446,15 @@ export default {
           hidden: false,
           editable: false
         },
-        // {
-        //   text: 'comments',
-        //   align: 'left',
-        //   sortable: true,
-        //   value: 'comments',
-        //   cellType: 'tb',
-        //   hidden: false,
-        //   editable: true
-        // },
+        {
+          text: 'comments',
+          align: 'left',
+          sortable: true,
+          value: 'comments',
+          cellType: 'tb',
+          hidden: false,
+          editable: true
+        },
         {
           text: 'Status',
           align: 'left',

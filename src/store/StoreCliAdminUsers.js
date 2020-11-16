@@ -1,26 +1,37 @@
 import apiLib from '../services/apiLib.js'
 import moment from 'moment'
 
+const bounce = 500
+
 export const moduleCliAdminUsers = {
   state: {
     cliAdminUsers: [],
+    cliAdminSelectedUser: {},
+    cliAdminSelectedUserDefaults: [],
     cliAdminUsersLoading: false,
     cliAdminUsersUpdating: false,
-    cliAdminError: false,
-    cliAdminSelectedUser: {},
-    _cliAdminSelectedUserDefaults: []
+    cliAdminUsersDeleting: false,
+    cliAdminUsersError: false
   },
   mutations: {
     SET_CLIADMIN_USERS (state, data) {
-      state.cliAdminUsers = data
-      state._cliAdminSelectedUserDefaults = JSON.parse(JSON.stringify(data))
+      const arr = []
+      for (let i = 0; i < data.length; i++) {
+        const element = {
+          ...data[i],
+          username: data[i].deptPerson.person.givenName + ' ' + data[i].deptPerson.person.familyName
+        }
+        arr.push(element)
+      }
+      state.cliAdminUsers = arr
     },
-    SET_NEW_CLIADMIN_USERS_DEFAULTS (state) {
-      const newDefaults = JSON.parse(JSON.stringify(state.cliAdminSelectedUser))
-      const index = state._cliAdminSelectedUserDefaults.findIndex(
-        u => u.userId === state.cliAdminSelectedUser.userId
-      )
-      state._cliAdminSelectedUserDefaults[index] = Object.assign(state._cliAdminSelectedUserDefaults[index], {}, newDefaults)
+    SET_SELECTED_USER_SETTINGS (state, data) {
+      if (data) {
+        const selected = state.cliAdminUsers.find(u => u.userId === data.userId)
+        state.cliAdminSelectedUser = { ...selected }
+      } else {
+        state.cliAdminSelectedUser = {}
+      }
     },
     SET_CLIADMIN_USERS_LOAD_STATE (state, data) {
       state.cliAdminUsersLoading = data
@@ -28,17 +39,17 @@ export const moduleCliAdminUsers = {
     SET_CLIADMIN_USERS_UPDATE_STATE (state, data) {
       state.cliAdminUsersUpdating = data
     },
-    SET_CLIADMIN_USERS_ERROR (state, data) {
-      state.cliAdminError = data
+    SET_CLIADMIN_USERS_DELETE_STATE (state, data) {
+      state.cliAdminUsersDeleting = data
     },
-    SET_CLIADMIN_SELECTED_USER (state, data) {
-      state.cliAdminSelectedUser = data
+    SET_CLIADMIN_USERS_ERROR (state, data) {
+      state.cliAdminUsersError = data
     },
     RESET_CLIADMIN_USERS_STATE (state) {
       state.cliAdminUsers = []
       state.cliAdminSelectedUser = {}
       state.cliAdminUsersLoading = false
-      state.cliAdminError = false
+      state.cliAdminUsersError = false
     },
     // Sleep and wake times
     UPDATE_WAKEUPTIME (state, data) {
@@ -61,12 +72,15 @@ export const moduleCliAdminUsers = {
         const response = await apiLib.getData('cliadmin/user')
         if (Array.isArray(response)) {
           context.commit('SET_CLIADMIN_USERS', response)
-          context.commit('SET_CLIADMIN_SELECTED_USER', response[0])
+          context.commit('SET_SELECTED_USER_SETTINGS', response[0])
+          setTimeout(() => {
+            context.commit('SET_CLIADMIN_USERS_LOAD_STATE', false)
+          }, bounce)
           context.commit('SET_CLIADMIN_USERS_LOAD_STATE', false)
           context.commit('SET_CLIADMIN_USERS_ERROR', false)
         } else {
           context.commit('SET_CLIADMIN_USERS', [])
-          context.commit('SET_CLIADMIN_SELECTED_USER', {})
+          context.commit('SET_SELECTED_USER_SETTINGS', {})
           context.commit('SET_CLIADMIN_USERS_LOAD_STATE', false)
         }
       } catch (error) {
@@ -91,7 +105,6 @@ export const moduleCliAdminUsers = {
           miscellaneousAdjustment: payload.hydrationTarget.miscellaneousAdjustment
         }
         await apiLib.updateData('cliadmin/user/' + payload.userId, updatePayload, false, true)
-        context.commit('SET_NEW_CLIADMIN_USERS_DEFAULTS')
         context.commit('SET_CLIADMIN_USERS_UPDATE_STATE', false)
       } catch (error) {
         console.error(error)
