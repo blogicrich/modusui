@@ -99,13 +99,14 @@
                 >
                   {{ `Set Wake and Sleep Times for User: ${selected.username}` }}
                 </v-card-title>
-                <v-flex>
-                  <v-layout
-                    row
-                    align-center
-                    justify-center
-                    fill-height
-                  >
+                <v-layout
+                  row
+                  wrap
+                  align-center
+                  justify-center
+                  fill-height
+                >
+                  <v-flex xs12 md6>
                     <v-menu
                       ref="wakeUpTimePicker"
                       :disabled="!editing"
@@ -116,9 +117,6 @@
                       lazy
                       transition="scale-transition"
                       offset-y
-                      full-width
-                      max-width="290px"
-                      min-width="290px"
                       :rules="[validation.generic, validation.wakeUpTime]"
                     >
                       <template v-slot:activator="{ on }">
@@ -141,19 +139,18 @@
                         @click:minute="$refs.wakeUpTimePicker.save(wakeUpTime)"
                       />
                     </v-menu>
+                  </v-flex>
+                  <v-flex xs12 md6>
                     <v-menu
                       ref="sleepTimePicker"
                       v-model="showSleepTimePicker"
                       :disabled="!editing"
                       :close-on-content-click="false"
-                      :nudge-right="40"
+                      :nudge-right="60"
                       :return-value="sleepTime"
                       lazy
                       transition="scale-transition"
                       offset-y
-                      full-width
-                      max-width="290px"
-                      min-width="290px"
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
@@ -175,43 +172,43 @@
                         @click:minute="$refs.sleepTimePicker.save(sleepTime)"
                       />
                     </v-menu>
-                  </v-layout>
-                  <v-card-title
-                    class="table-header"
-                  >
-                    {{ `Set Intervals for User: ${selected.username}` }}
-                  </v-card-title>
-                  <v-layout row wrap fill-height justify-space-between>
-                    <v-flex xs12 lg6>
-                      <v-select
-                        :disabled="!editing"
-                        :items="lightIntervalSettings"
-                        class="ma-2"
-                        v-model="lightInterval"
-                        label="Blue Flashing Light Interval"
-                        outline
-                        required
-                        item-text="menuText"
-                        item-value="blueLightFlashingIntervalId"
-                        :rules="[validation.generic]"
-                      />
-                    </v-flex>
-                    <v-flex xs12 lg6>
-                      <v-select
-                        :disabled="!editing"
-                        :items="spokenIntervalSettings"
-                        class="ma-2"
-                        v-model="spokenInterval"
-                        label="Spoken Reminder Interval"
-                        outline
-                        required
-                        item-text="menuText"
-                        item-value="spokenReminderId"
-                        :rules="[validation.generic]"
-                      />
-                    </v-flex>
-                  </v-layout>
-                </v-flex>
+                  </v-flex>
+                </v-layout>
+                <v-card-title
+                  class="table-header"
+                >
+                  {{ `Set Intervals for User: ${selected.username}` }}
+                </v-card-title>
+                <v-layout row wrap fill-height justify-space-between>
+                  <v-flex xs12 lg6>
+                    <v-select
+                      :disabled="!editing"
+                      :items="lightIntervalSettings"
+                      class="ma-2"
+                      v-model="lightInterval"
+                      label="Blue Flashing Light Interval"
+                      outline
+                      required
+                      item-text="menuText"
+                      item-value="blueLightFlashingIntervalId"
+                      :rules="[validation.generic]"
+                    />
+                  </v-flex>
+                  <v-flex xs12 lg6>
+                    <v-select
+                      :disabled="!editing"
+                      :items="spokenIntervalSettings"
+                      class="ma-2"
+                      v-model="spokenInterval"
+                      label="Spoken Reminder Interval"
+                      outline
+                      required
+                      item-text="menuText"
+                      item-value="spokenReminderId"
+                      :rules="[validation.generic]"
+                    />
+                  </v-flex>
+                </v-layout>
               </v-layout>
               <!-- NO SETTINGS RECORD CARD  -->
               <BaseDataTableInfoCard
@@ -398,11 +395,7 @@ export default {
     }
   },
   mounted () {
-    try {
-      this.$store.dispatch('setCliAdminUserSettings')
-    } catch (error) {
-      console.error(error)
-    }
+    this.$store.dispatch('setCliAdminUserSettings')
   },
   destroyed () {
     this.$store.commit('RESET_CLIADMIN_USER_SETTINGS_STORE_STATE')
