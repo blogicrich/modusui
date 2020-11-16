@@ -179,10 +179,6 @@ function normalizeData (users, conditions) {
   const arr = []
   if (!users.length) return arr
   // Set empty condition array if no user condition data exists
-  for (let i = 0; i < conditions.length; i++) {
-    const element = conditions[i]
-    // const conditionId =
-  }
   for (let i = 0; i < users.length; i++) {
     const userDetails = users[i]
     const conditionData = conditions.filter(condition => condition.userId === userDetails.userId)
@@ -197,8 +193,6 @@ function normalizeData (users, conditions) {
     } else {
       // Filter response for conditions pertaining to userId
       const conditionData = conditions.filter(condition => condition.userId === userDetails.userId)
-      const userConditionId = conditionData.find(e => e.userId === userDetails.userId).userConditionId
-      // const conditionData = conditions.filter(condition => condition.userConditionId === userConditionId)
       const conditionStatus = conditionData.find(e => e.userId === userDetails.userId).status
       const conditionId = conditionData.find(e => e.userId === userDetails.userId).conditionId
       // Push normalised data
