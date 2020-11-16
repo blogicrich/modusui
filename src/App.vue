@@ -74,7 +74,7 @@
         v-if="
           level.find((level) => level === 'CARER') &&
             authenticated &&
-            $vuetify.breakpoint.mdAndUp
+            $vuetify.breakpoint.lgAndUp
         "
         key="bp-lg"
         class="primary"
@@ -122,7 +122,7 @@
         v-if="
           level.find((level) => level === 'CARER') &&
             authenticated &&
-            $vuetify.breakpoint.smAndDown
+            $vuetify.breakpoint.mdAndDown
         "
         key="bp-sm"
         class="primary"
@@ -180,16 +180,11 @@
     <v-fade-transition>
       <v-footer
         v-if="
-          level.find((level) => level === 'SYSTEM ADMINISTRATOR') ||
-            (level.find((level) => level === 'CLIENT ADMINISTRATOR') &&
-              !level.find((level) => level === 'CARER') &&
-              authenticated &&
-              !wizardActive)
-        "
-        :fixed="fixed"
-        color="white"
-        app
-      >
+          $vuetify.breakpoint.lgAndDown && authenticated && !wizardActive"
+          :fixed="fixed"
+          color="white"
+          app
+        >
         <v-layout row fill height align-space-between justify-space-between>
           <v-layout class="pt-2" row align-center justify-start>
             <p
@@ -334,11 +329,12 @@ export default {
     }
   },
   methods: {
-    test (e) {
-      this.$router.push({ path: '/' + e.route, query: { headerText: e.text, headerIcon: e.icon } })
-    },
     swipe (direction) {
       this.swipeDirection = direction
+      if (this.swipeDirection === 'Right') {
+        this.drawerState = true
+        console.log('SWIPING')
+      }
     },
     setAuthenticated (newStatus) {
       if (this.level) {
@@ -412,12 +408,6 @@ export default {
     })
   },
   watch: {
-    swipeDirection: function () {
-      if (this.swipeDirection === 'Right') {
-        this.drawerState = true
-        this.swipeDirection = ''
-      }
-    },
     authenticated: function () {
       if (!this.authenticated) {
         this.logout()
