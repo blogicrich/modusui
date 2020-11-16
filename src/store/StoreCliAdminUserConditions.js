@@ -5,7 +5,6 @@ const bounce = 500
 export const moduleCliAdminUserConditions = {
   state: {
     cliAdminUserConditions: [],
-    cliAdminFilteredConditions: [],
     cliAdminSelectedUserConditions: {},
     cliAdminNewUserConditions: [],
     cliAdminUserConditionsLoading: false,
@@ -79,9 +78,9 @@ export const moduleCliAdminUserConditions = {
   actions: {
     async fetchCliAdminUserConditions (context) {
       try {
-        // Check if users in rootState
-        if (!context.rootState.cliAdminUsers.cliAdminUsers.length) await context.dispatch('fetchCliAdminUsers')
+        // Check if commonData in rootState
         if (!context.rootState.commonData.conditionOptions.length) await context.dispatch('fetchCommonData')
+        await context.dispatch('fetchCliAdminUsers')
         // Get users from fromState
         const users = context.rootState.cliAdminUsers.cliAdminUsers
         context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', true)
