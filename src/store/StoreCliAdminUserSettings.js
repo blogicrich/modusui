@@ -1,7 +1,7 @@
 import apiLib from '../services/apiLib.js'
 import moment from 'moment'
 
-const bounce = 5000
+const bounce = 500
 
 export const moduleCliAdminUserSettings = {
   state: {
@@ -113,9 +113,9 @@ export const moduleCliAdminUserSettings = {
         let users = []
         let defaultIntervals = []
         // Update users and default interval options in rootState
+        await context.dispatch('fetchCommonData')
         await context.dispatch('fetchCliAdminUsers')
         users = context.rootState.cliAdminUsers.cliAdminUsers
-        await context.dispatch('fetchCommonData')
         defaultIntervals = context.rootState.commonData.intervalOptions
         // Get users and default options from from rootState
         context.commit('SET_USER_SETTINGS', users)
@@ -131,7 +131,7 @@ export const moduleCliAdminUserSettings = {
       try {
         context.commit('SET_CLIADMIN_USER_SETTINGS_UPDATE_STATE', true)
         const payload = { ...context.state.cliAdminSelectedUserSettings }
-        // Convert times to seconds form midnight
+        // Convert times to seconds from midnight
         payload.wakeUpTime = convertTimeToSecondsFromMidnight(payload.wakeUpTime)
         payload.sleepTime = convertTimeToSecondsFromMidnight(payload.sleepTime)
         payload.hydrationTargetComments = ''
