@@ -25,7 +25,6 @@
       searchLabel="Search Records..."
       tableTitle="User Settings Records"
       @row-clicked="setSelectedUser"
-      @action-button-pressed="openDialog"
     >
       <v-card
         slot="expandedRow"
@@ -43,7 +42,7 @@
             >
               <!-- EDIT MODE CARD HEADER-->
               <v-layout
-                v-if="!loadingUserSettings && !updatingUserSettings && !deletingUserSettings"
+                v-if="!loadingUserSettings && !updatingUserSettings && !errorUserSettings"
                 row
                 fill-height
                 justify-end
@@ -52,10 +51,10 @@
                 <transition-group name="fade" mode="out-in" appear>
                   <v-btn
                     key="settingsRefreshBtn"
-                    :disabled="!editing || parametersPristine"
+                    :disabled="parametersPristine || !editing"
                     :color="$vuetify.theme.primary"
                     dark
-                    @click="$store.commit('RESET_SELECTED_USER_CONDITIONS', { userId: selected.userId })"
+                    @click="$store.commit('SET_SELECTED_USER_SETTINGS', { userId: selected.userId })"
                   >
                     <v-icon class="mr-2" small>
                       refresh
@@ -64,7 +63,7 @@
                   </v-btn>
                   <v-btn
                     key="settingsSaveBtn"
-                    :disabled="parametersPristine || !editFormValid"
+                    :disabled="parametersPristine || !editing"
                     :color="$vuetify.theme.primary"
                     dark
                     @click="updateUserSettings()"
@@ -91,113 +90,133 @@
                 </transition-group>
               </v-layout>
               <!-- EDIT ROWS -->
-              <!-- <v-layout
-                v-show="!loadingUserSettings && !updatingUserSettings && !deletingUserSettings"
-                v-for="(item, index) in selected"
-                :key="item.userId + '-' + `${index}`"
-              > -->
-              <v-flex>
-                <v-layout
-                  row
-                  align-center
-                  justify-center
-                  fill-height
+              <v-layout
+                v-if="!loadingUserSettings && !updatingUserSettings && !errorUserSettings"
+                column
+              >
+                <v-card-title
+                  class="table-header"
                 >
-                  <v-menu
-                    ref="wakeUpTimePicker"
-                    v-model="showWakeUpTimePicker"
-                    :close-on-content-click="false"
-                    :nudge-right="60"
-                    :return-value="wakeUpTime"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    max-width="290px"
-                    min-width="290px"
+                  {{ `Set Wake and Sleep Times for User: ${selected.username}` }}
+                </v-card-title>
+                <v-flex>
+                  <v-layout
+                    row
+                    align-center
+                    justify-center
+                    fill-height
                   >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        class="mx-3"
+                    <v-menu
+                      ref="wakeUpTimePicker"
+                      :disabled="!editing"
+                      v-model="showWakeUpTimePicker"
+                      :close-on-content-click="false"
+                      :nudge-right="60"
+                      :return-value="wakeUpTime"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      max-width="290px"
+                      min-width="290px"
+                      :rules="[validation.generic, validation.wakeUpTime]"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          class="ma-2"
+                          v-model="wakeUpTime"
+                          label="Wake up time"
+                          prepend-inner-icon="brightness_5"
+                          :disabled="!editing"
+                          readonly
+                          box
+                          outline
+                          v-on="on"
+                        />
+                      </template>
+                      <v-time-picker
+                        v-if="showWakeUpTimePicker"
                         v-model="wakeUpTime"
-                        label="Wake up time"
-                        prepend-icon="brightness_5"
-                        readonly
-                        v-on="on"
-                        :rules="[timeValidation.generic]"
+                        full-width
+                        @click:minute="$refs.wakeUpTimePicker.save(wakeUpTime)"
                       />
-                    </template>
-                    <v-time-picker
-                      v-if="showWakeUpTimePicker"
-                      v-model="wakeUpTime"
+                    </v-menu>
+                    <v-menu
+                      ref="sleepTimePicker"
+                      v-model="showSleepTimePicker"
+                      :disabled="!editing"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      :return-value="sleepTime"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
                       full-width
-                      @click:minute="$refs.wakeUpTimePicker.save(wakeUpTime)"
-                    />
-                  </v-menu>
-                  <v-menu
-                    ref="sleepTimePicker"
-                    v-model="showSleepTimePicker"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    :return-value="sleepTime"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        class="mx-3"
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          class="ma-2"
+                          v-model="sleepTime"
+                          label="Sleep time"
+                          prepend-inner-icon="brightness_3"
+                          :disabled="!editing"
+                          readonly
+                          box
+                          outline
+                          v-on="on"
+                        />
+                      </template>
+                      <v-time-picker
+                        v-if="showSleepTimePicker"
                         v-model="sleepTime"
-                        label="Sleep time"
-                        prepend-icon="brightness_3"
-                        readonly
-                        v-on="on"
-                        :rules="[timeValidation.generic]"
+                        full-width
+                        @click:minute="$refs.sleepTimePicker.save(sleepTime)"
                       />
-                    </template>
-                    <v-time-picker
-                      v-if="showSleepTimePicker"
-                      v-model="sleepTime"
-                      full-width
-                      @click:minute="$refs.sleepTimePicker.save(sleepTime)"
-                    />
-                  </v-menu>
-                </v-layout>
-                <v-layout row wrap fill-height justify-space-between>
-                  <!-- <v-flex xs12 lg6>
-                    <BaseRadioOptions
-                      @radio-option-changed="onChange"
-                      :radioConfig="intervalSettings.blueLightFlashingIntervals"
-                      :defaultValue="selectedBlueLightFlashingInterval.time"
-                      :groupHeader="drinkGroupHeader"
-                      :groupDescription="drinkRadioDescription"
-                      :radioHeader="drinkRadioHeader"
-                      :height="height"
-                      suffix=" mins"
-                    />
-                  </v-flex> -->
-                  <!-- <v-flex xs12 lg6>
-                    <BaseRadioOptions
-                      @radio-option-changed="onChange"
-                      :radioConfig="intervalSettings.voiceReminderIntervals"
-                      :groupHeader="voiceGroupHeader"
-                      :defaultValue="selectedVoiceReminderInterval.time"
-                      :groupDescription="voiceRadioDescription"
-                      :radioHeader="voiceRadioHeader"
-                      :height="height"
-                      suffix=" mins"
-                    />
-                  </v-flex> -->
-                </v-layout>
-              </v-flex>
-              <!-- </v-layout> -->
+                    </v-menu>
+                  </v-layout>
+                  <v-card-title
+                    class="table-header"
+                  >
+                    {{ `Set Intervals for User: ${selected.username}` }}
+                  </v-card-title>
+                  <v-layout row wrap fill-height justify-space-between>
+                    <v-flex xs12 lg6>
+                      <v-select
+                        :disabled="!editing"
+                        :items="lightIntervalSettings"
+                        class="ma-2"
+                        v-model="lightInterval"
+                        label="Blue Flashing Light Interval"
+                        outline
+                        required
+                        item-text="menuText"
+                        item-value="blueLightFlashingIntervalId"
+                        :rules="[validation.generic]"
+                      />
+                    </v-flex>
+                    <v-flex xs12 lg6>
+                      <v-select
+                        :disabled="!editing"
+                        :items="spokenIntervalSettings"
+                        class="ma-2"
+                        v-model="spokenInterval"
+                        label="Spoken Reminder Interval"
+                        outline
+                        required
+                        item-text="menuText"
+                        item-value="spokenReminderId"
+                        :rules="[validation.generic]"
+                      />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
               <!-- NO SETTINGS RECORD CARD  -->
               <BaseDataTableInfoCard
                 v-if="!users.length && loadingUserSettings"
-                key="noConditions"
+                key="noSettings"
                 :loadedMsg="`No user settings data for user: ${selected.username}.`"
                 :loaded="!loadingUserSettings"
                 :color="$vuetify.theme.primary"
@@ -205,8 +224,10 @@
               <!-- UPDATE PROGRESS -->
               <BaseDataTableInfoCard
                 key="conditionsProgress"
-                :loadingMsg="`Updating ${selected.username} conditions.`"
+                :loadingMsg="`Updating ${selected.username} settings.`"
+                errorMsg="Error retrieving User Settings"
                 :loading="loadingUserSettings || updatingUserSettings || deletingUserSettings"
+                :error="errorUserSettings"
                 :color="$vuetify.theme.primary"
               />
             </v-container>
@@ -234,20 +255,67 @@ export default {
   computed: {
     ...mapState({
       // Store data objects
-      users: state => state.cliAdminUsers.cliAdminUsers,
-      selected: state => state.cliAdminUsers.cliAdminSelectedUser,
+      users: state => state.cliAdminUserSettings.cliAdminUserSettings,
+      selected: state => state.cliAdminUserSettings.cliAdminSelectedUserSettings,
       // Store CRUD Booleans
-      deletingUserSettings: state => state.cliAdminUsers.cliAdminUsersDeleting,
-      updatingUserSettings: state => state.cliAdminUsers.cliAdminUsersError,
-      loadingUserSettings: state => state.cliAdminUsers.cliAdminUsersLoading,
-      errorUserSettings: state => state.cliAdminUsers.cliAdminUsersError,
+      deletingUserSettings: state => state.cliAdminUserSettings.cliAdminUserSettingsDeleting,
+      updatingUserSettings: state => state.cliAdminUserSettings.cliAdminUserSettingsUpdating,
+      loadingUserSettings: state => state.cliAdminUserSettings.cliAdminUserSettingsLoading,
+      errorUserSettings: state => state.cliAdminUserSettings.cliAdminUserSettingsError,
       conditionOptions: state => state.commonData.conditionOptions,
       // Options Select
-      intervalSettings: state => state.commonData.intervalOptions.blueFlashingLightInterval,
-      selectedIntervals: state => state.intervalSettings.intervalSettings.currentSettings
+      lightIntervalSettings: state => state.cliAdminUserSettings.cliAdminLightIntervalOptions,
+      spokenIntervalSettings: state => state.cliAdminUserSettings.cliAdminSpokenIntervalOptions
     }),
+    /* eslint-ignore-next-line */
     parametersPristine () {
-      return true
+      let isPristine = false
+      if (this.selected.userId && this.users.length) {
+        const pristineSettings = this.users.find(u => u.userId === this.selected.userId)
+        if (
+          this.sleepTime === pristineSettings.sleepTime &&
+          this.wakeUpTime === pristineSettings.wakeUpTime &&
+          (this.lightInterval === pristineSettings.blueLightFlashingIntervalId) &&
+          (this.spokenInterval === pristineSettings.blueLightFlashingIntervalId)
+        ) {
+          isPristine = true
+        } else {
+          isPristine = false
+        }
+      }
+      return isPristine
+    },
+    wakeUpTime: {
+      get () {
+        return this.$store.state.cliAdminUserSettings.cliAdminSelectedUserSettings.wakeUpTime
+      },
+      set (newValue) {
+        this.$store.commit('UPDATE_SELECTED_USER_WAKEUPTIME', newValue)
+      }
+    },
+    sleepTime: {
+      get () {
+        return this.$store.state.cliAdminUserSettings.cliAdminSelectedUserSettings.sleepTime
+      },
+      set (newValue) {
+        this.$store.commit('UPDATE_SELECTED_USER_SLEEPTIME', newValue)
+      }
+    },
+    lightInterval: {
+      get () {
+        return this.$store.state.cliAdminUserSettings.cliAdminSelectedUserSettings.blueLightFlashingIntervalId
+      },
+      set (newValue) {
+        this.$store.commit('UPDATE_SELECTED_USER_LIGHT_INTERVAL', newValue)
+      }
+    },
+    spokenInterval: {
+      get () {
+        return this.$store.state.cliAdminUserSettings.cliAdminSelectedUserSettings.voiceReminderIntervalId
+      },
+      set (newValue) {
+        this.$store.commit('UPDATE_SELECTED_USER_SPOKEN_INTERVAL', newValue)
+      }
     }
   },
   data () {
@@ -260,10 +328,8 @@ export default {
       // Edit Form
       editing: false,
       editFormValid: false,
-      sleepTime: 0,
       showSleepTimePicker: false,
       showWakeUpTimePicker: false,
-      wakeUpTime: 0,
       icon: 'local_pharmacy',
       // Data Table
       headers: [
@@ -304,8 +370,16 @@ export default {
           editable: true
         }
       ],
-      timeValidation: {
-        generic: value => !!value || 'Required.'
+      validation: {
+        generic: value => !!value || 'Required.',
+        sleepTime: (value) => {
+          if (value > this.wakeUpTime) return true
+          else return 'Time must be after Wake up time'
+        },
+        wakeUpTime: (value) => {
+          if (value < this.sleepTime) return true
+          else return 'Time must be before Wake up time'
+        }
       }
     }
   },
@@ -313,27 +387,26 @@ export default {
     setSelectedUser (e) {
       this.$store.commit('SET_SELECTED_USER_SETTINGS', { ...e.item })
     },
-    showField (param) {
-      if (param === 'conditionsId' || param === 'userConditionId') {
-        return false
-      } else {
-        return true
-      }
-    },
     async updateUserSettings () {
-      if (this.$refs.editSettingsForm.validate()) {
+      if (this.editFormValid) {
         try {
-
+          this.$store.dispatch('updateCliAdminUserSettings')
         } catch (error) {
           console.error(error)
         }
-      } else {
-        this.$refs.editSettingsForm.validate()
       }
     }
   },
-  mounted () {},
-  destroyed () {}
+  mounted () {
+    try {
+      this.$store.dispatch('setCliAdminUserSettings')
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  destroyed () {
+    this.$store.commit('RESET_CLIADMIN_USER_SETTINGS_STORE_STATE')
+  }
 }
 
 </script>
