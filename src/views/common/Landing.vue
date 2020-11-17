@@ -133,27 +133,34 @@
           </v-icon>
           <h2 class="ma-1 text-white">User Settings</h2>
         </v-layout>
-        <BaseLinkComponent
+        <!-- <BaseLinkComponent
           routerTitle="Interval Settings Management"
           link="/intervalmanagement"
           tooltipText="Set the reminder and Communication intervals for your eDroplets"
           icon="notification_important"
           colorIcon="#006480"
-        />
+        /> -->
         <BaseLinkComponent
           routerTitle="User Conditions"
           link="/usercondition"
           tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
-          icon="priority_high"
+          icon="local_pharmacy"
           colorIcon="#006480"
         />
         <BaseLinkComponent
+          routerTitle="User Settings Management"
+          link="/usersettings"
+          tooltipText="Set communication intervals, wake and sleep time settings"
+          icon="access_alarm"
+          colorIcon="#006480"
+        />
+        <!-- <BaseLinkComponent
           routerTitle="Sleep and Wake Times"
           link="/wakesleeptimes"
           tooltipText="Set sleep and wake up time"
           icon="access_alarm"
           colorIcon="#006480"
-        />
+        /> -->
       </v-flex>
       <v-flex sm6 lg4>
         <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">

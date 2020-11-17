@@ -104,15 +104,15 @@ export default new Router({
       component: () => import(/* webpackChunkName: "edroplet-management" */ './views/cliadmin/EdropManagement.vue')
     },
     {
-      path: '/intervalmanagement',
-      name: 'IntervalManagement',
-      component: () => import(/* webpackChunkName: "interval-options" */ './views/cliadmin/IntervalSettingsManagement.vue')
+      path: '/usersettings',
+      name: 'UserSettingsManagement',
+      component: () => import(/* webpackChunkName: "interval-options" */ './views/cliadmin/UserSettingsManagement.vue')
     },
-    {
-      path: '/wakesleeptimes',
-      name: 'WakeSleepTimes',
-      component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/WakeSleepTimes.vue')
-    },
+    // {
+    //   path: '/wakesleeptimes',
+    //   name: 'WakeSleepTimes',
+    //   component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/WakeSleepTimes.vue')
+    // },
 
     // Sysadmin routes
 
