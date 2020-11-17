@@ -65,9 +65,6 @@ export const moduleCliAdminUserSettings = {
       state.cliAdminSpokenIntervalOptions = spokenReminderOptions
       state.cliAdminLightIntervalOptions = blueLightFlashingOptions
     },
-    SET_CLIADMIN_USER_INTERVAL_OPTIONS (state, data) {
-      state.cliAdminUserSettings = data
-    },
     // Sleep and wake times
     UPDATE_SELECTED_USER_WAKEUPTIME (state, data) {
       state.cliAdminSelectedUserSettings.wakeUpTime = data
@@ -109,6 +106,7 @@ export const moduleCliAdminUserSettings = {
   actions: {
     async setCliAdminUserSettings (context) {
       try {
+        context.commit('SET_CLIADMIN_USER_SETTINGS_ERROR', false)
         context.commit('SET_CLIADMIN_USER_SETTINGS_LOAD_STATE', true)
         let users = []
         let defaultIntervals = []
@@ -131,6 +129,7 @@ export const moduleCliAdminUserSettings = {
       try {
         context.commit('SET_CLIADMIN_USER_SETTINGS_UPDATE_STATE', true)
         const payload = { ...context.state.cliAdminSelectedUserSettings }
+        console.log(payload)
         // Convert times to seconds from midnight
         payload.wakeUpTime = convertTimeToSecondsFromMidnight(payload.wakeUpTime)
         payload.sleepTime = convertTimeToSecondsFromMidnight(payload.sleepTime)

@@ -266,14 +266,14 @@ export default {
     }),
     /* eslint-ignore-next-line */
     parametersPristine () {
-      let isPristine = false
-      if (this.selected.userId && this.users.length) {
+      let isPristine = true
+      if (!this.loadingUserSettings && this.selected.userId && this.users.length) {
         const pristineSettings = this.users.find(u => u.userId === this.selected.userId)
         if (
-          this.sleepTime === pristineSettings.sleepTime &&
-          this.wakeUpTime === pristineSettings.wakeUpTime &&
+          (this.sleepTime === pristineSettings.sleepTime) &&
+          (this.wakeUpTime === pristineSettings.wakeUpTime) &&
           (this.lightInterval === pristineSettings.blueLightFlashingIntervalId) &&
-          (this.spokenInterval === pristineSettings.blueLightFlashingIntervalId)
+          (this.spokenInterval === pristineSettings.voiceReminderIntervalId)
         ) {
           isPristine = true
         } else {
@@ -398,7 +398,7 @@ export default {
     this.$store.dispatch('setCliAdminUserSettings')
   },
   destroyed () {
-    this.$store.commit('RESET_CLIADMIN_USER_SETTINGS_STORE_STATE')
+    this.$store.commit('SET_SELECTED_USER_SETTINGS')
   }
 }
 
