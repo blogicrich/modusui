@@ -179,12 +179,11 @@
     <!-- FOOTER -->
     <v-fade-transition>
       <v-footer
-        v-if="
-          $vuetify.breakpoint.lgAndDown && authenticated && !wizardActive"
-          :fixed="fixed"
-          color="white"
-          app
-        >
+        v-if="authenticated && !wizardActive"
+        :fixed="fixed"
+        color="white"
+        app
+      >
         <v-layout row fill height align-space-between justify-space-between>
           <v-layout class="pt-2" row align-center justify-start>
             <p
@@ -192,7 +191,7 @@
               class="ml-3"
               style="align-center"
             >
-              v: alpha
+              V: 0.0.1
             </p>
             <p
               v-if="$vuetify.breakpoint.mdAndUp"
@@ -278,15 +277,6 @@ export default {
           name: 'dashboard',
           tip: 'Go to Dashboard'
         },
-        // {
-        //   title: 'Alerts',
-        //   btnIcon: 'notification_important',
-        //   btnColor: 'white',
-        //   iconColor: 'white',
-        //   route: 'alerts',
-        //   name: '',
-        //   tip: 'View Alerts'
-        // },
         {
           title: 'Add Drinks',
           btnIcon: 'local_drink',
@@ -333,7 +323,6 @@ export default {
       this.swipeDirection = direction
       if (this.swipeDirection === 'Right') {
         this.drawerState = true
-        console.log('SWIPING')
       }
     },
     setAuthenticated (newStatus) {
