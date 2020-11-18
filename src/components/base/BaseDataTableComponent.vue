@@ -1,23 +1,25 @@
 <template>
   <div>
-    <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
+    <v-container v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
         <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
-        <h2 class="table-header ml-1">{{ tableTitle }}</h2>
+        <h2 class="headline text-primary font-weight-medium ml-1">{{ tableTitle }}</h2>
         <v-divider class="mx-2" inset vertical />
         <v-spacer />
-        <v-flex v-if="searchBarHidden" lg-3 xl-2>
-          <v-text-field
-            class="mb-2"
-            @click:append-outer="search = ''"
-            v-model="search"
-            append-icon="search"
-            :label="searchLabel"
-            single-line
-            hide-details
-            append-outer-icon="close"
-          />
-        </v-flex>
+        <v-fade-transition mode="out-in" appear>
+          <v-flex v-if="searchBarHidden" lg-3 xl-2>
+            <v-text-field
+              class="mb-2"
+              @click:append-outer="search = ''"
+              v-model="search"
+              append-icon="search"
+              :label="searchLabel"
+              single-line
+              hide-details
+              append-outer-icon="close"
+            />
+          </v-flex>
+        </v-fade-transition>
         <v-spacer />
         <v-divider v-if="editPerms.create" class="mx-2 mr-3" inset vertical />
         <v-btn v-if="editPerms.create" @click="newDialog = true" :color="primaryColor">
@@ -61,12 +63,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="table-cell-header text-xs-left"
+            class="title text-primary text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="table-cell-header" slot="activator">{{ header.text }}</span>
+              <span class="headline text-primary text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -85,7 +87,7 @@
               :key="header.text"
               :color="primaryColor"
             >
-              <div>{{ props.item[header.value] }}</div>
+              <div class="title text-xs-left font-weight-regular">{{ props.item[header.value] }}</div>
             </td>
           </tr>
         </template>
@@ -177,7 +179,7 @@
           <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
             <v-card>
-              <v-card-title class="table-header">{{ delDialogTitle }}</v-card-title>
+              <v-card-title class="headline text-primary font-weight-medium">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -192,7 +194,7 @@
               <v-card>
                 <v-card-title>
                   <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="table-header">{{ newDialogTitle }}</span>
+                  <span class="headline text-primary font-weight-medium">{{ newDialogTitle }}</span>
                 </v-card-title>
                 <v-card-text>
                   <v-container>
@@ -232,11 +234,11 @@
           <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="98%">
             <v-form v-model="valid" ref="editForm">
-              <v-card class="pa-0">
-                <v-card-title>
+              <v-card class="pa-3">
+                <v-layout row justify-start align-center>
                   <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="pg-subheader text-primary">{{ editDialogTitle }}</span>
-                </v-card-title>
+                  <span class="headline text-primary">{{ editDialogTitle }}</span>
+                </v-layout>
                 <v-card-text>
                   <v-container>
                     <v-layout v-for="(item, index) in selected" :key="index">
@@ -324,7 +326,7 @@
           </v-btn>
         </v-fade-transition>
       </v-layout>
-    </div>
+    </v-container>
     <!-- BREAKPOINT MDANDDOWN / MOBILE -->
     <v-container v-if="this.$vuetify.breakpoint.mdAndDown " fluid>
       <v-speed-dial
@@ -424,12 +426,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="table-cell-header text-xs-left"
+            class="body-2 text-primary font-weight-medium text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="table-cell-header" slot="activator">{{ header.text }}</span>
+              <span class="subheading text-primary font-weight-medium" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -442,12 +444,12 @@
               <v-checkbox v-model="props.selected" />
             </td>
             <td
-              class="text-xs-left"
+              class="text-xs-left body-2"
               v-for="header in headers"
               :hidden="header.hidden"
               :key="header.text"
             >
-              <div>{{ props.item[header.value] }}</div>
+              <div class="text-xs-left body-2">{{ props.item[header.value] }}</div>
             </td>
           </tr>
         </template>
@@ -486,7 +488,7 @@
           <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
             <v-card>
-              <v-card-title class="table-header">{{ delDialogTitle }}</v-card-title>
+              <v-card-title class="headline text-primary font-weight-medium">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -501,7 +503,7 @@
               <v-card>
                 <v-card-title>
                   <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="table-header">{{ newDialogTitle }}</span>
+                  <span class="headline text-primary font-weight-medium">{{ newDialogTitle }}</span>
                 </v-card-title>
                 <v-card-text>
                   <v-container>
@@ -548,37 +550,17 @@
           <!-- Edit confirmation dialog -->
           <v-dialog v-model="editDialog" max-width="500px">
             <v-form v-model="valid" ref="editForm">
-              <v-card>
-                <v-card-title class="pa-0">
-                  <v-layout class="ma-0 pa-0" row fill-height justify-center>
+              <v-card class="pa-3">
+                <v-layout>
+                  <v-layout row fill-height justify-center align-center>
                     <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
-                    <span class="table-header mt-3">{{ editDialogTitle }}</span>
+                    <span class="headline text-primary">{{ editDialogTitle }}</span>
                   </v-layout>
-                </v-card-title>
+                </v-layout>
                 <v-card-text>
                   <v-container class="ma-0 pa-0">
-                    <template v-if="index === editIndex">
+                    <template>
                       <v-layout v-for="(item, index) in selected" :key="index" column>
-                        <v-layout class="mx-3 my-2" row fill-height justify-center>
-                          <v-btn
-                            class="mx-3 my-0"
-                            fab
-                            small
-                            :color="primaryColor"
-                            @click="decrement(index)"
-                          >
-                            <v-icon large>arrow_left</v-icon>
-                          </v-btn>
-                          <v-btn
-                            class="mx-3 mt-0"
-                            fab
-                            small
-                            :color="primaryColor"
-                            @click="increment(index)"
-                          >
-                            <v-icon large>arrow_right</v-icon>
-                          </v-btn>
-                        </v-layout>
                         <v-flex
                           v-for="(property, key) in item"
                           :key="key"
@@ -590,23 +572,21 @@
                             :item="item"
                             :itemKey="key"
                             :property="property"
-                          />
-                          <v-select
-                            v-if="inputType(item, key, 'md')"
-                            class="ma-1"
-                            v-model="item[key]"
-                            :items="menuItems(key)"
-                            :label="getCellLabel(item, key, index)"
-                            :placeholder="item[key].value"
-                            :color="primaryColor"
-                            outline
-                            required
-                            return-object
-                            :item-value="newItem.find(attribute => attribute.attr === key).returnVal"
-                            :item-text="newItem.find(attribute => attribute.attr === key).displayVal"
                           >
-                            >
-                          </v-select>
+                            <v-select
+                              v-if="inputType(item, key, 'md')"
+                              class="ma-1"
+                              v-model="item[key]"
+                              :items="menuItems(key)"
+                              :label="key"
+                              :placeholder="item[key].value"
+                              :color="primaryColor"
+                              outline
+                              required
+                              :item-value="newItem.find(attribute => attribute.attr === key).returnVal"
+                              :item-text="newItem.find(attribute => attribute.attr === key).displayVal"
+                            />
+                          </slot>
                         </v-flex>
                       </v-layout>
                     </template>
@@ -779,7 +759,6 @@ export default {
     },
     save () {
       if (this.$refs.newForm.validate()) {
-        console.log(this.newItem)
         this.$emit('newItem', this.newItem)
         this.close()
       }
