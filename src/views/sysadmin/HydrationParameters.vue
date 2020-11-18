@@ -5,65 +5,83 @@
       :iconColor="iconColor"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
-    <v-layout row wrap>
-      <!-- START OF DAY -->
-
-      <v-layout column>
-        <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.mdAndUp" row align-center justify-start>
-          <v-icon class="mr-3" medium color="primary">schedule</v-icon>
-          <h2 class="text-primary">Start of the Day</h2>
+    <transition-group>
+      <BaseDataTableInfoCard
+        key="hydrationParamsLoadingCard"
+        v-if="paramsLoading || paramsError"
+        errorMsg="Error Loading Hydration Parameters."
+        loadingMsg="Loading Hydration Parameters..."
+        :loading="paramsLoading"
+        :loaded="!paramsLoading && !paramsError"
+        :error="paramsError"
+        :color="$vuetify.theme.primary"
+        :actionBtn="true"
+        actionBtnTitle="Reload Hydration Parameters"
+        @action-button-pressed="$store.dispatch('fetchHydrationParameters')"
+      />
+      <v-layout
+        key="hydrationParamsFields"
+        v-if="!paramsLoading && !paramsError"
+        row
+        wrap
+      >
+        <!-- START OF DAY -->
+        <v-layout column>
+          <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.mdAndUp" row align-center justify-start>
+            <v-icon class="mr-3" medium color="primary">schedule</v-icon>
+            <h2 class="text-primary display-1">Start of the Day</h2>
+          </v-layout>
+          <v-layout class="mx-4 mb-2 mt-1" v-if="$vuetify.breakpoint.smAndDown" row align-center justify-start>
+            <v-icon class="mr-3" small color="primary">schedule</v-icon>
+            <h3 class="text-primary">Start of the Day</h3>
+          </v-layout>
+          <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary" @keyup.enter="$event.target.nextElementSibling.focus()">
+            <BaseToleranceSetter
+              v-for="(parameter, index) in hydrationParameters"
+              :key="parameter.lowerHydrationBoundaryId"
+              class="baseToleranceSetter"
+              color="warning"
+              :fieldLabel="parameter.description"
+              :fieldValue="Number(getterStartOfDayValue(parameter.alertBoundariesAlertTypeBandId))"
+              :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
+              :rules="startOfDayValidation[parameter.description]"
+              @field-value-changed="$store.commit('UPDATE_START', { index: index, value: $event.value })"
+              @increment="$store.commit('INCREMENT_START', { index: index, value: $event.value })"
+              @decrement="$store.commit('DECREMENT_START', { index: index, value: $event.value })"
+            />
+          </v-form>
         </v-layout>
-        <v-layout class="mx-4 mb-2 mt-1" v-if="$vuetify.breakpoint.smAndDown" row align-center justify-start>
-          <v-icon class="mr-3" small color="primary">schedule</v-icon>
-          <h3 class="text-primary">Start of the Day</h3>
+        <!-- END OF DAY -->
+        <v-layout column>
+          <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.mdAndUp" row align-center justify-start>
+            <v-icon class="mr-3" medium color="primary">schedule</v-icon>
+            <h2 class="text-primary display-1">End of the Day</h2>
+          </v-layout>
+          <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.smAndDown" row align-center justify-start>
+            <v-icon class="mr-3" small color="primary">schedule</v-icon>
+            <h3 class="text-primary">End of the Day</h3>
+          </v-layout>
+          <v-form ref="formEndOfDay" class="mx-4 pb-3 border-primary">
+            <BaseToleranceSetter
+              v-for="(parameter, index) in hydrationParameters"
+              :key="parameter.lowerHydrationBoundaryId"
+              class="baseToleranceSetter"
+              color="warning"
+              :fieldLabel="parameter.description"
+              :fieldValue="Number(getterEndOfDayValue(parameter.alertBoundariesAlertTypeBandId))"
+              :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
+              :rules="endOfDayValidation[parameter.description]"
+              @field-value-changed="$store.commit('UPDATE_END', { index: index, value: $event.value })"
+              @increment="$store.commit('INCREMENT_END', { index: index, value: $event.value })"
+              @decrement="$store.commit('DECREMENT_END', { index: index, value: $event.value })"
+            />
+          </v-form>
         </v-layout>
-        <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary" @keyup.enter="$event.target.nextElementSibling.focus()">
-          <BaseToleranceSetter
-            v-for="(parameter, index) in hydrationParameters"
-            :key="parameter.lowerHydrationBoundaryId"
-            class="baseToleranceSetter"
-            color="warning"
-            :fieldLabel="parameter.description"
-            :fieldValue="Number(getterStartOfDayValue(parameter.alertBoundariesAlertTypeBandId))"
-            :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
-            :rules="startOfDayValidation[parameter.description]"
-            @field-value-changed="$store.commit('UPDATE_START', { index: index, value: $event.value })"
-            @increment="$store.commit('INCREMENT_START', { index: index, value: $event.value })"
-            @decrement="$store.commit('DECREMENT_START', { index: index, value: $event.value })"
-          />
-        </v-form>
       </v-layout>
-
-      <!-- END OF DAY -->
-
-      <v-layout column>
-        <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.mdAndUp" row align-center justify-start>
-          <v-icon class="mr-3" medium color="primary">schedule</v-icon>
-          <h2 class="text-primary">End of the Day</h2>
-        </v-layout>
-        <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.smAndDown" row align-center justify-start>
-          <v-icon class="mr-3" small color="primary">schedule</v-icon>
-          <h3 class="text-primary">End of the Day</h3>
-        </v-layout>
-        <v-form ref="formEndOfDay" class="mx-4 pb-3 border-primary">
-          <BaseToleranceSetter
-            v-for="(parameter, index) in hydrationParameters"
-            :key="parameter.lowerHydrationBoundaryId"
-            class="baseToleranceSetter"
-            color="warning"
-            :fieldLabel="parameter.description"
-            :fieldValue="Number(getterEndOfDayValue(parameter.alertBoundariesAlertTypeBandId))"
-            :fieldId="parameter.lowerHydrationBoundary.bandBoundariesId"
-            :rules="endOfDayValidation[parameter.description]"
-            @field-value-changed="$store.commit('UPDATE_END', { index: index, value: $event.value })"
-            @increment="$store.commit('INCREMENT_END', { index: index, value: $event.value })"
-            @decrement="$store.commit('DECREMENT_END', { index: index, value: $event.value })"
-          />
-        </v-form>
-      </v-layout>
-    </v-layout>
-    <v-layout v-if="!paramsLoading && $vuetify.breakpoint.lgAndUp" row justify-center align-center>
+    </transition-group>
+    <v-layout v-if="!paramsLoading && !paramsError && $vuetify.breakpoint.lgAndUp" row justify-center align-center>
       <v-btn
         :disabled="parametersPristine"
         class="root-nav-btn mt-3"
@@ -132,13 +150,15 @@
 
 import { mapState, mapGetters } from 'vuex'
 import BaseToleranceSetter from '@/components/base/BaseToleranceSetterComponent.vue'
+import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'HydrationParameters',
   mixins: [validation],
   components: {
-    BaseToleranceSetter
+    BaseToleranceSetter,
+    BaseDataTableInfoCard
   },
   data () {
     return {
@@ -241,7 +261,7 @@ export default {
           },
           v => v < 100 || 'Value must be less than 100%',
           v => v >= 0 || 'Value cannot be lower than 0%',
-          v => v < this.getterValidationValues.endDehydrated || 'Must be less than Dehydrated'
+          v => v > this.getterValidationValues.endDehydrated || 'Must be more than Dehydrated'
         ],
         'Over Hydrated': [
           v => {
@@ -287,7 +307,8 @@ export default {
       hydrationParameters: state => state.hydrationOptions.hydrationParams,
       hydrationParametersClone: state => state.hydrationOptions._originalHydrationParams,
       // Booleans
-      paramsLoading: state => state.hydrationOptions.hydrationParamsLoading
+      paramsLoading: state => state.hydrationOptions.hydrationParamsLoading,
+      paramsError: state => state.hydrationOptions.hydrationParamsError
     }),
     ...mapGetters([
       'getterStartOfDayValue',
