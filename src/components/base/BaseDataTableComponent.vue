@@ -68,7 +68,7 @@
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="headline text-primary text-xs-left" slot="activator">{{ header.text }}</span>
+              <span class="text-primary text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -87,7 +87,11 @@
               :key="header.text"
               :color="primaryColor"
             >
-              <div class="title text-xs-left font-weight-regular">{{ props.item[header.value] }}</div>
+              <div
+                class="body-2 text-xs-left text-secondary font-weight-regular"
+              >
+                {{ props.item[header.value] }}
+              </div>
             </td>
           </tr>
         </template>
@@ -178,8 +182,8 @@
           </v-layout>
           <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
-            <v-card>
-              <v-card-title class="headline text-primary font-weight-medium">{{ delDialogTitle }}</v-card-title>
+            <v-card class="pa-3">
+              <v-card-title class="title text-primary">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -191,14 +195,14 @@
           <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="96%">
             <v-form ref="newForm" v-model="valid">
-              <v-card>
-                <v-card-title>
-                  <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="headline text-primary font-weight-medium">{{ newDialogTitle }}</span>
-                </v-card-title>
+              <v-card class="pa-3">
+                <v-layout row justify-center align-center>
+                  <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
+                  <span class="title text-primary">{{ newDialogTitle }}</span>
+                </v-layout>
                 <v-card-text>
                   <v-container>
-                    <v-layout row>
+                    <v-layout column>
                       <v-flex v-for="(item, key) in newItem" :key="key">
                         <slot
                           name="newSlot"
@@ -236,8 +240,8 @@
             <v-form v-model="valid" ref="editForm">
               <v-card class="pa-3">
                 <v-layout row justify-start align-center>
-                  <v-icon medium :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="headline text-primary">{{ editDialogTitle }}</span>
+                  <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
+                  <span class="title text-primary">{{ editDialogTitle }}</span>
                 </v-layout>
                 <v-card-text>
                   <v-container>
@@ -426,12 +430,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="body-2 text-primary font-weight-medium text-xs-left"
+            class="subheader text-primary text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="subheading text-primary font-weight-medium" slot="activator">{{ header.text }}</span>
+              <span class="title text-primary font-weight-medium" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -449,7 +453,11 @@
               :hidden="header.hidden"
               :key="header.text"
             >
-              <div class="text-xs-left body-2">{{ props.item[header.value] }}</div>
+              <div
+                class="body-2 text-xs-left text-secondary font-weight-regular"
+              >
+                {{ props.item[header.value] }}
+              </div>
             </td>
           </tr>
         </template>
@@ -487,8 +495,8 @@
           </v-layout>
           <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
-            <v-card>
-              <v-card-title class="headline text-primary font-weight-medium">{{ delDialogTitle }}</v-card-title>
+            <v-card class="pa-3">
+              <v-card-title class="title text-primary">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -500,11 +508,11 @@
           <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="500px">
             <v-form ref="form" v-model="valid">
-              <v-card>
-                <v-card-title>
-                  <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="headline text-primary font-weight-medium">{{ newDialogTitle }}</span>
-                </v-card-title>
+              <v-card class="pa-3">
+                <v-layout row justify-center align-center>
+                  <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
+                  <span class="title text-primary">{{ newDialogTitle }}</span>
+                </v-layout>
                 <v-card-text>
                   <v-container>
                     <v-layout row wrap justify-space-around>
@@ -553,8 +561,8 @@
               <v-card class="pa-3">
                 <v-layout>
                   <v-layout row fill-height justify-center align-center>
-                    <v-icon class="ml-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
-                    <span class="headline text-primary">{{ editDialogTitle }}</span>
+                    <v-icon class="mr-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
+                    <span class="title text-primary">{{ editDialogTitle }}</span>
                   </v-layout>
                 </v-layout>
                 <v-card-text>
