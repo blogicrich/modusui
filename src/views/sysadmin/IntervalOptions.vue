@@ -5,11 +5,13 @@
       :iconColor="iconColor"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
     <v-layout v-if="!intervalsLoading" row wrap fill-height justify-space-between>
       <v-flex :class="$vuetify.breakpoint.lgAndUp ? 'lg6' : 'xs12'">
         <BaseRadioOptions
           class="mx-4 my-2"
+          groupIcon="online_prediction"
           :groupHeader="'Blue Light Flashing Interval Options'"
           :groupDescription="'Time between drink reminders - (Blue light flashing)'"
           :radioHeader="'Please select an option from the following:'"
@@ -36,6 +38,7 @@
       <v-flex xs12 lg6>
         <BaseRadioOptions
           class="mx-4 my-2"
+          groupIcon="record_voice_over"
           :groupHeader="'Voice Interval Options'"
           :groupDescription="'Time between drink reminders - (Voice message)'"
           :radioHeader="'Please select an option from the following:'"

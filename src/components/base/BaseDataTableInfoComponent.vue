@@ -128,14 +128,4 @@ export default {
 
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
-.abs-position {
-    height: 30%;
-    width: 50%;
-    position: absolute;
-    top:25;
-    left:25;
-}
-#cell {
-  margin: 2vw;
-}
 </style>

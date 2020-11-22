@@ -6,7 +6,7 @@
     >
       <v-flex ref="tileOne" slot="tileOne">
         <BaseChartHeader>
-          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
+          <p slot="header" class="headline font-weight-medium text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
           <BaseChartTypeSelector
             slot="tools"
             :chartTypes="hourChartTypes"
@@ -32,7 +32,7 @@
       </v-flex>
       <v-flex slot="tileTwo">
         <p
-          class="text-secondary text-center table-header text-ellipsis"
+          class="text-secondary text-center headline font-weight-medium text-ellipsis"
         >
           {{ 'eDroplet Drinks Total: ' + drinksTotal + ' L' }}
         </p>
@@ -67,7 +67,7 @@
       </v-flex>
       <v-flex slot="tileThree">
         <BaseChartHeader v-if="weekChartDataLoaded">
-          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ weekChartTitle }}</p>
+          <p slot="header" class="headline font-weight-medium text-secondary text-bold align-center mt-2">{{ weekChartTitle }}</p>
         </BaseChartHeader>
         <SubWeeklyHydrationBarChart
           ref="weeklyBarChart"
@@ -80,7 +80,7 @@
       </v-flex>
       <v-flex slot="tileFour">
         <BaseChartHeader v-if="dayChartDataLoaded">
-          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
+          <p slot="header" class="headline font-weight-medium text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
         </BaseChartHeader>
         <SubHydrationDayPieChart
           ref="percentHydratedChart"

@@ -1,16 +1,22 @@
 <template>
   <v-container fluid>
-    <!-- <v-layout row fill-height align-start justify-center> -->
     <BaseViewHeader
       class="mb-2"
       :headerIcon="headerIcon"
       :iconColor="iconColor"
       :headerText="headerText"
+      fullWidth
     />
-    <!-- </v-layout> -->
-    <v-layout class="mx-4" v-if="user.find(level => level === 'SYSTEM ADMINISTRATOR')" row wrap align-start justify-start>
+    <v-layout
+      class="mx-4"
+      v-if="user.find(level => level === 'SYSTEM ADMINISTRATOR')"
+      row
+      wrap
+      align-start
+      justify-start
+    >
       <v-flex sm6 lg4>
-        <v-layout class="ma-2" row wrap align-start justify-center style="background-color:#003c4d;border-radius:10px;">
+        <v-layout class="ma-2 menu-header-container" row wrap align-start justify-center>
           <v-icon
             class="ma-1"
             medium
@@ -50,7 +56,7 @@
         />
       </v-flex>
       <v-flex sm6 lg4>
-        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+        <v-layout class="ma-2 menu-header-container" row wrap align-center justify-center>
           <v-icon
             class="ma-1"
             medium
@@ -83,7 +89,7 @@
         />
       </v-flex>
       <v-flex sm6 lg4>
-        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+        <v-layout class="ma-2 menu-header-container" row wrap align-center justify-center>
           <v-icon
             class="ma-1"
             medium
@@ -104,7 +110,7 @@
     </v-layout>
     <v-layout v-if="user.find(level => level === 'CLIENT ADMINISTRATOR')" row wrap align-start justify-start class="landing-cli-admin">
       <v-flex sm6 lg4>
-        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+        <v-layout class="ma-2 menu-header-container" row wrap align-center justify-center>
           <v-icon
             class="ma-1"
             medium
@@ -123,7 +129,7 @@
         />
       </v-flex>
       <v-flex sm6 lg4>
-        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+        <v-layout class="ma-2 menu-header-container" row wrap align-center justify-center>
           <v-icon
             class="ma-1"
             medium
@@ -133,17 +139,10 @@
           </v-icon>
           <h2 class="ma-1 text-white">User Settings</h2>
         </v-layout>
-        <!-- <BaseLinkComponent
-          routerTitle="Interval Settings Management"
-          link="/intervalmanagement"
-          tooltipText="Set the reminder and Communication intervals for your eDroplets"
-          icon="notification_important"
-          colorIcon="#006480"
-        /> -->
         <BaseLinkComponent
           routerTitle="User Conditions"
           link="/usercondition"
-          tooltipText="Record any conditions and subsequent consumption modifiers for eDroplet Users"
+          tooltipText="Record user conditions and consumption modifiers"
           icon="local_pharmacy"
           colorIcon="#006480"
         />
@@ -154,16 +153,9 @@
           icon="access_alarm"
           colorIcon="#006480"
         />
-        <!-- <BaseLinkComponent
-          routerTitle="Sleep and Wake Times"
-          link="/wakesleeptimes"
-          tooltipText="Set sleep and wake up time"
-          icon="access_alarm"
-          colorIcon="#006480"
-        /> -->
       </v-flex>
       <v-flex sm6 lg4>
-        <v-layout class="ma-2" row wrap align-center justify-center style="background-color:#003c4d;border-radius:10px;">
+        <v-layout class="ma-2 menu-header-container" row wrap align-center justify-center>
           <v-icon
             class="ma-1"
             medium
@@ -176,7 +168,7 @@
         <BaseLinkComponent
           routerTitle="eDroplet Management"
           link="/edropletmanagement"
-          tooltipText="Manage the eDroplets on this account. Assign them to users or deactivate them"
+          tooltipText="Manage the eDroplets on this account"
           icon="local_drink"
           colorIcon="#006480"
         />
@@ -213,4 +205,8 @@ export default {
 </script>
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
+  .menu-header-container {
+    background-color:$vuetify-accent;
+    border-radius:10px;
+  }
 </style>

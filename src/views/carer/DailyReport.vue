@@ -2,7 +2,6 @@
   <v-container fluid>
     <BaseDataTable
       ref="baseDataTable"
-      class="mx-4"
       tableTitle="Daily Report"
       searchLabel="Search Records..."
       :headers="headers"
@@ -16,14 +15,12 @@
       recordIcon="menu_book"
       item-key="dayReportId"
       crudIdKey="dayReportId"
-
       :loading="dayReportLoading"
       :loaded="!dayReportLoading"
       :error="dayReportError"
       errorMsg="Error fetching data. Please check your internet connection and try again"
       loadingMsg="Loading comments"
       loadedMsg="No comments to display"
-
       @action-button-pressed="openNewDialog"
       @row-clicked="openEditDialog"
     />

@@ -3,7 +3,7 @@
     <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar v-if="!justRows" class="pa-1 my-1 elevation-1" flat color="white">
         <v-icon class="mr-2" medium :color="primaryColor">{{ tableTitleIcon }}</v-icon>
-        <h2 class="table-header ml-1">{{ tableTitle }}</h2>
+        <h2 class="headline text-primary font-weight-medium ml-1">{{ tableTitle }}</h2>
         <v-divider class="mx-2" inset vertical />
         <v-spacer />
         <v-flex v-if="searchBarHidden" lg-3 xl-2>
@@ -48,12 +48,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="table-cell-header text-xs-left"
+            class="title text-primary text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="table-cell-header" slot="activator">{{ header.text }}</span>
+              <span class="subheader text-primary text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -69,7 +69,7 @@
               :key="header.text"
               :color="primaryColor"
             >
-              <div>{{ props.item[header.value] }}</div>
+              <div class="body-2 text-xs-left text-secondary font-weight-regular">{{ props.item[header.value] }}</div>
             </td>
           </tr>
         </template>
@@ -114,7 +114,7 @@
             <v-speed-dial
               v-if="$vuetify.breakpoint.mdAndDown"
               v-model="fab"
-              class="table-fab ma-0"
+              class="ma-0"
               absolute
               :top="top"
               :bottom="bottom"
@@ -156,7 +156,7 @@
       <v-speed-dial
         v-if="tableActionButton"
         v-model="fab"
-        class="table-fab ma-0"
+        class="ma-0"
         fixed
         :top="top"
         :bottom="bottom"
@@ -211,12 +211,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="table-cell-header text-xs-left"
+            class="subheader text-primary font-weight-medium text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="table-cell-header" slot="activator">{{ header.text }}</span>
+              <span class="subheader text-primary font-weight-medium text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -226,12 +226,11 @@
         <template slot="items" slot-scope="props">
           <tr ref="clickableRow" @click="(props.expanded = !props.expanded) && rowClicked(props)">
             <td
-              class="text-xs-left"
               v-for="header in headers"
               :hidden="header.hidden"
               :key="header.text"
             >
-              <div>{{ props.item[header.value] }}</div>
+              <div class="body-2 text-xs-left text-secondary font-weight-regular">{{ props.item[header.value] }}</div>
             </td>
           </tr>
         </template>

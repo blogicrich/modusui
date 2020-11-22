@@ -70,7 +70,6 @@
       </v-form>
       <!-- Data table -->
       <dataTable
-        class="mx-4"
         :tableTitle="legend"
         :headers="headers"
         :primaryColor="primaryColor"

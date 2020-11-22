@@ -2,16 +2,16 @@
   <v-container :class="hovering ? 'enter-style' : 'leave-style' " @click="navigate" @mouseenter="setHover" @mouseleave="setHover">
     <v-layout row wrap fill-height align-center justify-start>
       <v-icon
-        :size="28"
+        :size="iconSize"
         :color="colorIcon"
         :to="link"
       >
         {{ icon }}
       </v-icon>
-      <span class="subheader">{{ routerTitle }}</span>
+      <span class="subheader text-primary font-weight-bold">{{ routerTitle }}</span>
     </v-layout>
     <v-layout class="mt-2" row wrap fill-height align-center justify-start>
-      <span class="text-secondary">{{ tooltipText }}</span>
+      <span class="subheader text-secondary">{{ tooltipText }}</span>
     </v-layout>
   </v-container>
 </template>
@@ -33,6 +33,19 @@ export default {
     colorIcon: String,
     test: String
   },
+  computed: {
+    /* eslint-disable vue/return-in-computed-property */
+    iconSize () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '20'
+        case 'sm': return '22'
+        case 'md': return '24'
+        case 'lg': return '28'
+        case 'xl': return '38'
+      }
+    }
+    /* eslint-disable vue/return-in-computed-property */
+  },
   methods: {
     navigate () {
       this.$router.push(this.link)
@@ -46,31 +59,97 @@ export default {
 
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
-
-  .enter-style {
-    cursor: pointer;
+  @media screen and (min-width: 340px) { // Aligned with Vuetify breakpoint values
     .subheader {
-      transition: all 0.6s ease;
-      margin-left: 10px;
-      font-size: 1.2em;
-    }
-    .text-secondary {
-      transition: all 0.6s ease;
-      font-style: italic;
+      font-weight: bold;
       color: $vuetify-primary;
     }
-  }
-  .leave-style {
-    cursor: none;
-    .subheader {
-      transition: all 0.6s ease;
-      margin-left: 4px;
-      font-size: 1em;
+    .enter-style {
+      cursor: pointer;
+      .subheader {
+        transition: all 0.6s ease;
+        margin-left: 10px;
+        font-size: 1.1em;
+      }
+      .text-secondary {
+        transition: all 0.6s ease;
+        font-style: italic;
+        color: $vuetify-primary;
+      }
     }
-    .text-secondary {
-      transition: all 0.6s ease;
-      font-style: normal;
-      color: $dark-blue-grey;
+    .leave-style {
+      cursor: none;
+      .subheader {
+        transition: all 0.6s ease;
+        margin-left: 4px;
+        font-size: 1em;
+      }
+      .text-secondary {
+        transition: all 0.6s ease;
+        font-style: normal;
+        color: $dark-blue-grey;
+      }
+    }
+  }
+    @media screen and (min-width: 1264px) { // Aligned with Vuetify breakpoint values
+    .subheader {
+      font-weight: bold;
+      color: $vuetify-primary;
+    }
+    .enter-style {
+      cursor: pointer;
+      .subheader {
+        transition: all 0.6s ease;
+        margin-left: 10px;
+        font-size: 0.9em;
+      }
+      .text-secondary {
+        transition: all 0.6s ease;
+        font-style: italic;
+        color: $vuetify-primary;
+      }
+    }
+    .leave-style {
+      cursor: none;
+      .subheader {
+        transition: all 0.6s ease;
+        margin-left: 4px;
+        font-size: 0.8em;
+      }
+      .text-secondary {
+        transition: all 0.6s ease;
+        font-style: normal;
+        color: $dark-blue-grey;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1904px) { // Aligned with Vuetify breakpoint values
+    .enter-style {
+      cursor: pointer;
+      .subheader {
+        transition: all 0.6s ease;
+        margin-left: 10px;
+        font-size: 1.4em;
+      }
+      .text-secondary {
+        transition: all 0.6s ease;
+        font-style: italic;
+        color: $vuetify-primary;
+      }
+    }
+    .leave-style {
+      cursor: none;
+      .subheader {
+        transition: all 0.6s ease;
+        margin-left: 4px;
+        font-size: 1.3em;
+      }
+      .text-secondary {
+        transition: all 0.6s ease;
+        font-style: normal;
+        color: $dark-blue-grey;
+      }
     }
   }
 </style>

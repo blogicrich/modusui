@@ -1,11 +1,12 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <BaseViewHeader
       v-if="this.$vuetify.breakpoint.mdAndDown"
       :headerIcon="headerIcon"
       :iconColor="iconColor"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
     <BaseDataTable
       ref="baseDataTable"
@@ -45,7 +46,6 @@
           :color="primaryColor"
           outline
           required
-          validate-on-blur
           :rules="newItem[itemKey].validators"
         />
       </template>
@@ -57,7 +57,6 @@
           :color="primaryColor"
           outline
           required
-          validata-on-blur
           :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
         >
           {{ property }}

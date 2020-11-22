@@ -1,14 +1,14 @@
 <template>
   <v-container fluid>
     <BaseViewHeader
-      class="mx-2 mb-2"
+      class="mx-0 px-0"
       :headerIcon="headerIcon"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
     <SubDisplayTable
       ref="subDisplayTable"
-      class="mx-4"
       :headers="headers"
       :items="users"
       :expandable="false"
@@ -95,7 +95,7 @@
                 column
               >
                 <v-card-title
-                  class="table-header"
+                  class="headline text-secondary"
                 >
                   {{ `Set Wake and Sleep Times for User: ${selected.username}` }}
                 </v-card-title>
@@ -175,7 +175,7 @@
                   </v-flex>
                 </v-layout>
                 <v-card-title
-                  class="table-header"
+                  class="headline text-secondary"
                 >
                   {{ `Set Intervals for User: ${selected.username}` }}
                 </v-card-title>

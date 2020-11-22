@@ -131,7 +131,7 @@
             <v-speed-dial
               v-if="$vuetify.breakpoint.mdAndDown"
               v-model="fab"
-              class="table-fab ma-0"
+              class="ma-0"
               absolute
               :top="top"
               :bottom="bottom"
@@ -336,7 +336,7 @@
       <v-speed-dial
         v-if="editPerms.create || editPerms.update || editPerms.delete"
         v-model="fab"
-        class="table-fab ma-0"
+        class="ma-0"
         fixed
         :top="top"
         :bottom="bottom"
@@ -367,7 +367,7 @@
       <v-speed-dial
         v-if="tableActionButton"
         v-model="fab"
-        class="table-fab ma-0"
+        class="ma-0"
         fixed
         :top="top"
         :bottom="bottom"
@@ -435,7 +435,7 @@
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="title text-primary font-weight-medium" slot="activator">{{ header.text }}</span>
+              <span class="text-primary font-weight-medium" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>

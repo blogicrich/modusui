@@ -1,11 +1,12 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <BaseViewHeader
       v-if="this.$vuetify.breakpoint.mdAndDown"
       :headerIcon="headerIcon"
       :iconColor="iconColor"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
     <BaseDataTable
       ref="baseDataTable"
