@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
+    <v-container v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar v-if="!justRows" class="pa-1 my-1 elevation-1" flat color="white">
         <v-icon class="mr-2" medium :color="primaryColor">{{ tableTitleIcon }}</v-icon>
         <h2 class="headline text-primary font-weight-medium ml-1">{{ tableTitle }}</h2>
@@ -149,7 +149,7 @@
           </v-btn>
         </v-fade-transition>
       </v-layout>
-    </div>
+    </v-container>
     <!-- BREAKPOINT MDANDDOWN / MOBILE -->
     <v-container v-if="this.$vuetify.breakpoint.mdAndDown " fluid>
       <!-- Speed dial mobile button -->

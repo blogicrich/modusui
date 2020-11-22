@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <BaseViewHeader
-      class="mx-0 px-0"
       :headerIcon="headerIcon"
       :headerText="headerText"
       hasDivider
