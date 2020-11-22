@@ -1,16 +1,14 @@
 <template>
-  <v-layout row wrap align-center justify-center>
-    <v-flex grow>
-      <v-layout row align-center justify-center>
+  <v-container class="pa-2">
+    <v-layout row align-center justify-center>
+      <v-flex grow>
         <slot name="header" />
-      </v-layout>
-    </v-flex>
-    <v-flex shrink>
-      <v-layout row align-center justify-end>
+      </v-flex>
+      <v-flex class="pa-0 ma-0" shrink>
         <slot name="tools" />
-      </v-layout>
-    </v-flex>
-  </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
