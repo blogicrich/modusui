@@ -163,7 +163,7 @@
             :tip="item.tip"
             :title="item.title"
             :name="item.name"
-            @nav-btn-clicked="$router.push({ name: item.name, params: { headerIcon: item.btnIcon, headerText: item.title} })"
+            @nav-btn-clicked="$router.push({ name: item.name, params: { headerIcon: item.btnIcon, headerText: item.title } })"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -420,7 +420,7 @@ export default {
 @import "./public/scss/main.scss";
 
 .app-shell {
-  background-color: $vuetify-secondary;
+  background-color: var(--v-secondary-base);
 }
 .hide {
   visibility: hidden;
