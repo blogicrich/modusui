@@ -8,26 +8,76 @@
   >
     <!-- eslint-disable-next-line -->
     <template v-slot:activator="{ on }">
-      <v-card hover ref="selected-user-tile" class="pa-3" v-on="on">
-        <v-layout row fill-height align-center justify-space-between>
+      <v-card
+        hover
+        ref="selected-user-tile"
+        class="pa-3"
+        v-on="on"
+      >
+        <v-layout
+          row
+          fill-height
+          align-center
+          justify-space-between
+        >
           <!-- DESKTOP -->
-          <v-flex v-if="$vuetify.breakpoint.lgAndUp" class="text-ellipsis">
-            <v-layout row fill-height align-center justify-start>
-              <v-icon large color="primary">group</v-icon>
-              <transition name="component-fade" mode="out-in">
-                <p class="table-header text-primary text-ellipsis ma-2">{{ 'Connected eDroplet User: ' }}</p>
+          <v-flex
+            v-if="$vuetify.breakpoint.lgAndUp"
+            class="text-ellipsis"
+          >
+            <v-layout
+              row
+              fill-height
+              align-center
+              justify-start
+            >
+              <v-icon
+                large
+                color="primary"
+              >
+                group
+              </v-icon>
+              <transition
+                name="component-fade"
+                mode="out-in"
+              >
+                <p class="headline font-weight-medium text-primary text-ellipsis ma-2">
+                  {{ $vuetify.breakpoint.xlOnly ? 'Connected eDroplet User: ' : 'eDroplet User: ' }}
+                </p>
               </transition>
-              <transition name="component-fade" mode="out-in">
-                <p class="table-header text-secondary ma-2">{{ getDisplayName(selectedUser) }}</p>
+              <transition
+                name="component-fade"
+                mode="out-in"
+              >
+                <p class="headline font-weight-medium text-accent ma-2">
+                  {{ getDisplayName(selectedUser) }}
+                </p>
               </transition>
             </v-layout>
           </v-flex>
           <!-- MOBILE -->
-          <v-flex v-if="$vuetify.breakpoint.mdAndDown">
-            <v-layout row fill-height align-center justify-start>
-              <v-icon medium color="primary">group</v-icon>
-              <transition name="component-fade" mode="out-in">
-                <p class="table-header text-secondary ma-2">{{ getDisplayName(selectedUser) }}</p>
+          <v-flex
+            v-if="$vuetify.breakpoint.mdAndDown"
+          >
+            <v-layout
+              row
+              fill-height
+              align-center
+              justify-start
+            >
+              <v-icon
+                medium
+                color="primary"
+              >
+                group
+              </v-icon>
+              <transition
+                name="component-fade"
+                mode="out-in"
+              >
+                <p class="headline font-weight-medium text-accent ma-2">
+                  {{ getDisplayName(selectedUser) }}
+                </p>
               </transition>
             </v-layout>
           </v-flex>
@@ -51,9 +101,17 @@
       </v-card>
     </template>
     <!-- USER LIST -->
-    <v-list two-line subheader class="ma-0 pa-0 userList">
+    <v-list
+      two-line
+      subheader
+      class="ma-0 pa-0 userList"
+    >
       <v-list-tile @click="searchTileClicked">
-        <v-text-field class="ma-1" v-model="search" prepend-icon="search" />
+        <v-text-field
+          class="ma-1"
+          v-model="search"
+          prepend-icon="search"
+        />
       </v-list-tile>
       <v-list-tile
         avatar
@@ -101,9 +159,9 @@ export default {
       showMenu: false,
       on: false,
       colourMapping: {
-        Green: '#00e676',
-        Amber: '#ffc400',
-        Red: '#ff1744'
+        Green: this.$vuetify.theme.success,
+        Amber: this.$vuetify.theme.warning,
+        Red: this.$vuetify.theme.error
       }
     }
   },

@@ -1,14 +1,15 @@
-<template lang="html">
-  <v-container v-if="!messagesLoading" fluid>
+<template>
+  <v-container fluid>
     <BaseViewHeader
       :headerIcon="headerIcon"
       :iconColor="iconColor"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
-    <v-layout class="mx-4 mb-2" row align-center>
+    <v-layout v-if="!messagesLoading" class="mx-4 mb-2" row align-center>
       <v-toolbar v-if="!messagesLoading" color="primary darken-1" dark>
-        <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">
+        <v-toolbar-title class="headline font-weight-bold" v-if="$vuetify.breakpoint.smAndUp">
           Edit sms and Email Messages
         </v-toolbar-title>
         <v-spacer />
@@ -67,7 +68,7 @@
         </v-btn>
       </v-toolbar>
     </v-layout>
-    <v-card class="mx-4" v-if="messages">
+    <v-card class="mx-4" v-if="!messagesLoading && messages">
       <v-form ref="smsEmailMessagesForm">
         <v-card-title class="text-primary title">
           {{ getterSelectedMessage.alertTypeDescription + ' : ' + getterSelectedMessage.communicationTypeDescription }}
@@ -76,6 +77,7 @@
           <v-text-field
             label="Subject"
             :value="getterSelectedMessage.subject"
+            :class="$vuetify.breakpoint.mdAndDown ? 'subheading font-weight-light' : 'headline font-weight-light'"
             color="primaryColor"
             outline
             :rules="[required, validateMaxChars(getterSelectedMessage.subject, 254)]"
@@ -85,6 +87,7 @@
             outline
             name="input-7-4"
             label="Message"
+            :class="$vuetify.breakpoint.mdAndDown ? 'subheading font-weight-light' : 'headline font-weight-light'"
             :value="getterSelectedMessage.message"
             :rules="[required, validateMaxChars(getterSelectedMessage.message, 254)]"
             @input="$store.commit('UPDATE_SELECTED_MESSAGE_TEXT', $event)"
@@ -92,7 +95,7 @@
         </v-card-text>
       </v-form>
     </v-card>
-    <v-layout v-if="!messagesLoading && $vuetify.breakpoint.lgAndUp" row justify-center align-center>
+    <v-layout v-if="!messagesLoading" row justify-center align-center>
       <v-btn
         :disabled="getterIsPristine"
         class="root-nav-btn mt-3"
@@ -162,7 +165,7 @@ export default {
     this.$store.dispatch('fetchMessages')
   },
   beforeRouteLeave (to, from, next) {
-    if (!this.isPristine && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
+    if (!this.getterIsPristine && !window.confirm('Do you really want to leave? You will lose all unsaved changes!')) {
       return next(false)
     }
     next()

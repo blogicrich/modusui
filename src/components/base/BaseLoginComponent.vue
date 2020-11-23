@@ -127,13 +127,13 @@ export default {
   background-color: inherit;
 }
 h2 {
-  color: $dark-blue-grey;
+  color: $vuetify-accent;
 }
 button:hover {
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
   float: right;
-  color: $dark-blue-grey;
+  color: $vuetify-accent;
   background-color:inherit;
   border-style: solid;
   border-radius: 1vh;

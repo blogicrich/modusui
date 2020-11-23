@@ -27,7 +27,7 @@
     </BaseViewHeader>
     <!-- ROUTE VIEW -->
     <v-slide-y-transition mode="out-in">
-      <router-view />
+      <router-view class="pa-0"/>
     </v-slide-y-transition>
   </v-container>
 </template>

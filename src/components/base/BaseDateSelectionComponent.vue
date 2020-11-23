@@ -1,10 +1,25 @@
 <template>
-  <v-container class="pa-0">
+  <v-container fluid>
     <v-layout align-center justify-center prepend-icon="event">
       <v-icon large>event</v-icon>
       <v-icon @click="subtractDay()" large title="Decrease date by one day">keyboard_arrow_left</v-icon>
       <v-menu ref="menu" v-model="menu" :close-on-content-click="false">
-        <v-text-field slot="activator" :value="formattedDate" readonly title="Pick a date" />
+        <v-text-field
+          v-if="$vuetify.breakpoint.lgAndUp"
+          slot="activator"
+          class="subheader font-weight-medium text-accent text-center"
+          :value="formattedDate"
+          readonly
+          title="Pick a date"
+        />
+        <v-text-field
+          v-if="$vuetify.breakpoint.mdAndDown"
+          class="subheader font-weight-light text-accent"
+          slot="activator"
+          :value="formattedDate"
+          readonly
+          title="Pick a date"
+        />
         <v-date-picker
           color="primary"
           color-header="primary"
@@ -63,3 +78,7 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+@import "./public/scss/main.scss";
+</style>

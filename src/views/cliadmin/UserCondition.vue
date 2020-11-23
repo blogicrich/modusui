@@ -1,14 +1,13 @@
 <template>
   <v-container fluid>
     <BaseViewHeader
-      class="mx-2 mb-2"
       :headerIcon="headerIcon"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
     <SubDisplayTable
       ref="subDisplayTable"
-      class="mx-4"
       :headers="headers"
       :items="userConditions"
       :expandable="false"

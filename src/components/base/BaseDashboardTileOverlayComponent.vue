@@ -1,10 +1,32 @@
 <template>
   <v-container class="transparent overlay" fluid>
-    <v-layout class="pt-1" column fill-height align-center justify-center>
+    <v-layout
+      v-if="$vuetify.breakpoint.lgAndUp"
+      class="pt-1"
+      column
+      fill-height
+      align-center
+      justify-center
+    >
       <v-flex grow>
         <v-layout class="ma-2" row fill-height align-center justify-center>
           <v-icon class="mr-3" color="primary" x-large>error</v-icon>
-          <span class="text-primary text-center pg-header">{{ message }}</span>
+          <span class="text-primary text-center headline">{{ message }}</span>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+    <v-layout
+      v-if="$vuetify.breakpoint.mdAndDown"
+      class="pt-1"
+      column
+      fill-height
+      align-center
+      justify-center
+    >
+      <v-flex grow>
+        <v-layout class="ma-2" row fill-height align-center justify-center>
+          <v-icon class="mr-2" color="primary" medium>error</v-icon>
+          <span class="text-primary text-center title">{{ message }}</span>
         </v-layout>
       </v-flex>
     </v-layout>

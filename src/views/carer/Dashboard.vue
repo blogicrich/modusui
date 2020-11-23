@@ -6,7 +6,14 @@
     >
       <v-flex ref="tileOne" slot="tileOne">
         <BaseChartHeader>
-          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ hourChartTitle }}</p>
+          <p
+            slot="header"
+            :class="$vuetify.breakpoint.mdAndUp ?
+              'title font-weight-medium text-accent text-center mt-2' :
+              'subheader font-weight-medium text-accent text-center mt-2'"
+          >
+            {{ hourChartTitle }}
+          </p>
           <BaseChartTypeSelector
             slot="tools"
             :chartTypes="hourChartTypes"
@@ -32,7 +39,10 @@
       </v-flex>
       <v-flex slot="tileTwo">
         <p
-          class="text-secondary text-center table-header text-ellipsis"
+          slot="header"
+          :class="$vuetify.breakpoint.mdAndUp ?
+            'title font-weight-medium text-accent text-center mt-2' :
+            'subheader font-weight-medium text-accent text-center mt-2'"
         >
           {{ 'eDroplet Drinks Total: ' + drinksTotal + ' L' }}
         </p>
@@ -53,7 +63,7 @@
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <!-- eslint-disable-next-line -->
-                <v-list-tile-title class="text-secondary">{{ 'eDroplet: ' + item.macAddress + '/' + item.friendlyName }}</v-list-tile-title>
+                <v-list-tile-title class="text-accent">{{ 'eDroplet: ' + item.macAddress + '/' + item.friendlyName }}</v-list-tile-title>
                 <v-list-tile-sub-title class="text-primary">{{ 'Time: ' + $moment.utc(item.dateTime*1000).format('dddd, MMMM Do YYYY, h:mm:ss a') }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title class="text-primary">{{ 'Amount: ' + item.volumeInLitres + ' L' }}</v-list-tile-sub-title>
               </v-list-tile-content>
@@ -66,8 +76,15 @@
         />
       </v-flex>
       <v-flex slot="tileThree">
-        <BaseChartHeader v-if="weekChartDataLoaded">
-          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ weekChartTitle }}</p>
+        <BaseChartHeader>
+          <p
+            slot="header"
+            :class="$vuetify.breakpoint.mdAndUp ?
+              'title font-weight-medium text-accent text-center mt-2' :
+              'subheader font-weight-medium text-accent text-center mt-2'"
+          >
+            {{ weekChartTitle }}
+          </p>
         </BaseChartHeader>
         <SubWeeklyHydrationBarChart
           ref="weeklyBarChart"
@@ -79,8 +96,15 @@
         />
       </v-flex>
       <v-flex slot="tileFour">
-        <BaseChartHeader v-if="dayChartDataLoaded">
-          <p slot="header" class="table-header text-secondary text-bold align-center mt-2">{{ dayChartTitle }}</p>
+        <BaseChartHeader>
+          <p
+            slot="header"
+            :class="$vuetify.breakpoint.mdAndUp ?
+              'title font-weight-medium text-accent text-center mt-2' :
+              'subheader font-weight-medium text-accent text-center mt-2'"
+          >
+            {{ dayChartTitle }}
+          </p>
         </BaseChartHeader>
         <SubHydrationDayPieChart
           ref="percentHydratedChart"
@@ -230,7 +254,6 @@ export default {
     async setDashboardPoll () {
       const self = this
       this.dashboardPollTimeout = setInterval(async function () {
-        console.log('POLLING')
         await self.updateCharts()
       }, this.dashboardPollRate)
     },

@@ -8,53 +8,7 @@ $vuetify-error: rgba(#cd2c00, 1);
 // Project branding colors that are not part of the Vuetify theme
 $table-row-hover: rgba(0, 161, 205, 0.1);
 $table-row-selected: rgba(#00A1CD, 0.5);
-$dark-blue-grey: rgba(#4d504f, 1);
 $white: rgba(#ffffff, 1);
-
-// App
-
-//  Headers
-
-.header-container {
-  // display: inline !important;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  padding-right: 20px;
-}
-
-@media screen and (min-width: 320px) {
-  .pg-header {
-    font-size: 4vw;
-  }
-}
-@media screen and (min-width: 600px) { // Aligned with Vuetify breakpoint values
-  .pg-header {
-    font-size: 3vw;
-  }
-}
-@media screen and (min-width: 960px) { // Aligned with Vuetify breakpoint values
-  .pg-header {
-    font-size: 2.5vw;
-  }
-}
-@media screen and (min-width: 1264px) { // Aligned with Vuetify breakpoint values
-  .pg-header {
-    font-size: 2vw;
-  }
-}
-@media screen and (min-width: 1904px) { // Aligned with Vuetify breakpoint values
-  .pg-header {
-    font-size: 1.5vw;
-  }
-}
-
-.table-header {
-  // margin: 1vw;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: $vuetify-primary;
-}
 
 //  Subheaders
 
@@ -65,24 +19,17 @@ $white: rgba(#ffffff, 1);
   font-size: 1.5em;
   font-weight: bold;
 }
-.subheader {
-  font-size: 1em;
-  font-weight: bold;
-  color: $vuetify-primary;
-}
 
 //  Text common
 
-.text-badge {
-  color: $white;
-  font-size: 0.75em;
-  font-weight: bold;
-}
 .text-center {
   text-align:center;
 }
 .text-left {
   text-align:left;
+}
+.text-accent {
+  color: $vuetify-accent;
 }
 .text-white {
   color: $white;
@@ -97,7 +44,7 @@ $white: rgba(#ffffff, 1);
   color: $vuetify-primary;
 }
 .text-secondary {
-  color: $vuetify-accent;
+  color: $vuetify-secondary;
 }
 .text-ellipsis {
   white-space: nowrap;
@@ -120,13 +67,6 @@ $white: rgba(#ffffff, 1);
   font-size: 1em;
 }
 // Table
-
-.table-cell-header {
-  margin-right: 1vw;
-  font-size: 1em;
-  font-weight: bold;
-  color: $vuetify-primary;
-}
 
 .select {
   td {
@@ -166,7 +106,7 @@ input[type=checkbox]:checked + label{
   float: right;
   padding: 1vh;
   border-radius: 1vh;
-  color: $dark-blue-grey;
+  color: $vuetify-accent;
   background-color: inherit;
   border-color: $vuetify-primary;
   border-style: solid;
@@ -180,7 +120,7 @@ input[type=checkbox]:checked + label{
   padding: 0.5vh;
   margin:1vh;
   border-radius: 1vh;
-  color:$dark-blue-grey;
+  color:$vuetify-accent;
   border-color: $vuetify-primary;
   border-width: 2px;
   border-style: solid;

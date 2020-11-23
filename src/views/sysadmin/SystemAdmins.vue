@@ -6,10 +6,10 @@
       :iconColor="iconColor"
       :headerText="headerText"
       hasDivider
+      fullWidth
     />
     <BaseDataTable
       ref="baseDataTable"
-      class="mx-4"
       tableTitle="System Administrators"
       searchLabel="Search Records..."
       :headers="headers"
@@ -44,6 +44,7 @@
               </v-btn>
               <v-btn
                 v-if="editFormVisible"
+                :disabled="!editFormValid || !passwordFormValid"
                 icon dark
                 @click="updateSelectedSysAdmin"
                 title="save and close"
@@ -52,6 +53,7 @@
               </v-btn>
               <v-btn
                 v-if="newFormVisible"
+                :disabled="!newFormValid || !passwordFormValid"
                 icon dark
                 @click="saveNewSysAdmin"
                 title="save and close"
@@ -81,7 +83,6 @@
                   color="primaryColor"
                   outline
                   clearable
-                  validate-on-blur
                   :type="passwordMasked ? 'text' : 'password'"
                   :rules="passwordValidation"
                 />
@@ -92,7 +93,6 @@
                   color="primaryColor"
                   outline
                   clearable
-                  validate-on-blur
                   :type="passwordMasked ? 'text' : 'password'"
                   :rules="passwordValidation"
                 />
@@ -163,7 +163,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-text-field
@@ -173,7 +172,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.email"
                 />
                 <v-text-field
@@ -183,7 +181,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.mobileNo"
                 />
                 <v-select
@@ -195,7 +192,7 @@
                   required
                   item-value="titleId"
                   item-text="shortDescription"
-                  :rules="sysAdminDetailsValidation.title"
+                  :rules="sysAdminDetailsValidation.titles"
                 />
                 <v-text-field
                   class="ma-1"
@@ -204,7 +201,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-text-field
@@ -214,7 +210,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-text-field
@@ -224,7 +219,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-card-actions>
@@ -256,7 +250,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-text-field
@@ -266,7 +259,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.email"
                 />
                 <v-text-field
@@ -276,7 +268,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.mobileNo"
                 />
                 <v-select
@@ -287,7 +278,7 @@
                   outline
                   item-value="titleId"
                   item-text="shortDescription"
-                  :rules="sysAdminDetailsValidation.title"
+                  :rules="sysAdminDetailsValidation.titles"
                 />
                 <v-text-field
                   class="ma-1"
@@ -296,7 +287,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-text-field
@@ -306,7 +296,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-text-field
@@ -316,7 +305,6 @@
                   color="primaryColor"
                   outline
                   required
-                  validate-on-blur
                   :rules="sysAdminDetailsValidation.generic"
                 />
                 <v-card-actions>
@@ -505,7 +493,7 @@ export default {
       tableActionButton: true,
       newBtnIcon: 'person_add',
       newBtnTitle: 'Add New System Administrator',
-      loading: !this.loading,
+      // loading: !this.loading,
       loaded: false,
       error: false,
       errorMsg: 'Error fetching data. Please check your internet connection. ',
@@ -597,11 +585,11 @@ export default {
         },
         value => {
           if (value) return value.length >= 8 || 'Password must be more than 8 characters.'
-          else return true
+          // else return true
         },
         value => {
           if (value) return value.length <= 72 || 'Password must be less than 72 characters.'
-          else return true
+          // else return true
         },
         value => {
           if (value === this.duplicatePasword || value === this.newPassword) return true
@@ -638,7 +626,6 @@ export default {
           }
         ],
         mobileNo: [
-          // value => !!value || 'Required.',
           value => {
             if (this.alphaNumericRegEx.test(value)) {
               return true

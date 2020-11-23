@@ -64,11 +64,6 @@ export default new Router({
           component: () => import(/* webpackChunkName: "additional-drinks" */ './views/carer/AdditionalDrinks.vue')
         },
         {
-          path: '/carer/alerts',
-          name: 'alerts',
-          component: () => import(/* webpackChunkName: "alerts" */ './views/carer/Alerts.vue')
-        },
-        {
           path: '/carer/away',
           name: 'away',
           component: () => import(/* webpackChunkName: "away" */ './views/carer/Away.vue')
@@ -108,11 +103,6 @@ export default new Router({
       name: 'UserSettingsManagement',
       component: () => import(/* webpackChunkName: "interval-options" */ './views/cliadmin/UserSettingsManagement.vue')
     },
-    // {
-    //   path: '/wakesleeptimes',
-    //   name: 'WakeSleepTimes',
-    //   component: () => import(/* webpackChunkName: "voice-messages" */ './views/cliadmin/WakeSleepTimes.vue')
-    // },
 
     // Sysadmin routes
 

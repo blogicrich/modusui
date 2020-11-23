@@ -2,7 +2,6 @@
   <v-container fluid>
     <BaseDataTable
       ref="baseDataTable"
-      class="mx-4"
       :headers="headers"
       :items="additionalDrinks"
       :editPerms="{ create: false, update: false, delete: false }"
