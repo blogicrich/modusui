@@ -56,7 +56,7 @@
           <v-container>
             <v-card-title>
               <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-              <span class="pg-subheader text-primary">Change Selected Comment</span>
+              <span class="title text-primary">Change Selected Comment</span>
               <v-spacer />
               <!-- Delete Comment Confirmation Dialog -->
               <v-dialog v-model="confirmationDialog" persistent max-width="500">
@@ -167,7 +167,7 @@
           <v-container fluid>
             <v-card-title>
               <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-              <span class="pg-subheader text-primary">Add new comment</span>
+              <span class="title text-primary">Add new comment</span>
             </v-card-title>
 
             <!-- New Comment Date Picker -->
@@ -250,7 +250,7 @@
             <v-list>
               <v-card-title>
                 <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-                <span class="pg-subheader text-primary">Comments for submission:</span>
+                <span class="title text-primary">Comments for submission:</span>
               </v-card-title>
               <v-fade-transition group hide-on-leave>
                 <v-card
@@ -260,7 +260,7 @@
                   outline
                   key="nokeyforthisbadboy"
                 >
-                  <v-card-text class="text-center">NO COMMENTS TO SUBMIT. PLEASE ADD COMMENT FOR SUBMISSION</v-card-text>
+                  <v-card-text class="text-xs-center">NO COMMENTS TO SUBMIT. PLEASE ADD COMMENT FOR SUBMISSION</v-card-text>
                 </v-card>
                 <v-card
                   v-show="newComments.length"

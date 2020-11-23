@@ -11,13 +11,13 @@
           <v-layout align-center justify-center column fill-height>
             <h3
               v-if="$vuetify.breakpoint.mdAndUp"
-              class="text-center"
+              class="text-xs-center"
             >
               {{ instructions }}
             </h3>
             <h4
               v-if="$vuetify.breakpoint.smAndDown"
-              class="text-center"
+              class="text-xs-center"
             >
               {{ instructions }}
             </h4>

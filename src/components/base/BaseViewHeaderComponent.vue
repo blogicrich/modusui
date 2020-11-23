@@ -34,14 +34,14 @@
             <h1
               key="headerTextLg"
               v-if="$vuetify.breakpoint.lgAndUp"
-              class="display-1 text-primary text-ellipsis"
+              class="display-1 text-primary text-truncate"
             >
               {{ headerText }}
             </h1>
             <h1
               key="headerTextMd"
               v-if="$vuetify.breakpoint.mdAndDown"
-              class="headline text-primary text-ellipsis"
+              class="headline text-primary text-truncate"
             >
               {{ headerText }}
             </h1>

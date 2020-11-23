@@ -23,7 +23,7 @@
           <!-- DESKTOP -->
           <v-flex
             v-if="$vuetify.breakpoint.lgAndUp"
-            class="text-ellipsis"
+            class="text-truncate"
           >
             <v-layout
               row
@@ -41,7 +41,7 @@
                 name="component-fade"
                 mode="out-in"
               >
-                <p class="headline font-weight-medium text-primary text-ellipsis ma-2">
+                <p class="headline font-weight-medium text-primary text-truncate ma-2">
                   {{ $vuetify.breakpoint.xlOnly ? 'Connected eDroplet User: ' : 'eDroplet User: ' }}
                 </p>
               </transition>
@@ -141,7 +141,7 @@
       </v-list-tile>
       <v-list-tile v-if="searchResults.length === 0">
         <v-flex>
-          <p class="text-primary text-center"> NO USERS MATCHING <br>{{ search }}</p>
+          <p class="text-primary text-xs-center"> NO USERS MATCHING <br>{{ search }}</p>
         </v-flex>
       </v-list-tile>
     </v-list>

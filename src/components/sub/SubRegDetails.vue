@@ -32,7 +32,7 @@
             </h2>
             <h2
               v-if="$vuetify.breakpoint.smAndDown"
-              class="font font-weight-thin text-center"
+              class="font font-weight-thin text-xs-center"
             >
               Lets get you started with your Connected Droplet
             </h2>
@@ -183,7 +183,7 @@
       </v-stepper>
     </v-fade-transition>
     <v-layout class="mt-4" row fill-height align-center justify-space-around>
-      <router-link class="text-center" to="/login">Already have an account? Click here to log in</router-link>
+      <router-link class="text-xs-center" to="/login">Already have an account? Click here to log in</router-link>
     </v-layout>
   </v-container>
 </template>

@@ -9,8 +9,8 @@
           <p
             slot="header"
             :class="$vuetify.breakpoint.mdAndUp ?
-              'title font-weight-medium text-accent text-center mt-2' :
-              'subheader font-weight-medium text-accent text-center mt-2'"
+              'title font-weight-medium text-accent text-xs-center mt-2' :
+              'subheader font-weight-medium text-accent text-xs-center mt-2'"
           >
             {{ hourChartTitle }}
           </p>
@@ -41,8 +41,8 @@
         <p
           slot="header"
           :class="$vuetify.breakpoint.mdAndUp ?
-            'title font-weight-medium text-accent text-center mt-2' :
-            'subheader font-weight-medium text-accent text-center mt-2'"
+            'title font-weight-medium text-accent text-xs-center mt-2' :
+            'subheader font-weight-medium text-accent text-xs-center mt-2'"
         >
           {{ 'eDroplet Drinks Total: ' + drinksTotal + ' L' }}
         </p>
@@ -80,8 +80,8 @@
           <p
             slot="header"
             :class="$vuetify.breakpoint.mdAndUp ?
-              'title font-weight-medium text-accent text-center mt-2' :
-              'subheader font-weight-medium text-accent text-center mt-2'"
+              'title font-weight-medium text-accent text-xs-center mt-2' :
+              'subheader font-weight-medium text-accent text-xs-center mt-2'"
           >
             {{ weekChartTitle }}
           </p>
@@ -100,8 +100,8 @@
           <p
             slot="header"
             :class="$vuetify.breakpoint.mdAndUp ?
-              'title font-weight-medium text-accent text-center mt-2' :
-              'subheader font-weight-medium text-accent text-center mt-2'"
+              'title font-weight-medium text-accent text-xs-center mt-2' :
+              'subheader font-weight-medium text-accent text-xs-center mt-2'"
           >
             {{ dayChartTitle }}
           </p>

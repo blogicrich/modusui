@@ -11,7 +11,7 @@
       <v-flex grow>
         <v-layout class="ma-2" row fill-height align-center justify-center>
           <v-icon class="mr-3" color="primary" x-large>error</v-icon>
-          <span class="text-primary text-center headline">{{ message }}</span>
+          <span class="text-primary text-xs-center headline">{{ message }}</span>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -26,7 +26,7 @@
       <v-flex grow>
         <v-layout class="ma-2" row fill-height align-center justify-center>
           <v-icon class="mr-2" color="primary" medium>error</v-icon>
-          <span class="text-primary text-center title">{{ message }}</span>
+          <span class="text-primary text-xs-center title">{{ message }}</span>
         </v-layout>
       </v-flex>
     </v-layout>

@@ -7,11 +7,10 @@
       >
         {{ groupIcon }}
       </v-icon>
-      <h2 class="text-center text-primary title ma-2"> {{ groupHeader }} </h2>
+      <h2 class="text-xs-center text-primary title ma-2"> {{ groupHeader }} </h2>
     </v-layout>
-    <!-- <h3 v-if="$vuetify.breakpoint.smAndDown" class="text-center text-primary ma-1 title"> {{ groupHeader }} </h3> -->
-    <p class="text-left my-2 subheader"> {{ groupDescription }} </p>
-    <h3 class="text-left text-primary subheader"> {{ radioHeader }}</h3>
+    <p class="text-xs-left my-2 subheader"> {{ groupDescription }} </p>
+    <h3 class="text-xs-left text-primary subheader"> {{ radioHeader }}</h3>
     <slot name="options" />
   </v-flex>
 </template>

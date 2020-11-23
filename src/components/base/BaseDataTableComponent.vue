@@ -296,7 +296,6 @@
         <v-fade-transition>
           <v-btn
             v-if="selected.length > 0 && editPerms.update"
-            class="std-btn"
             @click="editDialog = true"
             :color="primaryColor"
             large
@@ -308,7 +307,6 @@
         <v-fade-transition>
           <v-btn
             v-if="selected.length > 0 && editPerms.delete"
-            class="std-btn"
             @click="delDialog = true"
             :color="primaryColor"
             large
@@ -320,7 +318,6 @@
         <v-fade-transition>
           <v-btn
             v-if="items.length > 0"
-            class="std-btn"
             @click="searchDisplay"
             :color="primaryColor"
             large
@@ -783,4 +780,10 @@ export default {
 
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
+
+tr:hover td {
+  background-color: $table-row-hover;
+  cursor: pointer;
+}
+
 </style>

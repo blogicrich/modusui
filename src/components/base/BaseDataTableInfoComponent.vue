@@ -1,5 +1,5 @@
 <template>
-  <v-layout column justify-center align-space-around>
+  <v-layout class="pa-2" column justify-center align-space-around>
     <v-fade-transition>
       <v-layout row fill-height align-center justify-center>
         <v-flex v-if="loading && $vuetify.breakpoint.mdAndUp" class="mx-2 mb-5" xs12>

@@ -10,24 +10,8 @@ $table-row-hover: rgba(0, 161, 205, 0.1);
 $table-row-selected: rgba(#00A1CD, 0.5);
 $white: rgba(#ffffff, 1);
 
-//  Subheaders
-
-.pg-subheader {
-  margin: 1vw;
-  margin-left: 1vw;
-  text-align: left;
-  font-size: 1.5em;
-  font-weight: bold;
-}
-
 //  Text common
 
-.text-center {
-  text-align:center;
-}
-.text-left {
-  text-align:left;
-}
 .text-accent {
   color: $vuetify-accent;
 }
@@ -46,11 +30,7 @@ $white: rgba(#ffffff, 1);
 .text-secondary {
   color: $vuetify-secondary;
 }
-.text-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 //  Borders
 
 .border-primary {
@@ -58,29 +38,6 @@ $white: rgba(#ffffff, 1);
   border-width: 2px;
   border-color: $vuetify-primary;
   border-style: solid;
-}
-//  Buttons
-
-.std-btn {
-  background-color: $vuetify-primary;
-  border-radius: 4px;
-  font-size: 1em;
-}
-// Table
-
-.select {
-  td {
-    background-color: $table-row-selected;
-  }
-}
-.unselect {
-  td {
-    background-color: inherit;
-  }
-}
-tr:hover td {
-  background-color: $table-row-hover;
-  cursor: pointer;
 }
 
 // Tranisitions 
