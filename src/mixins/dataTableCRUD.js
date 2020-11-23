@@ -3,17 +3,14 @@ import apiLib from '@/services/apiLib.js'
 export const crudRoutines = {
   methods: {
     async addItem (item) {
-      // console.log('gfjkhgjkfdhgfdjkghjkfshjkgs', item)
       var row = {}
       for (var i = 0; i < item.length; i++) {
         if (item[i].sync) item[i][item[i].attr] = item[i].sync[item[i].attr]
         Object.keys(item[i]).forEach(function (key) {
           row[item[i].attr] = item[i][item[i].attr]
-          // console.log(row[item[i].attr], item[i][item[i].attr])
         })
       }
       await apiLib.postData(this.createUrl, row, true, true).then(() => {
-        console.log(row)
         for (var i = 0; i < item.length; i++) {
           Object.keys(item[i]).forEach(function (key) {
             // Return newItem values to null
@@ -51,13 +48,11 @@ export const crudRoutines = {
           editedItem = Object.assign({}, thatDefaultItem[j])
           Object.keys(thatDefaultItem[j]).forEach(function (key) {
             if (items[i][key]) editedItem[key] = items[i][key]
-            // console.log('Looping Inner: ', key, thatDefaultItem[j], items[i][key], editedItem[key])
           })
-          // console.log('Update Item: ', thatDefaultItem[j], this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem)
           apiLib.updateData(this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem, false, true)
             .then(() => {})
             .catch(error => {
-              console.log(error)
+              console.error(error)
             })
             .finally()
         }
@@ -68,9 +63,7 @@ export const crudRoutines = {
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      var response = await apiLib.getData(url, true, true)
-      // console.log("Response: ", response)
-      // console.log("Respone Type", Array.isArray(response))
+      var response = await apiLib.getData(url, false, true)
       if (Array.isArray(response) === false) {
         this.items = []
         this.errorMsg = 'Server response error: ' + response + ' - Please contact your system administrator.'
@@ -83,9 +76,7 @@ export const crudRoutines = {
         this.loadedMsg = 'No current records to display - There are no entries for this table.'
         this.loaded = true
         this.error = false
-        // console.log('FIRRRINGNNGNGNGNNGNGN: ', this.loadedMsg)
       } else {
-        // console.log("Items: ", this.items)
         this.items = response
         if (this.urls !== undefined) await this.setMenuItems(this.urls)
         this.loading = false
@@ -105,14 +96,11 @@ export const crudRoutines = {
       if (urls !== [] || urls !== null) {
         let menuItems = []
         const values = []
-        // console.log(urls)
         for (var i = 0; i < urls.length; i++) {
           if (urls[i].url) {
             menuItems = await apiLib.getData(urls[i].url, true, true)
             for (var j = 0; j < menuItems.length; j++) {
               const val = menuItems[j]
-              // console.log('menuItem url: ', val)
-              // values.push(menuItems[j][urls[i].key])
               values.push(val)
             }
           }
@@ -120,8 +108,6 @@ export const crudRoutines = {
             menuItems = urls[i].ref
             for (var k = 0; k < menuItems.length; k++) {
               const val = menuItems[k]
-              // console.log('menuItem ref: ', val)
-              // values.push(menuItems[j][urls[i].key])
               values.push(val)
             }
           }
