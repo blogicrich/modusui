@@ -88,7 +88,7 @@
               :color="primaryColor"
             >
               <div
-                class="body-2 text-xs-left text-secondary font-weight-regular"
+                class="body-2 text-xs-left text-accent font-weight-regular"
               >
                 {{ props.item[header.value] }}
               </div>
@@ -454,7 +454,7 @@
               :key="header.text"
             >
               <div
-                class="body-2 text-xs-left text-secondary font-weight-regular"
+                class="body-2 text-xs-left text-accent font-weight-regular"
               >
                 {{ props.item[header.value] }}
               </div>

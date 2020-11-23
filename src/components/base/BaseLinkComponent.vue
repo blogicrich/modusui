@@ -8,10 +8,10 @@
       >
         {{ icon }}
       </v-icon>
-      <span class="subheader text-primary font-weight-bold">{{ routerTitle }}</span>
+      <span class="description text-primary font-weight-bold">{{ routerTitle }}</span>
     </v-layout>
     <v-layout class="mt-2" row wrap fill-height align-center justify-start>
-      <span class="subheader text-secondary">{{ tooltipText }}</span>
+      <span class="description text-secondary">{{ tooltipText }}</span>
     </v-layout>
   </v-container>
 </template>
@@ -60,13 +60,13 @@ export default {
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
   @media screen and (min-width: 340px) { // Aligned with Vuetify breakpoint values
-    .subheader {
+    .description {
       font-weight: bold;
       color: $vuetify-primary;
     }
     .enter-style {
       cursor: pointer;
-      .subheader {
+      .description {
         transition: all 0.6s ease;
         margin-left: 10px;
         font-size: 1.1em;
@@ -79,7 +79,7 @@ export default {
     }
     .leave-style {
       cursor: none;
-      .subheader {
+      .description {
         transition: all 0.6s ease;
         margin-left: 4px;
         font-size: 1em;
@@ -87,18 +87,18 @@ export default {
       .text-secondary {
         transition: all 0.6s ease;
         font-style: normal;
-        color: $dark-blue-grey;
+        color: $vuetify-accent;
       }
     }
   }
     @media screen and (min-width: 1264px) { // Aligned with Vuetify breakpoint values
-    .subheader {
+    .description {
       font-weight: bold;
       color: $vuetify-primary;
     }
     .enter-style {
       cursor: pointer;
-      .subheader {
+      .description {
         transition: all 0.6s ease;
         margin-left: 10px;
         font-size: 0.9em;
@@ -111,7 +111,7 @@ export default {
     }
     .leave-style {
       cursor: none;
-      .subheader {
+      .description {
         transition: all 0.6s ease;
         margin-left: 4px;
         font-size: 0.8em;
@@ -119,7 +119,7 @@ export default {
       .text-secondary {
         transition: all 0.6s ease;
         font-style: normal;
-        color: $dark-blue-grey;
+        color: $vuetify-accent;
       }
     }
   }
@@ -127,7 +127,7 @@ export default {
   @media screen and (min-width: 1904px) { // Aligned with Vuetify breakpoint values
     .enter-style {
       cursor: pointer;
-      .subheader {
+      .description {
         transition: all 0.6s ease;
         margin-left: 10px;
         font-size: 1.4em;
@@ -140,7 +140,7 @@ export default {
     }
     .leave-style {
       cursor: none;
-      .subheader {
+      .description {
         transition: all 0.6s ease;
         margin-left: 4px;
         font-size: 1.3em;
@@ -148,7 +148,7 @@ export default {
       .text-secondary {
         transition: all 0.6s ease;
         font-style: normal;
-        color: $dark-blue-grey;
+        color: $vuetify-accent;
       }
     }
   }

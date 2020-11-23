@@ -9,8 +9,8 @@
           <p
             slot="header"
             :class="$vuetify.breakpoint.mdAndUp ?
-              'title font-weight-medium text-secondary text-center mt-2' :
-              'subheader font-weight-medium text-secondary text-center mt-2'"
+              'title font-weight-medium text-accent text-center mt-2' :
+              'subheader font-weight-medium text-accent text-center mt-2'"
           >
             {{ hourChartTitle }}
           </p>
@@ -41,8 +41,8 @@
         <p
           slot="header"
           :class="$vuetify.breakpoint.mdAndUp ?
-            'title font-weight-medium text-secondary text-center mt-2' :
-            'subheader font-weight-medium text-secondary text-center mt-2'"
+            'title font-weight-medium text-accent text-center mt-2' :
+            'subheader font-weight-medium text-accent text-center mt-2'"
         >
           {{ 'eDroplet Drinks Total: ' + drinksTotal + ' L' }}
         </p>
@@ -63,7 +63,7 @@
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <!-- eslint-disable-next-line -->
-                <v-list-tile-title class="text-secondary">{{ 'eDroplet: ' + item.macAddress + '/' + item.friendlyName }}</v-list-tile-title>
+                <v-list-tile-title class="text-accent">{{ 'eDroplet: ' + item.macAddress + '/' + item.friendlyName }}</v-list-tile-title>
                 <v-list-tile-sub-title class="text-primary">{{ 'Time: ' + $moment.utc(item.dateTime*1000).format('dddd, MMMM Do YYYY, h:mm:ss a') }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title class="text-primary">{{ 'Amount: ' + item.volumeInLitres + ' L' }}</v-list-tile-sub-title>
               </v-list-tile-content>
@@ -80,8 +80,8 @@
           <p
             slot="header"
             :class="$vuetify.breakpoint.mdAndUp ?
-              'title font-weight-medium text-secondary text-center mt-2' :
-              'subheader font-weight-medium text-secondary text-center mt-2'"
+              'title font-weight-medium text-accent text-center mt-2' :
+              'subheader font-weight-medium text-accent text-center mt-2'"
           >
             {{ weekChartTitle }}
           </p>
@@ -100,8 +100,8 @@
           <p
             slot="header"
             :class="$vuetify.breakpoint.mdAndUp ?
-              'title font-weight-medium text-secondary text-center mt-2' :
-              'subheader font-weight-medium text-secondary text-center mt-2'"
+              'title font-weight-medium text-accent text-center mt-2' :
+              'subheader font-weight-medium text-accent text-center mt-2'"
           >
             {{ dayChartTitle }}
           </p>

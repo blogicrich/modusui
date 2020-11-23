@@ -49,7 +49,7 @@
                 name="component-fade"
                 mode="out-in"
               >
-                <p class="headline font-weight-medium text-secondary ma-2">
+                <p class="headline font-weight-medium text-accent ma-2">
                   {{ getDisplayName(selectedUser) }}
                 </p>
               </transition>
@@ -75,7 +75,7 @@
                 name="component-fade"
                 mode="out-in"
               >
-                <p class="headline font-weight-medium text-secondary ma-2">
+                <p class="headline font-weight-medium text-accent ma-2">
                   {{ getDisplayName(selectedUser) }}
                 </p>
               </transition>

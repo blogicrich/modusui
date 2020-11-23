@@ -7,16 +7,14 @@
         <v-text-field
           v-if="$vuetify.breakpoint.lgAndUp"
           slot="activator"
-          class="subheader font-weight-medium text-secondary text-center"
+          class="subheader font-weight-medium text-accent text-center"
           :value="formattedDate"
           readonly
           title="Pick a date"
-        >
-          <!-- <div class="subheader font-weight-medium text-secondary text-center">{{ formattedDate }}</div> -->
-        </v-text-field>
+        />
         <v-text-field
           v-if="$vuetify.breakpoint.mdAndDown"
-          class="subheader font-weight-light text-secondary"
+          class="subheader font-weight-light text-accent"
           slot="activator"
           :value="formattedDate"
           readonly
