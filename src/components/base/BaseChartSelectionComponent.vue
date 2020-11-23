@@ -3,7 +3,7 @@
     <v-menu v-if="$vuetify.breakpoint.lgAndUp" ref="hourlyChartTypeSelector" offset-y>
       <template v-slot:activator="{ on }">
         <v-btn
-          class="text-white"
+          class="secondary--text"
           color="primary"
           v-on="on"
         >
@@ -25,7 +25,7 @@
     <v-menu v-if="$vuetify.breakpoint.mdAndDown" ref="hourlyChartTypeSelector" offset-y>
       <template v-slot:activator="{ on }">
         <v-btn
-          class="text-white"
+          class="secondary--text"
           icon
           :color="$vuetify.theme.secondary"
           v-on="on"

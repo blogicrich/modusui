@@ -15,7 +15,7 @@
           <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
         </v-btn>
       </v-tooltip>
-      <span class="text-white">{{ title }}</span>
+      <span class="secondary--text">{{ title }}</span>
     </v-flex>
   </v-layout>
 </template>

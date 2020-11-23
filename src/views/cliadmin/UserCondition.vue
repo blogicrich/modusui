@@ -197,7 +197,7 @@
           <v-container fluid>
             <v-card-title>
               <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-              <span class="title text-primary">{{ `Add conditions for: ${selected.username}` }}</span>
+              <span class="title primary--text">{{ `Add conditions for: ${selected.username}` }}</span>
             </v-card-title>
             <BaseDataTableInfoCard
               v-if="!conditionOptions.length"
@@ -277,7 +277,7 @@
             <v-list v-if="conditionOptions.length">
               <v-card-title>
                 <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-                <span class="title text-primary">Conditions for submission:</span>
+                <span class="title primary--text">Conditions for submission:</span>
               </v-card-title>
               <v-fade-transition group hide-on-leave>
                 <v-card

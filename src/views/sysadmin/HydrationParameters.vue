@@ -31,11 +31,11 @@
         <v-layout column>
           <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.mdAndUp" row align-center justify-start>
             <v-icon class="mr-3" medium color="primary">schedule</v-icon>
-            <h2 class="title text-primary">Start of the Day</h2>
+            <h2 class="title primary--text">Start of the Day</h2>
           </v-layout>
           <v-layout class="mx-4 mb-2 mt-1" v-if="$vuetify.breakpoint.smAndDown" row align-center justify-start>
             <v-icon class="mr-3" small color="primary">schedule</v-icon>
-            <h3 class="title text-primary">Start of the Day</h3>
+            <h3 class="title primary--text">Start of the Day</h3>
           </v-layout>
           <v-form ref="formStartOfDay" class="mx-4 py-2 border-primary" @keyup.enter="$event.target.nextElementSibling.focus()">
             <BaseToleranceSetter
@@ -57,11 +57,11 @@
         <v-layout column>
           <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.mdAndUp" row align-center justify-start>
             <v-icon class="mr-3" medium color="primary">schedule</v-icon>
-            <h2 class="title text-primary">End of the Day</h2>
+            <h2 class="title primary--text">End of the Day</h2>
           </v-layout>
           <v-layout class="mx-4 mb-2 mt-3" v-if="$vuetify.breakpoint.smAndDown" row align-center justify-start>
             <v-icon class="mr-3" small color="primary">schedule</v-icon>
-            <h3 class=" title text-primary">End of the Day</h3>
+            <h3 class=" title primary--text">End of the Day</h3>
           </v-layout>
           <v-form ref="formEndOfDay" class="mx-4 pb-3 border-primary">
             <BaseToleranceSetter

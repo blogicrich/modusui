@@ -24,7 +24,7 @@
           >
             table_chart
           </v-icon>
-          <h2 class="ma-1 text-white">Data Tables</h2>
+          <h2 class="ma-1 secondary--text">Data Tables</h2>
         </v-layout>
         <BaseLinkComponent
           routerTitle="Titles"
@@ -64,7 +64,7 @@
           >
             notifications_active
           </v-icon>
-          <h2 class="ma-1 text-white">Message Options</h2>
+          <h2 class="ma-1 secondary--text">Message Options</h2>
         </v-layout>
         <BaseLinkComponent
           routerTitle="Text/Email Messages"
@@ -97,7 +97,7 @@
           >
             people
           </v-icon>
-          <h2 class="ma-1 text-white">Admin Management</h2>
+          <h2 class="ma-1 secondary--text">Admin Management</h2>
         </v-layout>
         <BaseLinkComponent
           routerTitle="System Administrators"
@@ -118,7 +118,7 @@
           >
             people
           </v-icon>
-          <h2 class="ma-1 text-white">Authorised Persons</h2>
+          <h2 class="ma-1 secondary--text">Authorised Persons</h2>
         </v-layout>
         <BaseLinkComponent
           routerTitle="Personal Details"
@@ -137,7 +137,7 @@
           >
             local_drink
           </v-icon>
-          <h2 class="ma-1 text-white">User Settings</h2>
+          <h2 class="ma-1 secondary--text">User Settings</h2>
         </v-layout>
         <BaseLinkComponent
           routerTitle="User Conditions"
@@ -163,7 +163,7 @@
           >
             supervisor_account
           </v-icon>
-          <h2 class="ma-1 text-white">eDroplet Management</h2>
+          <h2 class="ma-1 secondary--text">eDroplet Management</h2>
         </v-layout>
         <BaseLinkComponent
           routerTitle="eDroplet Management"
@@ -206,7 +206,7 @@ export default {
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
   .menu-header-container {
-    background-color:$vuetify-accent;
+    background-color:var(--v-accent-base);
     border-radius:10px;
   }
 </style>
