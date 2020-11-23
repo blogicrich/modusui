@@ -37,7 +37,7 @@ export default new Router({
     {
       path: '/error',
       name: 'Error',
-      component: () => import(/* webpackChunkName: "about" */ './views/common/Error.vue')
+      component: () => import(/* webpackChunkName: "error" */ './views/common/Error.vue')
     },
     {
       path: '/landing',
