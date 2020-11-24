@@ -77,6 +77,7 @@ export default {
     setDates () {
       const date = this.$moment(Date.now()).format('YYYY-MM-DD')
       this.$store.commit('SET_DASHBOARD_DATE', date)
+      this.$store.commit('SET_MAX_DATE')
     }
   },
   mounted () {
