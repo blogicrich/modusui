@@ -8,10 +8,10 @@
       >
         {{ icon }}
       </v-icon>
-      <span class="description text-primary font-weight-bold">{{ routerTitle }}</span>
+      <span class="route-title primary--text">{{ routerTitle }}</span>
     </v-layout>
     <v-layout class="mt-2" row wrap fill-height align-center justify-start>
-      <span class="description text-secondary">{{ tooltipText }}</span>
+      <span class="route-title description">{{ tooltipText }}</span>
     </v-layout>
   </v-container>
 </template>
@@ -60,66 +60,66 @@ export default {
 <style scoped lang="scss">
   @import "./public/scss/main.scss";
   @media screen and (min-width: 340px) { // Aligned with Vuetify breakpoint values
-    .description {
+    .route-title {
       font-weight: bold;
-      color: $vuetify-primary;
+      color: var(--v-primary-base);
     }
     .enter-style {
       cursor: pointer;
-      .description {
+      .route-title {
         transition: all 0.6s ease;
         margin-left: 10px;
         font-size: 1.1em;
       }
-      .text-secondary {
+      .description {
         transition: all 0.6s ease;
         font-style: italic;
-        color: $vuetify-primary;
+        color: var(--v-primary-base);
       }
     }
     .leave-style {
       cursor: none;
-      .description {
+      .route-title {
         transition: all 0.6s ease;
         margin-left: 4px;
         font-size: 1em;
       }
-      .text-secondary {
+      .description {
         transition: all 0.6s ease;
         font-style: normal;
-        color: $vuetify-accent;
+        color: var(--v-accent-base);
       }
     }
   }
     @media screen and (min-width: 1264px) { // Aligned with Vuetify breakpoint values
-    .description {
+    .route-title {
       font-weight: bold;
-      color: $vuetify-primary;
+      color: var(--v-primary-base-base);
     }
     .enter-style {
       cursor: pointer;
-      .description {
+      .route-title {
         transition: all 0.6s ease;
         margin-left: 10px;
         font-size: 0.9em;
       }
-      .text-secondary {
+      .description {
         transition: all 0.6s ease;
         font-style: italic;
-        color: $vuetify-primary;
+        color: var(--v-primary-base-base);
       }
     }
     .leave-style {
       cursor: none;
-      .description {
+      .route-title {
         transition: all 0.6s ease;
         margin-left: 4px;
         font-size: 0.8em;
       }
-      .text-secondary {
+      .description {
         transition: all 0.6s ease;
         font-style: normal;
-        color: $vuetify-accent;
+        color: var(--v-accent-base);
       }
     }
   }
@@ -127,28 +127,28 @@ export default {
   @media screen and (min-width: 1904px) { // Aligned with Vuetify breakpoint values
     .enter-style {
       cursor: pointer;
-      .description {
+      .route-title {
         transition: all 0.6s ease;
         margin-left: 10px;
         font-size: 1.4em;
       }
-      .text-secondary {
+      .description {
         transition: all 0.6s ease;
         font-style: italic;
-        color: $vuetify-primary;
+        color: var(--v-primary-base);
       }
     }
     .leave-style {
       cursor: none;
-      .description {
+      .route-title {
         transition: all 0.6s ease;
         margin-left: 4px;
         font-size: 1.3em;
       }
-      .text-secondary {
+      .description {
         transition: all 0.6s ease;
         font-style: normal;
-        color: $vuetify-accent;
+        color: var(--v-accent-base);
       }
     }
   }

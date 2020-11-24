@@ -11,9 +11,8 @@
       :headers="headers"
       :items="users"
       :expandable="false"
+      :hasRowContent="true"
       :tableTitleIcon="headerIcon"
-      primaryColor="primary"
-      secondaryColor="secondary"
       :loading="loadingUserSettings"
       :loaded="!loadingUserSettings"
       :error="errorUserSettings"
@@ -94,7 +93,7 @@
                 column
               >
                 <v-card-title
-                  class="headline text-secondary"
+                  class="title accent--text"
                 >
                   {{ `Set Wake and Sleep Times for User: ${selected.username}` }}
                 </v-card-title>
@@ -174,7 +173,7 @@
                   </v-flex>
                 </v-layout>
                 <v-card-title
-                  class="headline text-secondary"
+                  class="title accent--text"
                 >
                   {{ `Set Intervals for User: ${selected.username}` }}
                 </v-card-title>

@@ -20,7 +20,7 @@
           </v-list>
         </v-card>
       </v-menu>
-      <p style="display:inline;text-align:center;" class="text-white" dark icon>{{ timeLeft }}</p>
+      <p style="display:inline;text-align:center;" class="secondary--text" dark icon>{{ timeLeft }}</p>
       <v-layout row>
         <v-flex offset-xs1 xs10>
           <v-slider dark color="white" class="progressSlider" step="0.1" tick-size="0.1" always-dirty @click.native="setPosition()" v-model="percentage" :disabled="!loaded" />
@@ -168,7 +168,7 @@ export default {
 <style lang="scss" scoped>
 @import "./public/scss/main.scss";
 .audio-card {
-  background-color: $vuetify-primary;
+  background-color: var(--v-primary-base);
   border-radius: 5em;
 }
 

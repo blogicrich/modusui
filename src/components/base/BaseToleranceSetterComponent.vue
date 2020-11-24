@@ -5,7 +5,7 @@
       v-if="$vuetify.breakpoint.smAndUp" grid-list row fill-height align-center justify-center
     >
       <v-flex xs8>
-        <h2 class="subheader text-primary">{{ fieldLabel }}</h2>
+        <h2 class="subheader primary--text">{{ fieldLabel }}</h2>
       </v-flex>
       <v-text-field
         :color="color"

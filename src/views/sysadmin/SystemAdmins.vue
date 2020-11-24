@@ -68,12 +68,12 @@
               <!-- Warning message - Shown if editing logged in user -->
               <v-layout v-if="isCurrentUser" row fill-height align-center justify-center>
                 <v-icon class="mr-2" medium :color="$vuetify.theme.warning">info</v-icon>
-                <span class="text-warning headline font-weight-bold text-center-xs ma-2">You are editing the user currently logged into the portal. If you successfully change the password you will be directed back to the log in screen</span>
+                <span class="warning--text headline font-weight-bold text-xs-center-xs ma-2">You are editing the user currently logged into the portal. If you successfully change the password you will be directed back to the log in screen</span>
               </v-layout>
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
-                <span v-show="editFormVisible" class="pg-subheader text-primary">Change System Administrator Password</span>
-                <span v-show="newFormVisible" class="pg-subheader text-primary">Set System Administrator Password</span>
+                <span v-show="editFormVisible" class="title primary--text">Change System Administrator Password</span>
+                <span v-show="newFormVisible" class="title primary--text">Set System Administrator Password</span>
               </v-card-title>
               <v-card-text>
                 <v-text-field
@@ -124,7 +124,7 @@
             <v-container>
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
-                <span class="pg-subheader text-primary">Change System Admin Details</span>
+                <span class="title primary--text">Change System Admin Details</span>
                 <v-spacer />
                 <!-- Delete Confirmation Dialog -->
                 <v-dialog v-model="confirmationDialog" persistent max-width="500">
@@ -240,7 +240,7 @@
             <v-container>
               <v-card-title>
                 <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
-                <span class="pg-subheader text-primary">Add new System Administrator</span>
+                <span class="title primary--text">Add new System Administrator</span>
               </v-card-title>
               <v-card-text>
                 <v-text-field

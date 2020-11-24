@@ -3,7 +3,7 @@
     <v-container v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar class="pa-1 my-1 elevation-1" flat color="white">
         <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
-        <h2 class="headline text-primary font-weight-medium ml-1">{{ tableTitle }}</h2>
+        <h2 class="headline primary--text font-weight-medium ml-1">{{ tableTitle }}</h2>
         <v-divider class="mx-2" inset vertical />
         <v-spacer />
         <v-fade-transition mode="out-in" appear>
@@ -63,12 +63,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="title text-primary text-xs-left"
+            class="title primary--text text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="text-primary text-xs-left" slot="activator">{{ header.text }}</span>
+              <span class="primary--text text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -88,7 +88,7 @@
               :color="primaryColor"
             >
               <div
-                class="body-2 text-xs-left text-accent font-weight-regular"
+                class="body-2 text-xs-left accent--text font-weight-regular"
               >
                 {{ props.item[header.value] }}
               </div>
@@ -183,7 +183,7 @@
           <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
             <v-card class="pa-3">
-              <v-card-title class="title text-primary">{{ delDialogTitle }}</v-card-title>
+              <v-card-title class="title primary--text">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -198,7 +198,7 @@
               <v-card class="pa-3">
                 <v-layout row justify-center align-center>
                   <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="title text-primary">{{ newDialogTitle }}</span>
+                  <span class="title primary--text">{{ newDialogTitle }}</span>
                 </v-layout>
                 <v-card-text>
                   <v-container>
@@ -241,7 +241,7 @@
               <v-card class="pa-3">
                 <v-layout row justify-start align-center>
                   <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="title text-primary">{{ editDialogTitle }}</span>
+                  <span class="title primary--text">{{ editDialogTitle }}</span>
                 </v-layout>
                 <v-card-text>
                   <v-container>
@@ -296,7 +296,6 @@
         <v-fade-transition>
           <v-btn
             v-if="selected.length > 0 && editPerms.update"
-            class="std-btn"
             @click="editDialog = true"
             :color="primaryColor"
             large
@@ -308,7 +307,6 @@
         <v-fade-transition>
           <v-btn
             v-if="selected.length > 0 && editPerms.delete"
-            class="std-btn"
             @click="delDialog = true"
             :color="primaryColor"
             large
@@ -320,7 +318,6 @@
         <v-fade-transition>
           <v-btn
             v-if="items.length > 0"
-            class="std-btn"
             @click="searchDisplay"
             :color="primaryColor"
             large
@@ -430,12 +427,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="subheader text-primary text-xs-left"
+            class="subheader primary--text text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="text-primary font-weight-medium" slot="activator">{{ header.text }}</span>
+              <span class="primary--text font-weight-medium" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -454,7 +451,7 @@
               :key="header.text"
             >
               <div
-                class="body-2 text-xs-left text-accent font-weight-regular"
+                class="body-2 text-xs-left accent--text font-weight-regular"
               >
                 {{ props.item[header.value] }}
               </div>
@@ -496,7 +493,7 @@
           <!-- Delete confirmation dialog -->
           <v-dialog v-model="delDialog" persistent max-width="500">
             <v-card class="pa-3">
-              <v-card-title class="title text-primary">{{ delDialogTitle }}</v-card-title>
+              <v-card-title class="title primary--text">{{ delDialogTitle }}</v-card-title>
               <v-card-text class="ma-2">{{ msgDel }}</v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -511,7 +508,7 @@
               <v-card class="pa-3">
                 <v-layout row justify-center align-center>
                   <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
-                  <span class="title text-primary">{{ newDialogTitle }}</span>
+                  <span class="title primary--text">{{ newDialogTitle }}</span>
                 </v-layout>
                 <v-card-text>
                   <v-container>
@@ -562,7 +559,7 @@
                 <v-layout>
                   <v-layout row fill-height justify-center align-center>
                     <v-icon class="mr-2" large :color="primaryColor">{{ recordIcon }}</v-icon>
-                    <span class="title text-primary">{{ editDialogTitle }}</span>
+                    <span class="title primary--text">{{ editDialogTitle }}</span>
                   </v-layout>
                 </v-layout>
                 <v-card-text>
@@ -783,4 +780,10 @@ export default {
 
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
+
+tr:hover td {
+  background-color: var(--v-secondary-darken1);
+  cursor: pointer;
+}
+
 </style>

@@ -70,7 +70,7 @@
     </v-layout>
     <v-card class="mx-4" v-if="!messagesLoading && messages">
       <v-form ref="smsEmailMessagesForm">
-        <v-card-title class="text-primary title">
+        <v-card-title class="primary--text title">
           {{ getterSelectedMessage.alertTypeDescription + ' : ' + getterSelectedMessage.communicationTypeDescription }}
         </v-card-title>
         <v-card-text>

@@ -127,17 +127,17 @@ export default {
   background-color: inherit;
 }
 h2 {
-  color: $vuetify-accent;
+  color: var(--v-accent-base);
 }
 button:hover {
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
   float: right;
-  color: $vuetify-accent;
+  color: var(--v-accent-base);
   background-color:inherit;
   border-style: solid;
   border-radius: 1vh;
-  border-color:  $vuetify-primary;
+  border-color: var(--v-primary-base);
   box-shadow:0.1vh 0.1vh rgba(0, 181, 229,0.25), 0.5vh 0.5vh rgba(0, 181, 229,0.08);
   padding: 1vh;
   cursor: pointer;

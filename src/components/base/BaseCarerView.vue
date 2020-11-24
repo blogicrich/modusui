@@ -27,7 +27,7 @@
     </BaseViewHeader>
     <!-- ROUTE VIEW -->
     <v-slide-y-transition mode="out-in">
-      <router-view class="pa-0"/>
+      <router-view class="pa-0" />
     </v-slide-y-transition>
   </v-container>
 </template>
@@ -77,6 +77,7 @@ export default {
     setDates () {
       const date = this.$moment(Date.now()).format('YYYY-MM-DD')
       this.$store.commit('SET_DASHBOARD_DATE', date)
+      this.$store.commit('SET_MAX_DATE')
     }
   },
   mounted () {
@@ -90,7 +91,7 @@ export default {
 @import "./public/scss/main.scss";
 
 .v-card {
-  background-color: $white;
+  background-color: white;
   padding: 5px;
 }
 

@@ -23,7 +23,7 @@
           <!-- DESKTOP -->
           <v-flex
             v-if="$vuetify.breakpoint.lgAndUp"
-            class="text-ellipsis"
+            class="text-truncate"
           >
             <v-layout
               row
@@ -41,7 +41,7 @@
                 name="component-fade"
                 mode="out-in"
               >
-                <p class="headline font-weight-medium text-primary text-ellipsis ma-2">
+                <p class="headline font-weight-medium primary--text text-truncate ma-2">
                   {{ $vuetify.breakpoint.xlOnly ? 'Connected eDroplet User: ' : 'eDroplet User: ' }}
                 </p>
               </transition>
@@ -49,7 +49,7 @@
                 name="component-fade"
                 mode="out-in"
               >
-                <p class="headline font-weight-medium text-accent ma-2">
+                <p class="headline font-weight-medium accent--text ma-2">
                   {{ getDisplayName(selectedUser) }}
                 </p>
               </transition>
@@ -75,7 +75,7 @@
                 name="component-fade"
                 mode="out-in"
               >
-                <p class="headline font-weight-medium text-accent ma-2">
+                <p class="headline font-weight-medium accent--text ma-2">
                   {{ getDisplayName(selectedUser) }}
                 </p>
               </transition>
@@ -141,7 +141,7 @@
       </v-list-tile>
       <v-list-tile v-if="searchResults.length === 0">
         <v-flex>
-          <p class="text-primary text-center"> NO USERS MATCHING <br>{{ search }}</p>
+          <p class="primary--text text-xs-center"> NO USERS MATCHING <br>{{ search }}</p>
         </v-flex>
       </v-list-tile>
     </v-list>
@@ -215,7 +215,7 @@ export default {
 @import "./public/scss/main.scss";
 
 .selectedUser {
-  background-color: $table-row-hover;
+  background-color: var(--v-tertiary-base);
 }
 
 .text-overflow-ellipsis {

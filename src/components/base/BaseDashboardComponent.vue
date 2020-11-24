@@ -72,7 +72,7 @@ export default {
 @import "./public/scss/main.scss";
 
 .v-card {
-  background-color: $white;
+  background-color: white;
   padding: 5px;
 }
 

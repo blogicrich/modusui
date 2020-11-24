@@ -56,6 +56,6 @@ export default {
 <style lang="scss" scoped>
 @import "./public/scss/main.scss";
 .cardBorder {
-  border: 3px solid $vuetify-primary;
+  border: 3px solid var(--v-primary-base);
 }
 </style>
