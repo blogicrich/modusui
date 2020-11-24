@@ -215,7 +215,7 @@ export default {
 @import "./public/scss/main.scss";
 
 .selectedUser {
-  background-color: var(--v-accent-lighten5);
+  background-color: var(--v-tertiary-base);
 }
 
 .text-overflow-ellipsis {
