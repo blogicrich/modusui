@@ -2,8 +2,8 @@
   <div>
     <v-container v-if="this.$vuetify.breakpoint.lgAndUp" fluid>
       <v-toolbar v-if="!justRows" class="pa-1 my-1 elevation-1" flat color="white">
-        <v-icon class="mr-2" medium :color="primaryColor">{{ tableTitleIcon }}</v-icon>
-        <h2 class="headline text-primary font-weight-medium ml-1">{{ tableTitle }}</h2>
+        <v-icon class="mr-2" medium :color="$vuetify.theme.primary">{{ tableTitleIcon }}</v-icon>
+        <h2 class="headline primary--text font-weight-medium ml-1">{{ tableTitle }}</h2>
         <v-divider class="mx-2" inset vertical />
         <v-spacer />
         <v-flex v-if="searchBarHidden" lg-3 xl-2>
@@ -22,10 +22,10 @@
         <v-btn
           v-if="tableActionButton"
           @click="$emit('action-button-pressed')"
-          :color="primaryColor"
+          :color="$vuetify.theme.primary"
         >
-          {{ actionButtonTitle }}
-          <v-icon class="ml-2">{{ actionButtonIcon }}</v-icon>
+          <div class="body-2 text-xs-center secondary--text">{{ actionButtonTitle }}</div>
+          <v-icon class="ml-2" :color="$vuetify.theme.secondary">{{ actionButtonIcon }}</v-icon>
         </v-btn>
       </v-toolbar>
       <v-data-table
@@ -33,7 +33,7 @@
         :headers="headers"
         :items="items"
         :search="search"
-        :expand="expand"
+        :expand="expandable"
         v-model="selected"
         :item-key="itemKey"
         select-all
@@ -48,12 +48,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="title text-primary text-xs-left"
+            class="title primary--text text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="subheader text-primary text-xs-left" slot="activator">{{ header.text }}</span>
+              <span class="subheader primary--text text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -61,15 +61,30 @@
         </template>
         <!-- Table: Row data-->
         <template slot="items" slot-scope="props">
-          <tr ref="clickableRow" @click="(props.expanded = !props.expanded) && rowClicked(props)" :class="props.expanded ? 'select' : 'unselect'">
+          <tr
+            ref="clickableRow"
+            @click="(props.expanded = !props.expanded) && rowClicked(props)"
+            :class="(props.expanded && hasRowContent) ? 'select' : 'unselect'"
+          >
             <td
               class="text-xs-left"
               :hidden="header.hidden"
               v-for="header in headers"
               :key="header.text"
-              :color="primaryColor"
+              :color="$vuetify.theme.primary"
             >
-              <div class="body-2 text-xs-left text-secondary font-weight-regular">{{ props.item[header.value] }}</div>
+              <div class="body-2 text-xs-left accent--text font-weight-regular">{{ props.item[header.value] }}</div>
+            </td>
+            <td>
+              <v-layout row align-center justify-end>
+                <v-icon
+                  v-if="hasRowContent"
+                  :color="$vuetify.theme.accent"
+                  large
+                >
+                  {{ (props.expanded && hasRowContent) ? 'expand_less' : 'expand_more' }}
+                </v-icon>
+              </v-layout>
             </td>
           </tr>
         </template>
@@ -87,7 +102,10 @@
             :loading="loading"
             :loaded="loaded"
             :error="error"
-            :color="primaryColor"
+            :color="$vuetify.theme.primary"
+            :actionBtn="infoActionButton"
+            :actionBtnTitle="infoActionBtnTitle"
+            @action-button-pressed="$emit('info-action-button-pressed')"
           />
         </template>
       </v-data-table>
@@ -101,7 +119,7 @@
                 v-model="pagination.rowsPerPage"
                 :items="rows"
                 label="rows"
-                :color="primaryColor"
+                :color="$vuetify.theme.primary"
               />
             </v-flex>
             <v-pagination
@@ -124,11 +142,11 @@
               :open-on-hover="hover"
               :transition="transition"
             >
-              <v-btn slot="activator" v-model="fab" :color="primaryColor" dark fab>
+              <v-btn slot="activator" v-model="fab" :color="$vuetify.theme.primary" dark fab>
                 <v-icon>menu</v-icon>
                 <v-icon>close</v-icon>
               </v-btn>
-              <v-btn fab dark medium :color="primaryColor" @click="searchDisplay">
+              <v-btn fab dark medium :color="$vuetify.theme.primary" @click="searchDisplay">
                 <v-icon dark>search</v-icon>
               </v-btn>
             </v-speed-dial>
@@ -139,13 +157,12 @@
         <v-fade-transition>
           <v-btn
             v-if="items.length > 0"
-            class="std-btn"
             @click="searchDisplay"
-            :color="primaryColor"
+            :color="$vuetify.theme.primary"
             large
           >
-            search
-            <v-icon class="ml-2">search</v-icon>
+            <div class="secondary--text">search</div>
+            <v-icon :color="$vuetify.theme.secondary" class="ml-2">search</v-icon>
           </v-btn>
         </v-fade-transition>
       </v-layout>
@@ -166,7 +183,7 @@
         :open-on-hover="hover"
         :transition="transition"
       >
-        <v-btn slot="activator" v-model="fab" :color="primaryColor" dark small fab>
+        <v-btn slot="activator" v-model="fab" :color="$vuetify.theme.primary" dark small fab>
           <v-icon>menu</v-icon>
           <v-icon>close</v-icon>
         </v-btn>
@@ -196,7 +213,7 @@
         :headers="headers"
         :items="items"
         :search="search"
-        :expand="expand"
+        :expand="expandable"
         v-model="selected"
         :item-key="itemKey"
         select-all
@@ -211,12 +228,12 @@
             v-for="header in props.headers"
             :key="header.text"
             :hidden="header.hidden"
-            class="subheader text-primary font-weight-medium text-xs-left"
+            class="subheader primary--text font-weight-medium text-xs-left"
             :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
             @click="changeSort(header.value)"
           >
             <v-tooltip bottom>
-              <span class="subheader text-primary font-weight-medium text-xs-left" slot="activator">{{ header.text }}</span>
+              <span class="subheader primary--text font-weight-medium text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
             <v-icon small>arrow_upward</v-icon>
@@ -230,7 +247,18 @@
               :hidden="header.hidden"
               :key="header.text"
             >
-              <div class="body-2 text-xs-left text-secondary font-weight-regular">{{ props.item[header.value] }}</div>
+              <div class="body-2 text-xs-left accent--text font-weight-regular">{{ props.item[header.value] }}</div>
+            </td>
+            <td>
+              <v-layout row align-center justify-end>
+                <v-icon
+                  v-if="hasRowContent"
+                  :color="$vuetify.theme.accent"
+                  medium
+                >
+                  {{ (props.expanded && hasRowContent) ? 'expand_less' : 'expand_more' }}
+                </v-icon>
+              </v-layout>
             </td>
           </tr>
         </template>
@@ -238,10 +266,14 @@
           <BaseDataTableInfoCard
             :errorMsg="errorMsg"
             :loadingMsg="loadingMsg"
+            :loadedMsg="loadedMsg"
             :loading="loading"
-            :loaded="loading"
+            :loaded="loaded"
             :error="error"
-            :color="primaryColor"
+            :color="$vuetify.theme.primary"
+            :actionBtn="infoActionButton"
+            :actionBtnTitle="infoActionBtnTitle"
+            @action-button-pressed="$emit('info-action-button-pressed')"
           />
         </template>
         <!-- Table Row Expanded Data -->
@@ -260,7 +292,7 @@
                 v-model="pagination.rowsPerPage"
                 :items="rows"
                 label="rows"
-                :color="primaryColor"
+                :color="$vuetify.theme.primary"
               />
             </v-flex>
             <v-pagination
@@ -281,7 +313,7 @@
 import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 
 export default {
-  name: 'BaseDisplayDataTable',
+  name: 'SubDisplayTable',
   components: {
     BaseDataTableInfoCard
   },
@@ -313,21 +345,20 @@ export default {
     loadingMsg: String,
     loadedMsg: String,
     tableTitle: String,
+    infoActionBtnTitle: String,
     // Styling
-    primaryColor: String,
-    secondaryColor: String,
     searchLabel: String,
     tableTitleIcon: String,
     // Booleans
-    expand: {
-      type: Boolean,
-      default: false
-    },
     expandable: {
       type: Boolean,
       default: false
     },
     justRows: {
+      type: Boolean,
+      default: false
+    },
+    hasRowContent: {
       type: Boolean,
       default: false
     },
@@ -337,7 +368,8 @@ export default {
     // Table Action Button
     actionButtonTitle: String,
     actionButtonIcon: String,
-    tableActionButton: Boolean
+    tableActionButton: Boolean,
+    infoActionButton: Boolean
   },
   methods: {
     pages () {
@@ -370,4 +402,21 @@ export default {
 
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
+
+.select {
+  td {
+    background-color: var(--v-tertiary-base);
+    cursor: pointer;
+  }
+}
+.unselect {
+  td {
+    background-color: inherit;
+    cursor: inherit;
+  }
+}
+tr:hover td {
+  background-color: var(--v-secondary-darken1);
+  cursor: pointer;
+}
 </style>
