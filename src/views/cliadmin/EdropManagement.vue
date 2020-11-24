@@ -7,7 +7,6 @@
       hasDivider
     />
     <sub-display-table-component
-      class="mx-4"
       :items="items"
       itemKey="baseId"
       :headers="headers"
@@ -20,16 +19,32 @@
       primaryColor="primary"
       secondaryColor="secondary"
       @row-clicked="handleRowClick"
+      @action-button-pressed="wizardDialog = true"
     />
-    <v-dialog v-model="editDialog">
+    <v-dialog v-model="editDialog" max-width="700">
       <v-card>
         <v-card-title primary-title>
-          <div>
+          <v-container fluid pa-0>
             <div class="headline">Edit Connected Droplet</div>
             <base-droplet-editor
+              v-if="editDialog"
               :baseId="editBaseId"
+              @done-editing="editDialog = false"
             />
-          </div>
+          </v-container>
+        </v-card-title>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="wizardDialog" max-width="700">
+      <v-card>
+        <v-card-title primary-title>
+          <v-container fluid pa-0>
+            <div class="headline">Add Connected Droplet to account</div>
+            <base-droplet-wizard
+              v-if="wizardDialog"
+              @done="wizardDialog = false"
+            />
+          </v-container>
         </v-card-title>
       </v-card>
     </v-dialog>
@@ -37,11 +52,13 @@
 </template>
 
 <script>
-import SubDisplayTableComponent from '../../components/sub/SubDisplayTableComponent.vue'
-import BaseViewHeaderComponent from '../../components/base/BaseViewHeaderComponent.vue'
-import BaseDropletEditor from '../../components/base/BaseDropletEditor.vue'
+import SubDisplayTableComponent from '@/components/sub/SubDisplayTableComponent.vue'
+import BaseViewHeaderComponent from '@/components/base/BaseViewHeaderComponent.vue'
+import BaseDropletEditor from '@/components/base/BaseDropletEditor.vue'
+import BaseDropletWizard from '@/components/base/BaseDropletWizard'
 
 import { mapState } from 'vuex'
+import Titles from '../sysadmin/Titles.vue'
 
 export default {
   name: 'EdropletManagement',
@@ -78,6 +95,7 @@ export default {
     return {
       editDialog: false,
       editBaseId: null,
+      wizardDialog: false,
       headers: [
         {
           value: 'baseId',
@@ -116,7 +134,8 @@ export default {
   components: {
     SubDisplayTableComponent,
     BaseViewHeaderComponent,
-    BaseDropletEditor
+    BaseDropletEditor,
+    BaseDropletWizard
   }
 }
 </script>
