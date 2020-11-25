@@ -56,7 +56,7 @@
               <span class="subheader primary--text text-xs-left" slot="activator">{{ header.text }}</span>
               <span>{{ header.text }}</span>
             </v-tooltip>
-            <v-icon small>arrow_upward</v-icon>
+            <v-icon small class="mx-1">arrow_upward</v-icon>
           </th>
         </template>
         <!-- Table: Row data-->
@@ -80,7 +80,7 @@
                 <v-icon
                   v-if="hasRowContent"
                   :color="$vuetify.theme.accent"
-                  large
+                  medium
                 >
                   {{ (props.expanded && hasRowContent) ? 'expand_less' : 'expand_more' }}
                 </v-icon>
@@ -241,7 +241,11 @@
         </template>
         <!-- Table: Row data-->
         <template slot="items" slot-scope="props">
-          <tr ref="clickableRow" @click="(props.expanded = !props.expanded) && rowClicked(props)">
+          <tr
+            ref="clickableRow"
+            @click="(props.expanded = !props.expanded) && rowClicked(props)"
+            :class="(props.expanded && hasRowContent) ? 'select' : 'unselect'"
+          >
             <td
               v-for="header in headers"
               :hidden="header.hidden"
