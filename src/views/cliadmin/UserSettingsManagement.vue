@@ -14,8 +14,10 @@
       :hasRowContent="true"
       :tableTitleIcon="headerIcon"
       :loading="loadingUserSettings"
-      :loaded="!loadingUserSettings"
+      :loaded="!loadingUserSettings && !errorUserSettings"
       :error="errorUserSettings"
+      :infoActionButton="errorUserSettings ? true : false"
+      :infoActionBtnTitle="'Reload User Settings'"
       errorMsg="Error loading User Settings records..."
       loadingMsg="Loading User Settings..."
       loadedMsg="No User records to display"
@@ -23,6 +25,7 @@
       searchLabel="Search Records..."
       tableTitle="User Settings Records"
       @row-clicked="setSelectedUser"
+      @info-action-button-pressed="$store.dispatch('setCliAdminUserSettings')"
     >
       <v-card
         slot="expandedRow"
@@ -47,44 +50,33 @@
                 align-center
               >
                 <transition-group name="fade" mode="out-in" appear>
-                  <v-btn
-                    key="settingsRefreshBtn"
+                  <RowButton
+                    key="settingsResetBtn"
+                    :btnColor="$vuetify.theme.primary"
+                    :btnIconColor="$vuetify.theme.primary"
+                    :btnTitle="'RESET'"
                     :disabled="parametersPristine || !editing"
-                    :color="$vuetify.theme.primary"
-                    dark
-                    @click="$store.commit('SET_SELECTED_USER_SETTINGS', { userId: selected.userId })"
-                  >
-                    <v-icon class="mr-2" small>
-                      refresh
-                    </v-icon>
-                    {{ 'REFRESH' }}
-                  </v-btn>
-                  <v-btn
+                    :icon="'refresh'"
+                    :iconColor="$vuetify.theme.secondary"
+                    @row-button-clicked="$store.commit('SET_SELECTED_USER_SETTINGS', { userId: selected.userId })"
+                  />
+                  <RowButton
                     key="settingsSaveBtn"
+                    :btnColor="$vuetify.breakpoint.smAndDown ? $vuetify.theme.success : $vuetify.theme.primary"
+                    :btnTitle="'SAVE'"
                     :disabled="parametersPristine || !editing"
-                    :color="$vuetify.theme.primary"
-                    dark
-                    @click="updateUserSettings()"
-                  >
-                    <v-icon class="mr-2" small>
-                      save
-                    </v-icon>
-                    {{ 'SAVE' }}
-                  </v-btn>
-                  <v-btn
+                    :icon="'save'"
+                    :iconColor="$vuetify.theme.secondary"
+                    @row-button-clicked="updateUserSettings()"
+                  />
+                  <RowButton
                     key="settingsEditBtn"
-                    :color="$vuetify.theme.primary"
-                    dark
-                    @click="editing = !editing"
-                  >
-                    <v-icon
-                      class="mr-2"
-                      small
-                    >
-                      {{ (editing) ? 'lock_open' : 'lock' }}
-                    </v-icon>
-                    {{ 'EDIT' }}
-                  </v-btn>
+                    :btnColor="$vuetify.theme.primary"
+                    :btnTitle="'EDIT'"
+                    :icon="editing ? 'lock_open' : 'lock'"
+                    :iconColor="$vuetify.theme.secondary"
+                    @row-button-clicked="editing = !editing"
+                  />
                 </transition-group>
               </v-layout>
               <!-- EDIT ROWS -->
@@ -208,22 +200,17 @@
                   </v-flex>
                 </v-layout>
               </v-layout>
-              <!-- NO SETTINGS RECORD CARD  -->
-              <BaseDataTableInfoCard
-                v-if="!users.length && loadingUserSettings"
-                key="noSettings"
-                :loadedMsg="`No user settings data for user: ${selected.username}.`"
-                :loaded="!loadingUserSettings"
-                :color="$vuetify.theme.primary"
-              />
               <!-- UPDATE PROGRESS -->
               <BaseDataTableInfoCard
                 key="conditionsProgress"
                 :loadingMsg="`Updating ${selected.username} settings.`"
                 errorMsg="Error retrieving User Settings"
-                :loading="loadingUserSettings || updatingUserSettings || deletingUserSettings"
+                :loading="updatingUserSettings"
                 :error="errorUserSettings"
                 :color="$vuetify.theme.primary"
+                :actionBtn="errorUserSettings ? true : false"
+                :actionBtnTitle="`RELOAD SETTINGS FOR ${selected.username}`"
+                @action-button-pressed="$store.dispatch('setCliAdminUserSettings')"
               />
             </v-container>
           </transition-group>
@@ -238,6 +225,7 @@
 import { mapState } from 'vuex'
 import SubDisplayTable from '@/components/sub/SubDisplayTableComponent.vue'
 import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
+import RowButton from '@/components/base/BaseDisplayTableRowBtn.vue'
 import validation from '@/mixins/validation'
 
 export default {
@@ -245,7 +233,8 @@ export default {
   mixins: [validation],
   components: {
     SubDisplayTable,
-    BaseDataTableInfoCard
+    BaseDataTableInfoCard,
+    RowButton
   },
   computed: {
     ...mapState({
@@ -396,7 +385,7 @@ export default {
     this.$store.dispatch('setCliAdminUserSettings')
   },
   destroyed () {
-    this.$store.commit('SET_SELECTED_USER_SETTINGS')
+    this.$store.commit('RESET_CLIADMIN_USER_SETTINGS_STORE_STATE')
   }
 }
 

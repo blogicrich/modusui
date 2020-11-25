@@ -16,10 +16,12 @@
       :tableActionButton="selectedHasConditions"
       actionButtonIcon="add"
       actionButtonTitle="Add new User Condition"
+      :infoActionButton="errorUserConditions ? true : false"
+      :infoActionBtnTitle="'Reload User Conditions'"
       :loading="loadingUserConditions"
-      :loaded="!loadingUserConditions"
+      :loaded="!loadingUserConditions && !errorUserConditions && userConditions.length > 0"
       :error="errorUserConditions"
-      errorMsg="Error loading User Condition records..."
+      errorMsg="Error loading User Condition records."
       loadingMsg="Loading User Conditions..."
       loadedMsg="No users records to display"
       item-key="userId"
@@ -27,6 +29,7 @@
       tableTitle="User Condition Records"
       @row-clicked="setSelectedUser"
       @action-button-pressed="openDialog"
+      @info-action-button-pressed="$store.dispatch('fetchCliAdminUserConditions')"
     >
       <v-card
         slot="expandedRow"
@@ -50,45 +53,95 @@
                 justify-end
                 align-center
               >
-                <transition-group name="fade" mode="out-in" appear>
+                <transition-group
+                  name="fade"
+                  mode="out-in"
+                  appear
+                >
                   <v-btn
-                    key="conditionsRefreshBtn"
-                    :disabled="!editing || parametersPristine"
-                    :color="$vuetify.theme.primary"
-                    dark
+                    key="conditionsDeleteBtn"
+                    v-show="$vuetify.breakpoint.mdAndDown"
+                    v-bind="buttonType"
+                    :disabled="!editing"
+                    :color="$vuetify.breakpoint.smAndDown ? '' : $vuetify.theme.error"
                     @click="$store.commit('RESET_SELECTED_USER_CONDITIONS', { userId: selected.userId })"
                   >
-                    <v-icon class="mr-2" small>
+                    <v-icon
+                      class="mr-2"
+                      medium
+                      :color="$vuetify.breakpoint.smAndDown ? $vuetify.theme.error : $vuetify.theme.secondary"
+                    >
+                      delete
+                    </v-icon>
+                    <div
+                      v-if="$vuetify.breakpoint.mdAndUp"
+                      class="secondary--text"
+                    >
+                      {{ 'DELETE' }}
+                    </div>
+                  </v-btn>
+                  <v-btn
+                    key="conditionsRefreshBtn"
+                    v-bind="buttonType"
+                    :disabled="!editing || parametersPristine"
+                    :color="$vuetify.breakpoint.smAndDown ? '' : $vuetify.theme.primary"
+                    @click="$store.commit('RESET_SELECTED_USER_CONDITIONS', { userId: selected.userId })"
+                  >
+                    <v-icon
+                      class="mr-2"
+                      v-bind="iconType"
+                      :color="$vuetify.breakpoint.smAndDown ? $vuetify.theme.primary : $vuetify.theme.secondary"
+                    >
                       refresh
                     </v-icon>
-                    {{ 'REFRESH' }}
+                    <div
+                      v-if="$vuetify.breakpoint.mdAndUp"
+                      class="secondary--text"
+                    >
+                      {{ 'RESET' }}
+                    </div>
                   </v-btn>
                   <v-btn
                     key="conditionsSaveBtn"
+                    v-bind="buttonType"
                     :disabled="parametersPristine || !editFormValid"
-                    :color="$vuetify.theme.primary"
-                    dark
+                    :color="$vuetify.breakpoint.smAndDown ? '' : $vuetify.theme.primary"
                     @click="updateUserConditions()"
                   >
-                    <v-icon class="mr-2" small>
+                    <v-icon
+                      class="mr-2 small"
+                      v-bind="iconType"
+                      :color="$vuetify.breakpoint.smAndDown ? $vuetify.theme.success : $vuetify.theme.secondary"
+                    >
                       save
                     </v-icon>
-                    {{ 'SAVE' }}
+                    <div
+                      v-if="$vuetify.breakpoint.mdAndUp"
+                      class="secondary--text"
+                    >
+                      {{ 'SAVE' }}
+                    </div>
                   </v-btn>
                   <v-btn
                     key="conditionsEditBtn"
                     v-if="selectedHasConditions"
-                    :color="$vuetify.theme.primary"
-                    dark
+                    v-bind="buttonType"
+                    :color="$vuetify.breakpoint.smAndDown ? '' : $vuetify.theme.primary"
                     @click="editing = !editing"
                   >
                     <v-icon
                       class="mr-2"
-                      small
+                      v-bind="iconType"
+                      :color="$vuetify.breakpoint.smAndDown ? $vuetify.theme.primary : $vuetify.theme.secondary"
                     >
                       {{ (editing) ? 'lock_open' : 'lock' }}
                     </v-icon>
-                    {{ 'EDIT' }}
+                    <div
+                      v-if="$vuetify.breakpoint.mdAndUp"
+                      class="secondary--text"
+                    >
+                      {{ 'EDIT' }}
+                    </div>
                   </v-btn>
                 </transition-group>
               </v-layout>
@@ -98,36 +151,40 @@
                 v-for="(item, index) in selected.conditions"
                 :key="item.description + '-' + `${index}`"
               >
-                <v-flex>
+                <v-layout :class="$vuetify.breakpoint.mdAndDown ?
+                  'column justify-center' :
+                  'row fill-height align-center justify-center'"
+                >
+                  <v-text-field
+                    v-show="showField(parameter)"
+                    v-for="(value, parameter) in item"
+                    :key="parameter"
+                    :disabled="(parameter !== 'hydrationAdjustment' || !editing) ? true : false"
+                    :value="value"
+                    :label="(parameter === 'hydrationAdjustment') ? 'adjustment' : parameter"
+                    :color="$vuetify.theme.primary"
+                    :rules="parameter === 'hydrationAdjustment' ?
+                      [conditionValidation.generic, conditionValidation.threeDp] : []"
+                    class="ma-2"
+                    outline
+                    @input="$store.commit('UPDATE_SELECTED_USER_CONDITIONS', {
+                      index: index,
+                      parameter: parameter,
+                      value: $event
+                    })"
+                  />
+                </v-layout>
+                <!-- EDIT ROW BUTTONS -->
+                <v-flex
+                  v-if="$vuetify.breakpoint.lgAndUp"
+                  shrink
+                >
                   <v-layout
                     row
-                    align-center
-                    justify-center
                     fill-height
+                    justify-center
+                    align-center
                   >
-                    <v-text-field
-                      v-show="showField(parameter)"
-                      v-for="(value, parameter) in item"
-                      :key="parameter"
-                      :disabled="(parameter !== 'hydrationAdjustment' || !editing) ? true : false"
-                      :value="value"
-                      :label="(parameter === 'hydrationAdjustment') ? 'adjustment' : parameter"
-                      :color="$vuetify.theme.primary"
-                      :rules="parameter === 'hydrationAdjustment' ?
-                        [conditionValidation.generic, conditionValidation.threeDp] : []"
-                      class="ma-2"
-                      outline
-                      @input="$store.commit('UPDATE_SELECTED_USER_CONDITIONS', {
-                        index: index,
-                        parameter: parameter,
-                        value: $event
-                      })"
-                    />
-                  </v-layout>
-                </v-flex>
-                <!-- EDIT ROW BUTTONS -->
-                <v-flex shrink>
-                  <v-layout row fill-height justify-center align-center>
                     <v-btn icon>
                       <v-icon
                         :disabled="!editing"
@@ -144,15 +201,18 @@
               <BaseDataTableInfoCard
                 v-if="!selectedHasConditions && !loadingUserConditions"
                 key="noConditions"
-                :loadedMsg="`No user condition data for user: ${selected.username}. Add a new user condition to continue.`"
-                :loaded="!selectedHasConditions"
+                :loadedMsg="`No user condition data for user: ${selected.username}.`"
+                :errorMsg="`Error retriving user conditions`"
+                :loaded="!selectedHasConditions && !errorUserConditions"
+                :error="!selectedHasConditions && errorUserConditions"
                 :color="$vuetify.theme.primary"
                 :actionBtn="true"
-                :actionBtnTitle="`Add a condition for ${selected.username}`"
-                @action-button-pressed="openDialog"
+                :actionBtnTitle="errorUserConditions ? 'RELOAD USER CONDITIONS' : `Add a condition for ${selected.username}`"
+                @action-button-pressed="errorUserConditions ? $store.dispatch('fetchCliAdminUserConditions') : openDialog()"
               />
               <!-- UPDATE AND DELETE PROGRESS -->
               <BaseDataTableInfoCard
+                v-if="!errorUserConditions"
                 key="conditionsProgress"
                 :loadingMsg="`Updating ${selected.username} conditions.`"
                 :loading="loadingUserConditions || updatingUserConditions || deletingUserConditions"
@@ -180,8 +240,9 @@
               <v-icon>close</v-icon>
             </v-btn>
             <v-btn
-              icon dark
-              :disabled="!newFormValid"
+              icon
+              dark
+              :disabled="!newUserConditions.length"
               @click="saveNewConditions"
               title="save and close"
             >
@@ -256,11 +317,19 @@
                 <v-btn
                   :disabled="!newFormValid"
                   title="Add Comment to Day Report"
-                  dark
                   :color="$vuetify.theme.primary"
                   @click="stageCondition()"
                 >
-                  Add
+                  <v-icon
+                    class="mr-2"
+                    small
+                    :color="$vuetify.theme.secondary"
+                  >
+                    add
+                  </v-icon>
+                  <div class="secondary--text">
+                    {{ 'ADD' }}
+                  </div>
                 </v-btn>
                 <v-btn
                   :disabled="!newParametersPristine"
@@ -400,6 +469,26 @@ export default {
         }
         return false
       }
+    },
+    buttonType () {
+      const buttonOptions = {}
+      if (this.$vuetify.breakpoint.smAndDown) {
+        buttonOptions.icon = true
+      } else {
+        buttonOptions.icon = false
+      }
+      return buttonOptions
+    },
+    iconType () {
+      const iconOptions = {}
+      if (this.$vuetify.breakpoint.smAndDown) {
+        iconOptions.medium = true
+        iconOptions.small = false
+      } else {
+        iconOptions.medium = false
+        iconOptions.small = true
+      }
+      return iconOptions
     }
   },
   data () {

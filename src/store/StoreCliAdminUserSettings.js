@@ -116,17 +116,20 @@ export const moduleCliAdminUserSettings = {
         users = context.rootState.cliAdminUsers.cliAdminUsers
         defaultIntervals = context.rootState.commonData.intervalOptions
         // Get users and default options from from rootState
-        context.commit('SET_USER_SETTINGS', users)
-        context.commit('SET_INTERVAL_OPTIONS', defaultIntervals)
-        context.commit('SET_CLIADMIN_USER_SETTINGS_LOAD_STATE', false)
+        setTimeout(() => {
+          context.commit('SET_USER_SETTINGS', users)
+          context.commit('SET_INTERVAL_OPTIONS', defaultIntervals)
+          context.commit('SET_CLIADMIN_USER_SETTINGS_LOAD_STATE', false)
+        }, bounce)
       } catch (error) {
         console.error(error)
         context.commit('SET_CLIADMIN_USER_SETTINGS_LOAD_STATE', false)
         context.commit('SET_CLIADMIN_USER_SETTINGS_ERROR', true)
       }
     },
-    async updateCliAdminUserSettings (context, data) {
+    async updateCliAdminUserSettings (context) {
       try {
+        context.commit('SET_CLIADMIN_USER_SETTINGS_ERROR', false)
         context.commit('SET_CLIADMIN_USER_SETTINGS_UPDATE_STATE', true)
         const payload = { ...context.state.cliAdminSelectedUserSettings }
         console.log(payload)
