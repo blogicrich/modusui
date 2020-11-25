@@ -5,6 +5,7 @@
       headerIcon="local_drink"
       headerText="Manage Connected Droplets"
       hasDivider
+      fullWidth
     />
     <sub-display-table-component
       :items="items"
