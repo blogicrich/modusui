@@ -17,6 +17,7 @@
           <BaseChartTypeSelector
             slot="tools"
             :chartTypes="hourChartTypes"
+            :disabled="!hourChartDataLoaded"
             btnTitle="Chart Type"
             :selectedType="hourChartType"
             @chart-type-changed="hourChartType = $event"

@@ -3,6 +3,7 @@
     <v-menu v-if="$vuetify.breakpoint.lgAndUp" ref="hourlyChartTypeSelector" offset-y>
       <template v-slot:activator="{ on }">
         <v-btn
+          :disabled="disabled"
           class="secondary--text"
           color="primary"
           v-on="on"
@@ -25,6 +26,7 @@
     <v-menu v-if="$vuetify.breakpoint.mdAndDown" ref="hourlyChartTypeSelector" offset-y>
       <template v-slot:activator="{ on }">
         <v-btn
+          :disabled="disabled"
           class="secondary--text"
           icon
           :color="$vuetify.theme.secondary"
@@ -53,6 +55,7 @@ export default {
   name: 'BaseChartSelectionComponent',
   props: {
     chartTypes: Array,
+    disabled: Boolean,
     btnTitle: String,
     selectedType: String
   },
