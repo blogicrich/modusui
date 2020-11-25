@@ -1,11 +1,15 @@
 import apiLib from '../services/apiLib.js'
 import moment from 'moment'
 
+const bounce = 500
+
 export const moduleDashboardDrinks = {
   state: {
     // Dashboard
     drinks: [],
     drinksLoading: false,
+    drinksError: false,
+    drinksUpdating: false,
     drinksTotal: 0,
     // Additional Drinks
     additionalDrinks: [],
@@ -47,6 +51,12 @@ export const moduleDashboardDrinks = {
     SET_DRINKS_LOAD_STATE (state, data) {
       state.drinksLoading = data
     },
+    SET_DRINKS_UPDATE_STATE (state, data) {
+      state.drinksUpdating = data
+    },
+    SET_DRINKS_ERROR_STATE (state, data) {
+      state.drinksError = data
+    },
     RESET_STATE (state) {
       // Dashboard
       state.drinks = []
@@ -60,38 +70,56 @@ export const moduleDashboardDrinks = {
     }
   },
   actions: {
-    fetchDashboardDrinks (context) {
-      const userId = context.rootState.dashboardUsers.selectedUser.userId
-      const date = context.rootState.dashboardDates.dashboardUnixDate
-
-      context.commit('SET_DRINKS_LOAD_STATE', true)
-      apiLib.getData('carer/dashboard-drinks/' + userId + '/' + date).then((response) => {
-        if (typeof response === 'undefined') {
+    async fetchDashboardDrinks (context) {
+      try {
+        context.commit('SET_DRINKS_ERROR_STATE', false)
+        context.commit('SET_DRINKS_LOAD_STATE', true)
+        const userId = context.rootState.dashboardUsers.selectedUser.userId
+        const date = context.rootState.dashboardDates.dashboardUnixDate
+        const response = await apiLib.getData('carer/dashboard-drinks/' + userId + '/' + date)
+        if (typeof response !== 'undefined' && !Array.isArray(response)) {
           context.commit('SET_DRINKS', [])
           context.commit('SET_DRINKS_LOAD_STATE', false)
+          context.commit('SET_DRINKS_ERROR_STATE', true)
         } else {
-          context.commit('SET_DRINKS', response)
-          context.commit('SET_DRINKS_LOAD_STATE', false)
+          setTimeout(() => {
+            context.commit('SET_DRINKS_LOAD_STATE', false)
+            context.commit('SET_DRINKS', setDrinksWithId(response))
+          }, bounce)
         }
-      })
-    },
-    postNewDrinks (context) {
-      const userId = context.rootState.dashboardUsers.selectedUser.userId
-      const jobs = []
-      for (let i = 0; i < context.state.newDrinks.length; i++) {
-        const element = context.state.newDrinks[i]
-        const data = {
-          volumeInLitres: Number(element.volume * element.quantity).toFixed(2),
-          containerTypeId: element.containerTypeId,
-          dateTime: convertToUnix(element.date, element.time)
-        }
-        jobs.push(apiLib.postData('carer/dashboard-drinks/' + userId, data, true, true))
-        console.log(data)
+      } catch (error) {
+        console.error(error)
+        context.commit('SET_DRINKS_LOAD_STATE', false)
+        context.commit('SET_DRINKS_ERROR_STATE', true)
       }
-      Promise.all(jobs).then((response) => {
+    },
+    async postNewDrinks (context) {
+      try {
+        context.commit('SET_DRINKS_ERROR_STATE', false)
+        context.commit('SET_DRINKS_UPDATE_STATE', true)
+        const userId = context.rootState.dashboardUsers.selectedUser.userId
+        const jobs = []
+        for (let i = 0; i < context.state.newDrinks.length; i++) {
+          const element = context.state.newDrinks[i]
+          const data = {
+            volumeInLitres: Number(element.volume * element.quantity).toFixed(2),
+            containerTypeId: element.containerTypeId,
+            dateTime: convertToUnix(element.date, element.time)
+          }
+          const update = await apiLib.postData('carer/dashboard-drinks/' + userId, data, true, true)
+          jobs.push(update)
+        }
+        await Promise.all(jobs)
         context.commit('RESET_NEW_DRINKS')
         context.dispatch('fetchDashboardDrinks')
-      })
+        setTimeout(() => {
+          context.commit('SET_DRINKS_UPDATE_STATE', false)
+        }, bounce)
+      } catch (error) {
+        console.error(error)
+        context.commit('SET_DRINKS_UPDATE_STATE', false)
+        context.commit('SET_DRINKS_ERROR_STATE', true)
+      }
     }
   }
 }
@@ -104,4 +132,14 @@ function convertToUnix (date, time) {
   const datetime = date + ' ' + time
   const dateUnix = moment(datetime).unix()
   return dateUnix
+}
+
+function setDrinksWithId (rawDrinks) {
+  const drinksWithId = []
+  let id = 0
+  for (let i = 0; i < rawDrinks.length; i++) {
+    const element = { ...rawDrinks[i], id: id++ }
+    drinksWithId.push(element)
+  }
+  return drinksWithId
 }

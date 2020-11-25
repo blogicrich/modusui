@@ -1,31 +1,35 @@
 <template>
   <v-container fluid>
-    <BaseDataTable
-      ref="baseDataTable"
+    <SubDisplayTable
+      ref="subDisplayTable"
       :headers="headers"
       :items="additionalDrinks"
-      :editPerms="{ create: false, update: false, delete: false }"
-      :primaryColor="primaryColor"
-      :secondaryColor="secondaryColor"
+      :expandable="false"
+      :hasRowContent="false"
+      :tableTitleIcon="icon"
       :recordIcon="icon"
       :addRecordIcon="iconAdd"
-      :tableActionButton="tableActionButton"
+      :tableActionButton="true"
       :actionButtonIcon="newBtnIcon"
       :actionButtonTitle="newBtnTitle"
-      :loading="loading"
-      :loaded="loaded"
-      :error="error"
-      :errorMsg="errorMsg"
-      :loadingMsg="loadingMsg"
-      :loadedMsg="loadedMsg"
+      :loading="drinksLoading"
+      :loaded="!drinksLoading && !drinksError"
+      :error="drinksError"
+      errorMsg="Unable to get Additonal Drinks data"
+      :loadingMsg="drinksLoading ? 'Fetching additional drinks data' : 'Updating additional drinks data'"
+      loadedMsg="No Additional Drinks to display"
+      :infoActionButton="drinksError ? true : false"
+      :infoActionBtnTitle="'Reload Additonal Drinks'"
+      itemKey="id"
       searchLabel="Search Records..."
       tableTitle="Additional Drinks"
       @action-button-pressed="openNewDialog"
+      @info-action-button-pressed="$store.dispatch('fetchDashboardDrinks')"
     />
 
     <!-- CRUD dialog -->
 
-    <v-layout justify-center>
+    <v-container fluid>
       <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
         <v-card class="pa-4">
           <v-toolbar dark fixed color="primary">
@@ -36,6 +40,7 @@
                 <v-icon>close</v-icon>
               </v-btn>
               <v-btn
+                :disabled="!newFormValid && !newDrinks.length"
                 icon dark
                 @click="saveNewDrinks"
                 title="save and close"
@@ -48,11 +53,11 @@
           <!-- Add New Drink -->
 
           <v-form v-model="newFormValid" v-if="containerTypes" ref="newDrinkForm" class="mt-4">
-            <v-container>
+            <v-container fluid>
               <v-card class="mt-5 pa-3" tile outline>
                 <v-card-title>
-                  <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
-                  <span class="pg-subheader text-primary">Add Drink</span>
+                  <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
+                  <span class="subheader primary--text">Add Drink</span>
                 </v-card-title>
                 <v-layout row wrap>
                   <v-flex xs12 sm4>
@@ -118,6 +123,7 @@
                         v-if="showDrinkDatePicker"
                         v-model="drinkDate"
                         full-width
+                        :max="maxDate.toISOString()"
                         @click:minute="$refs.drinkDatePicker.save(drinkDate)"
                       />
                     </v-menu>
@@ -149,6 +155,7 @@
                       <v-time-picker
                         v-if="showDrinkTimePicker"
                         v-model="drinkTime"
+                        :max="maxDate.toTimeString()"
                         full-width
                         @click:minute="$refs.drinkTimePicker.save(drinkTime)"
                       />
@@ -158,12 +165,21 @@
                 <v-card-actions>
                   <v-spacer />
                   <v-btn
+                    :disabled="!newFormValid"
                     title="Add a new drink"
-                    dark
                     :color="$vuetify.theme.primary"
                     @click="addNewDrink()"
                   >
-                    ADD
+                    <v-icon
+                      class="mr-2"
+                      small
+                      :color="$vuetify.theme.secondary"
+                    >
+                      add
+                    </v-icon>
+                    <div class="secondary--text">
+                      {{ 'ADD' }}
+                    </div>
                   </v-btn>
                   <v-btn
                     title="Reset form"
@@ -171,7 +187,16 @@
                     :color="$vuetify.theme.primary"
                     @click="$refs.newDrinkForm.reset()"
                   >
-                    RESET
+                    <v-icon
+                      class="mr-2"
+                      small
+                      :color="$vuetify.theme.secondary"
+                    >
+                      refresh
+                    </v-icon>
+                    <div class="secondary--text">
+                      {{ 'RESET' }}
+                    </div>
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -180,18 +205,37 @@
 
               <v-list>
                 <v-card-title>
-                  <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
-                  <span class="pg-subheader text-primary">Drinks for Submission:</span>
+                  <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
+                  <span class="subheader primary--text">Drinks for Submission:</span>
                 </v-card-title>
                 <v-fade-transition group hide-on-leave>
                   <v-card
-                    v-show="!newDrinks.length"
+                    v-show="!newDrinks.length && !drinksUpdating && !drinksError"
                     class="pa-2"
                     tile
                     outline
-                    key="nokeyforthisbadboy"
+                    key="drinkSubmissionCard"
                   >
-                    <v-card-text class="text-center">NO DRINKS TO SUBMIT. PLEASE ADD NEW DRINK ABOVE</v-card-text>
+                    <v-card-text
+                      class="text-xs-center"
+                    >
+                      NO DRINKS TO SUBMIT. PLEASE ADD NEW DRINK ABOVE
+                    </v-card-text>
+                  </v-card>
+                  <v-card
+                    v-if="drinksUpdating || drinksError"
+                    key="addDrinksUpdatingProgress"
+                  >
+                    <BaseDataTableInfoCard
+                      :loadingMsg="'Updating Additional Drinks records'"
+                      :loading="drinksUpdating"
+                      :errorMsg="'Error updating Additional Drinks records'"
+                      :error="drinksError && !drinksUpdating"
+                      :color="$vuetify.theme.primary"
+                      :actionBtn="drinksError ? true : false"
+                      :actionBtnTitle="`Reset Additional Drinks`"
+                      @action-button-pressed="fetchDashboardDrinks()"
+                    />
                   </v-card>
                   <v-card
                     v-show="newDrinks.length"
@@ -231,22 +275,23 @@
           </v-form>
         </v-card>
       </v-dialog>
-    </v-layout>
+    </v-container>
   </v-container>
 </template>
 
 <script>
 
-import { dataTableNavGuard } from '@/mixins/dataTableNavGuard.js'
 import { mapState } from 'vuex'
-import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import SubDisplayTable from '@/components/sub/SubDisplayTableComponent.vue'
+import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
 import validation from '@/mixins/validation'
 
 export default {
   name: 'AdditionalDrinks',
-  mixins: [dataTableNavGuard, validation],
+  mixins: [validation],
   components: {
-    BaseDataTable
+    SubDisplayTable,
+    BaseDataTableInfoCard
   },
   computed: {
     ...mapState({
@@ -256,6 +301,8 @@ export default {
       drinks: state => state.dashboardDrinks.drinks,
       additionalDrinks: state => state.dashboardDrinks.additionalDrinks,
       drinksLoading: state => state.dashboardDrinks.drinksLoading,
+      drinksUpdating: state => state.dashboardDrinks.drinksUpdating,
+      drinksError: state => state.dashboardDrinks.drinksError,
       containerTypes: state => state.commonData.containerTypes,
       newDrinks: state => state.dashboardDrinks.newDrinks
     })
@@ -270,6 +317,7 @@ export default {
   },
   data () {
     return {
+      maxDate: new Date(Date.now()),
       showContainerTypePicker: true,
       showDrinkTimePicker: true,
       showDrinkDatePicker: true,
@@ -277,28 +325,29 @@ export default {
       drinkTime: '',
       drinkDate: '',
       drinkQty: '',
-      // BaseDataTable
+      // SubDisplayTable
       newFormVisible: false,
       newFormValid: false,
       dialog: false,
-      tableActionButton: true,
+      // tableActionButton: true,
       newBtnIcon: 'add',
       newBtnTitle: 'Add Manual Drink',
       crudIdKey: 'dateTime',
-      loading: this.drinksLoading,
-      loaded: !this.drinksLoading,
-      error: false,
-      errorMsg: 'Unable to get additonal drinks data',
-      loadingMsg: 'Fetching additional drinks data',
-      loadedMsg: 'No Additional Drinks to display',
-      primaryColor: 'primary',
-      secondaryColor: 'primary darken-2',
       icon: 'local_drink',
       iconAdd: 'add',
       pagination: {
         sortBy: 'dateTime'
       },
       headers: [
+        {
+          text: 'id',
+          align: 'left',
+          sortable: true,
+          cellType: 'tb',
+          value: 'id',
+          hidden: true,
+          editable: true
+        },
         {
           text: 'Friendly Name',
           align: 'left',
@@ -365,10 +414,11 @@ export default {
     // STORE CRUD METHODS
     async fetchDashboardDrinks () {
       try {
+        if (this.dialog) this.dialog = false
         this.$store.dispatch('fetchCommonData')
         this.$store.dispatch('fetchDashboardDrinks')
       } catch (error) {
-        this.error = true
+        console.error(error)
       }
     },
     // Dialogs
@@ -393,8 +443,12 @@ export default {
       })
       this.$refs.newDrinkForm.reset()
     },
-    saveNewDrinks () {
-      this.$store.dispatch('postNewDrinks')
+    async saveNewDrinks () {
+      try {
+        await this.$store.dispatch('postNewDrinks')
+      } catch (error) {
+        console.error(error)
+      }
     },
     getContainerVolume () {
       const volume = this.containerType ? `${this.containerTypes.find(container => container.containerTypeId === this.containerType).volume}` : 'Select Container Type'
@@ -403,6 +457,18 @@ export default {
   },
   created () {
     this.fetchDashboardDrinks()
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.newFormVisible || this.newFormValid) {
+      const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
+      if (answer) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
   }
 }
 </script>
