@@ -164,40 +164,23 @@
                 </v-layout>
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn
+                  <RowButton
+                    key="addDrinksAddBtn"
                     :disabled="!newFormValid"
-                    title="Add a new drink"
-                    :color="$vuetify.theme.primary"
-                    @click="addNewDrink()"
-                  >
-                    <v-icon
-                      class="mr-2"
-                      small
-                      :color="$vuetify.theme.secondary"
-                    >
-                      add
-                    </v-icon>
-                    <div class="secondary--text">
-                      {{ 'ADD' }}
-                    </div>
-                  </v-btn>
-                  <v-btn
-                    title="Reset form"
-                    dark
-                    :color="$vuetify.theme.primary"
-                    @click="$refs.newDrinkForm.reset()"
-                  >
-                    <v-icon
-                      class="mr-2"
-                      small
-                      :color="$vuetify.theme.secondary"
-                    >
-                      refresh
-                    </v-icon>
-                    <div class="secondary--text">
-                      {{ 'RESET' }}
-                    </div>
-                  </v-btn>
+                    :btnColor="$vuetify.theme.primary"
+                    :btnTitle="'ADD'"
+                    :icon="'add'"
+                    :iconColor="$vuetify.theme.secondary"
+                    @row-button-clicked="addNewDrink()"
+                  />
+                  <RowButton
+                    key="addDrinksRestBtn"
+                    :btnColor="$vuetify.theme.primary"
+                    :btnTitle="'RESET'"
+                    :icon="'refresh'"
+                    :iconColor="$vuetify.theme.secondary"
+                    @row-button-clicked="$refs.newDrinkForm.reset()"
+                  />
                 </v-card-actions>
               </v-card>
 
@@ -284,6 +267,7 @@
 import { mapState } from 'vuex'
 import SubDisplayTable from '@/components/sub/SubDisplayTableComponent.vue'
 import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
+import RowButton from '@/components/base/BaseDisplayTableRowBtn.vue'
 import validation from '@/mixins/validation'
 
 export default {
@@ -291,7 +275,8 @@ export default {
   mixins: [validation],
   components: {
     SubDisplayTable,
-    BaseDataTableInfoCard
+    BaseDataTableInfoCard,
+    RowButton
   },
   computed: {
     ...mapState({
@@ -425,6 +410,7 @@ export default {
     closeDialog () {
       this.dialog = false
       this.newFormVisible = false
+      this.$refs.newDrinkForm.reset()
       this.$store.commit('RESET_NEW_DRINKS')
     },
     openNewDialog () {
@@ -432,7 +418,6 @@ export default {
       this.newFormVisible = true
     },
     addNewDrink () {
-      console.log(this.newDrinks, this.drinkDate, this.drinkTime, this.containerType, Number(this.drinkQty))
       this.$store.commit('ADD_NEW_DRINK', {
         quantity: Number(this.drinkQty),
         containerTypeId: this.containerType,
@@ -459,7 +444,7 @@ export default {
     this.fetchDashboardDrinks()
   },
   beforeRouteLeave (to, from, next) {
-    if (this.newFormVisible || this.newFormValid) {
+    if (this.newFormVisible || this.newDrinks.length) {
       const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
       if (answer) {
         next()
