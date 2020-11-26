@@ -19,7 +19,7 @@
       :infoActionButton="errorUserConditions ? true : false"
       :infoActionBtnTitle="'Reload User Conditions'"
       :loading="loadingUserConditions"
-      :loaded="!loadingUserConditions && !errorUserConditions && userConditions.length > 0"
+      :loaded="!loadingUserConditions && !errorUserConditions"
       :error="errorUserConditions"
       errorMsg="Error loading User Condition records."
       loadingMsg="Loading User Conditions..."
@@ -160,7 +160,6 @@
                 :loadingMsg="updatingUserConditions ?
                   `Updating ${selected.username} conditions.` :
                   `Deleting ${selected.username} condition.`"
-                :loaded="updatingUserConditions && !deletingUserConditions"
                 :loading="updatingUserConditions || deletingUserConditions"
                 :color="$vuetify.theme.primary"
               />
@@ -397,7 +396,7 @@ export default {
     },
     parametersPristine () {
       let isPristine = true
-      if (this.selected.conditions) {
+      if (this.selected.conditions && this.userConditions.length) {
         const userId = this.selected.userId
         const pristineConditions = this.userConditions.find(e => e.userId === userId).conditions
         for (let i = 0; i < this.selected.conditions.length; i++) {
@@ -618,4 +617,12 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
+
+.border-greyed {
+  border-radius: 1vw;
+  border-width: 2px;
+  border-color: var(--v-secondary-darken1);
+  border-style: solid;
+}
+
 </style>
