@@ -86,10 +86,7 @@ axi.interceptors.request.use((config) => {
 axi.interceptors.response.use((response) => {
   return response // Don't do anything upon success
 }, (error) => {
-  // console.log(error)
   if ([401, 403].includes(error.response.status)) {
-    // console.log(error.response.status)
-    // console.log(error)
     store.dispatch('LOGOUT')
   }
   return error
@@ -97,13 +94,15 @@ axi.interceptors.response.use((response) => {
 
 // Utils
 var logger = function (responseObj, url, data) {
-  if (data) console.log('data: ', data)
-  console.log('URL: ', url)
-  console.log('response.data: ', responseObj.data)
-  console.log('response.status: ', responseObj.status)
-  console.log('response.statusText: ', responseObj.statusText)
-  console.log('response.headers:', responseObj.headers)
-  console.log('response.request:', responseObj.request)
+  if (process.env.NODE_ENV === 'development') {
+    if (data) console.log('data: ', data)
+    console.log('URL: ', url)
+    console.log('response.data: ', responseObj.data)
+    console.log('response.status: ', responseObj.status)
+    console.log('response.statusText: ', responseObj.statusText)
+    console.log('response.headers:', responseObj.headers)
+    console.log('response.request:', responseObj.request)
+  }
 }
 
 export default {
@@ -136,7 +135,7 @@ export default {
 
   async getData (url, log, toast) {
     return axi.get(url).then(response => {
-      // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
+      if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true })
       if (log) logger(response, url)
       return response.data
     })
