@@ -683,7 +683,6 @@ export default {
       }
     },
     async saveNewSysAdmin () {
-      console.log(this.editFormVisible, this.newFormVisible)
       if (this.$refs.newSysAdminDetailsForm.validate()) {
         try {
           await this.$store.dispatch('postNewSysAdmin')

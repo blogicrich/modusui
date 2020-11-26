@@ -132,7 +132,6 @@ export const moduleCliAdminUserSettings = {
         context.commit('SET_CLIADMIN_USER_SETTINGS_ERROR', false)
         context.commit('SET_CLIADMIN_USER_SETTINGS_UPDATE_STATE', true)
         const payload = { ...context.state.cliAdminSelectedUserSettings }
-        console.log(payload)
         // Convert times to seconds from midnight
         payload.wakeUpTime = convertTimeToSecondsFromMidnight(payload.wakeUpTime)
         payload.sleepTime = convertTimeToSecondsFromMidnight(payload.sleepTime)

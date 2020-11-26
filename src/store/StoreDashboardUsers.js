@@ -22,10 +22,8 @@ export const moduleDashboardUsers = {
       }
     },
     DECREMENT_USER_CONTEXT (state, user) {
-      console.log(state.selectedUser)
     },
     INCREMENT_USER_CONTEXT (state, user) {
-      console.log(state.selectedUser)
     }
   },
   actions: {

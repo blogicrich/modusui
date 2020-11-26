@@ -26,7 +26,6 @@ export const moduleHydrationParameters = {
       state.hydrationParamsError = data
     },
     INCREMENT_START (state, data) {
-      console.log(data)
       state.hydrationParams[data.index].lowerHydrationBoundary.percentHydratedStart++
       Vue.set(state.hydrationParams, data.index, state.hydrationParams[data.index])
     },

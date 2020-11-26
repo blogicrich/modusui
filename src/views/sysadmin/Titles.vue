@@ -178,9 +178,6 @@ export default {
     }
   },
   methods: {
-    validateItems (items) {
-      console.log(items)
-    },
     resetItem () {
       this.newItem = [
         {
