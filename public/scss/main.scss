@@ -7,6 +7,12 @@
   border-style: solid;
 }
 
+.border-greyed {
+  border-radius: 1vw;
+  border-width: 2px;
+  border-color: var(--v-secondary-darken1);
+  border-style: solid;
+}
 // Tranisitions 
 
 .fade-enter-active, .fade-leave-active {
