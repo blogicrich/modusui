@@ -1,51 +1,49 @@
 <template>
-  <v-container id="forgotpassword">
-    <v-fade-transition>
-      <v-flex>
-        <v-layout class="mb-2" column align-center>
-          <router-link to="/login">
-            <img class="loginresetimg" alt="" src="../../assets/ed_logo.svg">
-          </router-link>
-        </v-layout>
-        <v-form ref="forgotpwform" @submit.prevent="checkEmail">
-          <v-layout align-center justify-center column fill-height>
-            <h3
-              v-if="$vuetify.breakpoint.mdAndUp"
-              class="text-xs-center"
-            >
-              {{ instructions }}
-            </h3>
-            <h4
-              v-if="$vuetify.breakpoint.smAndDown"
-              class="text-xs-center"
-            >
-              {{ instructions }}
-            </h4>
-            <v-text-field
-              class="mt-3 inputloginreset"
-              ref="email" :hint="hint"
-              v-model="email"
-              type="email"
-              name="email"
-              :rules="emailRules"
-              label="Enter your e-mail address"
-              single-line
-              clearable
-            />
-            <v-btn
-              class="loginreset"
-              :disabled="email === ''"
-              flat
-              round
-              @click="checkEmail"
-            >
-              Send E-mail
-            </v-btn>
-          </v-layout>
-        </v-form>
-      </v-flex>
-    </v-fade-transition>
-  </v-container>
+  <v-layout class="mx-3" align-center justify-center column>
+    <router-link to="/login">
+      <v-img contain :height="imageSize" :width="imageSize" :src="require('@/assets/ed_logo.svg')" />
+    </router-link>
+    <v-form ref="forgotpwform" @submit.prevent="checkEmail">
+      <v-layout class="mx-3" align-center justify-center column>
+        <span
+          class="body-1 text-xs-center"
+        >
+          {{ instructions }}
+        </span>
+        <v-text-field
+          class="mt-2"
+          v-model="email"
+          :hint="hint"
+          label="email"
+          type="email"
+          name="email"
+          outline
+          single-line
+          full-width
+          :rules="emailRules"
+        />
+      </v-layout>
+      <v-layout row fill-height align-end justify-end>
+        <v-btn
+          :disabled="!validateEmail(email)"
+          :color="$vuetify.theme.primary"
+          @click="checkEmail"
+        >
+          <v-icon
+            class="mr-2"
+            :color="$vuetify.theme.secondary"
+          >
+            send
+          </v-icon>
+          <div
+            class="secondary--text"
+          >
+            {{ 'SEND EMAIL' }}
+          </div>
+        </v-btn>
+      </v-layout>
+    </v-form>
+  </v-layout>
 </template>
 
 <script>
@@ -57,13 +55,25 @@ export default {
   mixins: [
     validation
   ],
+  computed: {
+    /* eslint-disable vue/return-in-computed-property */
+    imageSize () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '200'
+        case 'sm': return '300'
+        case 'md': return '300'
+        case 'lg': return '400'
+        case 'xl': return '450'
+      }
+    }
+  },
   data () {
     return {
-      email: '',
+      email: undefined,
       emailRules: [
         (v) => !!v || 'Email address is required',
         (v) => this.emailRegEx.test(v) || 'Email address must be valid',
-        (v) => v.length <= 256 || 'Email address too long'
+        (v) => this.validateMaxChars(v, 256) || 'Email address too long'
       ],
       hint: 'Please enter valid email address',
       instructions: 'Please enter your email address below and click the "Send E-mail" button.'
