@@ -8,8 +8,8 @@ module.exports = {
     'plugin:vue/recommended'
   ],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-unused-vars': 'warn',
     'vue/attribute-hyphenation': 'off',
     'vue/singleline-html-element-content-newline': 'off',
