@@ -6,7 +6,9 @@
         class="ma-4"
         lazy-validation
       >
-        <v-layout v-bind="binding">
+        <v-layout :class="$vuetify.breakpoint.xsOnly ? 'column align-center justify-center' :
+          'row fill-height align-center justify-space-between'"
+        >
           <!-- Start date menu picker -->
           <v-menu
             ref="startDateMenu"
@@ -69,24 +71,24 @@
         </v-layout>
       </v-form>
       <!-- Data table -->
-      <dataTable
+      <SubDisplayTable
         :tableTitle="legend"
         :headers="headers"
-        :primaryColor="primaryColor"
         :items="awayPeriods"
+        :hasRowContent="false"
         searchLabel="Search Records..."
         recordIcon="calendar_today"
-        editDialogTitle="Edit Away Period(s)"
-        :secondaryColor="secondaryColor"
         item-key="awayId"
-        :editPerms="{ create: false, update: false, delete: false }"
         :addRecordIcon="iconAdd"
-        :loading="awayLoading"
-        :loaded="!awayLoading"
-        :error="error"
-        :errorMsg="errorMsg"
+        :loading="awayLoading || loaded"
+        :loaded="!awayLoading && !awayError"
+        :error="awayError || dateError"
+        :errorMsg="dateError ? 'Please check selected date range' : `Error loading Away periods for ${username}`"
         :loadingMsg="loadingMsg"
         :loadedMsg="loadedMsg"
+        :infoActionButton="awayError ? true : false"
+        :infoActionBtnTitle="`RELOAD AWAY PERIODS FOR ${username}`"
+        @info-action-button-pressed="refreshData()"
       />
     </v-layout>
   </v-container>
@@ -94,16 +96,14 @@
 
 <script>
 
-import { crudRoutines } from '@/mixins/dataTableCRUD.js'
-import dataTable from '@/components/base/BaseDataTableComponent'
+import SubDisplayTable from '@/components/sub/SubDisplayTableComponent'
 import { mapState } from 'vuex'
 import moment from 'moment'
 
 export default {
   name: 'Away',
-  mixins: [crudRoutines],
   components: {
-    dataTable
+    SubDisplayTable
   },
   watch: {
     selectedUser () {
@@ -126,33 +126,17 @@ export default {
       selectedUser: state => state.dashboardUsers.selectedUser,
       dashboardUsers: state => state.dashboardUsers.dashboardUsers,
       awayLoading: state => state.dashboardAway.awayLoading,
+      awayError: state => state.dashboardAway.awayError,
       awayPeriods: state => state.dashboardAway.awayPeriods
     }),
-    binding: function () {
-      const binding = {}
-      if (this.$vuetify.breakpoint.mdAndDown) {
-        binding.column = true
-        binding.row = false
-        binding.fillHeight = false
-        binding.alignCenter = true
-        binding.justifyCenter = true
-        binding.justifySpaceBetween = false
-      }
-      if (this.$vuetify.breakpoint.lgAndUp) {
-        binding.column = false
-        binding.row = true
-        binding.fillHeight = true
-        binding.alignCenter = true
-        binding.justifyCenter = false
-        binding.justifySpaceBetween = true
-      }
-      return binding
-    },
     endDateFormattedValue () {
       return this.endDate ? moment(this.endDate).format('dddd, MMMM Do YYYY') : ''
     },
     startDateFormattedValue () {
       return this.startDate ? moment(this.startDate).format('dddd, MMMM Do YYYY') : ''
+    },
+    username () {
+      return this.selectedUser.deptPerson.person.givenName + ' ' + this.selectedUser.deptPerson.person.familyName
     }
   },
   data: () => ({
@@ -166,12 +150,11 @@ export default {
     // Start date picker
     startDate: new Date(Date.now() - (7 * 86400000)).toISOString().substr(0, 10),
     startDateMenu: false,
-    // BaseDataTable
+    // BaseSubDisplayTable
     items: [],
     iconAdd: 'person_add',
     loaded: false,
-    error: false,
-    errorMsg: ' ',
+    dateError: false,
     loadingMsg: 'Loading Away Periods',
     loadedMsg: 'No data for selected time period',
     legend: 'Away Periods',
@@ -251,7 +234,7 @@ export default {
       } else {
         this.errorMsg = 'Please check selected date range.'
         this.loaded = false
-        this.error = true
+        this.dateError = true
       }
     }
   },
@@ -263,7 +246,7 @@ export default {
         new Date(this.endDate).getTime() / 1000
       )
     } catch (error) {
-      this.error = true
+      this.dateError = true
       this.errorMsg = 'Please check your internet connection and refresh page to try again.'
     }
   }

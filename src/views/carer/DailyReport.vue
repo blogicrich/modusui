@@ -1,26 +1,25 @@
 <template>
   <v-container fluid>
-    <BaseDataTable
-      ref="baseDataTable"
+    <SubDisplayTable
+      ref="SubDisplayTable"
       tableTitle="Daily Report"
       searchLabel="Search Records..."
       :headers="headers"
       :items="comments"
-      :editPerms="{ create: false, update: false, delete: false }"
-      primaryColor="primary"
-      secondaryColor="secondary"
       :tableActionButton="tableActionButtonVisible"
       actionButtonIcon="person_add"
       actionButtonTitle="Add new comment to daily report"
-      recordIcon="menu_book"
+      tableTitleIcon="menu_book"
       item-key="dayReportId"
-      crudIdKey="dayReportId"
-      :loading="dayReportLoading"
-      :loaded="!dayReportLoading"
+      :loading="dayReportLoading && !dayReportError"
+      :loaded="!dayReportLoading && !dayReportError"
       :error="dayReportError"
-      errorMsg="Error fetching data. Please check your internet connection and try again"
-      loadingMsg="Loading comments"
+      :errorMsg="`Error retrieving comments for ${username}`"
+      loadingMsg="Loading Day Report comments"
       loadedMsg="No comments to display"
+      :infoActionButton="dayReportError ? true : false"
+      :infoActionBtnTitle="`RELOAD DAY REPORT FOR ${username}`"
+      @info-action-button-pressed="$store.dispatch('fetchDailyReport')"
       @action-button-pressed="openNewDialog"
       @row-clicked="openEditDialog"
     />
@@ -35,7 +34,8 @@
             </v-btn>
             <v-btn
               v-if="editFormVisible"
-              icon dark
+              :disabled="editCommentPristine"
+              icon
               @click="updateSelectedComment"
               title="save and close"
             >
@@ -43,7 +43,8 @@
             </v-btn>
             <v-btn
               v-if="newFormVisible"
-              icon dark
+              :disabled="!newComments.length"
+              icon
               @click="saveNewComments"
               title="save and close"
             >
@@ -55,13 +56,34 @@
         <v-form v-if="editFormVisible" v-model="editFormValid" ref="editCommentForm">
           <v-container>
             <v-card-title>
-              <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
-              <span class="title primary--text">Change Selected Comment</span>
+              <v-layout row fill-height align-center justify-start>
+                <v-icon class="mr-2" medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
+                <span class="title primary--text text-truncate">Change Selected Comment</span>
+              </v-layout>
               <v-spacer />
               <!-- Delete Comment Confirmation Dialog -->
               <v-dialog v-model="confirmationDialog" persistent max-width="500">
                 <template v-slot:activator="{ on }">
-                  <v-btn dark large :color="$vuetify.theme.error" v-on="on">DELETE COMMENT</v-btn>
+                  <v-btn
+                    v-if="$vuetify.breakpoint.mdAndUp"
+                    large
+                    :color="$vuetify.theme.error"
+                    v-on="on"
+                  >
+                    <div class="secondary--text">
+                      {{ 'DELETE COMMENT' }}
+                    </div>
+                  </v-btn>
+                  <v-btn
+                    v-if="$vuetify.breakpoint.smAndDown"
+                    icon
+                    :color="$vuetify.theme.error"
+                    v-on="on"
+                  >
+                    <v-icon :color="$vuetify.theme.secondary">
+                      {{ 'delete' }}
+                    </v-icon>
+                  </v-btn>
                 </template>
                 <v-card>
                   <v-card-title
@@ -92,7 +114,9 @@
               </v-dialog>
             </v-card-title>
             <!-- EDIT Form Fields -->
-            <v-card-text>
+            <v-card-text
+              key="editComments"
+            >
               <!-- Comment Date Picker -->
               <v-menu
                 ref="commentDateMenu"
@@ -147,15 +171,15 @@
               />
               <v-card-actions>
                 <v-spacer />
-                <v-btn
-                  title="Rest password fields"
-                  dark
-                  :color="$vuetify.theme.primary"
+                <RowButton
+                  key="editCommentsAddBtn"
                   :disabled="editCommentPristine"
-                  @click="$store.commit('UNDO_SELECTED_COMMENT', selectedComment.dayReportId)"
-                >
-                  RESET
-                </v-btn>
+                  :btnColor="$vuetify.theme.primary"
+                  :btnTitle="'RESET'"
+                  :icon="'refresh'"
+                  :iconColor="$vuetify.theme.secondary"
+                  @row-button-clicked="$store.commit('UNDO_SELECTED_COMMENT', selectedComment.dayReportId)"
+                />
               </v-card-actions>
             </v-card-text>
           </v-container>
@@ -166,7 +190,7 @@
         <v-form v-if="newFormVisible" v-model="newFormValid" ref="newCommentForm">
           <v-container fluid>
             <v-card-title>
-              <v-icon medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
+              <v-icon class="mr-2" medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
               <span class="title primary--text">Add new comment</span>
             </v-card-title>
 
@@ -224,24 +248,24 @@
               />
               <v-card-actions>
                 <v-spacer />
-                <v-btn
+                <RowButton
+                  key="dailyReportAddBtn"
                   :disabled="!newComment"
-                  title="Add Comment to Day Report"
-                  dark
-                  :color="$vuetify.theme.primary"
-                  @click="addCommentToDayReport"
-                >
-                  Add
-                </v-btn>
-                <v-btn
+                  :btnColor="$vuetify.theme.primary"
+                  :btnTitle="'ADD'"
+                  :icon="'add'"
+                  :iconColor="$vuetify.theme.secondary"
+                  @row-button-clicked="addCommentToDayReport"
+                />
+                <RowButton
+                  key="dailyReportResetBtn"
                   :disabled="newCommentPristine"
-                  title="Reset Comment"
-                  dark
-                  :color="$vuetify.theme.primary"
-                  @click="$refs.newCommentForm.reset()"
-                >
-                  RESET
-                </v-btn>
+                  :btnColor="$vuetify.theme.primary"
+                  :btnTitle="'RESET'"
+                  :icon="'refresh'"
+                  :iconColor="$vuetify.theme.secondary"
+                  @row-button-clicked="$refs.newCommentForm.reset()"
+                />
               </v-card-actions>
             </v-card-text>
 
@@ -254,42 +278,56 @@
               </v-card-title>
               <v-fade-transition group hide-on-leave>
                 <v-card
-                  v-show="!newComments.length"
+                  v-show="!newComments.length && !dayReportUpdating && !dayReportError"
                   class="pa-2"
                   tile
                   outline
-                  key="nokeyforthisbadboy"
+                  key="commentsSubmissionCard"
                 >
                   <v-card-text class="text-xs-center">NO COMMENTS TO SUBMIT. PLEASE ADD COMMENT FOR SUBMISSION</v-card-text>
                 </v-card>
                 <v-card
-                  v-show="newComments.length"
+                  v-show="newComments.length && !dayReportUpdating && !dayReportError"
                   class="pa-2"
                   v-for="(record, index) in newComments"
                   :key="index"
                   tile
                   outline
                 >
-                  <v-layout>
-                    <v-flex grow>
-                      <span class="accent--text">{{ record.comment }}</span>
-                    </v-flex>
+                  <v-layout row fill-height align-center justify-center>
+                    <v-layout :class="$vuetify.breakpoint.smAndDown ?
+                      'column justify-center' :
+                      'row fill-height align-center justify-center'"
+                    >
+                      <v-flex grow>
+                        <span class="accent--text">{{ 'comment: ' + record.comment }}</span>
+                      </v-flex>
+                      <v-spacer />
+                      <v-flex grow>
+                        <span class="accent--text">{{ 'date: ' + record.date }}</span>
+                      </v-flex>
+                    </v-layout>
                     <v-spacer />
-                    <v-flex shrink>
-                      <span class="accent--text">{{ record.date }}</span>
-                    </v-flex>
-                    <v-flex shrink>
-                      <v-icon
-                        color="pink"
-                        class="mx-3"
-                        @click="$store.commit('REMOVE_NEW_COMMENT', index)"
-                      >
-                        close
-                      </v-icon>
-                    </v-flex>
+                    <v-icon
+                      color="pink"
+                      class="mx-3"
+                      @click="$store.commit('REMOVE_NEW_COMMENT', index)"
+                    >
+                      close
+                    </v-icon>
                   </v-layout>
                 </v-card>
               </v-fade-transition>
+              <BaseDataTableInfoCard
+                :loadingMsg="'Updating comment records...'"
+                :loading="dayReportUpdating"
+                :errorMsg="'Error updating comment'"
+                :error="dayReportError && !dayReportUpdating"
+                :color="$vuetify.theme.primary"
+                :actionBtn="dayReportError ? true : false"
+                :actionBtnTitle="`Reset Daily Report`"
+                @action-button-pressed="closeDialog"
+              />
             </v-list>
           </v-container>
         </v-form>
@@ -300,13 +338,19 @@
 
 <script>
 
-import BaseDataTable from '@/components/base/BaseDataTableComponent'
+import SubDisplayTable from '@/components/sub/SubDisplayTableComponent'
+import BaseDataTableInfoCard from '@/components/base/BaseDataTableInfoComponent.vue'
+import RowButton from '@/components/base/BaseDisplayTableRowBtn.vue'
+
 import { mapState } from 'vuex'
 
 export default {
   name: 'DailyReport',
   components: {
-    BaseDataTable
+    SubDisplayTable,
+    BaseDataTableInfoCard,
+    RowButton
+
   },
   watch: {
     selectedUser () {
@@ -324,20 +368,35 @@ export default {
       comments: state => state.dashboardDailyReport.comments,
       newComments: state => state.dashboardDailyReport.newComments,
       selectedComment: state => state.dashboardDailyReport.selectedComment,
-      dayReportLoading: state => state.dashboardDailyReport.dailyReportLoading,
-      dayReportError: state => state.dashboardDailyReport.dayReportError,
+      dayReportLoading: state => state.dashboardDailyReport.commentsLoading,
+      dayReportError: state => state.dashboardDailyReport.commentsError,
+      dayReportUpdating: state => state.dashboardDailyReport.commentsUpdating,
+      dayReportDeleting: state => state.dashboardDailyReport.commentsDeleting,
       newComment: state => state.dashboardDailyReport.newComment,
       newCommentDate: state => state.dashboardDailyReport.newCommentDate,
       maxDate: state => state.dashboardDailyReport.maxDate
     }),
     newCommentPristine () {
-      if (this.newComment === '') return true
+      if (this.newComment === '' || this.newComment === undefined) return true
       else return false
     },
     editCommentPristine () {
-      const pristineComment = this.comments.find((report) => this.selectedComment.dayReportId === report.dayReportId).comments
-      if (this.selectedComment.comments === pristineComment) return true
-      else return false
+      let isPristine = true
+      const pristineComment = this.comments.find(report => this.selectedComment.dayReportId === report.dayReportId)
+      if (pristineComment) {
+        const pristineComment = this.comments.find(report => this.selectedComment.dayReportId === report.dayReportId)
+        if (this.selectedComment.comments === pristineComment.comments &&
+          this.selectedComment.date === pristineComment.date) {
+          isPristine = true
+        } else {
+          isPristine = false
+        }
+      }
+      return isPristine
+      // return false
+    },
+    username () {
+      return this.selectedUser.deptPerson.person.givenName + ' ' + this.selectedUser.deptPerson.person.familyName
     }
   },
   data () {
@@ -388,7 +447,6 @@ export default {
       newFormValid: false,
       // newCommentDate: null,
       showCommentDatePicker: false,
-      reportText: '',
       // Edit Dialog
       dialog: false,
       editFormValid: false,
@@ -417,18 +475,12 @@ export default {
       this.$store.commit('ADD_NEW_COMMENT', { date: this.newCommentDate, text: this.newComment })
       this.$refs.newCommentForm.reset()
     },
-    deleteItems (e) {
-      console.log(e)
-    },
     dialogTitle () {
       if (this.newFormVisible) {
         return 'Add New Comment to Day Report'
       } else {
         return 'Edit Day Report'
       }
-    },
-    editItems (e) {
-      console.log(e)
     },
     closeDialog () {
       // RESET ALL BOOLEANS AND STORE OBJECTS
@@ -460,7 +512,7 @@ export default {
           await this.$store.dispatch('fetchDailyReport')
           this.closeDialog()
         } catch (error) {
-          // TBI
+          console.error(error)
         }
       } else {
         this.$refs.editCommentForm.validate()
@@ -478,11 +530,8 @@ export default {
           that.confirmationDialog = false
         }, this.timeoutDuration)
       } catch (error) {
-        // TBI
+        console.error(error)
       }
-    },
-    refreshItems () {
-
     },
     async saveNewComments () {
       if (this.newFormVisible) {
@@ -494,6 +543,18 @@ export default {
   },
   created () {
     this.$store.dispatch('fetchDailyReport')
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.newFormVisible || this.editFormVisible || !this.newCommentPristine || !this.editCommentPristine) {
+      const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
+      if (answer) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
   }
 }
 

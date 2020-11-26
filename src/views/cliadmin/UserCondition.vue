@@ -600,6 +600,18 @@ export default {
   },
   destroyed () {
     this.$store.commit('RESET_CLIADMIN_USER_CONDITIONS_STORE_STATE')
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.newFormVisible || !this.parametersPristine || !this.newParametersPristine) {
+      const answer = window.confirm('Do you really want to leave? You will lose all unsaved changes!')
+      if (answer) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
   }
 }
 
