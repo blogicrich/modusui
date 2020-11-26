@@ -68,7 +68,7 @@
       </v-layout>
     </v-toolbar>
     <!-- SIDEBAR -->
-    <transition-group name="navBtns">
+    <transition-group name="fade" mode="in-out" appear>
       <!-- FOR MD AND UP -->
       <v-navigation-drawer
         v-if="
@@ -419,12 +419,6 @@ export default {
 <style scoped lang="scss">
 @import "./public/scss/main.scss";
 
-.app-shell {
-  background-color: var(--v-secondary-base);
-}
-.hide {
-  visibility: hidden;
-}
 img {
   position: absolute;
   top: 2px;
