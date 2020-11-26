@@ -93,7 +93,6 @@ export const moduleCliAdminUserConditions = {
             context.commit('SET_CLIADMIN_USER_CONDITIONS', normalizeData(users, response))
             context.commit('SET_CLIADMIN_USER_CONDITIONS_LOAD_STATE', false)
           }, bounce)
-          context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', false)
         } else {
           context.commit('SET_CLIADMIN_USER_CONDITIONS', [])
           context.commit('SET_CLIADMIN_SELECTED_CLIENT_ADMIN', {})
@@ -108,15 +107,17 @@ export const moduleCliAdminUserConditions = {
     },
     async deleteCliAdminUserCondition (context, payload) {
       try {
+        context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', false)
         context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', true)
         await apiLib.deleteData('cliadmin/user-condition/' + payload, false, true)
         await context.dispatch('fetchCliAdminUserConditions')
-        context.commit('SET_SELECTED_USER_CONDITIONS')
         setTimeout(() => {
+          context.commit('SET_SELECTED_USER_CONDITIONS')
           context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', false)
         }, bounce)
       } catch (error) {
         console.error(error)
+        context.commit('SET_CLIADMIN_USER_CONDITIONS_DELETE_STATE', false)
         context.commit('SET_CLIADMIN_USER_CONDITIONS_ERROR', true)
       }
     },
