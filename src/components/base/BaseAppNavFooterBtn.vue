@@ -1,6 +1,6 @@
 <template>
-  <v-layout class="pt-1" row fill-height align-center justify-space-around>
-    <v-flex grow>
+  <v-layout class="pa-1" row fill-height align-center justify-center>
+    <v-flex grow @click.stop="$emit('nav-btn-clicked')">
       <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
         <span>{{ tip }}</span>
         <v-btn
@@ -10,7 +10,6 @@
           icon
           :color="btnColor"
           :disabled="enabled"
-          @click.stop="$emit('nav-btn-clicked')"
         >
           <v-icon :color="iconColor || 'primary'" large>{{ btnIcon }}</v-icon>
         </v-btn>
