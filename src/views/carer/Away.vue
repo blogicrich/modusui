@@ -239,6 +239,7 @@ export default {
     }
   },
   mounted () {
+    this.$emit('header-changed', { headerIcon: this.headerIcon, headerText: this.headerText })
     try {
       this.getAwayPeriods(
         this.selectedUser.userId,

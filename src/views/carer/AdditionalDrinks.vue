@@ -302,6 +302,10 @@ export default {
   },
   data () {
     return {
+      // Header
+      headerIcon: 'local_drink',
+      headerText: 'Additional Drinks',
+      // Add drinks
       maxDate: new Date(Date.now()),
       showContainerTypePicker: true,
       showDrinkTimePicker: true,
@@ -442,6 +446,9 @@ export default {
   },
   created () {
     this.fetchDashboardDrinks()
+  },
+  mounted () {
+    this.$emit('header-changed', { headerIcon: this.headerIcon, headerText: this.headerText })
   },
   beforeRouteLeave (to, from, next) {
     if (this.newFormVisible || this.newDrinks.length) {

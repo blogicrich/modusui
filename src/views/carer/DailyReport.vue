@@ -401,6 +401,9 @@ export default {
   },
   data () {
     return {
+      // Header
+      headerIcon: 'menu_book',
+      headerText: 'Daily Report',
       // BaseDataTable
       tableActionButtonVisible: true,
       selected: [],
@@ -543,6 +546,9 @@ export default {
   },
   created () {
     this.$store.dispatch('fetchDailyReport')
+  },
+  mounted () {
+    this.$emit('header-changed', { headerIcon: this.headerIcon, headerText: this.headerText })
   },
   beforeRouteLeave (to, from, next) {
     if (this.newFormVisible || this.editFormVisible || !this.newCommentPristine || !this.editCommentPristine) {

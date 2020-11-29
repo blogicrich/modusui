@@ -224,6 +224,8 @@ export default {
   data () {
     return {
       // Dashboard
+      headerIcon: 'dashboard',
+      headerText: 'Dashboard',
       dashboardIsLoading: true,
       dashboardLoadingTimeout: null,
       dashboardPollTimeout: null,
@@ -289,6 +291,7 @@ export default {
     this.setDates()
   },
   mounted () {
+    this.$emit('header-changed', { headerIcon: this.headerIcon, headerText: this.headerText })
     this.setDashboardPoll()
     this.updateDashboardLoadStatus()
   },

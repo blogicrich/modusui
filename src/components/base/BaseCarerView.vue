@@ -27,7 +27,7 @@
     </BaseViewHeader>
     <!-- ROUTE VIEW -->
     <v-slide-y-transition mode="out-in">
-      <router-view class="pa-0" />
+      <router-view class="pa-0" @header-changed="setHeader($event)" />
     </v-slide-y-transition>
   </v-container>
 </template>
@@ -61,11 +61,9 @@ export default {
       to.name === 'away' ? this.ctrSlotVisible = false : this.ctrSlotVisible = true
     }
   },
-  props: {
-    headerIcon: String,
-    headerText: String
-  },
   data: () => ({
+    headerIcon: '',
+    headerText: '',
     rhSlotVisible: true,
     ctrSlotVisible: true
   }),
@@ -78,6 +76,10 @@ export default {
       const date = this.$moment(Date.now()).format('YYYY-MM-DD')
       this.$store.commit('SET_DASHBOARD_DATE', date)
       this.$store.commit('SET_MAX_DATE')
+    },
+    setHeader (e) {
+      this.headerIcon = e.headerIcon
+      this.headerText = e.headerText
     }
   },
   mounted () {

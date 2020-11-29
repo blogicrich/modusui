@@ -104,7 +104,7 @@
             :route="item.route"
             :tip="item.tip"
             :name="item.name"
-            @nav-btn-clicked="$router.push({ name: item.name, params: { headerIcon: item.btnIcon, headerText: item.title} })"
+            @nav-btn-clicked="$router.push({ name: item.name })"
           />
         </v-layout>
       </v-navigation-drawer>
@@ -212,7 +212,7 @@
             tip="Dashboard"
             name="dashboard"
             top
-            @nav-btn-clicked="$router.push({ name: 'dashboard', params: { headerIcon: 'dashboard', headerText: 'Dashboard' } })"
+            @nav-btn-clicked="$router.push({ name: 'dashboard' })"
           />
           <BaseAppNavBtn
             btnIcon="exit_to_app"
@@ -330,7 +330,7 @@ export default {
           (this.level.find((level) => level === 'CARER') &&
             this.level.find((level) => level === 'CLIENT ADMINISTRATOR'))
         ) {
-          this.$router.push({ name: 'dashboard', params: { headerText: 'Dashboard', headerIcon: 'dashboard' } })
+          this.$router.push({ name: 'dashboard' })
         }
       } else {
         this.$store.dispatch('LOGOUT')
