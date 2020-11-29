@@ -679,6 +679,7 @@ export default {
         this.$store.dispatch('fetchSystemAdmins')
         this.$store.dispatch('fetchTitles')
       } catch (error) {
+        console.error(error)
         this.error = true
       }
     },
@@ -688,7 +689,7 @@ export default {
           await this.$store.dispatch('postNewSysAdmin')
           this.getSysAdmins()
         } catch (error) {
-          // TBI
+          console.error(error)
         }
       } else {
         this.$refs.editSysAdminPasswordForm.validate()
@@ -706,7 +707,7 @@ export default {
             this.$router.push('/login')
           }
         } catch (error) {
-          // TBI
+          console.error(error)
         }
       } else {
         this.$refs.editSysAdminDetailsForm.validate()
@@ -723,7 +724,7 @@ export default {
           that.deletingData = false
         }, this.timeoutDuration)
       } catch (error) {
-        // TBI
+        console.error(error)
       }
     }
   },
