@@ -176,22 +176,13 @@
         color="white"
         app
       >
-        <v-layout row fill height align-space-between justify-space-between>
-          <v-layout class="pt-2" row align-center justify-start>
-            <p
-              v-if="$vuetify.breakpoint.smAndDown"
-              class="ml-3"
-              style="align-center"
+        <v-layout row fill height align-center justify-center>
+          <v-layout row fill-height align-center justify-start>
+            <span
+              class="ml-3 caption text-xs-center"
             >
-              V: 0.0.1
-            </p>
-            <p
-              v-if="$vuetify.breakpoint.mdAndUp"
-              class="ml-3 caption"
-              style="align-center"
-            >
-              Version: 0.0.1
-            </p>
+              Version: 0.1.1
+            </span>
           </v-layout>
           <BaseAppNavBtn
             btnIcon="home"
@@ -252,8 +243,6 @@ export default {
   data () {
     return {
       drawerState: false,
-      // swipeDirection: '',
-      // Snackbar
       snackState: false,
       snackText: '',
       snackColor: '',
@@ -311,12 +300,6 @@ export default {
     }
   },
   methods: {
-    // swipe (direction) {
-    //   this.swipeDirection = direction
-    //   if (this.swipeDirection === 'Right') {
-    //     this.drawerState = true
-    //   }
-    // },
     setAuthenticated (newStatus) {
       if (this.level) {
         if (
