@@ -1,12 +1,5 @@
 <template>
-  <v-app
-    v-touch="{
-      left: () => swipe('Left'),
-      right: () => swipe('Right'),
-      up: () => swipe('Up'),
-      down: () => swipe('Down'),
-    }"
-  >
+  <v-app>
     <!-- HEADER -->
     <v-toolbar
       v-if="authenticated && !wizardActive"
@@ -17,13 +10,12 @@
       <img
         v-if="$vuetify.breakpoint.smAndDown"
         @click="drawerState = true"
-        alt
         src="./assets/ed_logo.svg"
       >
       <img>
       <img
         v-if="$vuetify.breakpoint.mdAndUp"
-        alt
+        @click="drawerState = true"
         src="./assets/ed_logo.svg"
       ><img>
       <v-spacer />
@@ -116,7 +108,7 @@
           />
         </v-layout>
       </v-navigation-drawer>
-      <!-- FOR SM AND DOWN -->
+      <!-- FOR MD AND DOWN -->
       <v-navigation-drawer
         v-model="drawerState"
         v-if="
@@ -260,7 +252,7 @@ export default {
   data () {
     return {
       drawerState: false,
-      swipeDirection: '',
+      // swipeDirection: '',
       // Snackbar
       snackState: false,
       snackText: '',
@@ -319,12 +311,12 @@ export default {
     }
   },
   methods: {
-    swipe (direction) {
-      this.swipeDirection = direction
-      if (this.swipeDirection === 'Right') {
-        this.drawerState = true
-      }
-    },
+    // swipe (direction) {
+    //   this.swipeDirection = direction
+    //   if (this.swipeDirection === 'Right') {
+    //     this.drawerState = true
+    //   }
+    // },
     setAuthenticated (newStatus) {
       if (this.level) {
         if (
