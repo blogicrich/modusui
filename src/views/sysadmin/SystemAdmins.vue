@@ -8,28 +8,29 @@
       hasDivider
       fullWidth
     />
-    <BaseDataTable
-      ref="baseDataTable"
-      tableTitle="System Administrators"
-      searchLabel="Search Records..."
+    <SubDisplayTable
+      ref="subDisplayTable"
       :headers="headers"
       :items="sysAdmins"
-      :editPerms="{ create: false, update: false, delete: false }"
-      :primaryColor="primaryColor"
-      :secondaryColor="secondaryColor"
-      :tableActionButton="tableActionButton"
-      :actionButtonIcon="newBtnIcon"
-      :actionButtonTitle="newBtnTitle"
-      :recordIcon="icon"
-      :readUrl="readUrl"
+      :expandable="false"
+      :tableTitleIcon="headerIcon"
+      :tableActionButton="true"
+      actionButtonIcon="person_add"
+      actionButtonTitle="Add new System Administrator"
+      :infoActionButton="error ? true : false"
+      :infoActionBtnTitle="'Reload System Administrators'"
       :loading="loading"
-      :loaded="loaded"
+      :loaded="!loading && !error"
       :error="error"
-      :errorMsg="errorMsg"
-      :loadingMsg="loadingMsg"
-      :loadedMsg="loadedMsg"
+      errorMsg="Error fetching data. Please check your internet connection."
+      loadingMsg="Loading System Administrators"
+      loadedMsg="No System Administrators records to display"
+      item-key="portalAuthorisedId"
+      searchLabel="Search Records..."
+      tableTitle="System Administrators"
       @row-clicked="openEditDialog"
       @action-button-pressed="openNewDialog"
+      @info-action-button-pressed="$store.dispatch('fetchSystemAdmins')"
     />
     <!-- CRUD dialog -->
     <v-layout justify-center v-if="selectedSysAdmin">
@@ -44,7 +45,7 @@
               </v-btn>
               <v-btn
                 v-if="editFormVisible"
-                :disabled="!editFormValid || !passwordFormValid"
+                :disabled="!editFormValid && !passwordFormValid"
                 icon dark
                 @click="updateSelectedSysAdmin"
                 title="save and close"
@@ -71,7 +72,7 @@
                 <span class="warning--text headline font-weight-bold text-xs-center-xs ma-2">You are editing the user currently logged into the portal. If you successfully change the password you will be directed back to the log in screen</span>
               </v-layout>
               <v-card-title>
-                <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
+                <v-icon class="mr-2" medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
                 <span v-show="editFormVisible" class="title primary--text">Change System Administrator Password</span>
                 <span v-show="newFormVisible" class="title primary--text">Set System Administrator Password</span>
               </v-card-title>
@@ -80,7 +81,7 @@
                   class="ma-1"
                   label="New Password"
                   v-model="newPassword"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   clearable
                   :type="passwordMasked ? 'text' : 'password'"
@@ -90,7 +91,7 @@
                   class="ma-1"
                   label="Repeat New Password"
                   v-model="duplicateNewPassword"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   clearable
                   :type="passwordMasked ? 'text' : 'password'"
@@ -123,7 +124,7 @@
           <v-form v-if="editFormVisible" v-model="editFormValid" ref="editSysAdminDetailsForm">
             <v-container>
               <v-card-title>
-                <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
+                <v-icon class="mr-2" medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
                 <span class="title primary--text">Change System Admin Details</span>
                 <v-spacer />
                 <!-- Delete Confirmation Dialog -->
@@ -149,8 +150,8 @@
                     <v-spacer />
                     <v-card-actions>
                       <v-spacer />
-                      <v-btn :color="primaryColor" flat @click.native.prevent="confirmationDialog = false">Cancel</v-btn>
-                      <v-btn :color="primaryColor" flat @click.native.prevent="deleteSysAdmin">Delete</v-btn>
+                      <v-btn :color="$vuetify.theme.primary" flat @click.native.prevent="confirmationDialog = false">Cancel</v-btn>
+                      <v-btn :color="$vuetify.theme.primary" flat @click.native.prevent="deleteSysAdmin">Delete</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -160,7 +161,7 @@
                   class="ma-1"
                   label="username"
                   v-model="selectedUsername"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -169,7 +170,7 @@
                   class="ma-1"
                   label="email"
                   v-model="selectedEmail"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.email"
@@ -178,7 +179,7 @@
                   class="ma-1"
                   label="mobile"
                   v-model="selectedMobileNo"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.mobileNo"
@@ -198,7 +199,7 @@
                   class="ma-1"
                   label="givenName"
                   v-model="selectedGivenName"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -207,7 +208,7 @@
                   class="ma-1"
                   label="familyName"
                   v-model="selectedFamilyName"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -216,7 +217,7 @@
                   class="ma-1"
                   label="salutation"
                   v-model="selectedSalutation"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -239,7 +240,7 @@
           <v-form v-if="newFormVisible" v-model="newFormValid" ref="newSysAdminDetailsForm">
             <v-container>
               <v-card-title>
-                <v-icon medium :color="primaryColor">{{ icon }}</v-icon>
+                <v-icon class="mr-2" medium :color="$vuetify.theme.primary">{{ icon }}</v-icon>
                 <span class="title primary--text">Add new System Administrator</span>
               </v-card-title>
               <v-card-text>
@@ -247,7 +248,7 @@
                   class="ma-1"
                   label="Username"
                   v-model="newUsername"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -256,7 +257,7 @@
                   class="ma-1"
                   label="Email"
                   v-model="newEmail"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.email"
@@ -265,7 +266,7 @@
                   class="ma-1"
                   label="Mobile"
                   v-model="newMobileNo"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.mobileNo"
@@ -284,7 +285,7 @@
                   class="ma-1"
                   label="Given Name"
                   v-model="newGivenName"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -293,7 +294,7 @@
                   class="ma-1"
                   label="Family Name"
                   v-model="newFamilyName"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -302,7 +303,7 @@
                   class="ma-1"
                   label="Salutation"
                   v-model="newSalutation"
-                  color="primaryColor"
+                  :color="$vuetify.theme.primary"
                   outline
                   required
                   :rules="sysAdminDetailsValidation.generic"
@@ -329,7 +330,7 @@
 
 <script>
 
-import BaseDataTable from '@/components/base/BaseDataTableComponent.vue'
+import SubDisplayTable from '@/components/sub/SubDisplayTableComponent.vue'
 import validation from '@/mixins/validation'
 import { mapState } from 'vuex'
 
@@ -337,13 +338,14 @@ export default {
   name: 'SystemAdmins',
   mixins: [validation],
   components: {
-    BaseDataTable
+    SubDisplayTable
   },
   computed: {
     ...mapState({
       currentUser: state => state.eDropletApp.portalAuthorisedId,
       sysAdmins: state => state.systemAdmins.sysAdmins,
       loading: state => state.systemAdmins.sysAdminsLoading,
+      error: state => state.systemAdmins.sysAdminsError,
       selectedSysAdmin: state => state.systemAdmins.selectedSysAdmin,
       titles: state => state.titles.titles
     }),
@@ -485,25 +487,13 @@ export default {
   },
   data () {
     return {
+      // Dialogs
+      icon: 'person',
       // BaseViewHeader
       headerIcon: 'persons',
       iconColor: this.$vuetify.theme.primary,
       headerText: 'System Administrators',
-      // BaseDataTable
-      tableActionButton: true,
-      newBtnIcon: 'person_add',
-      newBtnTitle: 'Add New System Administrator',
-      // loading: !this.loading,
-      loaded: false,
-      error: false,
-      errorMsg: 'Error fetching data. Please check your internet connection. ',
-      loadingMsg: 'Loading System Administrators',
-      loadedMsg: 'No System Administrators to display',
-      readUrl: 'sysadmin/sysadmin',
-      primaryColor: 'primary',
-      secondaryColor: 'primary darken-2',
-      icon: 'person',
-      iconAdd: 'person_add',
+      // SubDisplayTable
       headers: [
         {
           text: 'PortalId',
@@ -585,11 +575,11 @@ export default {
         },
         value => {
           if (value) return value.length >= 8 || 'Password must be more than 8 characters.'
-          // else return true
+          else return 'Value required'
         },
         value => {
           if (value) return value.length <= 72 || 'Password must be less than 72 characters.'
-          // else return true
+          else return 'Value required'
         },
         value => {
           if (value === this.duplicatePasword || value === this.newPassword) return true
@@ -606,13 +596,16 @@ export default {
       sysAdminDetailsValidation: {
         generic: [
           value => !!value || 'Required.',
-          value => value.length <= 20 || 'Max 20 characters',
           value => {
             if (this.alphabeticalRegEx.test(value)) {
               return true
             } else {
               return 'Alphabetical characters only'
             }
+          },
+          value => {
+            if (value) return value.length <= 20 || 'Max 20 characters'
+            else return 'Value required'
           }
         ],
         email: [
@@ -651,13 +644,13 @@ export default {
       this.dialog = true
     },
     openEditDialog (value) {
-      this.$store.commit('SET_SELECTED_SYSADMIN', value)
+      this.$store.commit('SET_SELECTED_SYSADMIN', value.item)
       this.editFormVisible = true
       this.newFormVisible = false
       this.dialog = true
     },
     closeDialog () {
-      // REST ALL BOOLEANS AND STORE OBJECTS
+      // RESET ALL BOOLEANS AND STORE OBJECTS
       this.$store.dispatch('resetBoundFields')
       this.dialog = false
       this.editFormVisible = false
@@ -705,6 +698,8 @@ export default {
           if (this.isCurrentUser) {
             this.$store.dispatch('LOGOUT')
             this.$router.push('/login')
+          } else {
+            await this.$store.dispatch('fetchSystemAdmins')
           }
         } catch (error) {
           console.error(error)
@@ -737,6 +732,3 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-@import "./public/scss/main.scss";
-</style>
