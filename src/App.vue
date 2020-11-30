@@ -64,7 +64,7 @@
       <!-- FOR MD AND UP -->
       <v-navigation-drawer
         v-if="
-          level.find((level) => level === 'CARER') &&
+          level.includes('CARER') &&
             authenticated &&
             $vuetify.breakpoint.lgAndUp
         "
@@ -79,10 +79,7 @@
       >
         <v-layout column fill-height align-center justify-space-between>
           <BaseAppNavBtn
-            v-if="
-              level.find((level) => level === 'CARER') &&
-                level.find((level) => level === 'CLIENT ADMINISTRATOR')
-            "
+            v-if="level.includes('CARER') && level.includes('CLIENT ADMINISTRATOR')"
             my-3
             right
             btnIcon="settings"
@@ -112,7 +109,7 @@
       <v-navigation-drawer
         v-model="drawerState"
         v-if="
-          level.find((level) => level === 'CARER') &&
+          level.includes('CARER') &&
             authenticated &&
             $vuetify.breakpoint.mdAndDown
         "
@@ -128,10 +125,7 @@
       >
         <v-layout column fill-height align-start justify-start>
           <BaseAppNavBtn
-            v-if="
-              level.find((level) => level === 'CARER') &&
-                level.find((level) => level === 'CLIENT ADMINISTRATOR')
-            "
+            v-if="level.includes('CARER') && level.includes('CLIENT ADMINISTRATOR')"
             my-3
             right
             btnIcon="settings"
@@ -161,7 +155,7 @@
       </v-navigation-drawer>
     </transition-group>
     <!-- ROUTER VIEW -->
-    <v-container fluid>
+    <v-container :class="containerStyle">
       <v-content>
         <v-slide-y-transition mode="out-in">
           <router-view @authenticated="setAuthenticated" />
@@ -346,6 +340,13 @@ export default {
     }
   },
   computed: {
+    containerStyle () {
+      if (this.$route.name === 'login' || this.$route.name === 'forgotpassword' || this.$route.name === 'registration') {
+        return 'fill-height fluid'
+      } else {
+        return 'fluid'
+      }
+    },
     userLevel () {
       const greeting = 'LOGGED IN AS: '
       let concatUser = ''
@@ -375,6 +376,11 @@ export default {
     authenticated: function () {
       if (!this.authenticated) {
         this.logout()
+      }
+    },
+    '$route' (to, from) {
+      if (to.name !== from.name) {
+        this.drawerState = false
       }
     }
   },

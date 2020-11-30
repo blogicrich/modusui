@@ -1,16 +1,14 @@
 <template>
-  <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
-    <base-reset-password />
-  </v-layout>
+  <BaseResetPassword />
 </template>
 
 <script>
 
-import BaseResetPasswordVue from '@/components/base/BaseResetPassword'
+import BaseResetPassword from '@/components/base/BaseResetPassword'
 
 export default {
   components: {
-    'base-reset-password': BaseResetPasswordVue
+    BaseResetPassword
   }
 }
 </script>

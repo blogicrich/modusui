@@ -1,40 +1,37 @@
 <template>
-  <v-layout column align-center justify-center>
-    <v-layout class="ma-2" column align-center>
-      <v-img contain :height="imageSize" :width="imageSize" :src="require('@/assets/ed_logo.svg')" />
+  <v-layout column align-center justify-center @keyup.enter="checkValues">
+    <v-img
+      style="margin:-0px"
+      contain
+      :height="imageSize"
+      :width="imageSize"
+      :src="require('@/assets/ed_logo.svg')"
+    />
+    <v-progress-circular
+      v-if="isAuthenticating"
+      class="ma-2"
+      :rotate="180"
+      :size="spinnerSize"
+      :width="spinnerWidth"
+      :color="primaryColor"
+      indeterminate
+    />
+    <span
+      v-if="isAuthenticating && !isActive"
+      style="text-xs-center accent--text font-weight-bold"
+    >
+      Authenticating. Please wait...
+    </span>
+    <v-layout v-if="msg && !isActive && !isAuthenticating" align-center justify-center>
+      <v-icon class="mr-2 mb-1" color="error">highlight_off</v-icon>
+      <span class="body-2 text-xs-center accent--text font-weight-bold">{{ msg }}</span>
     </v-layout>
-    <v-form ref="loginForm" v-model="loginFormValid">
-      <v-layout
-        v-if="isAuthenticating"
-        column
-        align-center
-        justify-center
-      >
-        <v-progress-circular
-          class="ma-2"
-          :rotate="180"
-          :size="spinnerSize"
-          :width="spinnerWidth"
-          :color="primaryColor"
-          indeterminate
-        />
-        <span style="text-xs-center accent--text font-weight-bold">Authenticating. Please wait...</span>
-      </v-layout>
-      <v-layout
-        v-if="!isAuthenticating"
-        column
-        align-center
-        justify-center
-        @keyup.enter="checkValues"
-      >
-        <v-fade-transition>
-          <v-flex>
-            <v-layout v-if="msg" align-center justify-center>
-              <v-icon class="ma-2" color="error">highlight_off</v-icon>
-              <span class="body-2 text-xs-center accent--text font-weight-bold">{{ msg }}</span>
-            </v-layout>
-          </v-flex>
-        </v-fade-transition>
+    <v-form
+      ref="loginForm"
+      v-model="loginFormValid"
+      v-if="!isAuthenticating && !isActive"
+    >
+      <v-layout column align-center justify-center>
         <v-text-field
           v-model="input.username"
           type="text"
@@ -51,13 +48,13 @@
           outline
           :rules="[v => !!v || 'Password required!']"
         />
-        <router-link to="/passwordreset">
+        <router-link class="mb-3" to="/passwordreset">
           <a>Forgotten password?</a>
         </router-link>
       </v-layout>
-      <v-layout class="mt-1" align-end justify-end column>
+      <v-layout v-if="!isAuthenticating && !isActive" row align-end justify-end>
         <v-btn
-          :disabled="!loginFormValid"
+          :disabled="!loginFormValid || isAuthenticating"
           :color="$vuetify.theme.primary"
           @click="checkValues"
         >

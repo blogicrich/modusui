@@ -1,21 +1,15 @@
 <template>
-  <v-layout
-    class="loginreset-container"
-    row
-    fill-height
-    align-center
-    justify-space-around
-  >
+  <v-container fill-height>
     <BaseLogin
       :msg="msg"
       :is-authenticating="loading"
-      :is-active="isActive"
+      :is-active="authenticated"
       :primary-color="primaryColor"
       :spinner-size="spinnerSize"
       :spinner-width="spinnerWidth"
       @authenticate="submitCredentials"
     />
-  </v-layout>
+  </v-container>
 </template>
 
 <script>

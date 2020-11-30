@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="loginreset-container" row fill-height align-center justify-space-around>
+  <v-layout row fill-height align-center justify-space-around>
     <v-dialog v-model="dropletAvailabilityError" persistent width="700">
       <v-card v-if="dropletState === 'BASE_NOT_FOUND'">
         <v-card-title class="headline lighten-2">This Connected Droplet has not come online yet</v-card-title>
