@@ -166,6 +166,7 @@
     <v-fade-transition>
       <v-footer
         v-if="authenticated && !wizardActive"
+        height="34"
         :fixed="fixed"
         color="white"
         app
@@ -407,4 +408,5 @@ img {
   height: inherit;
   padding: 5px;
 }
+
 </style>

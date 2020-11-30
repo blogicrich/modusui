@@ -2,7 +2,7 @@
   <v-flex :class="$vuetify.breakpoint.smAndDown ? 'border-primary pa-2' : 'border-primary pa-4'">
     <v-layout row fill-height align-center justify-center>
       <v-icon
-        :color="$vuetify.theme.accent"
+        :color="$vuetify.theme.primary"
         medium
       >
         {{ groupIcon }}

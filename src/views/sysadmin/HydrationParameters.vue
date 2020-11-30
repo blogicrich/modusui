@@ -7,7 +7,7 @@
       hasDivider
       fullWidth
     />
-    <transition-group name="fade" mode="out-in">
+    <transition-group name="fade" mode="in-out" appear>
       <BaseDataTableInfoCard
         key="hydrationParamsLoadingCard"
         v-if="paramsLoading || paramsError"

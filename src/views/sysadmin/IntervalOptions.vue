@@ -65,7 +65,6 @@
     </v-layout>
     <v-layout v-if="$vuetify.breakpoint.lgAndUp" row justify-center align-center>
       <v-btn
-        class="root-nav-btn"
         :disabled="!intervalsPristine"
         @click="save(selectedBlueLightInterval, selectedSpokenReminderInterval)"
         color="primary" large
@@ -74,7 +73,6 @@
         <v-icon class="ma-1">save</v-icon>
       </v-btn>
       <v-btn
-        class="root-nav-btn"
         :disabled="!intervalsPristine"
         @click="reset"
         color="primary" large
@@ -190,7 +188,7 @@ export default {
         this.blueLight = this.selectedBlueLightInterval.time
         this.spoken = this.selectedSpokenReminderInterval.time
       } catch (error) {
-        // TBI
+        console.error(error)
       }
     }
   },

@@ -77,7 +77,7 @@
           <v-text-field
             label="Subject"
             :value="getterSelectedMessage.subject"
-            :class="$vuetify.breakpoint.mdAndDown ? 'subheading font-weight-light' : 'headline font-weight-light'"
+            :class="'subheading font-weight-light'"
             color="primaryColor"
             outline
             :rules="[required, validateMaxChars(getterSelectedMessage.subject, 254)]"
@@ -87,7 +87,7 @@
             outline
             name="input-7-4"
             label="Message"
-            :class="$vuetify.breakpoint.mdAndDown ? 'subheading font-weight-light' : 'headline font-weight-light'"
+            :class="'subheading font-weight-light'"
             :value="getterSelectedMessage.message"
             :rules="[required, validateMaxChars(getterSelectedMessage.message, 254)]"
             @input="$store.commit('UPDATE_SELECTED_MESSAGE_TEXT', $event)"
@@ -172,7 +172,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-@import "./public/scss/main.scss";
-</style>

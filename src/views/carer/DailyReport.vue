@@ -393,7 +393,6 @@ export default {
         }
       }
       return isPristine
-      // return false
     },
     username () {
       return this.selectedUser.deptPerson.person.givenName + ' ' + this.selectedUser.deptPerson.person.familyName
@@ -565,6 +564,3 @@ export default {
 }
 
 </script>
-<style scoped lang="scss">
-@import "./public/scss/main.scss";
-</style>
