@@ -3,6 +3,7 @@ import apiLib from '../services/apiLib.js'
 export const moduleSystemAdministrators = {
   state: {
     sysAdminsLoading: true,
+    sysAdminsError: false,
     sysAdmins: [],
     selectedSysAdmin: {},
     selectedSysAdminCopy: {},
@@ -32,11 +33,14 @@ export const moduleSystemAdministrators = {
       state.sysAdmins = data
     },
     SET_SELECTED_SYSADMIN (state, data) {
-      state.selectedSysAdmin = data
+      state.selectedSysAdmin = { ...data }
       state.selectedSysAdminCopy = JSON.parse(JSON.stringify(data))
     },
     SET_SYSADMINS_LOAD_STATUS (state, data) {
       state.sysAdminsLoading = data
+    },
+    SET_SYSADMINS_ERROR_STATUS (state, data) {
+      state.sysAdminsError = data
     },
     // PASSWORD - UPDATE AND CREATE
     SET_SYSADMIN_NEW_PASSWORD (state, data) {
@@ -111,15 +115,22 @@ export const moduleSystemAdministrators = {
   },
   actions: {
     async fetchSystemAdmins (context) {
-      context.commit('SET_SYSADMINS_LOAD_STATUS', true)
-      return apiLib.getData('sysadmin/sysadmin', true).then((response) => {
-        if (typeof response === 'undefined' || response.length <= 0) {
+      try {
+        context.commit('SET_SYSADMINS_ERROR_STATUS', false)
+        context.commit('SET_SYSADMINS_LOAD_STATUS', true)
+        const response = await apiLib.getData('sysadmin/sysadmin')
+        if (typeof response === 'undefined' || !Array.isArray(response)) {
           context.commit('SET_SYSADMINS', [])
+          context.commit('SET_SYSADMINS_LOAD_STATUS', false)
         } else {
           context.commit('SET_SYSADMINS', response)
           context.commit('SET_SYSADMINS_LOAD_STATUS', false)
         }
-      })
+      } catch (error) {
+        console.log(error)
+        context.commit('SET_SYSADMINS_ERROR_STATUS', true)
+        context.commit('SET_SYSADMINS_LOAD_STATUS', false)
+      }
     },
 
     async updateSysAdmin (context) {
