@@ -1,6 +1,6 @@
 <template>
   <v-layout class="pa-1" row fill-height align-center justify-center>
-    <v-flex grow @click.stop="$emit('nav-btn-clicked')">
+    <v-flex grow @click.stop="!enabled ? $emit('nav-btn-clicked') : undefined">
       <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
         <span>{{ tip }}</span>
         <v-btn
