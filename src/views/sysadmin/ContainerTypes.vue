@@ -140,12 +140,18 @@ export default {
           menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
             value => {
               if (this.alphabeticalRegEx.test(value)) {
                 return true
               } else {
                 return 'Alphabetical characters only'
+              }
+            },
+            value => {
+              if (value) {
+                return value.length <= 20 || 'Max 20 characters'
+              } else {
+                return 'Value required'
               }
             }
           ]
@@ -158,7 +164,13 @@ export default {
           menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters'
+            value => {
+              if (this.numeric3dpRegEx.test(value)) {
+                return true
+              } else {
+                return 'Consumption to 3dp'
+              }
+            }
           ]
         }
       ],
@@ -178,12 +190,18 @@ export default {
           menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
             value => {
               if (this.alphabeticalRegEx.test(value)) {
                 return true
               } else {
                 return 'Alphabetical characters only'
+              }
+            },
+            value => {
+              if (value) {
+                return value.length <= 20 || 'Max 20 characters'
+              } else {
+                return 'Value required'
               }
             }
           ]
@@ -200,9 +218,6 @@ export default {
           ]
         }
       ]
-      // this.defaultItem = [
-      //   { containerTypeId: 0, description: ' ', volume: 0 }
-      // ]
     }
   },
   mounted () {

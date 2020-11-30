@@ -10,19 +10,13 @@ export const crudRoutines = {
           row[item[i].attr] = item[i][item[i].attr]
         })
       }
-      await apiLib.postData(this.createUrl, row, true, true).then(() => {
-        for (var i = 0; i < item.length; i++) {
-          Object.keys(item[i]).forEach(function (key) {
-            // Return newItem values to null
-            item[i][item[i].attr] = null
-          })
-        }
+      await apiLib.postData(this.createUrl, row, false, true).then(() => {
+        row = {}
+        this.getItems(this.readUrl)
       })
         .catch(error => {
           console.error(error)
         })
-      row = {}
-      this.getItems(this.readUrl)
     },
 
     async deleteItem (items) {
@@ -49,21 +43,22 @@ export const crudRoutines = {
           Object.keys(thatDefaultItem[j]).forEach(function (key) {
             if (items[i][key]) editedItem[key] = items[i][key]
           })
-          apiLib.updateData(this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem, false, true)
-            .then(() => {})
+          await apiLib.updateData(this.updateUrl + '/' + editedItem[this.crudIdKey], editedItem, false, true)
+            .then(() => {
+              this.getItems(this.readUrl)
+            })
             .catch(error => {
               console.error(error)
             })
             .finally()
         }
       }
-      this.getItems(this.readUrl)
     },
 
     async getItems (url) {
       this.loading = true
       this.loadingMsg = 'Loading Data - Please Wait'
-      var response = await apiLib.getData(url, false, true)
+      var response = await apiLib.getData(url, false)
       if (Array.isArray(response) === false) {
         this.items = []
         this.errorMsg = 'Server response error: ' + response + ' - Please contact your system administrator.'
@@ -98,7 +93,7 @@ export const crudRoutines = {
         const values = []
         for (var i = 0; i < urls.length; i++) {
           if (urls[i].url) {
-            menuItems = await apiLib.getData(urls[i].url, true, true)
+            menuItems = await apiLib.getData(urls[i].url, true)
             for (var j = 0; j < menuItems.length; j++) {
               const val = menuItems[j]
               values.push(val)

@@ -33,7 +33,7 @@
       delDialogTitle="Confirm deletetion of selected items?"
       msgDel="Are you sure you want to delete the selected items?"
 
-      @newItem="addItem"
+      @newItem="addItem($event)"
       @itemsEdited="editItems"
       @deleteSelected="deleteItem"
       @itemsCancelled="getItems(readUrl)"
@@ -47,7 +47,6 @@
           :color="primaryColor"
           outline
           required
-          validate-on-blur
           :rules="newItem[itemKey].validators"
         />
       </template>
@@ -60,7 +59,6 @@
           :color="primaryColor"
           outline
           required
-          validata-on-blur
           :rules="newItem.find(attribute => attribute.attr === itemKey).validators"
         >
           {{ property }}
@@ -140,15 +138,20 @@ export default {
           cellType: 'tb',
           attr: 'shortDescription',
           cellLabel: 'Abbreviation',
-          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
             value => {
               if (this.alphabeticalRegEx.test(value)) {
                 return true
               } else {
                 return 'Alphabetical characters only'
+              }
+            },
+            value => {
+              if (value) {
+                return value.length <= 20 || 'Max 20 characters'
+              } else {
+                return 'Value required'
               }
             }
           ]
@@ -158,15 +161,20 @@ export default {
           cellType: 'tb',
           attr: 'longDescription',
           cellLabel: 'Description',
-          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
             value => {
               if (this.alphabeticalRegEx.test(value)) {
                 return true
               } else {
                 return 'Alphabetical characters only'
+              }
+            },
+            value => {
+              if (value) {
+                return value.length <= 20 || 'Max 20 characters'
+              } else {
+                return 'Value required'
               }
             }
           ]
@@ -184,15 +192,20 @@ export default {
           shortDescription: '',
           cellType: 'tb',
           cellLabel: 'shortDescription',
-          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
             value => {
               if (this.alphabeticalRegEx.test(value)) {
                 return true
               } else {
                 return 'Alphabetical characters only'
+              }
+            },
+            value => {
+              if (value) {
+                return value.length <= 20 || 'Max 20 characters'
+              } else {
+                return 'Value required'
               }
             }
           ]
@@ -201,23 +214,25 @@ export default {
           longDescription: '',
           cellType: 'tb',
           cellLabel: 'longDescription',
-          // menuItems: [],
           validators: [
             value => !!value || 'Required.',
-            value => value.length <= 20 || 'Max 20 characters',
             value => {
               if (this.alphabeticalRegEx.test(value)) {
                 return true
               } else {
                 return 'Alphabetical characters only'
               }
+            },
+            value => {
+              if (value) {
+                return value.length <= 20 || 'Max 20 characters'
+              } else {
+                return 'Value required'
+              }
             }
           ]
         }
       ]
-      // this.defaultItem = [
-      //   { titleId: 0, shortDescription: '', longDescription: '' }
-      // ]
     }
   },
   mounted () {
