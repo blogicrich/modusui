@@ -504,7 +504,7 @@
           </v-dialog>
           <!-- New Item newDialog -->
           <v-dialog v-model="newDialog" max-width="500px">
-            <v-form ref="form" v-model="valid">
+            <v-form ref="newForm" v-model="valid">
               <v-card class="pa-3">
                 <v-layout row justify-center align-center>
                   <v-icon class="mr-2" medium :color="primaryColor">{{ recordIcon }}</v-icon>
@@ -765,6 +765,7 @@ export default {
     save () {
       if (this.$refs.newForm.validate()) {
         this.$emit('newItem', this.newItem)
+        this.$refs.newForm.reset()
         this.close()
       }
     },
