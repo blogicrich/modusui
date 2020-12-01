@@ -3,12 +3,11 @@ import apiLib from '../services/apiLib.js'
 export const moduleCliAdminDroplets = {
   state: {
     droplets: null,
+    error: null,
     loading: true,
     // Base Availability Check values
     queriedMacAddress: null,
-    queryResult: null,
-    // Register values
-    dropletRegisterStatus: null
+    queryResult: null
   },
   mutations: {
     SET_AVAILABILITY_QUERY_RESULTS (state, { macAddress, availabilityState }) {
@@ -17,6 +16,9 @@ export const moduleCliAdminDroplets = {
     },
     SET_LOADING_STATE (state, loading) {
       state.loading = loading
+    },
+    SET_ERROR_STATE (state, error) {
+      state.error = error
     },
     SET_DROPLETS (state, droplets) {
       state.droplets = droplets
@@ -27,45 +29,73 @@ export const moduleCliAdminDroplets = {
   },
   actions: {
     async fetchAvailabilityState ({ commit }, macAddress) {
-      commit('SET_LOADING_STATE', true)
-      const response = await apiLib.getData(`/cliadmin/base/${macAddress}/availability-state`)
-      commit('SET_AVAILABILITY_QUERY_RESULTS', { macAddress, availabilityState: response.availabilityState })
-      commit('SET_LOADING_STATE', false)
+      try {
+        commit('SET_LOADING_STATE', true)
+        commit('SET_ERROR_STATE', false)
+        const response = await apiLib.getData(`/cliadmin/base/${macAddress}/availability-state`)
+        commit('SET_AVAILABILITY_QUERY_RESULTS', { macAddress, availabilityState: response.availabilityState })
+      } catch (err) {
+        commit('SET_ERROR_STATE', err)
+      } finally {
+        commit('SET_LOADING_STATE', false)
+      }
     },
     async fetchDroplets ({ commit }) {
-      commit('SET_LOADING_STATE', true)
-      const response = await apiLib.getData('/cliadmin/base')
-      commit('SET_DROPLETS', response)
-      commit('SET_LOADING_STATE', false)
+      try {
+        commit('SET_LOADING_STATE', true)
+        commit('SET_ERROR_STATE', false)
+        const response = await apiLib.getData('/cliadmin/base')
+        commit('SET_DROPLETS', response)
+      } catch (err) {
+        commit('SET_ERROR_STATE', err)
+      } finally {
+        commit('SET_LOADING_STATE', false)
+      }
     },
     async registerDroplet ({ commit }, macAddress) {
-      commit('SET_LOADING_STATE', true)
-      const { status } = await apiLib.postData(
-        '/cliadmin/base',
-        {
-          macAddress
-        },
-        true,
-        true,
-        true
-      )
-      commit('SET_REGISTER_STATUS', status)
-      commit('SET_LOADING_STATE', false)
+      try {
+        commit('SET_LOADING_STATE', true)
+        commit('SET_ERROR_STATE', false)
+        await apiLib.postData('/cliadmin/base', { macAddress }, true, true)
+        commit('SET_REGISTER_STATUS', status)
+      } catch (err) {
+        commit('SET_ERROR_STATE', err)
+      } finally {
+        commit('SET_LOADING_STATE', false)
+      }
     },
     async setDropletName ({ commit }, { friendlyName, baseId }) {
-      commit('SET_LOADING_STATE', true)
-      await apiLib.updateData(`/cliadmin/base/${baseId}/name`, { friendlyName }, true, true)
-      commit('SET_LOADING_STATE', false)
+      try {
+        commit('SET_LOADING_STATE', true)
+        commit('SET_ERROR_STATE', false)
+        await apiLib.updateData(`/cliadmin/base/${baseId}/name`, { friendlyName }, true, true)
+      } catch (err) {
+        commit('SET_ERROR_STATE', err)
+      } finally {
+        commit('SET_LOADING_STATE', false)
+      }
     },
     async setDropletUser ({ commit }, { userId, baseId }) {
-      commit('SET_LOADING_STATE', true)
-      await apiLib.updateData(`/cliadmin/base/${baseId}/user`, { userId }, true, true)
-      commit('SET_LOADING_STATE', false)
+      try {
+        commit('SET_LOADING_STATE', true)
+        commit('SET_ERROR_STATE', false)
+        await apiLib.updateData(`/cliadmin/base/${baseId}/user`, { userId }, true, true)
+      } catch (err) {
+        commit('SET_ERROR_STATE', err)
+      } finally {
+        commit('SET_LOADING_STATE', false)
+      }
     },
     async unlinkDroplet ({ commit }, baseId) {
-      commit('SET_LOADING_STATE', true)
-      await apiLib.deleteData(`/cliadmin/base/${baseId}`, true, true)
-      commit('SET_LOADING_STATE', false)
+      try {
+        commit('SET_LOADING_STATE', true)
+        commit('SET_ERROR_STATE', false)
+        await apiLib.deleteData(`/cliadmin/base/${baseId}`, true, true)
+      } catch (err) {
+        commit('SET_ERROR_STATE', err)
+      } finally {
+        commit('SET_LOADING_STATE', false)
+      }
     }
   }
 }
