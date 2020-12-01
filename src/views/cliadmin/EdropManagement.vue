@@ -13,6 +13,13 @@
       :headers="headers"
       :expandable="false"
       :loading="loading"
+      :loaded="!loading && !error"
+      :error="error"
+      errorMsg="Error while loading Connected Droplets"
+      loadingMsg="Loading Connected Droplets..."
+      loadedMsg="No Connected Droplets to display"
+      :infoActionButton="error || ((!droplets || droplets.length === 0) && !loading)"
+      :infoActionBtnTitle="'Reload Connected Droplets'"
       :tableActionButton="true"
       actionButtonIcon="add"
       actionButtonTitle="Add new Connected Droplet"
@@ -21,6 +28,7 @@
       secondaryColor="secondary"
       @row-clicked="handleRowClick"
       @action-button-pressed="wizardDialog = true"
+      @info-action-button-pressed="$store.dispatch('fetchDroplets')"
     />
     <v-dialog v-model="editDialog" max-width="700">
       <v-card>
@@ -59,14 +67,14 @@ import BaseDropletEditor from '@/components/base/BaseDropletEditor.vue'
 import BaseDropletWizard from '@/components/base/BaseDropletWizard'
 
 import { mapState } from 'vuex'
-import Titles from '../sysadmin/Titles.vue'
 
 export default {
   name: 'EdropletManagement',
   computed: {
     ...mapState({
       loading: state => state.cliAdminDroplets.loading,
-      droplets: state => state.cliAdminDroplets.droplets
+      droplets: state => state.cliAdminDroplets.droplets,
+      error: state => state.cliAdminDroplets.error
     }),
     items () {
       if (this.droplets) {
