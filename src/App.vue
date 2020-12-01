@@ -9,13 +9,13 @@
     >
       <img
         v-if="$vuetify.breakpoint.smAndDown"
-        @click="drawerState = true"
+        @click="setDrawerState()"
         src="./assets/ed_logo.svg"
       >
       <img>
       <img
         v-if="$vuetify.breakpoint.mdAndUp"
-        @click="drawerState = true"
+        @click="setDrawerState()"
         src="./assets/ed_logo.svg"
       ><img>
       <v-spacer />
@@ -295,6 +295,9 @@ export default {
     }
   },
   methods: {
+    setDrawerState () {
+      this.drawerState = !this.drawerState
+    },
     setAuthenticated (newStatus) {
       if (this.level) {
         if (
