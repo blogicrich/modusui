@@ -8,6 +8,7 @@
       fullWidth
     />
     <sub-display-table-component
+      tableTitleIcon="local_drink"
       :items="items"
       itemKey="baseId"
       :headers="headers"

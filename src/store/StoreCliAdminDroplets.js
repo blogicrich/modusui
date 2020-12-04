@@ -14,10 +14,10 @@ export const moduleCliAdminDroplets = {
       state.queriedMacAddress = macAddress
       state.queryResult = availabilityState
     },
-    SET_LOADING_STATE (state, loading) {
+    SET_DROPLET_LOADING_STATE (state, loading) {
       state.loading = loading
     },
-    SET_ERROR_STATE (state, error) {
+    SET_DROPLET_ERROR_STATE (state, error) {
       state.error = error
     },
     SET_DROPLETS (state, droplets) {
@@ -30,71 +30,71 @@ export const moduleCliAdminDroplets = {
   actions: {
     async fetchAvailabilityState ({ commit }, macAddress) {
       try {
-        commit('SET_LOADING_STATE', true)
-        commit('SET_ERROR_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', true)
+        commit('SET_DROPLET_ERROR_STATE', false)
         const response = await apiLib.getData(`/cliadmin/base/${macAddress}/availability-state`)
         commit('SET_AVAILABILITY_QUERY_RESULTS', { macAddress, availabilityState: response.availabilityState })
       } catch (err) {
-        commit('SET_ERROR_STATE', err)
+        commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
-        commit('SET_LOADING_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', false)
       }
     },
     async fetchDroplets ({ commit }) {
       try {
-        commit('SET_LOADING_STATE', true)
-        commit('SET_ERROR_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', true)
+        commit('SET_DROPLET_ERROR_STATE', false)
         const response = await apiLib.getData('/cliadmin/base')
         commit('SET_DROPLETS', response)
       } catch (err) {
-        commit('SET_ERROR_STATE', err)
+        commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
-        commit('SET_LOADING_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', false)
       }
     },
     async registerDroplet ({ commit }, macAddress) {
       try {
-        commit('SET_LOADING_STATE', true)
-        commit('SET_ERROR_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', true)
+        commit('SET_DROPLET_ERROR_STATE', false)
         await apiLib.postData('/cliadmin/base', { macAddress }, true, true)
         commit('SET_REGISTER_STATUS', status)
       } catch (err) {
-        commit('SET_ERROR_STATE', err)
+        commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
-        commit('SET_LOADING_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', false)
       }
     },
     async setDropletName ({ commit }, { friendlyName, baseId }) {
       try {
-        commit('SET_LOADING_STATE', true)
-        commit('SET_ERROR_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', true)
+        commit('SET_DROPLET_ERROR_STATE', false)
         await apiLib.updateData(`/cliadmin/base/${baseId}/name`, { friendlyName }, true, true)
       } catch (err) {
-        commit('SET_ERROR_STATE', err)
+        commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
-        commit('SET_LOADING_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', false)
       }
     },
     async setDropletUser ({ commit }, { userId, baseId }) {
       try {
-        commit('SET_LOADING_STATE', true)
-        commit('SET_ERROR_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', true)
+        commit('SET_DROPLET_ERROR_STATE', false)
         await apiLib.updateData(`/cliadmin/base/${baseId}/user`, { userId }, true, true)
       } catch (err) {
-        commit('SET_ERROR_STATE', err)
+        commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
-        commit('SET_LOADING_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', false)
       }
     },
     async unlinkDroplet ({ commit }, baseId) {
       try {
-        commit('SET_LOADING_STATE', true)
-        commit('SET_ERROR_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', true)
+        commit('SET_DROPLET_ERROR_STATE', false)
         await apiLib.deleteData(`/cliadmin/base/${baseId}`, true, true)
       } catch (err) {
-        commit('SET_ERROR_STATE', err)
+        commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
-        commit('SET_LOADING_STATE', false)
+        commit('SET_DROPLET_LOADING_STATE', false)
       }
     }
   }

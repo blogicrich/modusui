@@ -47,12 +47,12 @@ export default {
       ],
 
       givenNameRules: [
-        v => v !== '' || 'Your given name is required',
+        v => v !== '' || 'Given name is required',
         v => v.length <= 128 || 'Given name is too long'
       ],
 
       familyNameRules: [
-        v => v !== '' || 'Your family name is required',
+        v => v !== '' || 'Family name is required',
         v => v.length <= 128 || 'Family name is too long'
       ],
 

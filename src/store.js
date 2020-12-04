@@ -31,6 +31,7 @@ import { moduleDashboardUsers } from '@/store/StoreDashboardUsers'
 import { moduleDashboardWeek } from '@/store/StoreDashboardWeek'
 // Unregistered
 import { moduleGettingStartedWizard } from '@/store/StoreGettingStartedWizard'
+import { modulePublicTitles } from '@/store/StorePublicTitles'
 
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
@@ -67,7 +68,8 @@ export default new Vuex.Store({
     dashboardUsers: moduleDashboardUsers,
     dashboardWeek: moduleDashboardWeek,
     // Unregistered
-    gettingStartedWizard: moduleGettingStartedWizard
+    gettingStartedWizard: moduleGettingStartedWizard,
+    publicTitles: modulePublicTitles
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [] // set logger only for development

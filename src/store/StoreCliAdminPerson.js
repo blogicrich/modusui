@@ -2,54 +2,32 @@ import apiLib from '../services/apiLib.js'
 
 export const moduleCliAdminPerson = {
   state: {
-    cliAdminPersons: [],
-    cliAdminPersonsLoading: false,
-    cliAdminPersonsError: false,
-    cliAdminSelectedPerson: false
+    people: [],
+    loading: false,
+    error: null
   },
   mutations: {
-    SET_CLIADMIN_PERSONS (state, data) {
-      state.cliAdminPersons = data
+    SET_PEOPLE_LOAD_STATE (state, loading) {
+      state.loading = loading
     },
-    SET_CLIADMIN_PERSONS_LOAD_STATE (state, data) {
-      state.cliAdminPersonsLoading = data
+    SET_PEOPLE_ERROR_STATE (state, error) {
+      state.error = error
     },
-    SET_CLIADMIN_PERSONS_ERROR (state, data) {
-      state.cliAdminError = data
-    },
-    SET_CLIADMIN_SELECTED_PERSON (state, data) {
-      state.cliAdminSelectedPerson = data
-    },
-    RESET_CLIADMIN_PERSONS_STATE (state) {
-      state.cliAdminPersons = []
-      state.cliAdminSelectedPerson = {}
-      state.cliAdminPersonsLoading = false
-      state.cliAdminError = false
+    SET_PEOPLE (state, people) {
+      state.people = people
     }
   },
   actions: {
-    async fetchCliAdminPersons (context, payload) {
+    async fetchPeople ({ commit }) {
       try {
-        context.commit('SET_CLIADMIN_PERSONS_LOAD_STATE', true)
-        const response = await apiLib.getData('cliadmin/person')
-        if (Array.isArray(response)) {
-          context.commit('SET_CLIADMIN_PERSONS', response)
-          context.commit('SET_CLIADMIN_SELECTED_PERSON', response[0])
-          context.commit('SET_CLIADMIN_PERSONS_LOAD_STATE', false)
-          context.commit('SET_CLIADMIN_PERSONS_ERROR', false)
-        } else {
-          context.commit('SET_CLIADMIN_PERSONS', [])
-          context.commit('SET_CLIADMIN_SELECTED_PERSON', {})
-          context.commit('SET_CLIADMIN_PERSONS_LOAD_STATE', false)
-        }
-      } catch (error) {
-        console.error(error)
-        context.commit('SET_CLIADMIN_PERSONS_ERROR', true)
-        return error
+        commit('SET_PEOPLE_LOAD_STATE', true)
+        commit('SET_PEOPLE_ERROR_STATE', null)
+        commit('SET_PEOPLE', await apiLib.getData('/cliadmin/person'))
+      } catch (err) {
+        commit('SET_PEOPLE_ERROR_STATE', err)
+      } finally {
+        commit('SET_PEOPLE_LOAD_STATE', false)
       }
     }
-  },
-  getters: {
-
   }
 }
