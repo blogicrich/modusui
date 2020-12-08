@@ -6,7 +6,9 @@ export const moduleCommonData = {
     genderOptions: [],
     conditionOptions: [],
     intervalOptions: [],
-    containerTypes: []
+    containerTypes: [],
+    alertTypes: [],
+    communicationMethods: []
   },
   mutations: {
     SET_GENDER_OPTIONS (state, data) {
@@ -21,6 +23,12 @@ export const moduleCommonData = {
     SET_CONTAINER_TYPES (state, data) {
       state.containerTypes = data
     },
+    SET_ALERT_TYPES (state, data) {
+      state.alertTypes = data
+    },
+    SET_COMMUNICATION_METHODS (state, data) {
+      state.communicationMethods = data
+    },
     SET_COMMON_DATA_LOAD_STATE (state, data) {
       state.commonDataLoadState = data
     }
@@ -33,7 +41,9 @@ export const moduleCommonData = {
         dispatch('fetchConditionOptions'),
         dispatch('fetchIntervalOptions'),
         dispatch('fetchContainerTypes'),
-        dispatch('fetchGenderOptions')
+        dispatch('fetchGenderOptions'),
+        dispatch('fetchAlertTypes'),
+        dispatch('fetchCommunicationMethods')
       ])
         .then(
           commit('SET_COMMON_DATA_LOAD_STATE', false)
@@ -72,6 +82,24 @@ export const moduleCommonData = {
           context.commit('SET_CONTAINER_TYPES', [])
         } else {
           context.commit('SET_CONTAINER_TYPES', response)
+        }
+      })
+    },
+    async fetchAlertTypes (context) {
+      apiLib.getData('common/alert-types/').then((response) => {
+        if (typeof response === 'undefined') {
+          context.commit('SET_ALERT_TYPES', [])
+        } else {
+          context.commit('SET_ALERT_TYPES', response)
+        }
+      })
+    },
+    async fetchCommunicationMethods (context) {
+      apiLib.getData('common/communication-methods/').then((response) => {
+        if (typeof response === 'undefined') {
+          context.commit('SET_COMMUNICATION_METHODS', [])
+        } else {
+          context.commit('SET_COMMUNICATION_METHODS', response)
         }
       })
     }

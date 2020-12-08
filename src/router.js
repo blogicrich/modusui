@@ -103,6 +103,11 @@ export default new Router({
       name: 'UserSettingsManagement',
       component: () => import(/* webpackChunkName: "interval-options" */ './views/cliadmin/UserSettingsManagement.vue')
     },
+    {
+      path: '/carersettings',
+      name: 'CarerSettings',
+      component: () => import(/* webpackChunkName: "carer-settings" */ './views/cliadmin/CarerSettings.vue')
+    },
 
     // Sysadmin routes
 

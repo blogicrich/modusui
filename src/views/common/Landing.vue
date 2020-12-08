@@ -127,6 +127,13 @@
           icon="person"
           colorIcon="#006480"
         />
+        <BaseLinkComponent
+          routerTitle="Carer Settings"
+          link="/carersettings"
+          tooltipText="Change settings and user assignment for carers"
+          icon="people"
+          colorIcon="#006480"
+        />
       </v-flex>
       <v-flex sm6 lg4>
         <v-layout class="ma-2 menu-header-container" row wrap align-center justify-center>

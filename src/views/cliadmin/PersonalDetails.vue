@@ -13,7 +13,7 @@
       itemKey="deptPersonId"
       :headers="headers"
       :expandable="false"
-      :hasRowContent="selected !== null"
+      :hasRowContent="true"
       :loading="loading"
       :loaded="!loading && !error"
       :error="error"
@@ -176,6 +176,7 @@ import SubPersonDetailsFields from '@/components/sub/SubPersonDetailsFields.vue'
 import SubCredentialsFields from '@/components/sub/SubCredentialsFields.vue'
 import SubUserDetailsFields from '@/components/sub/SubUserDetailsFields.vue'
 import { mapState } from 'vuex'
+import objectOperations from '../../mixins/objectOperations'
 
 export default {
   components: {
@@ -185,6 +186,9 @@ export default {
     SubCredentialsFields,
     SubUserDetailsFields
   },
+  mixins: [
+    objectOperations
+  ],
   computed: {
     ...mapState({
       loading: state =>
@@ -334,41 +338,6 @@ export default {
       this.$store.commit('SET_CLIENT_ADMINS', null)
       this.$store.commit('SET_CARERS', null)
       this.handleRowClick({ item: this.people.find(person => person.deptPersonId === this.selected.deptPersonId) })
-    },
-    simpleDataDeepCopy (object) {
-      return JSON.parse(JSON.stringify(object))
-    },
-    simpleDataDeepCompare (objectA, objectB) {
-      if (!objectA || !objectB || typeof objectA !== 'object') {
-        if (!objectA === objectB) {
-          console.log(`${objectA} does not equal ${objectB}`)
-        }
-        return objectA === objectB
-      }
-
-      if (Array.isArray(objectA)) {
-        if (!Array.isArray(objectB)) {
-          return false
-        }
-
-        if (objectA.length !== objectB.length) {
-          return false
-        }
-
-        for (let i = 0; objectA.length > i; i++) {
-          if (!this.simpleDataDeepCompare(objectA[i], objectB[i])) {
-            return false
-          }
-        }
-      }
-
-      for (const key of Object.keys(objectA)) {
-        if (!this.simpleDataDeepCompare(objectA[key], objectB[key])) {
-          return false
-        }
-      }
-
-      return true
     },
     showCarerDeletePrompt () {
       this.promptTitle = `Delete ${this.selected.salutation} as carer`
