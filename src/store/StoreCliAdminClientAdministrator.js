@@ -28,6 +28,44 @@ export const moduleCliAdminClientAdministrator = {
       } finally {
         commit('SET_CLIENT_ADMIN_LOADING', false)
       }
+    },
+    async createClientAdmin ({ commit }, newClientAdmin) {
+      try {
+        commit('SET_CLIENT_ADMIN_LOADING', true)
+        commit('SET_CLIENT_ADMIN_ERROR', null)
+        await apiLib.postData('/cliadmin/client-administrator', newClientAdmin, false, true)
+      } catch (err) {
+        commit('SET_CLIENT_ADMIN_ERROR', err)
+      } finally {
+        commit('SET_CLIENT_ADMIN_LOADING', false)
+      }
+    },
+    async updateClientAdmin ({ commit }, alteredClientAdmin) {
+      try {
+        commit('SET_CLIENT_ADMIN_LOADING', true)
+        commit('SET_CLIENT_ADMIN_ERROR', null)
+        await apiLib.updateData(
+          `/cliadmin/client-administrator/${alteredClientAdmin.deptPersonId}`, alteredClientAdmin, false, true
+        )
+      } catch (err) {
+        commit('SET_CLIENT_ADMIN_ERROR', err)
+      } finally {
+        commit('SET_CLIENT_ADMIN_LOADING', false)
+      }
+    },
+    async deleteClientAdmin ({ commit, state }, deptPersonId) {
+      try {
+        commit('SET_CLIENT_ADMIN_LOADING', true)
+        commit('SET_CLIENT_ADMIN_ERROR', null)
+        await apiLib.deleteData(`/cliadmin/client-administrator/${deptPersonId}`, false, true)
+        if (state.administrators) {
+          commit('SET_CLIENT_ADMINS', state.administrators.filter(admin => admin.deptPersonId !== deptPersonId))
+        }
+      } catch (err) {
+        commit('SET_CLIENT_ADMIN_ERROR', err)
+      } finally {
+        commit('SET_CLIENT_ADMIN_LOADING', false)
+      }
     }
   }
 }

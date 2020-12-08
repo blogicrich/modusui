@@ -324,7 +324,7 @@ export default {
       this.snackState = eventPayload.state
     },
     logout () {
-      this.$store.dispatch('LOGOUT')
+      this.$router.push('/logout')
     },
     home () {
       this.$router.push('/landing')

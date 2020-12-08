@@ -52,10 +52,10 @@ const url = function () {
   switch (process.env.NODE_ENV) {
     case 'development':
       val = 'https://droplet.lemonstall.com/api/'
-      return val
+      break
     case 'production':
       val = 'https://droplet.lemonstall.com/api/'
-      return val
+      break
     default:
       val = 'https://droplet.lemonstall.com/api/'
       break

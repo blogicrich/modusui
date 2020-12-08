@@ -14,6 +14,13 @@
       @change="change"
     />
     <v-text-field
+      label="Phone number (Optional)"
+      v-model="mobileNo"
+      placeholder="+44 121 ..."
+      :rules="mobileNoRules"
+      @change="change"
+    />
+    <v-text-field
       :label="editMode ? 'Override Password' : 'Password'"
       type="password"
       hint="Something hard to guess"
@@ -49,6 +56,7 @@ export default {
     return {
       username: this.value.username,
       email: this.value.email,
+      mobileNo: this.value.mobileNo || '',
       password: this.value.password || '',
       passwordRepeat: this.value.password || '',
 
@@ -60,6 +68,10 @@ export default {
       emailRules: [
         v => v !== '' || 'Email is required',
         v => this.emailRegEx.test(v) || 'Enter a valid email address'
+      ],
+      mobileNoRules: [
+        v => v.length <= 45 || 'Phone number too long',
+        v => v.length === 0 || this.phoneRegEx.test(v) || 'Enter a valid phone number'
       ],
       passwordRules: [
         v => this.editMode || (v !== '' || 'A password is required'),
@@ -77,7 +89,8 @@ export default {
       this.$emit('input', {
         username: this.username,
         password: this.password,
-        email: this.email
+        email: this.email,
+        mobileNo: this.mobileNo
       })
     }
   },
@@ -86,6 +99,7 @@ export default {
       this.username = newValue.username
       this.password = newValue.password
       this.email = newValue.email
+      this.mobileNo = newValue.mobileNo || ''
     },
     duplicateToFix (newValue) {
       this.username = ''

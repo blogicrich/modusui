@@ -8,9 +8,10 @@
       @change="change"
     />
     <v-text-field
-      label="Daily Other Hydration (Optional)"
+      label="Daily Other Hydration"
       type="number"
       step="0.01"
+      :rules="dailyOtherHydrationConsumptionRules"
       v-model="dailyOtherHydrationConsumption"
       append-icon="L"
       @change="change"
@@ -85,6 +86,21 @@
       persistent-hint
       @change="change"
     />
+    <v-text-field
+      label="Miscellaneous Adjustements"
+      type="number"
+      step="0.01"
+      :rules="miscellaneousAdjustmentRules"
+      v-model="miscellaneousAdjustment"
+      append-icon="L"
+      @change="change"
+    />
+    <v-text-field
+      label="Comments"
+      :rules="commentsRules"
+      v-model="comments"
+      @change="change"
+    />
   </div>
 </template>
 
@@ -97,12 +113,14 @@ export default {
   data () {
     return {
       genderId: null,
-      wakeUpTime: '7:00',
+      wakeUpTime: 25200,
       showWakeUpTimePicker: false,
-      sleepTime: '22:00',
+      sleepTime: 79200,
       showSleepTimePicker: false,
       voiceMessageVolume: 75,
       dailyOtherHydrationConsumption: 0,
+      miscellaneousAdjustment: 0,
+      comments: '',
 
       genderIdRules: [
         v => v !== null || 'Gender is required'
@@ -114,6 +132,20 @@ export default {
 
       sleepTimeRules: [
         v => v !== null || 'Sleep time is required'
+      ],
+
+      dailyOtherHydrationConsumptionRules: [
+        v => v <= 99.99 || 'Number too large',
+        v => v >= 0 || 'Number too low'
+      ],
+
+      miscellaneousAdjustmentRules: [
+        v => v <= 99.99 || 'Number too large',
+        v => v >= -99.99 || 'Number too low'
+      ],
+
+      commentsRules: [
+        v => v.length <= 256 || 'Comments are too long'
       ]
     }
   },
@@ -121,20 +153,33 @@ export default {
     change () {
       this.$emit('input', {
         genderId: this.genderId,
-        wakeUpTime: this.wakeUpTime,
-        sleepTime: this.sleepTime,
+        wakeUpTime: this.timeStringToSeconds(this.wakeUpTime),
+        sleepTime: this.timeStringToSeconds(this.sleepTime),
         voiceMessageVolume: this.voiceMessageVolume,
-        dailyOtherHydrationConsumption: this.dailyOtherHydrationConsumption
+        dailyOtherHydrationConsumption: this.dailyOtherHydrationConsumption,
+        miscellaneousAdjustment: this.miscellaneousAdjustment,
+        comments: this.comments
       })
+    },
+    timeStringToSeconds (string) {
+      const [hourString, minutesString] = string.split(':')
+      return parseInt(hourString) * 3600 + parseInt(minutesString) * 60
+    },
+    secondsToTimeString (seconds) {
+      const hours = Math.floor(seconds / 3600)
+      const minutes = Math.floor((seconds - hours * 3600) / 60)
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
     }
   },
   watch: {
     value (newValue) {
       this.genderId = newValue.genderId
-      this.wakeUpTime = newValue.wakeUpTime
-      this.sleepTime = newValue.sleepTime
+      this.wakeUpTime = this.secondsToTimeString(newValue.wakeUpTime)
+      this.sleepTime = this.secondsToTimeString(newValue.sleepTime)
       this.voiceMessageVolume = newValue.voiceMessageVolume
       this.dailyOtherHydrationConsumption = newValue.dailyOtherHydrationConsumption
+      this.miscellaneousAdjustment = newValue.miscellaneousAdjustment
+      this.comments = newValue.comments
     }
   },
   computed: {

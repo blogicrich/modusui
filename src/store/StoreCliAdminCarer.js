@@ -28,6 +28,42 @@ export const moduleCliAdminCarer = {
       } finally {
         commit('SET_CARER_LOAD_STATE', false)
       }
+    },
+    async createCarer ({ commit }, carer) {
+      try {
+        commit('SET_CARER_LOAD_STATE', true)
+        commit('SET_CARER_ERROR_STATE', null)
+        await apiLib.postData('/cliadmin/carer', carer, false, true)
+      } catch (err) {
+        commit('SET_CARER_ERROR_STATE', err)
+      } finally {
+        commit('SET_CARER_LOAD_STATE', false)
+      }
+    },
+    async updateCarer ({ commit }, carer) {
+      try {
+        commit('SET_CARER_LOAD_STATE', true)
+        commit('SET_CARER_ERROR_STATE', null)
+        await apiLib.updateData(`/cliadmin/carer/${carer.deptPersonId}`, carer, false, true)
+      } catch (err) {
+        commit('SET_CARER_ERROR_STATE', err)
+      } finally {
+        commit('SET_CARER_LOAD_STATE', false)
+      }
+    },
+    async deleteCarer ({ commit, state }, deptPersonId) {
+      try {
+        commit('SET_CARER_LOAD_STATE', true)
+        commit('SET_CARER_ERROR_STATE', null)
+        await apiLib.deleteData(`/cliadmin/carer/${deptPersonId}`, false, true)
+        if (state.carers) {
+          commit('SET_CARERS', state.carers.filter(carer => carer.deptPerson.deptPersonId !== deptPersonId))
+        }
+      } catch (err) {
+        commit('SET_CARER_ERROR_STATE', err)
+      } finally {
+        commit('SET_CARER_LOAD_STATE', false)
+      }
     }
   }
 }
