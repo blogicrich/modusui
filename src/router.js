@@ -7,13 +7,6 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
-
-    // fallback
-    {
-      path: '*',
-      redirect: '/'
-    },
-
     // Common routes
     {
       path: '/',
@@ -159,6 +152,12 @@ export default new Router({
       name: 'Registration',
       props: (route) => ({ unsanitizedMacAddress: route.query.macAddress }),
       component: () => import(/* webpackChunkName: "register" */ './views/unregistered/Registration.vue')
+    },
+
+    // fallback
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })

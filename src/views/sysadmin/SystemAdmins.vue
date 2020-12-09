@@ -697,7 +697,6 @@ export default {
           // Check if user is current and re-direct to login
           if (this.isCurrentUser) {
             this.$store.dispatch('LOGOUT')
-            this.$router.push('/login')
           } else {
             await this.$store.dispatch('fetchSystemAdmins')
           }

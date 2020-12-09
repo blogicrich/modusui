@@ -58,7 +58,7 @@ export const moduleCliAdminUsers = {
       try {
         commit('SET_CLIADMIN_USERS_LOAD_STATE', true)
         commit('SET_CLIADMIN_USERS_ERROR', null)
-        await apiLib.postData('/cliadmin/user', user, false, true)
+        await apiLib.postData('/cliadmin/user', user, false, true, true)
       } catch (err) {
         commit('SET_CLIADMIN_USERS_ERROR', err)
       } finally {
@@ -69,7 +69,7 @@ export const moduleCliAdminUsers = {
       try {
         commit('SET_CLIADMIN_USERS_LOAD_STATE', true)
         commit('SET_CLIADMIN_USERS_ERROR', null)
-        await apiLib.updateData('/cliadmin/user', user, false, true)
+        await apiLib.updateData('/cliadmin/user', user, false, true, true)
       } catch (err) {
         commit('SET_CLIADMIN_USERS_ERROR', err)
       } finally {
@@ -80,7 +80,7 @@ export const moduleCliAdminUsers = {
       try {
         commit('SET_CLIADMIN_USERS_LOAD_STATE', true)
         commit('SET_CLIADMIN_USERS_ERROR', null)
-        await apiLib.deleteData(`/cliadmin/user/${userId}`, false, true)
+        await apiLib.deleteData(`/cliadmin/user/${userId}`, false, true, true)
         if (state.cliAdminUsers) {
           commit('SET_CLIADMIN_USERS', state.cliAdminUsers.filter(user => user.userId !== userId))
         }

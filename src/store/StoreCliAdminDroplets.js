@@ -32,7 +32,7 @@ export const moduleCliAdminDroplets = {
       try {
         commit('SET_DROPLET_LOADING_STATE', true)
         commit('SET_DROPLET_ERROR_STATE', false)
-        const response = await apiLib.getData(`/cliadmin/base/${macAddress}/availability-state`)
+        const response = await apiLib.getData(`/cliadmin/base/${macAddress}/availability-state`, false, false, true)
         commit('SET_AVAILABILITY_QUERY_RESULTS', { macAddress, availabilityState: response.availabilityState })
       } catch (err) {
         commit('SET_DROPLET_ERROR_STATE', err)
@@ -44,7 +44,7 @@ export const moduleCliAdminDroplets = {
       try {
         commit('SET_DROPLET_LOADING_STATE', true)
         commit('SET_DROPLET_ERROR_STATE', false)
-        const response = await apiLib.getData('/cliadmin/base')
+        const response = await apiLib.getData('/cliadmin/base', false, false, true)
         commit('SET_DROPLETS', response)
       } catch (err) {
         commit('SET_DROPLET_ERROR_STATE', err)
@@ -56,7 +56,7 @@ export const moduleCliAdminDroplets = {
       try {
         commit('SET_DROPLET_LOADING_STATE', true)
         commit('SET_DROPLET_ERROR_STATE', false)
-        await apiLib.postData('/cliadmin/base', { macAddress }, true, true)
+        await apiLib.postData('/cliadmin/base', { macAddress }, false, true, true)
         commit('SET_REGISTER_STATUS', status)
       } catch (err) {
         commit('SET_DROPLET_ERROR_STATE', err)
@@ -68,7 +68,7 @@ export const moduleCliAdminDroplets = {
       try {
         commit('SET_DROPLET_LOADING_STATE', true)
         commit('SET_DROPLET_ERROR_STATE', false)
-        await apiLib.updateData(`/cliadmin/base/${baseId}/name`, { friendlyName }, true, true)
+        await apiLib.updateData(`/cliadmin/base/${baseId}/name`, { friendlyName }, false, true, true)
       } catch (err) {
         commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
@@ -79,7 +79,7 @@ export const moduleCliAdminDroplets = {
       try {
         commit('SET_DROPLET_LOADING_STATE', true)
         commit('SET_DROPLET_ERROR_STATE', false)
-        await apiLib.updateData(`/cliadmin/base/${baseId}/user`, { userId }, true, true)
+        await apiLib.updateData(`/cliadmin/base/${baseId}/user`, { userId }, false, true, true)
       } catch (err) {
         commit('SET_DROPLET_ERROR_STATE', err)
       } finally {
@@ -90,7 +90,7 @@ export const moduleCliAdminDroplets = {
       try {
         commit('SET_DROPLET_LOADING_STATE', true)
         commit('SET_DROPLET_ERROR_STATE', false)
-        await apiLib.deleteData(`/cliadmin/base/${baseId}`, true, true)
+        await apiLib.deleteData(`/cliadmin/base/${baseId}`, false, true, true)
       } catch (err) {
         commit('SET_DROPLET_ERROR_STATE', err)
       } finally {

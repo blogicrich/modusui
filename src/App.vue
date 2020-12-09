@@ -207,7 +207,7 @@
             name="login"
             tip="Logout"
             top
-            @nav-btn-clicked="$router.push('/login')"
+            @nav-btn-clicked="logout"
           />
         </v-layout>
       </v-footer>
@@ -314,7 +314,7 @@ export default {
           this.$router.push({ name: 'dashboard' })
         }
       } else {
-        this.$store.dispatch('LOGOUT')
+        this.$store.commit('CLEAR_STATE')
       }
     },
     showSnack (eventPayload) {
@@ -324,7 +324,17 @@ export default {
       this.snackState = eventPayload.state
     },
     logout () {
-      this.$router.push('/logout')
+      if (this.$route.path !== '/login') {
+        if (this.authenticated) {
+          this.$store
+            .dispatch('LOGOUT')
+            .then(() => {
+              this.$router.push('/login')
+            })
+        } else {
+          this.$router.push('/login')
+        }
+      }
     },
     home () {
       this.$router.push('/landing')
@@ -364,7 +374,7 @@ export default {
       return this.$store.getters.authenticated
     },
     level: function () {
-      return this.$store.getters.level
+      return this.$store.getters.level || []
     },
     loadStatus: function () {
       return this.$store.getters.authDataLoading

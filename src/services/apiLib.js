@@ -1,253 +1,181 @@
-/* apiLIB.js - Spearmark API request library BETA
-/* -----------------------------------------------------------------------------
-
-A wrapper for the axios library for communication with the Spearmark eDroplet API
-
---------------------------------------------------------------------------------
-
-API:
-
-deleteData(url, log, toast)
-getData(url, log, toast)
-postData(url, data, log, toast)
-updateData(url, data, log, toast)
-
-func params:
-
-url : String - url tail without prepending forward slash
-data : Object - data object to be sent with request
-log : Boolean - Will send request details to dev tools console
-toast : Boolean - Will show v-snackbar with server response message
-status: Boolean - Will return an object - {
-    response: response.data,
-    status: response.status,
-    statusText: response.statusText
-}
-
-Response Objects:
-
-response :
-- The request was made and the server responded with a status of 2xx
-
-error.response :
-- The request was made and the server responded with a status code that falls
-out of the range of 2xx
-
-error.request :
-- The request was made but no response was received. `error.request` is an
-instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
-
-error.message :
-- Something happened in setting up the request that triggered an Error
-
------------------------------------------------------------------------------ */
-
 import axios from 'axios'
 import { EventBus } from '@/mixins/eventBus.js'
-import { moduleEdropletApp } from '@/store/StoreEdropletApp'
 import store from '@/store'
 
-const url = function () {
-  let val = ''
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      val = 'https://droplet.lemonstall.com/api/'
-      break
-    case 'production':
-      val = 'https://droplet.lemonstall.com/api/'
-      break
-    default:
-      val = 'https://droplet.lemonstall.com/api/'
-      break
-  }
-  return val
+/**
+ * Override per-function call logs for apiLib requests and log everything. Does not work unless in development
+ * environment.
+ */
+const DEBUG_LOG_ALL = true
+
+const URLS = {
+  development: 'http://localhost:3000',
+  production: 'https://droplet.lemonstall.com'
 }
 
 const axi = axios.create({
-  baseURL: url(),
-  timeout: 60000
+  baseURL: URLS[process.env.NODE_ENV || 'development'],
+  timeout: 60000,
+  xsrfCookieName: 'csrf',
+  xsrfHeaderName: 'X-CSRF-Token',
+  withCredentials: process.env.NODE_ENV === 'development'
 })
 
-axi.interceptors.request.use((config) => {
-  // Do something before request is sent
-  if (moduleEdropletApp.getters.token) {
-    config.headers.common.authorization = 'Bearer ' + moduleEdropletApp.state.token
-  } else {
-    delete config.headers.common.authorization
-    axios.defaults.headers.common['Content-Type'] = { 'Accept ': 'application/json' }
+/**
+ * Sends a toast signal over the Vue event bus with the API's message data or status text as a fallback.
+ *
+ * @param {axios.response} response
+ */
+function toastResponse (response) {
+  EventBus.$emit('snack-msg', {
+    text: (response.data && response.data.message) ? response.data.message : response.statusText,
+    time: 6000,
+    color: (response.status >= 200 && response.status <= 299) ? 'success' : 'error',
+    state: true
+  })
+}
+
+/**
+ * Logs the given axios response. Only works in development environment.
+ *
+ * @param {axios.response} response
+ */
+function logResponse (response) {
+  if (process.env.NODE_ENV !== 'development') {
+    return
   }
-  return config
-}, function (error) {
-  // Do something with request error
-  return Promise.reject(error)
-})
 
-// Logout when the API either forbids us to take a certain action or outright says our credentials are invalid.
-axi.interceptors.response.use((response) => {
-  return response // Don't do anything upon success
-}, (error) => {
-  if ([401, 403].includes(error.response.status)) {
-    store.dispatch('LOGOUT')
-  }
-  return error
-})
+  console.groupCollapsed(`[${new Date().toISOString()}] [${response.status}] ${response.statusText}`)
+  console.dir(response.data)
+  console.groupEnd()
+}
 
-// Utils
-var logger = function (responseObj, url, data) {
-  if (process.env.NODE_ENV === 'development') {
-    if (data) console.log('data: ', data)
-    console.log('URL: ', url)
-    console.log('response.data: ', responseObj.data)
-    console.log('response.status: ', responseObj.status)
-    console.log('response.statusText: ', responseObj.statusText)
-    console.log('response.headers:', responseObj.headers)
-    console.log('response.request:', responseObj.request)
+/**
+ * Generates a response handler function that calls required post-response functions if needed.
+ *
+ * @param {Boolean} log
+ * @param {Boolean} toast
+ */
+function responseHandler (log, toast) {
+  return (response) => {
+    if (log || DEBUG_LOG_ALL) {
+      logResponse(response)
+    }
+
+    if (toast) {
+      toastResponse(response)
+    }
+
+    return Promise.resolve(response.data)
   }
 }
 
-export default {
-  async deleteData (url, log, toast) {
-    return axi.delete(url).then(response => {
-      if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
-      if (log) logger(response, url)
-      return response.data
-    })
-      .catch(error => {
-        if (error.response) {
-          if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-          if (log) logger(error.response, url)
-          return error.response.statusText + ' ' + error.response.status + '\n'
-        } else if (error.request) {
-          if (toast) EventBus.$emit('snack-msg', { text: error.request, time: 6000, color: 'error', state: true })
-          console.log(error.request)
-        } else {
-          if (toast) EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true })
-          console.log('error.message: ', error.message)
-        }
-        console.log(error.config)
-      })
-      .finally(() => {
-      // ROUTER TO STD PAGE IF ERR?
-      })
-  },
+/**
+ * Generates an error handler function that takes care of error logging, logout on unauthorized/forbidden, and
+ * optionally rethrows the error.
+ *
+ * @param {Boolean} log
+ * @param {Boolean} toast
+ * @param {Boolean} rethrow
+ */
+function errorResponseHandler (log, toast, rethrow) {
+  return (error) => {
+    if (error.response) {
+      if ([401, 403].includes(error.response.status)) {
+        store.commit('CLEAR_STATE')
+      }
 
-  // Get data
-
-  async getData (url, log, toast) {
-    return axi.get(url).then(response => {
-      if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true })
-      if (log) logger(response, url)
-      return response.data
-    })
-      .catch(error => {
-        if (error.response) {
-          if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-          if (log) logger(error.response, url)
-          return error.response.message + ' ' + error.response.status
-        } else if (error.request) {
-          console.log(error.request)
-        } else {
-          console.log('error.message: ', error.message)
-        }
-        console.log(error.config)
-      })
-      .finally(() => {
-      // ROUTER TO STD PAGE IF ERR?
-      })
-  },
-
-  // Add (POST) new data
-
-  async postData (url, data, log, toast, status) {
-    if (data) {
-      return axi.post(url, data).then(response => {
-        if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
-        if (log) logger(response, url, data)
-        if (status) {
-          return { response: response.data, status: response.status, statusText: response.statusText }
-        } else {
-          return response.data
-        }
-      })
-        .catch(error => {
-          if (error.response) {
-            if (status) {
-              return { status: error.response.status, statusText: error.response.statusText }
-            }
-            if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) {
-              logger(error.response, url, data)
-              return error.response.statusText + ' ' + error.response.status + '\n'
-            }
-          } else if (error.request) {
-            console.log(error.request)
-          } else {
-            console.log('error.message: ', error.message)
-          }
-          console.log(error.config)
-        })
-        .finally(() => {
-        // ROUTER TO STD PAGE IF ERR?
-        })
+      responseHandler(log, toast)(error.response)
+    } else if (toast) {
+      EventBus.$emit('snack-msg', { text: error.message, time: 6000, color: 'error', state: true })
     }
-  },
 
-  // Post Auth
-
-  async postAuth (url, data, log, toast) {
-    if (data) {
-      return axi.post(url, data).then(response => {
-        if (log) logger(response, url)
-        // if (toast) EventBus.$emit('snack-msg', { text: response.statusText, time: 6000, color: 'success', state: true } )
-        if (!response.message) {
-          return response.data
-        } else {
-          return response.message
-        }
-      })
-        .catch(error => {
-          if (error.response) {
-            if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) logger(error.response, url, data)
-            return error.response.statusText + ' ' + error.response.status + '\n'
-          } else if (error.request) {
-            console.log(error.request)
-          } else {
-            console.log('error.message: ', error.message)
-          }
-          console.log(error.config)
-          console.log(error)
-        })
-        .finally(() => {
-        // ROUTER TO STD PAGE IF ERR?
-        })
-    }
-  },
-
-  // Update (PUT) data
-
-  async updateData (url, data, log, toast) {
-    if (data) {
-      return axi.put(url, data).then(response => {
-        if (toast) EventBus.$emit('snack-msg', { text: response.data.message, time: 6000, color: 'success', state: true })
-        if (log) logger(response, url, data)
-        return response.data
-      })
-        .catch(error => {
-          if (error.response) {
-            if (toast) EventBus.$emit('snack-msg', { text: error.response.statusText, time: 6000, color: 'error', state: true })
-            if (log) logger(error.response, url, data)
-            return error.response.statusText + ' ' + error.response.status + '\n'
-          } else if (error.request) {
-            console.log(error.request)
-          } else {
-            console.log('error.message: ', error.message)
-          }
-          console.log(error.config)
-        })
-        .finally(() => {
-        // ROUTER TO STD PAGE IF ERR?
-        })
+    if (rethrow) {
+      throw error
+    } else {
+      Promise.resolve(error)
     }
   }
+}
+
+/**
+ * Returns a Promise for an HTTP GET call to the api at the specified path. Resolves with response object.
+ *
+ * @param {String} path API path to call
+ * @param {Boolean} [log] Log the response if in dev mode (default = true)
+ * @param {Boolean} [toast] Show response message to the user (default = false)
+ * @param {Boolean} [rethrow] Rethrow any errors that occur instead of returning them. Use this for try/catch flows when
+ * using async/await (default = false)
+ *
+ * @returns {Promise<Object|String|Error>}
+ */
+function getData (path, log = true, toast = false, rethrow = false) {
+  return axi
+    .get(path)
+    .then(responseHandler(log, toast))
+    .catch(errorResponseHandler(log, toast, rethrow))
+}
+
+/**
+ * Returns a Promise for an HTTP POST call to the api at the specified path. Resolves with response object.
+ *
+ * @param {String} path API path to call
+ * @param {Object} data Request body
+ * @param {Boolean} [log] Log the response if in dev mode (default = true)
+ * @param {Boolean} [toast] Show response message to the user (default = true)
+ * @param {Boolean} [rethrow] Rethrow any errors that occur instead of returning them. Use this for try/catch flows when
+ * using async/await (default = false)
+ *
+ * @returns {Promise<Object|String|Error>}
+ */
+function postData (path, data, log = true, toast = true, rethrow = false) {
+  return axi
+    .post(path, data)
+    .then(responseHandler(log, toast))
+    .catch(errorResponseHandler(log, toast, rethrow))
+}
+
+/**
+ * Returns a Promise for an HTTP PUT call to the api at the specified path. Resolves with response object.
+ *
+ * @param {String} path API path to call
+ * @param {Object} data Request body
+ * @param {Boolean} [log] Log the response if in dev mode (default = true)
+ * @param {Boolean} [toast] Show response message to the user (default = true)
+ * @param {Boolean} [rethrow] Rethrow any errors that occur instead of returning them. Use this for try/catch flows when
+ * using async/await (default = false)
+ *
+ * @returns {Promise<Object|String|Error>}
+ */
+function updateData (path, data, log = true, toast = true, rethrow = false) {
+  return axi
+    .put(path, data)
+    .then(responseHandler(log, toast))
+    .catch(errorResponseHandler(log, toast, rethrow))
+}
+
+/**
+ * Returns a Promise for an HTTP DELETE call to the api at the specified path. Resolves with response object.
+ *
+ * @param {String} path API path to call
+ * @param {Object} data Request body
+ * @param {Boolean} [log] Log the response if in dev mode (default = true)
+ * @param {Boolean} [toast] Show response message to the user (default = true)
+ * @param {Boolean} [rethrow] Rethrow any errors that occur instead of returning them. Use this for try/catch flows when
+ * using async/await (default = false)
+ *
+ * @returns {Promise<Object|String|Error>}
+ */
+function deleteData (path, log = true, toast = true, rethrow = false) {
+  return axi
+    .delete(path)
+    .then(responseHandler(log, toast))
+    .catch(errorResponseHandler(log, toast, rethrow))
+}
+
+export default {
+  getData,
+  postData,
+  updateData,
+  deleteData
 }

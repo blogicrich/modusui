@@ -1,6 +1,7 @@
 <template>
   <v-container fill-height>
     <BaseLogin
+      v-if="!waitingForAntiCSRF"
       :msg="msg"
       :is-authenticating="loading"
       :is-active="authenticated"
@@ -22,6 +23,7 @@ export default {
   },
   data: function () {
     return {
+      waitingForAntiCSRF: true,
       msg: '',
       primaryColor: 'primary',
       spinnerSize: '50',
@@ -33,7 +35,7 @@ export default {
       return this.$store.getters.authenticated
     },
     level: function () {
-      return this.$store.getters.level
+      return this.$store.getters.level || []
     },
     loading: function () {
       return this.$store.state.eDropletApp.authDataLoading
@@ -52,16 +54,22 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('LOGOUT')
+    this.$store.commit('CLEAR_STATE')
+    this.waitingForAntiCSRF = true
+    Promise.all([
+      this.$store.dispatch('GAIN_ANTI_CSRF_TOKEN')
+    ]).then(() => {
+      this.waitingForAntiCSRF = false
+    })
   },
   methods: {
-    async submitCredentials (item) {
-      this.$store.dispatch('LOGOUT') // Ensure localStorage is clean
+    submitCredentials (item) {
+      this.$store.dispatch('CLEAR_STATE') // Ensure localStorage is clean
       this.$store.dispatch('POST_LOGIN', item).then((response) => {
-        if (response) {
-          this.msg = response
-        } else {
+        if (response && response.ok) {
           this.$emit('authenticated')
+        } else {
+          this.msg = (response !== undefined) ? response.message : 'Network error'
         }
       })
     }

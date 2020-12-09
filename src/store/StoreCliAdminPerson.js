@@ -22,7 +22,7 @@ export const moduleCliAdminPerson = {
       try {
         commit('SET_PEOPLE_LOAD_STATE', true)
         commit('SET_PEOPLE_ERROR_STATE', null)
-        commit('SET_PEOPLE', await apiLib.getData('/cliadmin/person'))
+        commit('SET_PEOPLE', await apiLib.getData('/cliadmin/person', false, false, true))
       } catch (err) {
         commit('SET_PEOPLE_ERROR_STATE', err)
       } finally {
@@ -33,7 +33,7 @@ export const moduleCliAdminPerson = {
       try {
         commit('SET_PEOPLE_LOAD_STATE', true)
         commit('SET_PEOPLE_ERROR_STATE', null)
-        await apiLib.postData('/cliadmin/person', newPerson, false, true)
+        await apiLib.postData('/cliadmin/person', newPerson, false, true, true)
       } catch (err) {
         commit('SET_PEOPLE_ERROR_STATE', err)
       } finally {
@@ -44,7 +44,7 @@ export const moduleCliAdminPerson = {
       try {
         commit('SET_PEOPLE_LOAD_STATE', true)
         commit('SET_PEOPLE_ERROR_STATE', null)
-        await apiLib.updateData(`/cliadmin/person/${alteredPerson.deptPersonId}`, alteredPerson, false, true)
+        await apiLib.updateData(`/cliadmin/person/${alteredPerson.deptPersonId}`, alteredPerson, false, true, true)
       } catch (err) {
         commit('SET_PEOPLE_ERROR_STATE', err)
       } finally {
@@ -55,7 +55,7 @@ export const moduleCliAdminPerson = {
       try {
         commit('SET_PEOPLE_LOAD_STATE', true)
         commit('SET_PEOPLE_ERROR_STATE', null)
-        await apiLib.deleteData(`/cliadmin/person/${deptPersonId}`, false, true)
+        await apiLib.deleteData(`/cliadmin/person/${deptPersonId}`, false, true, true)
         if (state.carers) {
           commit('SET_PEOPLE', state.people.filter(person => person.deptPersonId !== deptPersonId))
         }

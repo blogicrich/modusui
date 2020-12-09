@@ -9,7 +9,6 @@ export const moduleEdropletApp = {
     level: deserialize('level', []),
     portalAuthorisedId: deserialize('portalAuthorisedId'),
     authDataLoading: false,
-    token: deserialize('token'),
     // Dashboard
     userDataLoading: false,
     storeId: null,
@@ -39,41 +38,36 @@ export const moduleEdropletApp = {
       serialize('level', data)
       state.level = data
     },
-    SET_TOKEN (state, data) {
-      serialize('token', data)
-      state.token = data
+    CLEAR_STATE (state) {
+      state.authenticated = false
+      state.portalAuthorisedId = null
+      state.level = null
+      state.active = false
+      state.authDataLoading = false
+      localStorage.clear()
     }
   },
   actions: {
     async POST_LOGIN (context, payload) {
-      context.commit('SET_LOAD_STATUS', true)
-      const data = apiLib.postAuth('login', payload, false, false).then(response => {
-        if (response) {
-          if (response.roles) {
-            localStorage.clear()
-            context.commit('SET_AUTHENTICATION_STATE', true)
-            context.commit('SET_PORTAL_AUTH_ID', response.user.portalAuthorisedId)
-            context.commit('SET_LEVEL', response.roles)
-            context.commit('SET_TOKEN', response.token)
-            context.commit('SET_ACTIVE', true)
-            context.commit('SET_LOAD_STATUS', false)
-          } else {
-            return response
-          }
-        } else {
-          context.dispatch('LOGOUT')
-        }
-      })
-      return data
+      try {
+        const response = await apiLib.postData('login', payload, true, false, true)
+        context.commit('SET_AUTHENTICATION_STATE', true)
+        context.commit('SET_PORTAL_AUTH_ID', response.user.portalAuthorisedId)
+        context.commit('SET_LEVEL', response.roles)
+        context.commit('SET_ACTIVE', true)
+        context.commit('SET_LOAD_STATUS', false)
+        return response
+      } catch (err) {
+        context.commit('CLEAR_STATE')
+        return err.response
+      }
     },
-    LOGOUT (context) {
-      context.commit('SET_AUTHENTICATION_STATE', false)
-      context.commit('SET_PORTAL_AUTH_ID', null)
-      context.commit('SET_LEVEL', [])
-      context.commit('SET_TOKEN', null)
-      context.commit('SET_ACTIVE', false)
-      context.commit('SET_LOAD_STATUS', false)
-      localStorage.clear()
+    async LOGOUT (context) {
+      await apiLib.postData('logout', {}, false, true, false)
+      context.commit('CLEAR_STATE')
+    },
+    async GAIN_ANTI_CSRF_TOKEN (context) {
+      await apiLib.postData('gain-pre-login-csrf-token', {}, false, false, false)
     }
   },
   getters: {

@@ -22,7 +22,7 @@ export const moduleCliAdminClientAdministrator = {
       try {
         commit('SET_CLIENT_ADMIN_LOADING', true)
         commit('SET_CLIENT_ADMIN_ERROR', null)
-        commit('SET_CLIENT_ADMINS', await apiLib.getData('/cliadmin/client-administrator'))
+        commit('SET_CLIENT_ADMINS', await apiLib.getData('/cliadmin/client-administrator', false, false, true))
       } catch (err) {
         commit('SET_CLIENT_ADMIN_ERROR', err)
       } finally {
@@ -33,7 +33,7 @@ export const moduleCliAdminClientAdministrator = {
       try {
         commit('SET_CLIENT_ADMIN_LOADING', true)
         commit('SET_CLIENT_ADMIN_ERROR', null)
-        await apiLib.postData('/cliadmin/client-administrator', newClientAdmin, false, true)
+        await apiLib.postData('/cliadmin/client-administrator', newClientAdmin, false, true, true)
       } catch (err) {
         commit('SET_CLIENT_ADMIN_ERROR', err)
       } finally {
@@ -45,7 +45,11 @@ export const moduleCliAdminClientAdministrator = {
         commit('SET_CLIENT_ADMIN_LOADING', true)
         commit('SET_CLIENT_ADMIN_ERROR', null)
         await apiLib.updateData(
-          `/cliadmin/client-administrator/${alteredClientAdmin.deptPersonId}`, alteredClientAdmin, false, true
+          `/cliadmin/client-administrator/${alteredClientAdmin.deptPersonId}`,
+          alteredClientAdmin,
+          false,
+          true,
+          true
         )
       } catch (err) {
         commit('SET_CLIENT_ADMIN_ERROR', err)
@@ -57,7 +61,7 @@ export const moduleCliAdminClientAdministrator = {
       try {
         commit('SET_CLIENT_ADMIN_LOADING', true)
         commit('SET_CLIENT_ADMIN_ERROR', null)
-        await apiLib.deleteData(`/cliadmin/client-administrator/${deptPersonId}`, false, true)
+        await apiLib.deleteData(`/cliadmin/client-administrator/${deptPersonId}`, false, true, true)
         if (state.administrators) {
           commit('SET_CLIENT_ADMINS', state.administrators.filter(admin => admin.deptPersonId !== deptPersonId))
         }

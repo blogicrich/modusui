@@ -22,7 +22,7 @@ export const moduleCliAdminCarer = {
       try {
         commit('SET_CARER_LOAD_STATE', true)
         commit('SET_CARER_ERROR_STATE', null)
-        commit('SET_CARERS', await apiLib.getData('/cliadmin/carer'))
+        commit('SET_CARERS', await apiLib.getData('/cliadmin/carer', false, false, true))
       } catch (err) {
         commit('SET_CARER_ERROR_STATE', err)
       } finally {
@@ -33,7 +33,7 @@ export const moduleCliAdminCarer = {
       try {
         commit('SET_CARER_LOAD_STATE', true)
         commit('SET_CARER_ERROR_STATE', null)
-        await apiLib.postData('/cliadmin/carer', carer, false, true)
+        await apiLib.postData('/cliadmin/carer', carer, false, true, true)
       } catch (err) {
         commit('SET_CARER_ERROR_STATE', err)
       } finally {
@@ -44,7 +44,7 @@ export const moduleCliAdminCarer = {
       try {
         commit('SET_CARER_LOAD_STATE', true)
         commit('SET_CARER_ERROR_STATE', null)
-        await apiLib.updateData(`/cliadmin/carer/${carer.deptPersonId}`, carer, false, true)
+        await apiLib.updateData(`/cliadmin/carer/${carer.deptPersonId}`, carer, false, true, true)
       } catch (err) {
         commit('SET_CARER_ERROR_STATE', err)
       } finally {
@@ -55,7 +55,7 @@ export const moduleCliAdminCarer = {
       try {
         commit('SET_CARER_LOAD_STATE', true)
         commit('SET_CARER_ERROR_STATE', null)
-        await apiLib.deleteData(`/cliadmin/carer/${deptPersonId}`, false, true)
+        await apiLib.deleteData(`/cliadmin/carer/${deptPersonId}`, false, true, true)
         if (state.carers) {
           commit('SET_CARERS', state.carers.filter(carer => carer.deptPerson.deptPersonId !== deptPersonId))
         }

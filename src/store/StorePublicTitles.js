@@ -22,7 +22,7 @@ export const modulePublicTitles = {
       try {
         commit('SET_PUBLIC_TITLES_LOAD_STATE', true)
         commit('SET_PUBLIC_TITLES_ERROR_STATE', null)
-        commit('SET_PUBLIC_TITLES', await apiLib.getData('/public/title'))
+        commit('SET_PUBLIC_TITLES', await apiLib.getData('/public/title', false, false, true))
       } catch (err) {
         commit('SET_PUBLIC_TITLES_ERROR_STATE', err)
       } finally {
