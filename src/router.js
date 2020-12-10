@@ -146,10 +146,9 @@ export default new Router({
     },
 
     // Unregistered users and ByteSnap Landing Page
-
     {
       path: '/register',
-      name: 'Registration',
+      name: 'register',
       props: (route) => ({ unsanitizedMacAddress: route.query.macAddress }),
       component: () => import(/* webpackChunkName: "register" */ './views/unregistered/Registration.vue')
     },

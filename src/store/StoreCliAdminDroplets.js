@@ -52,11 +52,11 @@ export const moduleCliAdminDroplets = {
         commit('SET_DROPLET_LOADING_STATE', false)
       }
     },
-    async registerDroplet ({ commit }, macAddress) {
+    async registerDroplet ({ commit }, { macAddress, friendlyName }) {
       try {
         commit('SET_DROPLET_LOADING_STATE', true)
         commit('SET_DROPLET_ERROR_STATE', false)
-        await apiLib.postData('/cliadmin/base', { macAddress }, false, true, true)
+        await apiLib.postData('/cliadmin/base', { macAddress, friendlyName }, false, true, true)
         commit('SET_REGISTER_STATUS', status)
       } catch (err) {
         commit('SET_DROPLET_ERROR_STATE', err)

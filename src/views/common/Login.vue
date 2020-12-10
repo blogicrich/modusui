@@ -64,9 +64,9 @@ export default {
   },
   methods: {
     submitCredentials (item) {
-      this.$store.dispatch('CLEAR_STATE') // Ensure localStorage is clean
+      this.$store.commit('CLEAR_STATE') // Ensure localStorage is clean
       this.$store.dispatch('POST_LOGIN', item).then((response) => {
-        if (response && response.ok) {
+        if (response.expiresOn > 0) {
           this.$emit('authenticated')
         } else {
           this.msg = (response !== undefined) ? response.message : 'Network error'

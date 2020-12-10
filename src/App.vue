@@ -66,7 +66,8 @@
         v-if="
           level.includes('CARER') &&
             authenticated &&
-            $vuetify.breakpoint.lgAndUp
+            $vuetify.breakpoint.lgAndUp &&
+            !wizardActive
         "
         key="bp-lg"
         class="primary"
@@ -396,12 +397,13 @@ export default {
       if (to.name !== from.name) {
         this.drawerState = false
       }
+
+      if (!['/', '/register'].includes(to.path) && !this.authenticated) {
+        this.logout()
+      }
     }
   },
-  mounted () {
-    if (!this.authenticated) {
-      this.logout()
-    }
+  created () {
     EventBus.$on('snack-msg', (data) => {
       this.showSnack(data)
     })

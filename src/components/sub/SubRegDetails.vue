@@ -47,7 +47,7 @@
           <v-form v-model="stepOne.valid" class="pl-2 pr-2" ref="accountForm" @submit.prevent>
             <v-layout>
               <v-flex xs12 md4>
-                <sub-new-account-fields
+                <sub-credentials-fields
                   v-model="stepOne.accountDetails"
                   :duplicateToFix="stepOne.duplicateToFix"
                 />
@@ -70,11 +70,6 @@
         <v-stepper-content step="2">
           <v-form v-model="stepTwo.valid" class="pl-2 pr-2" @submit.prevent>
             <v-flex xs12 md4>
-              <v-text-field
-                label="Email Address"
-                v-model="stepTwo.email"
-                :rules="stepTwo.emailRules"
-              />
               <sub-person-details-fields v-model="stepTwo.personalDetails" :titles="titles" />
             </v-flex>
             <v-btn class="ml-0" @click="step = 1">Go Back</v-btn>
@@ -114,71 +109,17 @@
           </v-form>
         </v-stepper-content>
 
-        <v-stepper-step step="4">Who is going to use this Connected Droplet?</v-stepper-step>
+        <v-stepper-step step="4">Finishing up</v-stepper-step>
         <v-stepper-content step="4">
-          <v-form
-            v-model="stepFour.valid"
-            class="pl-4 pr-2"
-            @submit.prevent
-            @submit="submitDropletUse"
-          >
-            <v-layout row wrap>
-              <v-flex xs12 md8>
-                <v-radio-group v-model="stepFour.dropletUse">
-                  <v-radio value="SELF" label="I want to use this Connected Droplet myself" />
-                  <v-radio
-                    value="OTHER_USER"
-                    label="I want to configure this Connected Droplet for someone else"
-                  />
-                  <v-radio
-                    value="SOMETHING_ELSE"
-                    label="(Leave Connected Droplet unassigned) I want to authorize another person to manage this Connected Droplet for someone else"
-                  />
-                </v-radio-group>
-              </v-flex>
-            </v-layout>
-            <v-layout row rwap v-if="stepFour.dropletUse === 'OTHER_USER'">
-              <v-flex xs12 md6>
-                <sub-person-details-fields :titles="titles" v-model="stepFour.userPersonalDetails" />
-              </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-              <template v-if="['SELF', 'OTHER_USER'].includes(stepFour.dropletUse)">
-                <v-flex xs12 md6>
-                  <sub-carer-details-fields
-                    v-model="stepFour.carerDetails"
-                    :communicationMethods="communicationMethods"
-                    :alertTypes="alertTypes"
-                  />
-                  <sub-user-details-fields v-model="stepFour.userDetails" :genders="genders" />
-                </v-flex>
-              </template>
-            </v-layout>
-
-            <v-btn
-              type="submit"
-              color="primary"
-              v-if="stepFour.dropletUse === 'SELF'"
-              :disabled="!stepFour.valid"
-            >
-              Save configuration
-            </v-btn>
-            <v-btn
-              type="submit"
-              color="primary"
-              v-if="stepFour.dropletUse === 'OTHER_USER'"
-              :disabled="!stepFour.valid"
-            >
-              Save configuration for other user
-            </v-btn>
-            <v-btn
-              type="submit"
-              color="primary"
-              v-if="stepFour.dropletUse === 'SOMETHING_ELSE'"
-            >
-              To Dashboard
-            </v-btn>
-          </v-form>
+          <v-card flat>
+            <v-card-title>
+              All set! You can continue configuring your account on the admin control panel.
+            </v-card-title>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="primary" to="/landing">to admin control panel<v-icon>launch</v-icon></v-btn>
+            </v-card-actions>
+          </v-card>
         </v-stepper-content>
       </v-stepper>
     </v-fade-transition>
@@ -191,19 +132,14 @@
 <script>
 import validation from '../../mixins/validation'
 import SubPersonDetailsFields from './SubPersonDetailsFields'
-import SubCarerDetailsFields from './SubCarerDetailsFields'
-import SubNewAccountFields from './SubNewAccountFields'
-import SubUserDetailsFields from './SubUserDetailsFields'
+import SubCredentialsFields from './SubCredentialsFields'
 
 export default {
   props: {
     macAddress: String,
     titles: Array,
-    genders: Array,
     validAccountAcquired: Boolean,
-    duplicateAccount: Boolean,
-    communicationMethods: Array,
-    alertTypes: Array
+    duplicateAccount: Boolean
   },
   data () {
     return {
@@ -214,25 +150,20 @@ export default {
         duplicateToFix: null,
         accountDetails: {
           username: '',
+          email: '',
+          mobileNo: '',
           password: ''
         }
       },
 
       stepTwo: {
         valid: false,
-        email: '',
         personalDetails: {
           titleId: null,
           givenName: '',
           familyName: '',
           salutation: ''
-        },
-
-        emailRules: [
-          v => v !== '' || 'An email address is required',
-          v => this.emailRegEx.test(v) || 'Invalid email address',
-          v => v.length <= 256 || 'Email address too long'
-        ]
+        }
       },
 
       stepThree: {
@@ -242,28 +173,6 @@ export default {
         friendlyNameRules: [
           v => v.length <= 45 || 'Connected droplet name too long'
         ]
-      },
-
-      stepFour: {
-        valid: false,
-        dropletUse: null,
-        userDetails: {
-          genderId: null,
-          wakeUpTime: '7:00',
-          sleepTime: '22:00',
-          voiceMessageVolume: 75,
-          dailyOtherHydrationConsumption: 0
-        },
-        userPersonalDetails: {
-          titleId: null,
-          givenName: '',
-          familyName: '',
-          salutation: ''
-        },
-        carerDetails: {
-          communicationMethodId: null,
-          alertTypeIds: null
-        }
       }
     }
   },
@@ -286,9 +195,6 @@ export default {
         macAddress: this.macAddress
       })
       this.step = 4
-    },
-    submitDropletUse () {
-      this.$emit('submitDropletUse', this.stepFour)
     }
   },
   watch: {
@@ -303,9 +209,7 @@ export default {
   ],
   components: {
     SubPersonDetailsFields,
-    SubCarerDetailsFields,
-    SubNewAccountFields,
-    SubUserDetailsFields
+    SubCredentialsFields
   }
 }
 </script>

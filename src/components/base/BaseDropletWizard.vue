@@ -62,7 +62,7 @@ export default {
   computed: {
     ...mapState({
       loading: state => state.cliAdminDroplets.loading,
-      authenticated: state => state.eDropletApp.authenticated,
+      authenticated: state => state.eDropletApp.getters.authenticated,
       availabilityState: state => state.cliAdminDroplets.queryResult
     })
   },
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     addDroplet () {
-      this.$store.dispatch('registerDroplet', this.formattedAddress).then(() => {
+      this.$store.dispatch('registerDroplet', { macAddress: this.formattedAddress }).then(() => {
         if (this.authenticated) {
           this.$store.dispatch('fetchDroplets')
         }

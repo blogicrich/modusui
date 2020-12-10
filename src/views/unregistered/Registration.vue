@@ -1,7 +1,7 @@
 <template>
   <v-layout row fill-height align-center justify-space-around>
-    <v-dialog v-model="dropletAvailabilityError" persistent width="700">
-      <v-card v-if="dropletState === 'BASE_NOT_FOUND'">
+    <v-dialog :value="availabilityState !== 'AVAILABLE'" persistent width="700">
+      <v-card v-if="availabilityState === 'NOT_FOUND'">
         <v-card-title class="headline lighten-2">This Connected Droplet has not come online yet</v-card-title>
         <v-card-text>Make sure the batteries are inserted correctly.</v-card-text>
         <v-card-actions>
@@ -10,7 +10,7 @@
         </v-card-actions>
       </v-card>
 
-      <v-card v-if="dropletState === 'BASE_ALREADY_LINKED'">
+      <v-card v-if="availabilityState === 'ALLOCATED'">
         <v-card-title class="headline lighten-2">This Connected Droplet is already in use</v-card-title>
         <v-card-text>
           If you know who used this Connected Droplet previously, ask them to unlink it from their account. If this is
@@ -39,15 +39,11 @@
       v-show="!isWaitingForResponse"
       :macAddress="macAddress"
       :titles="titles"
-      :genders="genders"
-      :communicationMethods="communicationMethods"
-      :alertTypes="alertTypes"
       :validAccountAcquired="validAccountAcquired"
       :duplicateAccount="duplicateAccount"
       @accountErrorAcknowledged="duplicateAccount = false"
       @submitAccountDetails="submitAccountDetails"
       @submitEdropletConfig="submitEdropletConfig"
-      @submitDropletUse="submitDropletUse"
     />
   </v-layout>
 </template>
@@ -71,7 +67,6 @@ export default {
       isWaitingForResponse: true,
       validAccountAcquired: false,
       duplicateAccount: false,
-      dropletAvailabilityError: false,
       msg: '',
       primaryColor: 'primary',
       spinnerSize: '250',
@@ -86,139 +81,80 @@ export default {
 
       // Cooldown, we don't want the user spamming this check.
       setTimeout(() => {
-        this.$store.dispatch('checkDropletAvailable', this.macAddress).then(() => {
+        this.$store.dispatch('fetchPublicAvailabilityState', this.macAddress).then(() => {
           this.isWaitingForResponse = false
         })
       }, 2000)
-    },
-    sanitizeMacAddress (macAddress) {
-      return macAddress
-        .split(/-|:/)
-        .map(octet => octet.toUpperCase())
-        .reduce((address, currentOctet) => address + currentOctet + '-', '')
-        .slice(0, -1)
     },
     showAlert (message, route) {
       alert(message)
       this.$router.push(route)
     },
-    submitAccountDetails (details) {
+    async submitAccountDetails (details) {
       this.loadingMessage = 'Creating new account...'
       this.validAccountAcquiredd = false
       this.isWaitingForResponse = true
 
-      this.$store.dispatch('createAccount', details).then(() => {
-        if (this.registerStatus === 200) {
-          this.loadingMessage = 'Logging you in...'
-          this.$store.dispatch('POST_LOGIN', { username: details.username, password: details.password })
-            .then(() => {
-              this.validAccountAcquired = true
-              this.isWaitingForResponse = false
-            })
-        } else if (this.registerStatus === 409) {
+      await this.$store.dispatch('registerAccount', {
+        ...details,
+        baseAddress: this.macAddress
+      })
+
+      if (this.wizardError) {
+        if (this.wizardError.response && this.wizardError.response.status === 409) {
           this.duplicateAccount = true
           this.isWaitingForResponse = false
         } else {
           this.$router.push('/error')
         }
-      })
+        return
+      }
+
+      this.loadingMessage = 'Logging you in...'
+      await this.$store.dispatch('POST_LOGIN', { username: details.username, password: details.password })
+      this.validAccountAcquired = true
+      this.isWaitingForResponse = false
     },
-    submitEdropletConfig (config) {
+    async submitEdropletConfig (config) {
       this.isWaitingForResponse = true
       this.loadingMessage = 'Adding the Connected Droplet to your account...'
-      this.$store.dispatch('linkDroplet', config).then(() => {
-        if (this.linkDropletStatus !== 200) {
-          this.isWaitingForResponse = false
-          return this.showAlert('Unable to link droplet to account at this time.', '/error')
-        }
-
-        this.loadingMessage = 'Preparing next step...'
-        this.$store.dispatch('fetchWizardOptions').then(() => {
-          this.isWaitingForResponse = false
-        })
-      })
-    },
-    submitDropletUse (data) {
-      if (data.dropletUse === 'SOMETHING_ELSE') {
-        return this.$router.replace('/landing')
-      }
-
-      this.loadingMessage = 'Saving your configuration...'
-      this.isWaitingForResponse = true
-
-      const sleepTime = this.convertTimeToSecondsFromMidnight(data.userDetails.sleepTime)
-      const wakeUpTime = this.convertTimeToSecondsFromMidnight(data.userDetails.wakeUpTime)
-
-      if (data.dropletUse === 'SELF') {
-        this.$store.dispatch('useDropletSelf', {
-          ...data.userDetails,
-          ...data.carerDetails,
-          wakeUpTime,
-          sleepTime,
-          macAddress: this.macAddress
-        }).then(() => {
-          this.$router.replace('/dashboard')
-        })
-      } else {
-        this.$store.dispatch('useDropletOther', {
-          ...data.userPersonalDetails,
-          ...data.userDetails,
-          ...data.carerDetails,
-          wakeUpTime,
-          sleepTime,
-          macAddress: this.macAddress
-        }).then(() => {
-          this.$router.replace('/dashboard')
-        })
-      }
-    },
-    convertTimeToSecondsFromMidnight (time) {
-      const startOfDay = this.$moment().startOf('day')
-      return this.$moment(time, 'HH:mm').diff(startOfDay, 'seconds')
+      await this.$store.dispatch('registerDroplet', config)
+      this.isWaitingForResponse = false
     }
   },
   computed: {
     ...mapState({
-      titles: state => state.gettingStartedWizard.titles,
-      registerStatus: state => state.gettingStartedWizard.registerStatus,
-      linkDropletStatus: state => state.gettingStartedWizard.linkDropletStatus,
-      dropletState: state => state.gettingStartedWizard.dropletState,
-      genders: state => state.wizard.genders,
-      communicationMethods: state => state.wizard.communicationMethods,
-      alertTypes: state => state.wizard.alertTypes
+      titles: state => state.publicTitles.titles,
+      availabilityState: state => state.gettingStartedWizard.availabilityState,
+      wizardError: state => state.gettingStartedWizard.error
     })
   },
   mounted () {
+    this.$store.commit('SET_WIZARD_ACTIVE_STATE', true)
+
     if (!this.unsanitizedMacAddress || !this.unsanitizedMacAddress.match(this.macAddressRegEx)) {
       return this.showAlert(`Invalid Connected Droplet Address "${this.unsanitizedMacAddress}"`, '/error')
     }
 
     // Convert from any of the valid MAC address representations to the one we want.
-    this.macAddress = this.sanitizeMacAddress(this.unsanitizedMacAddress)
-
-    this.$store.dispatch('getTitles').then(() => {
-    })
+    this.macAddress = this.unsanitizedMacAddress
+      .split(/-|:/)
+      .map(octet => octet.toUpperCase())
+      .reduce((address, currentOctet) => address + currentOctet + '-', '')
+      .slice(0, -1)
 
     Promise.all([
-      this.$store.dispatch('getTitles'),
-      this.$store.dispatch('checkDropletAvailable', this.macAddress)
+      this.$store.dispatch('GAIN_ANTI_CSRF_TOKEN'),
+      this.$store.dispatch('fetchPublicTitles'),
+      this.$store.dispatch('fetchPublicAvailabilityState', this.macAddress)
     ]).then(() => {
       this.isWaitingForResponse = false
     })
-
-    this.$store.commit('SET_WIZARD_ACTIVE_STATE', true)
   },
   beforeRouteLeave (from, to, next) {
     console.log('Wizard incactive.')
     this.$store.commit('SET_WIZARD_ACTIVE_STATE', false)
     next()
-  },
-  watch: {
-    dropletState (newState) {
-      if (newState === 'BASE_NOT_FOUND' || newState === 'BASE_ALREADY_LINKED') {
-        this.dropletAvailabilityError = true
-      }
-    }
   },
   mixins: [
     validation

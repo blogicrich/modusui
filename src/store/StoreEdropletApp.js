@@ -1,10 +1,11 @@
 import apiLib from '../services/apiLib.js'
+import moment from 'moment'
 
 export const moduleEdropletApp = {
   state: {
     // Login
     isActive: deserialize('isActive'),
-    authenticated: deserialize('authenticated', false),
+    expiresOn: deserialize('expiresOn', 0),
     // deptPersonsId: deserialize('deptPersonsId'),
     level: deserialize('level', []),
     portalAuthorisedId: deserialize('portalAuthorisedId'),
@@ -22,9 +23,9 @@ export const moduleEdropletApp = {
     SET_LOAD_STATUS (state, data) {
       state.authDataLoading = data
     },
-    SET_AUTHENTICATION_STATE (state, data) {
-      serialize('authenticated', data)
-      state.authenticated = data
+    SET_AUTH_EXPIRY (state, data) {
+      serialize('expiresOn', data)
+      state.expiresOn = data
     },
     SET_PORTAL_AUTH_ID (state, data) {
       serialize('portalAuthorisedId', data)
@@ -39,7 +40,7 @@ export const moduleEdropletApp = {
       state.level = data
     },
     CLEAR_STATE (state) {
-      state.authenticated = false
+      state.expiresOn = 0
       state.portalAuthorisedId = null
       state.level = null
       state.active = false
@@ -50,8 +51,9 @@ export const moduleEdropletApp = {
   actions: {
     async POST_LOGIN (context, payload) {
       try {
+        context.commit('SET_LOAD_STATUS', true)
         const response = await apiLib.postData('login', payload, true, false, true)
-        context.commit('SET_AUTHENTICATION_STATE', true)
+        context.commit('SET_AUTH_EXPIRY', response.expiresOn)
         context.commit('SET_PORTAL_AUTH_ID', response.user.portalAuthorisedId)
         context.commit('SET_LEVEL', response.roles)
         context.commit('SET_ACTIVE', true)
@@ -60,6 +62,8 @@ export const moduleEdropletApp = {
       } catch (err) {
         context.commit('CLEAR_STATE')
         return err.response
+      } finally {
+        context.commit('SET_LOAD_STATUS', false)
       }
     },
     async LOGOUT (context) {
@@ -73,7 +77,7 @@ export const moduleEdropletApp = {
   getters: {
     // Login getters
     isActive: state => state.isActive,
-    authenticated: state => state.authenticated,
+    authenticated: state => state.expiresOn > moment().unix(),
     deptPersonsId: state => state.deptPersonsId,
     level: state => state.level,
     portalAuthorisedId: state => state.portalAuthorisedId,
