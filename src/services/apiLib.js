@@ -6,11 +6,11 @@ import store from '@/store'
  * Override per-function call logs for apiLib requests and log everything. Does not work unless in development
  * environment.
  */
-const DEBUG_LOG_ALL = true
+const DEBUG_LOG_ALL = false
 
 const URLS = {
   development: 'http://localhost:3000',
-  production: 'https://droplet.lemonstall.com'
+  production: 'https://droplet.lemonstall.com/api'
 }
 
 const axi = axios.create({
