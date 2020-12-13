@@ -37,10 +37,10 @@ export const moduleDashboardDrinks = {
         const element = data[i]
         if (element.type === 'Other') {
           additionalDrinksTotal = additionalDrinksTotal + Number(element.volumeInLitres)
-          additionalDrinks.push({ ...element, longFormDate: convertTimeToLongForm(element.datetime) })
+          additionalDrinks.push({ ...element, longFormDate: convertTimeToLongForm(element.dateTime) })
         } else {
           drinksTotal = drinksTotal + Number(element.volumeInLitres)
-          drinks.push({ ...element, longFormDate: convertTimeToLongForm(element.datetime) })
+          drinks.push({ ...element, longFormDate: convertTimeToLongForm(element.dateTime) })
         }
       }
       state.drinks = drinks
@@ -124,13 +124,13 @@ export const moduleDashboardDrinks = {
   }
 }
 
-function convertTimeToLongForm (datetime) {
-  return moment(datetime).format('YYYY-MM-DD HH:MM')
+function convertTimeToLongForm (dateTime) {
+  return moment.unix(dateTime).format('YYYY-MM-DD')
 }
 
 function convertToUnix (date, time) {
-  const datetime = date + ' ' + time
-  const dateUnix = moment(datetime).unix()
+  const dateTime = date + ' ' + time
+  const dateUnix = moment(dateTime).unix()
   return dateUnix
 }
 

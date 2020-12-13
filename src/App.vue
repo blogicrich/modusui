@@ -398,7 +398,7 @@ export default {
         this.drawerState = false
       }
 
-      if (!['/', '/register'].includes(to.path) && !this.authenticated) {
+      if (!['/', '/register', '/passwordreset'].includes(to.path) && !this.authenticated) {
         this.logout()
       }
     }
